@@ -20,7 +20,7 @@ internal class MonkeyTest {
 
     @ParameterizedTest
     @MethodSource("dataForProfile")
-    fun profile(text: String, chars: List<Char>) {
+    fun simulation(text: String, chars: List<Char>) {
         val typewriter = Typewriter(chars)
         val monkey = Monkey(1, typewriter)
         log("#chars", chars.size)
@@ -28,58 +28,32 @@ internal class MonkeyTest {
         log("#text", text.length)
         log("text", text)
         val results = mutableListOf<Long>()
-        val maxIterations = 1_000_000_000_000L
         val numMatches = 3
+        val start = System.currentTimeMillis()
         while (results.size < numMatches) {
-            val result = monkey.run(text, maxIterations)
+            val result = monkey.run(text)
             results += result
+            val diff = System.currentTimeMillis() - start
+            log("duration", diff / 1000)
             if (result >= 0) {
                 log("result", withCommas(result))
+            } else {
+                println("maximum reached")
             }
         }
-        val failed = results.count { it == -1L }
-        // val succeeded = results.count { it > -1 }
-        log("failed", failed)
-        // log("failed%", String.format("%.3f%%", failed.toDouble() / results.size * 100))
-        // log("success", succeeded)
+        val diff = System.currentTimeMillis() - start
+        log("total duration", diff / 1000)
         val average = results.filter { it >= 0 }.average().toLong()
         log("average", withCommas(average))
         println()
     }
 
-    @ParameterizedTest
-    @MethodSource("dataForRun")
-    fun testOne(text: String, chars: List<Char>, iterations: Long) {
-        val typewriter = Typewriter(chars)
-        val monkey = Monkey(1, typewriter)
-        log("#chars", chars.size)
-        log("chars", chars)
-        log("#text", text.length)
-        log("text", text)
-        log("iterations", iterations)
-        val result = monkey.run(text, iterations)
-        log("result", result)
-        println()
-    }
-
     companion object {
         @JvmStatic
-        fun dataForRun(): List<Arguments> {
-            return (0..3).map {
-                Arguments.of("abc", charList(it + 3), 200L)
-            }
-        }
-
-        @JvmStatic
         fun dataForProfile(): List<Arguments> {
-            val sublists = mutableListOf<Arguments>()
-            sublists += Arguments.of("why", charList(26))
-            sublists += Arguments.of("whom", charList(26))
-            sublists += Arguments.of("where", charList(26))
-            sublists += Arguments.of("whence", charList(26))
-            sublists += Arguments.of("whether", charList(26))
-            sublists += Arguments.of("whomever", charList(26))
-            return sublists
+            val chars = charList(26)
+            return listOf("why", "whom", "where", "whence", "whether", "whomever")
+                .map { Arguments.of(it, chars) }
         }
 
         private fun charList(last: Int): List<Char> {
@@ -90,8 +64,6 @@ internal class MonkeyTest {
     @Test
     fun getId() {
     }
-
-    private val defaultObj = Object()
 
     private fun withCommas(number: Number): String {
         return String.format("%,d", number)

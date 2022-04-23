@@ -1,17 +1,17 @@
 package org.incava.mmonkeys
 
 class Monkey(val id: Int, private val typewriter: Typewriter) {
-    fun run(text: String, maxIterations: Long): Long {
-        var matched = -1
+    fun run(text: String, maxIterations: Long = Long.MAX_VALUE): Long {
+        var current = 0
         for (iteration in 0 until maxIterations) {
             val ch = typewriter.randomCharacter()
-            if (text[matched + 1] == ch) {
-                matched += 1
-                if (matched + 1 == text.length) {
+            if (text[current] == ch) {
+                ++current
+                if (current == text.length) {
                     return iteration
                 }
             } else {
-                matched = -1
+                current = 0
             }
         }
         return -1L
