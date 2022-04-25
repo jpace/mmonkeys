@@ -9,4 +9,9 @@ object Console {
     fun log(msg: String) {
         println(msg)
     }
+
+    fun printf(fmt: String, vararg args: Any) {
+        val str = String.format(fmt, *args)
+        println(str)
+    }
 }

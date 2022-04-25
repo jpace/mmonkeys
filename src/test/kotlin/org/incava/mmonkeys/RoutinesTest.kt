@@ -28,6 +28,12 @@ class RoutinesTest {
     }
 
     @Test
+    fun testMemory() {
+        showBanner()
+        showMemory(AtomicInteger(0))
+    }
+
+    @Test
     fun memoryTest() {
         runBlocking<Unit> {
             val counter = AtomicInteger(0)
