@@ -13,5 +13,7 @@ fun main(args: Array<String>) {
     println("free: ${runtime.freeMemory() / mb}")
     val routines = Routines()
     // routines.run()
-    routines.memoryTest()
+    val factor = 6
+    val count = 10.0.pow(factor).toInt()
+    routines.memoryTest(count)
 }

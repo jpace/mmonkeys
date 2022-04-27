@@ -3,10 +3,10 @@ package org.incava.mmonkeys
 import org.incava.mmonkeys.Console.log
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import kotlin.test.assertEquals
 
 internal class MonkeyTest {
 
@@ -19,53 +19,80 @@ internal class MonkeyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dataForProfile")
-    fun simulation(text: String, chars: List<Char>) {
-        val typewriter = Typewriter(chars)
+    @MethodSource("dataForSimulation")
+    fun wordSimulation(expected: Word, characters: List<Char>) {
+        // log("expected", expected)
+        log("#expected", expected.length())
+        // log("characters", characters)
+        log("#characters", characters.size)
+        val typewriter = Typewriter(characters)
         val monkey = Monkey(1, typewriter)
-        log("#chars", chars.size)
-        log("chars", chars)
-        log("#text", text.length)
-        log("text", text)
         val results = mutableListOf<Long>()
-        val numMatches = 3
+        val targetMatches = 3
         val start = System.currentTimeMillis()
-        while (results.size < numMatches) {
-            val result = monkey.run(text)
-            results += result
-            val diff = System.currentTimeMillis() - start
-            log("duration", diff / 1000)
-            if (result >= 0) {
-                log("result", withCommas(result))
-            } else {
-                println("maximum reached")
+        while (results.size < targetMatches) {
+            var iteration = 0L
+            while (iteration < 1_000_000_000_000L) {
+                val word = monkey.nextWord()
+                if (word == expected) {
+                    // log("word", word)
+                    // log("iteration", iteration)
+                    results.add(iteration)
+                    break
+                }
+                ++iteration
             }
         }
         val diff = System.currentTimeMillis() - start
-        log("total duration", diff / 1000)
-        val average = results.filter { it >= 0 }.average().toLong()
-        log("average", withCommas(average))
+        log("total duration", diff / 1000.0)
+        val average = results.average().toLong()
+        log("average", average)
         println()
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataForGetWord")
+    fun getWord(expected: Word, characters: List<Char>) {
+        println("chars = $characters")
+        val typewriter = DeterministicTypewriter(characters)
+        val obj = Monkey(id = 37, typewriter = typewriter)
+        println("obj = $obj")
+        val result = obj.nextWord()
+        println("result = $result")
+        assertEquals(expected, result)
     }
 
     companion object {
         @JvmStatic
-        fun dataForProfile(): List<Arguments> {
-            val chars = charList(26)
-            return listOf("why", "whom", "where", "whence", "whether", "whomever")
-                .map { Arguments.of(it, chars) }
+        fun dataForSimulation(): List<Arguments> {
+            val range = 2..7
+            val charList = charList('z')
+            return range.map { length ->
+                val word = Word(charList.subList(0, length))
+                (length .. length + 5 step 2).map { numChars ->
+                    Arguments.of(word, charList.subList(0, numChars + 3) + ' ')
+                }
+            }.flatten()
+        }
+
+        @JvmStatic
+        fun dataForGetWord(): List<Arguments> {
+            val chars = charList(5) + listOf(' ')
+            return listOf(
+                Arguments.of(Word(""), charList(0)),
+                Arguments.of(Word("a"), charList(1)),
+                Arguments.of(Word("abc"), charList(3)),
+                Arguments.of(Word("abcd"), charList(4)),
+                Arguments.of(Word("abcde"), charList(5))
+            );
         }
 
         private fun charList(last: Int): List<Char> {
-            return (0 until last).map { 'a' + it }.toList()
+            return (0 until last).map { 'a' + it }.toList() + ' '
         }
-    }
 
-    @Test
-    fun getId() {
-    }
-
-    private fun withCommas(number: Number): String {
-        return String.format("%,d", number)
+        private fun charList(last: Char): List<Char> {
+            return ('a'..last).toList() + ' '
+        }
     }
 }
