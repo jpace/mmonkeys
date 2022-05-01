@@ -25,7 +25,7 @@ internal class MonkeyTest {
         log("#expected", expected.length())
         // log("characters", characters)
         log("#characters", characters.size)
-        val typewriter = Typewriter(characters)
+        val typewriter = StandardTypewriter(characters)
         val monkey = Monkey(1, typewriter)
         val results = mutableListOf<Long>()
         val targetMatches = 3
@@ -51,8 +51,8 @@ internal class MonkeyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dataForGetWord")
-    fun getWord(expected: Word, characters: List<Char>) {
+    @MethodSource("dataForNextWord")
+    fun nextWord(expected: Word, characters: List<Char>) {
         println("chars = $characters")
         val typewriter = DeterministicTypewriter(characters)
         val obj = Monkey(id = 37, typewriter = typewriter)
@@ -76,8 +76,7 @@ internal class MonkeyTest {
         }
 
         @JvmStatic
-        fun dataForGetWord(): List<Arguments> {
-            val chars = charList(5) + listOf(' ')
+        fun dataForNextWord(): List<Arguments> {
             return listOf(
                 Arguments.of(Word(""), charList(0)),
                 Arguments.of(Word("a"), charList(1)),

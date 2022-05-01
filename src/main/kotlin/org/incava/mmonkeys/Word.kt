@@ -25,7 +25,7 @@ class Word() {
     }
 
     override fun toString(): String {
-        return "Word(characters=$characters)"
+        return "$characters"
     }
 
     override fun equals(other: Any?): Boolean {
