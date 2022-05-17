@@ -1,82 +1,62 @@
 package org.incava.mmonkeys
 
 import kotlinx.coroutines.*
-import org.incava.mmonkeys.Console.log
+import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 class Monkeys(private val list: List<Monkey>) {
-    val monitorInterval = 5000L
+    private val monitorInterval = 500L
 
-    fun run(sought: Word, maxAttempts: Long = 10): Int {
+    fun run(sought: Word, maxAttempts: Long): Int {
+        return run(sought, maxAttempts) { it.nextWord() }
+    }
+
+    fun run(sought: String, maxAttempts: Long): Int {
+        return run(sought, maxAttempts) { it.nextString() }
+    }
+
+    private fun run(sought: Any, maxAttempts: Long, function: (Monkey) -> Any): Int {
         val expected = list.size * maxAttempts
-        // log("expected", expected)
+        log("expected", expected)
         val iterations = AtomicInteger(0)
         val found = AtomicBoolean(false)
         val memory = Memory()
         runBlocking {
-            val timer = getTimer(memory, iterations)
+            val timer = launchTimer(memory, iterations)
             val jobs = list.map { monkey ->
                 launch {
-                    runMonkey(maxAttempts, found, monkey, iterations, sought)
+                    runMonkey(maxAttempts, found, monkey, iterations, sought, function)
                 }
             }
-            val watcher = launch {
-                watchMonkeys(found, jobs)
-            }
+            val watcher = launchWatcher(found, jobs)
             jobs.forEach { it.join() }
             timer.cancel()
             watcher.cancel()
             memory.showCurrent(iterations)
         }
-        return postProcess(found, iterations)
-    }
-
-    private fun CoroutineScope.getTimer(memory: Memory, iterations: AtomicInteger): Job {
-        val timer = launch {
-            memory.monitor(iterations, 5000L)
-        }
-        return timer
-    }
-
-    fun run(sought: String, maxAttempts: Long = 10): Int {
-        val expected = list.size * maxAttempts
-        // log("expected", expected)
-        val iterations = AtomicInteger(0)
-        val found = AtomicBoolean(false)
-        val memory = Memory()
-        runBlocking {
-            val timer = getTimer(memory, iterations)
-            val jobs = list.map { monkey ->
-                launch {
-                    runMonkey(maxAttempts, found, monkey, iterations, sought)
-                }
-            }
-            val watcher = launch {
-                watchMonkeys(found, jobs)
-            }
-            jobs.forEach { it.join() }
-            timer.cancel()
-            watcher.cancel()
-            memory.showCurrent(iterations)
-        }
-        return postProcess(found, iterations)
-    }
-
-    private fun postProcess(found: AtomicBoolean, iterations: AtomicInteger): Int {
         log("found?", found.get())
         log("iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 
-    private suspend fun watchMonkeys(found: AtomicBoolean, jobs: List<Job>) {
-        while (!found.get()) {
-            delay(1000L)
+    private fun CoroutineScope.launchTimer(memory: Memory, iterations: AtomicInteger): Job {
+        return launch {
+            memory.monitor(iterations, monitorInterval)
         }
-        log("watcher#found!")
-        jobs.forEach {
-            log("canceling", it)
-            it.cancel()
+    }
+
+    private fun CoroutineScope.launchWatcher(found: AtomicBoolean, jobs: List<Job>): Job {
+        return launch {
+            while (!found.get()) {
+                delay(1000L)
+            }
+            log("watcher#found!")
+            jobs.forEach {
+                log("canceling", it)
+                it.cancel()
+            }
         }
     }
 
@@ -85,14 +65,14 @@ class Monkeys(private val list: List<Monkey>) {
         found: AtomicBoolean,
         monkey: Monkey,
         iterations: AtomicInteger,
-        sought: Word
+        sought: Any,
+        function: (Monkey) -> Any,
     ) {
         (0 until maxAttempts).forEach { iteration ->
             if (found.get()) {
-                // log("failed", monkey.id)
                 return
             } else {
-                val result = monkey.nextWord()
+                val result = function(monkey)
                 iterations.incrementAndGet()
                 if (result == sought) {
                     log("success", monkey.id)
@@ -105,31 +85,4 @@ class Monkeys(private val list: List<Monkey>) {
             delay(5L)
         }
     }
-
-    private suspend fun runMonkey(
-        maxAttempts: Long,
-        found: AtomicBoolean,
-        monkey: Monkey,
-        iterations: AtomicInteger,
-        sought: String
-    ) {
-        (0 until maxAttempts).forEach { iteration ->
-            if (found.get()) {
-                // log("failed", monkey.id)
-                return
-            } else {
-                val result = monkey.nextString()
-                iterations.incrementAndGet()
-                if (result == sought) {
-                    log("success", monkey.id)
-                    log("result", result)
-                    log("iteration", iteration + 1)
-                    found.set(true)
-                    return
-                }
-            }
-            delay(5L)
-        }
-    }
-
 }

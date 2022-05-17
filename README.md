@@ -42,10 +42,14 @@ one being the feasibility of that often-repeated phrase,
 and the other to learn Kotlin.
 
 So if you're a Kotlin expert (compared to me, that's
-with more than a few weeks of experience), then feel
-free/encouraged to send feedback about how I can improve
+someone with more than a few weeks of experience), then feel
+free/encouraged to send feedback about how to improve
 this. Obviously this project makes much usage of 
 coroutines, so that should be focused on.
 
 I appreciate your interest in this project, and I
 hope you find it interesting.
+
+### disclaimer
+
+No monkeys were harmed in the production of this project.

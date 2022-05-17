@@ -3,7 +3,8 @@ package org.incava.mmonkeys
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.incava.mmonkeys.Console.printf
+import org.incava.mmonkeys.util.Console.printf
+import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicInteger
 
 class Routines {
@@ -21,9 +22,7 @@ class Routines {
             }
             val jobs = List(count) {
                 launch {
-                    println("it: $it")
                     (0 until 100).forEach { num ->
-                        println("it: $it; num: $num")
                         number.incrementAndGet()
                     }
                 }
