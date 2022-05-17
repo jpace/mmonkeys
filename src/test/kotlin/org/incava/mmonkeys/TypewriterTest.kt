@@ -9,8 +9,8 @@ internal class TypewriterTest {
     @ParameterizedTest
     @MethodSource("dataForRandomCharacter")
     fun randomCharacter(expectedLow: Char, expectedHigh: Char, chars: List<Char>) {
-        val obj = Typewriter(chars)
-        val result = obj.randomCharacter()
+        val obj = StandardTypewriter(chars)
+        val result = obj.nextCharacter()
         assertTrue(result >= expectedLow)
         assertTrue(result <= expectedHigh)
     }

@@ -1,31 +1,20 @@
 package org.incava.mmonkeys
 
-import org.incava.mmonkeys.Console.log
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import org.incava.mmonkeys.util.Console.log
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertEquals
 
 internal class MonkeyTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
+    @Disabled
     @ParameterizedTest
     @MethodSource("dataForSimulation")
     fun wordSimulation(expected: Word, characters: List<Char>) {
-        // log("expected", expected)
         log("#expected", expected.length())
-        // log("characters", characters)
         log("#characters", characters.size)
-        val typewriter = Typewriter(characters)
+        val typewriter = StandardTypewriter(characters)
         val monkey = Monkey(1, typewriter)
         val results = mutableListOf<Long>()
         val targetMatches = 3
@@ -35,8 +24,6 @@ internal class MonkeyTest {
             while (iteration < 1_000_000_000_000L) {
                 val word = monkey.nextWord()
                 if (word == expected) {
-                    // log("word", word)
-                    // log("iteration", iteration)
                     results.add(iteration)
                     break
                 }
@@ -51,33 +38,29 @@ internal class MonkeyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dataForGetWord")
-    fun getWord(expected: Word, characters: List<Char>) {
-        println("chars = $characters")
+    @MethodSource("dataForNextWord")
+    fun nextWord(expected: Word, characters: List<Char>) {
         val typewriter = DeterministicTypewriter(characters)
         val obj = Monkey(id = 37, typewriter = typewriter)
-        println("obj = $obj")
         val result = obj.nextWord()
-        println("result = $result")
         assertEquals(expected, result)
     }
 
     companion object {
         @JvmStatic
         fun dataForSimulation(): List<Arguments> {
-            val range = 2..7
-            val charList = charList('z')
+            val range = 1..3
+            val charList = charList('p')
             return range.map { length ->
                 val word = Word(charList.subList(0, length))
-                (length .. length + 5 step 2).map { numChars ->
+                (length..length + 5 step 2).map { numChars ->
                     Arguments.of(word, charList.subList(0, numChars + 3) + ' ')
                 }
             }.flatten()
         }
 
         @JvmStatic
-        fun dataForGetWord(): List<Arguments> {
-            val chars = charList(5) + listOf(' ')
+        fun dataForNextWord(): List<Arguments> {
             return listOf(
                 Arguments.of(Word(""), charList(0)),
                 Arguments.of(Word("a"), charList(1)),

@@ -70,4 +70,12 @@ internal class WordTest {
             );
         }
     }
+
+    @Test
+    fun testEquals() {
+        val x = Word("abc")
+        val y = Word("abc")
+        val result = x == y
+        assertTrue(result, "x: $x; y: $y")
+    }
 }
