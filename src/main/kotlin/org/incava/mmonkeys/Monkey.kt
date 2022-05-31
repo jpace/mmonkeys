@@ -5,18 +5,6 @@ class Monkey(val id: Int, private val typewriter: Typewriter) {
         return typewriter.nextCharacter()
     }
 
-    fun nextWord(): Word {
-        val word = Word()
-        while (true) {
-            val ch = nextChar()
-            if (ch == ' ') {
-                return word
-            } else {
-                word += ch
-            }
-        }
-    }
-
     fun nextString(): String {
         val builder = StringBuilder()
         while (true) {

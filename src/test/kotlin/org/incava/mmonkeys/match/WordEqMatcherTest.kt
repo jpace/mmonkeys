@@ -2,7 +2,8 @@ package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.DeterministicTypewriter
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.Word
+import org.incava.mmonkeys.word.Word
+import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -19,7 +20,7 @@ internal class WordEqMatcherTest : MatcherTest() {
                     "when running the matcher, " +
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
-                val monkey = Monkey(1, typewriter)
+                val monkey = WordMonkey(1, typewriter)
                 val obj = WordEqMatcher(monkey)
                 val result = obj.run(inputs.second, 1000L)
                 assertEquals(expected, result)

@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.perf
 
-import org.incava.mmonkeys.Word
+import org.incava.mmonkeys.word.Word
 import org.incava.mmonkeys.util.Console.log
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

@@ -1,24 +1,24 @@
-package org.incava.mmonkeys
+package org.incava.mmonkeys.word
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.incava.mmonkeys.BaseMonkeys
 import org.incava.mmonkeys.util.Console.log
 
-class Monkeys(private val list: List<Monkey>, private val sought: String, maxAttempts: Long) :
-    BaseMonkeys(maxAttempts) {
+class WordMonkeys(private val list: List<WordMonkey>, private val sought: Word, maxAttempts: Long) : BaseMonkeys(maxAttempts) {
     override fun CoroutineScope.launchMonkeys() = list.map { monkey ->
         launch {
             runMonkey(monkey)
         }
     }
 
-    private suspend fun runMonkey(monkey: Monkey) {
+    private suspend fun runMonkey(monkey: WordMonkey) {
         (0 until maxAttempts).forEach { iteration ->
             if (found.get()) {
                 return
             } else {
-                val result = monkey.nextString()
+                val result = monkey.nextWord()
                 iterations.incrementAndGet()
                 if (result == sought) {
                     log("success", monkey.id)

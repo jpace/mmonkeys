@@ -1,5 +1,6 @@
 package org.incava.mmonkeys
 
+import org.incava.mmonkeys.word.Word
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

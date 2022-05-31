@@ -1,4 +1,4 @@
-package org.incava.mmonkeys
+package org.incava.mmonkeys.word
 
 class Word() {
     constructor(char: Char) : this() {

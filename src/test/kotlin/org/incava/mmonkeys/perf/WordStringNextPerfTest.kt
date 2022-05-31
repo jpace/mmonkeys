@@ -2,6 +2,7 @@ package org.incava.mmonkeys.perf
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.StandardTypewriter
+import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DynamicTest
@@ -14,16 +15,18 @@ import kotlin.system.measureTimeMillis
 internal class WordStringNextPerfTest {
     private val factors = (5..7)
     private lateinit var monkey: Monkey
+    private lateinit var wordMonkey: WordMonkey
 
     @BeforeEach
     fun setUp() {
         monkey = Monkey(37, StandardTypewriter(('a'..'z').toList() + ' '))
+        wordMonkey = WordMonkey(37, StandardTypewriter(('a'..'z').toList() + ' '))
     }
 
-    private fun runIterations(name: String, iterations: Long, function: (Monkey) -> Any) {
+    private fun runIterations(name: String, iterations: Long, function: () -> Unit) {
         val duration = measureTimeMillis {
             for (i in 0 until iterations) {
-                val result = function(monkey)
+                val result = function()
             }
         }
         println("$name: iterations: $iterations; duration: $duration")
@@ -37,7 +40,7 @@ internal class WordStringNextPerfTest {
             DynamicTest.dynamicTest("given $iterations iterations, " +
                     "when invoking nextWord, " +
                     "then the result should be some duration") {
-                runIterations("word", iterations) { it.nextWord() }
+                runIterations("word", iterations) { wordMonkey.nextWord() }
             }
         }
 
@@ -48,7 +51,7 @@ internal class WordStringNextPerfTest {
             DynamicTest.dynamicTest("given $iterations iterations, " +
                     "when invoking nextString, " +
                     "then the result should be some duration") {
-                runIterations("string", iterations) { it.nextString() }
+                runIterations("string", iterations) { monkey.nextString() }
             }
         }
 }

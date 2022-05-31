@@ -2,11 +2,12 @@ package org.incava.mmonkeys.perf
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.StandardTypewriter
-import org.incava.mmonkeys.Word
+import org.incava.mmonkeys.word.Word
 import org.incava.mmonkeys.match.StringEqMatcher
 import org.incava.mmonkeys.match.WordEqMatcher
 import org.incava.mmonkeys.util.Duration
 import org.incava.mmonkeys.util.Table
+import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
@@ -23,7 +24,7 @@ fun Number.percentage(other: Number): Number {
 internal class WordStringMatcherPerfTest {
     data class PerfTestStatus(
         val durations: MutableList<Long> = mutableListOf(),
-        var iterations: MutableList<Long> = mutableListOf(),
+        val iterations: MutableList<Long> = mutableListOf(),
     ) {
         fun averageDurations(): Long {
             return durations.average().toLong()
@@ -65,8 +66,9 @@ internal class WordStringMatcherPerfTest {
     @ParameterizedTest
     @MethodSource("dataForPerfTest")
     fun perfTestBoth(chars: List<Char>, numTrials: Int, numMatches: Int, string: String) {
+        val wordMonkey = WordMonkey(37, StandardTypewriter(chars))
+        val wordEqMatcher = WordEqMatcher(wordMonkey)
         val monkey = Monkey(37, StandardTypewriter(chars))
-        val wordEqMatcher = WordEqMatcher(monkey)
         val stringEqMatcher = StringEqMatcher(monkey)
         val word = Word(string)
         val stringStatus = PerfTestStatus()
