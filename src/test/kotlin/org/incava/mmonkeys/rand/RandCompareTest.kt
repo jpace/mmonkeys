@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.mmonkeys.util.Console.log
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -16,11 +15,8 @@ internal class RandCompareTest : RandTest() {
     }
 
     private fun calculatedTest(numTrials: Int) {
-        val slotSize = numTrials / 100
-        val obj = RandCalculated()
         runTimer("calculated") {
-            val result = obj.calculate(27, numTrials)
-            obj.reduceSlots(result, slotSize)
+            val obj = RandCalculated(27, numTrials)
         }
     }
 
