@@ -5,18 +5,14 @@ import org.incava.mmonkeys.word.Word
 import org.incava.mmonkeys.word.WordMonkey
 import org.incava.mmonkeys.word.WordMonkeys
 
-class WordSimulation(endChar: Char, private val sought: Word) : Simulation(endChar) {
-    override fun run() {
-        log("Word Simulation")
-        repeat(10) {
-            runIteration()
-        }
-        summarize("word")
+class WordSimulation(params: SimulationParams, private val sought: Word = Word(params.sought)) : Simulation(params) {
+    override fun name(): String {
+        return "word"
     }
 
-    private fun runIteration() {
+    override fun runIteration() {
         runIteration("word") {
-            val monkeyList = (0 until numMonkeys).map { WordMonkey(it, typewriter) }
+            val monkeyList = (0 until params.numMonkeys).map { WordMonkey(it, typewriter) }
             val monkeys = WordMonkeys(monkeyList, sought, maxAttempts)
             val iteration = monkeys.run()
             log("iteration", iteration)

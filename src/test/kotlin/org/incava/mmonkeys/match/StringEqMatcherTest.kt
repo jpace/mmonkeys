@@ -4,7 +4,10 @@ import org.incava.mmonkeys.DeterministicTypewriter
 import org.incava.mmonkeys.Monkey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class StringEqMatcherTest : MatcherTest() {
     @TestFactory
@@ -19,9 +22,29 @@ internal class StringEqMatcherTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val obj = StringEqMatcher(monkey)
-                val result = obj.run(inputs.second, 1000L)
+                val obj = StringEqMatcher(monkey, inputs.second)
+                val result = obj.run(1000L)
                 assertEquals(expected, result)
+                val iteration = obj.iteration
+                assertTrue(iteration >= 0)
             }
         }
+
+    @Test
+    fun testRunIteration() {
+        val typewriter = DeterministicTypewriter(charList('a', 'e'))
+        val monkey = Monkey(1, typewriter)
+        val obj = StringEqMatcher(monkey, "123")
+        val result = obj.runIteration()
+        assertFalse(result)
+    }
+
+    @Test
+    fun testIteration() {
+        val typewriter = DeterministicTypewriter(charList('a', 'e'))
+        val monkey = Monkey(1, typewriter)
+        val obj = StringEqMatcher(monkey, "123")
+        val result = obj.iteration
+        assertEquals(-1L, result)
+    }
 }

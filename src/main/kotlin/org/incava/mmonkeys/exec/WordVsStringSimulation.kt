@@ -1,12 +1,11 @@
 package org.incava.mmonkeys.exec
 
-import org.incava.mmonkeys.word.Word
 import kotlin.random.Random
 
-class WordVsStringSimulation(private val endChar: Char, private val sought: String) {
+class WordVsStringSimulation(val params: SimulationParams) {
     fun run() {
-        val str = StringSimulation(endChar, sought)
-        val word = WordSimulation(endChar, Word(sought))
+        val str = StringSimulation(params)
+        val word = WordSimulation(params)
         repeat(10) {
             val b = Random.Default.nextBoolean()
             if (b) {

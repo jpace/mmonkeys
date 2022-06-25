@@ -4,20 +4,16 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.Monkeys
 import org.incava.mmonkeys.util.Console.log
 
-class StringSimulation(endChar: Char, private val sought: String) : Simulation(endChar) {
-    override fun run() {
-        log("Simulation")
-        repeat(10) {
-            runIteration()
-        }
-        summarize("string")
+class StringSimulation(params: SimulationParams) : Simulation(params) {
+    override fun name(): String {
+        return "string"
     }
 
-    private fun runIteration() {
+    override fun runIteration() {
         log("string -------------------------------------")
         runIteration("string") {
-            val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-            val monkeys = Monkeys(monkeyList, sought, maxAttempts)
+            val monkeyList = (0 until params.numMonkeys).map { Monkey(it, typewriter) }
+            val monkeys = Monkeys(monkeyList, params.sought, maxAttempts)
             val iteration = monkeys.run()
             log("iteration", iteration)
         }

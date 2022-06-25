@@ -4,19 +4,27 @@ import org.incava.mmonkeys.StandardTypewriter
 import org.incava.mmonkeys.util.Console.log
 import kotlin.system.measureTimeMillis
 
-abstract class Simulation(endChar: Char) {
+abstract class Simulation(val params: SimulationParams) {
     private val sleepInterval = 1000L
-    private val charList = ('a'..endChar).toList() + ' '
-    protected val typewriter = StandardTypewriter(charList)
-    protected val numMonkeys = charList.size
+    protected val typewriter = StandardTypewriter(params.charList)
     protected val maxAttempts = 100_000_000L
     private val durations = mutableListOf<Long>()
 
-    abstract fun run()
+    fun run() {
+        log(name())
+        repeat(params.iterations) {
+            runIteration()
+        }
+        summarize()
+    }
 
-    protected fun summarize(name: String) {
-        durations.forEach { log(name, it) }
-        log("$name.average", durations.average().toLong())
+    abstract fun name() : String
+
+    abstract fun runIteration()
+
+    protected fun summarize() {
+        durations.forEach { log("${name()} duration", it) }
+        log("${name()}.average", durations.average().toLong())
     }
 
     protected fun runIteration(name: String, block: () -> Unit) {

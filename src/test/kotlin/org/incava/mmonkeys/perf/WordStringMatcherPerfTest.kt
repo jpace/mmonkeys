@@ -69,7 +69,7 @@ internal class WordStringMatcherPerfTest {
         val wordMonkey = WordMonkey(37, StandardTypewriter(chars))
         val wordEqMatcher = WordEqMatcher(wordMonkey)
         val monkey = Monkey(37, StandardTypewriter(chars))
-        val stringEqMatcher = StringEqMatcher(monkey)
+        val stringEqMatcher = StringEqMatcher(monkey, string)
         val word = Word(string)
         val stringStatus = PerfTestStatus()
         val wordStatus = PerfTestStatus()
@@ -88,7 +88,7 @@ internal class WordStringMatcherPerfTest {
                 sleep(sleepInterval)
                 stringStatus.durations += measureTimeMillis {
                     repeat(numMatches) {
-                        val result = stringEqMatcher.run(string) ?: -1L
+                        val result = stringEqMatcher.run() ?: -1L
                         stringStatus.iterations += result
                     }
                 }

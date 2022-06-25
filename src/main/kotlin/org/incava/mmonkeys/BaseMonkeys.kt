@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 abstract class BaseMonkeys(protected val maxAttempts: Long) {
-    protected val monitorInterval = 500L
     protected val iterations = AtomicInteger(0)
     protected val found = AtomicBoolean(false)
-    protected val memory = Memory()
+    private val monitorInterval = 500L
+    private val memory = Memory()
 
     fun run(): Int {
         runBlocking {
@@ -29,13 +29,13 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
 
     protected abstract fun CoroutineScope.launchMonkeys(): List<Job>
 
-    protected fun CoroutineScope.launchTimer(memory: Memory): Job {
+    private fun CoroutineScope.launchTimer(memory: Memory): Job {
         return launch {
             memory.monitor(iterations, monitorInterval)
         }
     }
 
-    protected fun CoroutineScope.launchWatcher(jobs: List<Job>): Job {
+    private fun CoroutineScope.launchWatcher(jobs: List<Job>): Job {
         return launch {
             while (!found.get()) {
                 delay(1000L)

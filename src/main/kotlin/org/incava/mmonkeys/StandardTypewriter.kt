@@ -2,15 +2,15 @@ package org.incava.mmonkeys
 
 import kotlin.random.Random
 
-open class StandardTypewriter(private val characters: List<Char>) : Typewriter {
-    private val numChars: Int = characters.size
+open class StandardTypewriter(private val chars: List<Char> = ('a'..'z').toList() + ' ') : Typewriter {
+    private val numChars: Int = chars.size
 
     override fun nextCharacter(): Char {
         val idx = Random.nextInt(numChars)
-        return characters[idx]
+        return chars[idx]
     }
 
     override fun toString(): String {
-        return "StandardTypewriter(characters=$characters, numChars=$numChars)"
+        return "StandardTypewriter(chars=$chars, numChars=$numChars)"
     }
 }
