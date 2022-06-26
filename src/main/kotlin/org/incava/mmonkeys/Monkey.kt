@@ -1,6 +1,6 @@
 package org.incava.mmonkeys
 
-class Monkey(val id: Int, private val typewriter: Typewriter) {
+open class Monkey(val id: Int, private val typewriter: Typewriter) {
     private fun nextChar(): Char {
         return typewriter.nextCharacter()
     }

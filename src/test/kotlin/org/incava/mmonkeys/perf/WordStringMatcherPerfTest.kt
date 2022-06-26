@@ -2,14 +2,16 @@ package org.incava.mmonkeys.perf
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.StandardTypewriter
-import org.incava.mmonkeys.word.Word
+import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.StringEqMatcher
 import org.incava.mmonkeys.match.WordEqMatcher
 import org.incava.mmonkeys.util.Duration
 import org.incava.mmonkeys.util.Table
+import org.incava.mmonkeys.word.Word
 import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -21,7 +23,18 @@ fun Number.percentage(other: Number): Number {
 }
 
 @Disabled
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class WordStringMatcherPerfTest {
+    private val perfTable = PerfTable()
+
+    @BeforeAll
+    fun setup() {
+        println("setting up")
+        println("s1: word")
+        println("s2: string")
+        perfTable.printHeader()
+    }
+
     data class PerfTestStatus(
         val durations: MutableList<Long> = mutableListOf(),
         val iterations: MutableList<Long> = mutableListOf(),
@@ -37,16 +50,14 @@ internal class WordStringMatcherPerfTest {
 
     class PerfTable : Table() {
         private val format: List<Triple<String, Class<out Any>, Int>> = listOf(
-            Triple("chars", String::class.java, 8),
-            Triple("end char", String::class.java, 8),
-            Triple("word time", Long::class.java, 12),
-            Triple("string time", Long::class.java, 12),
-            Triple("string %", Long::class.java, 12),
-            Triple("word iters", Long::class.java, 14),
-            Triple("string iters", Long::class.java, 14),
-            Triple("trials", Long::class.java, 8),
+            Triple("chars", String::class.java, 5),
+            Triple("s1 time", Long::class.java, 8),
+            Triple("s2 time", Long::class.java, 8),
+            Triple("s2 %", Long::class.java, 5),
+            Triple("s1 count", Long::class.java, 12),
+            Triple("s2 count", Long::class.java, 12),
             Triple("matches", Long::class.java, 8),
-            Triple("exec time", String::class.java, 12),
+            Triple("total time", String::class.java, 12),
         )
 
         override fun getHeader(): Array<String> {
@@ -66,54 +77,56 @@ internal class WordStringMatcherPerfTest {
     @ParameterizedTest
     @MethodSource("dataForPerfTest")
     fun perfTestBoth(chars: List<Char>, numTrials: Int, numMatches: Int, string: String) {
-        val wordMonkey = WordMonkey(37, StandardTypewriter(chars))
-        val wordEqMatcher = WordEqMatcher(wordMonkey)
-        val monkey = Monkey(37, StandardTypewriter(chars))
-        val stringEqMatcher = StringEqMatcher(monkey, string)
-        val word = Word(string)
-        val stringStatus = PerfTestStatus()
-        val wordStatus = PerfTestStatus()
+        val typewriter = StandardTypewriter(chars)
+        val monkey = Monkey(37, typewriter)
+        val wordMonkey = WordMonkey(38, typewriter)
+        val s1Matcher = WordEqMatcher(wordMonkey, Word(string))
+        val s2Matcher = StringEqMatcher(monkey, string)
+        val s1Status = PerfTestStatus()
+        val s2Status = PerfTestStatus()
         val sleepInterval = 100L
         val overall = measureTimeMillis {
-            repeat(numTrials) {
-                sleep(sleepInterval)
-                wordStatus.durations += measureTimeMillis {
-                    repeat(numMatches) {
-                        val result = wordEqMatcher.run(word) ?: -1L
-                        wordStatus.iterations += result
-                    }
-                }
-            }
-            repeat(numTrials) {
-                sleep(sleepInterval)
-                stringStatus.durations += measureTimeMillis {
-                    repeat(numMatches) {
-                        val result = stringEqMatcher.run() ?: -1L
-                        stringStatus.iterations += result
-                    }
-                }
-            }
+            runTrials(numTrials, numMatches, s1Matcher, s2Status)
+            runTrials(numTrials, numMatches, s2Matcher, s1Status)
         }
-        val cells = arrayOf(string, chars[chars.size - 2],
-            wordStatus.averageDurations(),
-            stringStatus.averageDurations(),
-            stringStatus.averageDurations().percentage(wordStatus.averageDurations()).toLong(),
-            wordStatus.averageIterations(),
-            stringStatus.averageIterations(),
-            numTrials, numMatches, Duration.millisToString(overall, 5000L))
-        perfTable.printRow(*cells)
+        addTrial(numMatches, overall, string, s2Status, s1Status)
         sleep(sleepInterval)
     }
 
-    companion object {
-        private val perfTable = PerfTable()
+    private fun addTrial(
+        numMatches: Int,
+        duration: Long,
+        string: String,
+        status1: PerfTestStatus,
+        status2: PerfTestStatus,
+    ) {
+        val abbr = string.replace(Regex("^(\\w).*(\\w)$"), "..$2")
+        val cells = arrayOf(
+            abbr,
+            status1.averageDurations(),
+            status2.averageDurations(),
+            status2.averageDurations().percentage(status1.averageDurations()).toLong(),
+            status1.averageIterations(),
+            status2.averageIterations(),
+            numMatches,
+            Duration.millisToString(duration, 5000L))
+        perfTable.printRow(*cells)
+    }
 
-        @BeforeAll
-        @JvmStatic
-        fun writeBanner() {
-            perfTable.printHeader()
+    private fun runTrials(numTrials: Int, numMatches: Int, matcher: Matcher, status: PerfTestStatus) {
+        val sleepInterval = 100L
+        sleep(sleepInterval)
+        repeat(numTrials) {
+            status.durations += measureTimeMillis {
+                repeat(numMatches) {
+                    val result = matcher.run() ?: -1L
+                    status.iterations += result
+                }
+            }
         }
+    }
 
+    companion object {
         private fun arg(sought: String, endChar: Char, numMatches: Int): Arguments {
             return Arguments.of(charList('a', endChar), 4, numMatches, sought)
         }
@@ -132,8 +145,8 @@ internal class WordStringMatcherPerfTest {
                 add(arg("abcde", 'o', 2))
                 add(arg("ab", 'z', 2))
                 add(arg("abc", 'z', 2))
-                add(arg("abcd", 'z', 1))
-                add(arg("abcde", 'z', 1))
+                // add(arg("abcd", 'z', 1))
+                // add(arg("abcde", 'z', 1))
             }
         }
 

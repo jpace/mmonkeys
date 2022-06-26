@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.util
 
-abstract class Table() {
+abstract class Table {
     fun printHeader() {
         val fmt = format(true)
         val header = getHeader()

@@ -21,8 +21,8 @@ internal class WordEqMatcherTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = WordMonkey(1, typewriter)
-                val obj = WordEqMatcher(monkey)
-                val result = obj.run(inputs.second, 1000L)
+                val obj = WordEqMatcher(monkey, inputs.second)
+                val result = obj.run(1000L)
                 assertEquals(expected, result)
             }
         }

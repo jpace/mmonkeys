@@ -31,12 +31,21 @@ internal class StringEqMatcherTest : MatcherTest() {
         }
 
     @Test
-    fun testRunIteration() {
+    fun testRunIterationNoMatch() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
         val obj = StringEqMatcher(monkey, "123")
         val result = obj.runIteration()
         assertFalse(result)
+    }
+
+    @Test
+    fun testRunIterationMatch() {
+        val typewriter = DeterministicTypewriter(charList('a', 'e'))
+        val monkey = Monkey(1, typewriter)
+        val obj = StringEqMatcher(monkey, "abcde")
+        val result = obj.runIteration()
+        assertTrue(result)
     }
 
     @Test

@@ -1,8 +1,9 @@
 package org.incava.mmonkeys.word
 
+import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.Typewriter
 
-class WordMonkey(internal val id: Int, private val typewriter: Typewriter) {
+class WordMonkey(id: Int, private val typewriter: Typewriter) : Monkey(id, typewriter) {
     private fun nextChar(): Char {
         return typewriter.nextCharacter()
     }
