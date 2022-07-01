@@ -5,10 +5,8 @@ import org.incava.mmonkeys.StandardTypewriter
 import org.incava.mmonkeys.Typewriter
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.StringEqMatcher
-import org.incava.mmonkeys.match.WordEqMatcher
+import org.incava.mmonkeys.match.StringPartialMatcher
 import org.incava.mmonkeys.util.Duration
-import org.incava.mmonkeys.word.Word
-import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.lang.Thread.sleep
@@ -24,13 +22,21 @@ internal class MatcherPerfTest {
 
     @Test
     fun runTest() {
-        val params = createParams(charList('a', 'a'), "a")
-        println("s1: ${params.first.name}")
-        println("s2: ${params.second.name}")
         perfTable.printHeader()
         runPerfTrial(charList('a', 'h'), 500, "abc")
         runPerfTrial(charList('a', 'h'), 50, "abcd")
         runPerfTrial(charList('a', 'h'), 7, "abcde")
+        runPerfTrial(charList('a', 'h'), 3, "abcdef")
+        runPerfTrial(charList('a', 'h'), 1, "abcdefg")
+        runPerfTrial(charList('a', 'z'), 1000, "a")
+        runPerfTrial(charList('a', 'z'), 250, "ab")
+        runPerfTrial(charList('a', 'z'), 25, "abc")
+        runPerfTrial(charList('a', 'z'), 5, "abcd")
+        runPerfTrial(charList('a', 'z'), 1, "abcde")
+//        runPerfTrial(charList('a', 'z'), 1, "abcdef")
+//        runPerfTrial(charList('a', 'z'), 1, "abcdefg")
+//        runPerfTrial(charList('a', 'z'), 1, "abcdefgh")
+//        runPerfTrial(charList('a', 'z'), 1, "abcdefghi")
     }
 
     private fun charList(first: Char, last: Char): List<Char> {
@@ -45,9 +51,18 @@ internal class MatcherPerfTest {
         return supplier.invoke(typewriter)
     }
 
+    private fun createMatcher2(
+        chars: List<Char>,
+        string: String,
+        supplier: (typewriter: Typewriter, string: String) -> Matcher,
+    ): Matcher {
+        val typewriter = StandardTypewriter(chars)
+        return supplier.invoke(typewriter, string)
+    }
+
     private fun createParams(chars: List<Char>, string: String): Pair<PerfTestResults, PerfTestResults> {
         val x = createMatcher(chars) { typewriter: Typewriter ->
-            WordEqMatcher(WordMonkey(38, typewriter), Word(string))
+            StringPartialMatcher(Monkey(38, typewriter), string)
         }
         val y = createMatcher(chars) { typewriter: Typewriter ->
             StringEqMatcher(Monkey(37, typewriter), string)
@@ -57,9 +72,13 @@ internal class MatcherPerfTest {
 
     private fun runPerfTrial(chars: List<Char>, numMatches: Int, string: String) {
         val (rx, ry) = createParams(chars, string)
-        val trial = MatcherPerfTrial(rx, ry, numMatches)
+        runPerfTrial(rx, ry, numMatches, string)
+    }
+
+    private fun runPerfTrial(x: PerfTestResults, y: PerfTestResults, numMatches: Int, string: String) {
+        val trial = MatcherPerfTrial(x, y, numMatches, 1)
         val duration = trial.run()
-        addTrial(numMatches, duration, string, rx, ry)
+        addTrial(numMatches, duration, string, x, y)
         pause()
     }
 

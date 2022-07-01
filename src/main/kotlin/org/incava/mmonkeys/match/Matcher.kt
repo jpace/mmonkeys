@@ -13,6 +13,7 @@ abstract class Matcher(open val monkey: Monkey) {
             }
             ++iteration
         }
+        println("failing after $iteration iterations")
         return null
     }
 

@@ -6,12 +6,8 @@ import org.junit.jupiter.api.TestFactory
 
 internal class TableTest {
     class TableX : Table() {
-        override fun getHeader(): Array<String> {
-            TODO("Not yet implemented")
-        }
-
-        override fun getWidths(header: Boolean): List<Pair<Class<out Any>, Int>> {
-            TODO("Not yet implemented")
+        override fun cells(): List<Triple<String, Class<out Any>, Int>> {
+            return emptyList()
         }
     }
 

@@ -8,15 +8,26 @@ abstract class Table {
         println(str)
     }
 
+    abstract fun cells(): List<Triple<String, Class<out Any>, Int>>
+
     fun printRow(vararg values: Any) {
         val fmt = format(false)
         val str = String.format(fmt, *values)
         println(str)
     }
 
-    abstract fun getHeader(): Array<String>
+    private fun getHeader(): Array<String> {
+        return cells().map {
+            it.first
+        }.toTypedArray()
+    }
 
-    abstract fun getWidths(header: Boolean): List<Pair<Class<out Any>, Int>>
+    private fun getWidths(header: Boolean): List<Pair<Class<out Any>, Int>> {
+        return cells().map {
+            val cls = if (header) String::class.java else it.second
+            (cls to it.third)
+        }
+    }
 
     fun format(header: Boolean): String {
         val fields = getWidths(header).map {

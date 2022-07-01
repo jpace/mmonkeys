@@ -5,10 +5,10 @@ import kotlin.system.measureTimeMillis
 
 internal class MatcherPerfTrial(
     private val s1: PerfTestResults,
-    private val s2: PerfTestResults,
+    private val s2: PerfTestResults?,
     private val numMatches: Int,
+    private val numTrials: Int = 4,
 ) {
-    private val numTrials = 4
     private val sleepInterval = 100L
 
     private fun pause() {
@@ -18,7 +18,9 @@ internal class MatcherPerfTrial(
     fun run(): Long {
         val duration = measureTimeMillis {
             runTrials(s1)
-            runTrials(s2)
+            if (s2 != null) {
+                runTrials(s2)
+            }
         }
         pause()
         return duration
