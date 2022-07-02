@@ -1,12 +1,12 @@
 package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.DeterministicTypewriter
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.word.Word
 import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 
 internal class WordEqMatcherTest : MatcherTest() {
     @TestFactory
@@ -22,8 +22,15 @@ internal class WordEqMatcherTest : MatcherTest() {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = WordMonkey(1, typewriter)
                 val obj = WordEqMatcher(monkey, inputs.second)
-                val result = obj.run(1000L)
-                assertEquals(expected, result)
+                run(obj, expected)
+                if (expected == null) {
+                    assertThrows<RuntimeException> {
+                        obj.run(1000L)
+                    }
+                } else {
+                    val result = obj.run(1000L)
+                    assertEquals(expected, result)
+                }
             }
         }
 }

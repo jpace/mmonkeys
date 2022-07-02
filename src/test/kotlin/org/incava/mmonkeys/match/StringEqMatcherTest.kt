@@ -23,10 +23,7 @@ internal class StringEqMatcherTest : MatcherTest() {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
                 val obj = StringEqMatcher(monkey, inputs.second)
-                val result = obj.run(1000L)
-                assertEquals(expected, result)
-                val iteration = obj.iteration
-                assertTrue(iteration >= 0)
+                run(obj, expected)
             }
         }
 

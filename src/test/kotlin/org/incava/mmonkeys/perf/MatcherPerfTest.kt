@@ -60,7 +60,7 @@ internal class MatcherPerfTest {
         val y = createMatcher(chars) { typewriter: Typewriter ->
             StringEqMatcher(Monkey(37, typewriter), string)
         }
-        return PerfTestResults("word", x) to PerfTestResults("string", y)
+        return PerfTestResults("word", x, 0) to PerfTestResults("string", y, 0)
     }
 
     private fun runPerfTrial(chars: List<Char>, numMatches: Int, string: String) {

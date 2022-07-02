@@ -5,12 +5,10 @@ import org.incava.mmonkeys.StandardTypewriter
 import org.incava.mmonkeys.match.StringMatcher
 import kotlin.system.measureTimeMillis
 
-class PerfTrial(
-    lastChar: Char,
-    sought: String,
-    typeCtor: (List<Char>) -> StandardTypewriter,
-    matchCtor: (Monkey, String) -> StringMatcher,
-) {
+typealias TypewriterCtor = (List<Char>) -> StandardTypewriter
+typealias MatcherCtor = (Monkey, String) -> StringMatcher
+
+class PerfTrial(lastChar: Char, sought: String, typeCtor: TypewriterCtor, matchCtor: MatcherCtor) {
     val matcher: StringMatcher
 
     init {
@@ -35,12 +33,10 @@ class PerfTrial(
         val iterations = mutableListOf<Long>()
         pause()
         val duration = measureTimeMillis {
-            repeat(4) {
+            repeat(numMatches) {
                 durations += measureTimeMillis {
-                    repeat(numMatches) {
-                        val result = matcher.run() ?: -1L
-                        iterations += result
-                    }
+                    val result = matcher.run()
+                    iterations += result
                 }
             }
         }

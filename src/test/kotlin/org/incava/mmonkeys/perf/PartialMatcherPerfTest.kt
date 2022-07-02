@@ -26,8 +26,8 @@ internal class PartialMatcherPerfTest {
             ),
             'z' to listOf(
                 "abc" to 1_000,
-                "abcd" to 1000,
-                "abcde" to 100,
+                "abcd" to 100,
+                "abcde" to 10,
                 "abcdef" to 1,
 //            "abcdefg" to 1,
 //            "abcdefgh" to 1,
