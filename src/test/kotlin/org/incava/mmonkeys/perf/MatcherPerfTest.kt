@@ -7,10 +7,12 @@ import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.StringEqMatcher
 import org.incava.mmonkeys.match.StringPartialMatcher
 import org.incava.mmonkeys.util.Duration
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.lang.Thread.sleep
 
+@Disabled
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class MatcherPerfTest {
     private val perfTable = PerfTable()
@@ -49,15 +51,6 @@ internal class MatcherPerfTest {
     ): Matcher {
         val typewriter = StandardTypewriter(chars)
         return supplier.invoke(typewriter)
-    }
-
-    private fun createMatcher2(
-        chars: List<Char>,
-        string: String,
-        supplier: (typewriter: Typewriter, string: String) -> Matcher,
-    ): Matcher {
-        val typewriter = StandardTypewriter(chars)
-        return supplier.invoke(typewriter, string)
     }
 
     private fun createParams(chars: List<Char>, string: String): Pair<PerfTestResults, PerfTestResults> {

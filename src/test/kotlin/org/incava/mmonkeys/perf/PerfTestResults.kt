@@ -5,6 +5,7 @@ import org.incava.mmonkeys.match.Matcher
 data class PerfTestResults(
     val name: String,
     val matcher: Matcher,
+    val duration: Long = -1L,
     val durations: MutableList<Long> = mutableListOf(),
     val iterations: MutableList<Long> = mutableListOf(),
 ) {

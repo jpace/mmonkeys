@@ -9,7 +9,7 @@ internal class MemoryTableTest {
     fun `given boolean argument, the result should match`() =
         listOf(
             true to "%7s | %14s | %6s | %6s | %6s",
-            false to "%7s | %,14d | %,6d | %,6d | %,6d",
+            false to "%7s | %,14d | %,6d | %,6d | %6s",
         ).map { (input, expected) ->
             DynamicTest.dynamicTest("given \"$input\", " +
                     "when formatting, " +
