@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.exec
 
-import org.incava.mmonkeys.StandardTypewriter
+import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console.log
 import kotlin.system.measureTimeMillis
 

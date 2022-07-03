@@ -24,12 +24,12 @@ class PerfTest {
         table.printHeader()
     }
 
-    fun addTrial(trial: PerfTrial, numMatches: Int) {
-        val results = trial.run(numMatches)
-        addResults(numMatches, trial.matcher.sought, results)
+    fun addTrial(perfTrial: PerfTrial, numMatches: Int) {
+        val results = perfTrial.run(numMatches)
+        addResults(numMatches, perfTrial.matcher.sought, results)
     }
 
-    fun memoryUsed() : Long {
+    private fun memoryUsed() : Long {
         val mb = 2.0.pow(20).toLong()
         val runtime = Runtime.getRuntime()
         val total = runtime.totalMemory() / mb
@@ -37,7 +37,7 @@ class PerfTest {
         return total - free
     }
 
-    private fun addResults(numMatches: Int, string: String, results: PerfTestResults) {
+    private fun addResults(numMatches: Int, string: String, results: PerfResults) {
         val abbr = string.replace(Regex("^(\\w).*(\\w)$"), "..$2")
         val cells = arrayOf(
             abbr,

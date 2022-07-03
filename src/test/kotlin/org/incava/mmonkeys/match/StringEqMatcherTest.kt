@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.match
 
-import org.incava.mmonkeys.DeterministicTypewriter
+import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.Monkey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest

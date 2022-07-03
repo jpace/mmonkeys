@@ -1,4 +1,4 @@
-package org.incava.mmonkeys
+package org.incava.mmonkeys.type
 
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.params.ParameterizedTest

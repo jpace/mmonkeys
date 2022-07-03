@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.mmonkeys.util.Console
 import kotlin.math.abs
 import kotlin.test.assertTrue
 
@@ -11,7 +10,7 @@ open class RandTest {
         50_000 to 7.2,
         100_000 to 3.2,
         500_000 to 1.2,
-        1_000_000 to 1.0,
+        1_000_000 to 1.1,
         5_000_000 to 0.7,
     )
     val exp98 = 112.271
@@ -20,14 +19,5 @@ open class RandTest {
     fun assertWithin(expected: Double, result: Double, maxDistance: Double) {
         val diff = abs(result - expected)
         assertTrue(diff <= maxDistance, "expected: $diff within $maxDistance of $expected")
-    }
-
-    fun <T> runTimer(msg: String = "duration", block: () -> T): T {
-        val start = System.currentTimeMillis()
-        val result = block()
-        val done = System.currentTimeMillis()
-        val duration = done - start
-        Console.log(msg, duration)
-        return result
     }
 }

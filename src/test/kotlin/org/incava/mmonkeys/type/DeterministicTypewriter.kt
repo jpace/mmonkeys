@@ -1,4 +1,4 @@
-package org.incava.mmonkeys
+package org.incava.mmonkeys.type
 
 class DeterministicTypewriter(private val characters: List<Char>) : Typewriter {
     private val numChars: Int = characters.size

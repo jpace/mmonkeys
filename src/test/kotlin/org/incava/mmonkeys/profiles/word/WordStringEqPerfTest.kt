@@ -1,16 +1,13 @@
-package org.incava.mmonkeys.perf
+package org.incava.mmonkeys.profiles.word
 
-import org.incava.mmonkeys.word.Word
 import org.incava.mmonkeys.util.Console.log
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
+import org.incava.mmonkeys.word.Word
 import java.lang.Thread.sleep
 import kotlin.math.pow
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-@Disabled
-internal class WordStringEqPerfTest {
+class WordStringEqPerfTest {
     private fun runPerfTest(x: Any, y: Any, z: Any, type: String, iterations: Long) {
         val duration = measureTimeMillis {
             for (i in 0..iterations) {
@@ -56,7 +53,6 @@ internal class WordStringEqPerfTest {
         sleep(2000L)
     }
 
-    @Test
     fun equalsPerformance() {
         val exponent = 8
         val iterations = 10.0.pow(exponent).toLong()
@@ -65,4 +61,8 @@ internal class WordStringEqPerfTest {
         runPerfTest("abc", "defghi", iterations)
         runPerfTest("abc", "abcdef", iterations)
     }
+}
+
+fun main(args: Array<String>) {
+    WordStringEqPerfTest().equalsPerformance()
 }

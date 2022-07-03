@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.word
 
-import org.incava.mmonkeys.DeterministicTypewriter
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.StandardTypewriter
+import org.incava.mmonkeys.type.DeterministicTypewriter
+import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest

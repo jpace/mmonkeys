@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.match
 
-import org.incava.mmonkeys.DeterministicTypewriter
+import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.Monkey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class StringPartialMatcherTest : MatcherTest() {
+internal class StringPartialMatcherPerfTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(

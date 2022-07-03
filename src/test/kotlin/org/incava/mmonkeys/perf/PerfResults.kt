@@ -2,7 +2,7 @@ package org.incava.mmonkeys.perf
 
 import org.incava.mmonkeys.match.Matcher
 
-data class PerfTestResults(
+data class PerfResults(
     val name: String,
     val matcher: Matcher,
     val duration: Long,
