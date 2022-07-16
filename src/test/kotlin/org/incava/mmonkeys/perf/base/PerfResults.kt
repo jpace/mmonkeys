@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.perf
+package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.match.Matcher
 

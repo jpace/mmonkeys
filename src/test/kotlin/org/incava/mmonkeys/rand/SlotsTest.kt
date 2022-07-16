@@ -61,7 +61,6 @@ internal class SlotsTest {
             1_000_000 to 1.0,
             5_000_000 to 0.7,
         ).map { (input, expected) ->
-
             DynamicTest.dynamicTest("given $input, " +
                     "when running the generate method, " +
                     "then the result should be within distance $expected") {

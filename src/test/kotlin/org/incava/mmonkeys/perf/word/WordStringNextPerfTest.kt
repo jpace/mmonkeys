@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.profiles.word
+package org.incava.mmonkeys.perf.word
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.type.StandardTypewriter
@@ -35,7 +35,7 @@ class WordStringNextPerfTest {
         }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val obj = WordStringNextPerfTest()
     obj.`measure string performance`()
     obj.`measure string performance`()

@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.profiles.word
+package org.incava.mmonkeys.perf.word
 
 import org.incava.mmonkeys.util.Console.log
 import org.incava.mmonkeys.word.Word
@@ -63,6 +63,6 @@ class WordStringEqPerfTest {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     WordStringEqPerfTest().equalsPerformance()
 }

@@ -1,17 +1,15 @@
-package org.incava.mmonkeys.profiles.match
+package org.incava.mmonkeys.perf.match
 
 import org.incava.mmonkeys.match.StringPartialMatcher
-import org.incava.mmonkeys.perf.PerfTest
-import org.incava.mmonkeys.perf.PerfTrial
-import org.incava.mmonkeys.profiles.word.WordStringNextPerfTest
+import org.incava.mmonkeys.perf.base.PerfTest
+import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
 
 class PartialMatcherPerfTest {
-    val typeCtor = ::StandardTypewriter
-    val matchCtor = ::StringPartialMatcher
+    private val typeCtor = ::StandardTypewriter
+    private val matchCtor = ::StringPartialMatcher
 
     fun run() {
-
         val test = PerfTest()
         val params = mapOf(
             'h' to listOf(
@@ -40,7 +38,7 @@ class PartialMatcherPerfTest {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val obj = PartialMatcherPerfTest()
     obj.run()
 }
