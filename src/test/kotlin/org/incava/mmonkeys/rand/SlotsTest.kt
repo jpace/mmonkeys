@@ -19,14 +19,13 @@ internal class SlotsTest {
 
     @Test
     fun reduceSlots() {
-        val input = mutableMapOf<Int, Int>()
         // inputs from RandCalculated are ascending
-        (0 until 10).forEach { outer ->
-            (outer * 100 until (outer + 1) * 100).forEach { inner ->
-                input[inner] = outer
-            }
-        }
-        val result = Slots.reduceSlots(input, 10)
+        val slotSize = 100
+        val inputs = (0 until 1000).map {
+            val value = it / slotSize
+            Pair(it, value)
+        }.toMap()
+        val result = Slots.reduceSlots(inputs, inputs.size / slotSize)
         assertEquals(100, result.size)
         assertEquals(0, result.keys.first())
         assertEquals(99, result.keys.last())
@@ -45,7 +44,7 @@ internal class SlotsTest {
         }
     }
 
-    fun assertWithin(expected: Double, result: Double, maxDistance: Double) {
+    private fun assertWithin(expected: Double, result: Double, maxDistance: Double) {
         val diff = abs(result - expected)
         assertTrue(diff <= maxDistance, "expected: $diff within $maxDistance of $expected")
     }

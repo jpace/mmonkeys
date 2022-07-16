@@ -1,21 +1,18 @@
 package org.incava.mmonkeys.rand
 
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.Test
 
 internal class RandGeneratedTest : RandTest() {
-    @TestFactory
-    fun generateTest() =
-        inputs.map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input, " +
-                    "when running the generate method, " +
-                    "then the result should be within distance $expected") {
-                val obj = RandGenerated()
-                val results = obj.generate(27, input)
-                val result98 = results.getOrDefault(98, 0.0)
-                assertWithin(exp98, result98, expected)
-                val result99 = results.getOrDefault(99, 0.0)
-                assertWithin(exp99, result99, expected)
-            }
+    @Test
+    fun nextRand() {
+        val obj = RandGenerated(27, 1000)
+        var sum = 0.0
+        val iterations = 100000
+        repeat(iterations) {
+            val result = obj.nextRand()
+            sum += result
         }
+        // with enough iterations the overall average should be ~= 27
+        assertWithin(27.0, sum / iterations, 1.5)
+    }
 }

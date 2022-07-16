@@ -17,7 +17,7 @@ object Slots {
         return reduced
     }
 
-    fun calculate(size: Int, numSlots: Int = 1000): Map<Int, Int> {
+    fun calculate(size: Int, numSlots: Int): Map<Int, Int> {
         val slots = mutableMapOf<Int, Int>()
         var currentSlot = 0
         var count = 1

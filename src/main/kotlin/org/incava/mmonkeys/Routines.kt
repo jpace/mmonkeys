@@ -22,7 +22,7 @@ class Routines {
             }
             val jobs = List(count) {
                 launch {
-                    (0 until 100).forEach { num ->
+                    (0 until 100).forEach { _ ->
                         number.incrementAndGet()
                     }
                 }
