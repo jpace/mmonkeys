@@ -62,7 +62,7 @@ class WordStringMatcherPerfTest {
         val duration = measureTimeMillis {
             durations += measureTimeMillis {
                 repeat(numMatches) {
-                    val result = matcher.run() ?: -1L
+                    val result = matcher.run()
                     iterations += result
                 }
             }

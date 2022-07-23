@@ -7,9 +7,9 @@ import org.incava.mmonkeys.util.Console.log
 fun main(args: Array<String>) {
     log("main")
     log("args", args.toList())
-    val charList = ('a'..'p').toList() + ' '
-    val sought = "abc"
-    val params = SimulationParams(charList = charList, numMonkeys = 27, sought = sought, iterations = 1)
+    val charList = ('a'..'z').toList() + ' '
+    val sought = "abcd"
+    val params = SimulationParams(charList = charList, numMonkeys = 1000, sought = sought, iterations = 1)
     val simulation = when {
         args.isEmpty() || args[0] == "--string" -> {
             StringSimulation(params)

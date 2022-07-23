@@ -2,6 +2,7 @@ package org.incava.mmonkeys.exec
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.Monkeys
+import org.incava.mmonkeys.match.StringEqMatcher
 import org.incava.mmonkeys.util.Console.log
 
 class StringSimulation(params: SimulationParams) : Simulation(params) {
@@ -11,9 +12,10 @@ class StringSimulation(params: SimulationParams) : Simulation(params) {
 
     override fun runIteration() {
         log("string -------------------------------------")
+        val matching = { monkey: Monkey, sought: String -> StringEqMatcher(monkey, sought) }
         runIteration("string") {
             val monkeyList = (0 until params.numMonkeys).map { Monkey(it, typewriter) }
-            val monkeys = Monkeys(monkeyList, params.sought, maxAttempts)
+            val monkeys = Monkeys(monkeyList, params.sought, matching, maxAttempts)
             val iteration = monkeys.run()
             log("iteration", iteration)
         }
