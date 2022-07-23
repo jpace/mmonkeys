@@ -1,9 +1,8 @@
-package org.incava.mmonkeys.exec
+package org.incava.mmonkeys.word
 
+import org.incava.mmonkeys.exec.Simulation
+import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.util.Console.log
-import org.incava.mmonkeys.word.Word
-import org.incava.mmonkeys.word.WordMonkey
-import org.incava.mmonkeys.word.WordMonkeys
 
 class WordSimulation(params: SimulationParams, private val sought: Word = Word(params.sought)) : Simulation(params) {
     override fun name(): String {

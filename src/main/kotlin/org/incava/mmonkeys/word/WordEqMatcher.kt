@@ -1,7 +1,6 @@
-package org.incava.mmonkeys.match
+package org.incava.mmonkeys.word
 
-import org.incava.mmonkeys.word.Word
-import org.incava.mmonkeys.word.WordMonkey
+import org.incava.mmonkeys.match.Matcher
 
 class WordEqMatcher(override val monkey: WordMonkey, private val sought: Word) : Matcher(monkey) {
     override fun runIteration(): Boolean {

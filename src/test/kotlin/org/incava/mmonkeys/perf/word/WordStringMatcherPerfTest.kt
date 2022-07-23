@@ -3,7 +3,7 @@ package org.incava.mmonkeys.perf.word
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.StringEqMatcher
-import org.incava.mmonkeys.match.WordEqMatcher
+import org.incava.mmonkeys.word.WordEqMatcher
 import org.incava.mmonkeys.perf.base.PerfResults
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Duration

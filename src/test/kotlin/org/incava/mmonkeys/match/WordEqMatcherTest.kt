@@ -2,6 +2,7 @@ package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.word.Word
+import org.incava.mmonkeys.word.WordEqMatcher
 import org.incava.mmonkeys.word.WordMonkey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest

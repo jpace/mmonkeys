@@ -9,7 +9,35 @@ import org.incava.mmonkeys.util.Console.log
 class Monkeys (
     private val list: List<Monkey>,
     private val sought: String,
-    matching: ((monkey: Monkey, sought: String) -> Matcher),
+    private val matching: ((monkey: Monkey, sought: String) -> Matcher),
     maxAttempts: Long,
-) : MatchMonkeys(list, sought, matching, maxAttempts) {
+) : BaseMonkeys(maxAttempts) {
+    override fun CoroutineScope.launchMonkeys() = list.map { monkey ->
+        launch {
+            val matcher = matching.invoke(monkey, sought)
+            runMatcher(matcher)
+        }
+    }
+
+    private suspend fun runMatcher(matcher: Matcher) {
+        (0 until maxAttempts).forEach { iteration ->
+            when {
+                found.get() -> {
+                    return
+                }
+                matcher.runIteration() -> {
+                    iterations.incrementAndGet()
+                    log("success", matcher.monkey.id)
+                    log("iteration", iteration)
+                    log("matcher iter", matcher.iteration)
+                    found.set(true)
+                    return
+                }
+                else -> {
+                    iterations.incrementAndGet()
+                    delay(5L)
+                }
+            }
+        }
+    }
 }
