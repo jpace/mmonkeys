@@ -11,7 +11,7 @@ open class StringPartialMatcher(monkey: Monkey, sought: String) : StringMatcher(
             if (ch == sought[idx]) {
                 ++idx
                 if (idx == len) {
-                    return true
+                    return monkey.nextChar() == ' '
                 }
             } else {
                 break

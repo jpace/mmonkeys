@@ -42,7 +42,7 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
             }
             log("watcher#found!")
             jobs.forEach {
-                log("canceling", it)
+                // log("canceling", it)
                 it.cancel()
             }
         }

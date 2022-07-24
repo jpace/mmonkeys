@@ -15,6 +15,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
         listOf(
             (charList('a', 'c') to "abc") to 0L,
             (charList('a', 'e') to "abcde") to 0L,
+            (charList('a', 'f') to "abcde") to null,
             (charList('a', 'e') to "invalid") to null,
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, " +

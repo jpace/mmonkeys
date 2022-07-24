@@ -1,9 +1,9 @@
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.SimulationParams
-import org.incava.mmonkeys.exec.StringMatcherSimulation
 import org.incava.mmonkeys.exec.StringSimulation
 import org.incava.mmonkeys.word.WordSimulation
 import org.incava.mmonkeys.match.StringEqMatcher
+import org.incava.mmonkeys.match.StringPartialMatcher
 import org.incava.mmonkeys.util.Console.log
 
 fun main(args: Array<String>) {
@@ -11,14 +11,12 @@ fun main(args: Array<String>) {
     log("args", args.toList())
     val charList = ('a'..'p').toList() + ' '
     val sought = "abcd"
-    val matching = { monkey: Monkey, str: String -> StringEqMatcher(monkey, str) }
-    val params = SimulationParams(charList = charList, numMonkeys = 1000, sought = sought, matching = matching)
+    val eqMatch = { monkey: Monkey, str: String -> StringEqMatcher(monkey, str) }
+    val partialMatch = { monkey: Monkey, str: String -> StringPartialMatcher(monkey, str) }
+    val params = SimulationParams(charList, 1000, sought, matching = eqMatch)
     val simulation = when {
-        args.isEmpty() || args[0] == "--string" -> {
+        args.isEmpty() || args[0] == "--string" || args[0] == "--stringmatch" -> {
             StringSimulation(params)
-        }
-        args[0] == "--stringmatch" -> {
-            StringMatcherSimulation(params)
         }
         args[0] == "--word" -> {
             WordSimulation(params)
@@ -27,6 +25,7 @@ fun main(args: Array<String>) {
             StringSimulation(params)
         }
     }
+    params.summarize()
     log(simulation.name())
     simulation.run()
     simulation.summarize()

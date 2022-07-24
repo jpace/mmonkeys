@@ -6,7 +6,8 @@ import kotlinx.coroutines.launch
 import org.incava.mmonkeys.BaseMonkeys
 import org.incava.mmonkeys.util.Console.log
 
-class WordMonkeys(private val list: List<WordMonkey>, private val sought: Word, maxAttempts: Long) : BaseMonkeys(maxAttempts) {
+class WordMonkeys(private val list: List<WordMonkey>, private val sought: Word, maxAttempts: Long) :
+    BaseMonkeys(maxAttempts) {
     override fun CoroutineScope.launchMonkeys() = list.map { monkey ->
         launch {
             runMonkey(monkey)

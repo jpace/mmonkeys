@@ -6,7 +6,10 @@ import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 class RandGenVsCalcTest {
-    private fun runCtor(durations: MutableList<Long>, count: Int, block: () -> Any) {
+    private val random = Random.Default
+    private val size = 27
+
+    private fun runBlock(durations: MutableList<Long>, count: Int, block: () -> Any) {
         val duration = measureTimeMillis {
             repeat(count) {
                 block()
@@ -15,52 +18,41 @@ class RandGenVsCalcTest {
         durations += duration
     }
 
+    private fun runBlocks(
+        count: Int,
+        firstBlock: () -> Any,
+        secondBlock: () -> Any,
+    ): Pair<List<Long>, List<Long>> {
+        val firstTimes = mutableListOf<Long>()
+        val secondTimes = mutableListOf<Long>()
+        repeat(10) {
+            if (random.nextBoolean()) {
+                runBlock(firstTimes, count, firstBlock)
+                runBlock(secondTimes, count, secondBlock)
+            } else {
+                runBlock(secondTimes, count, secondBlock)
+                runBlock(firstTimes, count, firstBlock)
+            }
+        }
+        return firstTimes to secondTimes
+    }
+
     fun ctor() {
         println("ctor")
-        val count = 500
-        val size = 27
-        val random = Random.Default
         val calcBlock = { RandCalculated(size, 10000) }
         val genBlock = { RandGenerated(size, 10000) }
-        val calcTimes = mutableListOf<Long>()
-        val genTimes = mutableListOf<Long>()
-        val types = (calcTimes to calcBlock) to (genTimes to genBlock)
-        repeat(10) {
-            val (x, y) = if (random.nextBoolean()) types else types.second to types.first
-            runCtor(x.first, count, x.second)
-            runCtor(y.first, count, y.second)
-        }
+        val (calcTimes, genTimes) = runBlocks(500, calcBlock, genBlock)
         println("calc : ${calcTimes.average()}")
         println("gen  : ${genTimes.average()}")
     }
 
-    private fun runNextRand(durations: MutableList<Long>, count: Int, block: () -> Double) {
-        val duration = measureTimeMillis {
-            val values = mutableListOf<Double>()
-            repeat(count) {
-                values += block()
-            }
-        }
-        durations += duration
-    }
-
     fun nextRand() {
         println("nextRand")
-        val count = 10000000
-        val random = Random.Default
-        val size = 27
         val calc = RandCalculated(size, 10000)
         val gen = RandGenerated(size, 10000)
-        val calcTimes = mutableListOf<Long>()
-        val genTimes = mutableListOf<Long>()
         val calcBlock = { calc.nextRand() }
         val genBlock = { gen.nextRand() }
-        val types = (calcTimes to calcBlock) to (genTimes to genBlock)
-        repeat(10) {
-            val (x, y) = if (random.nextBoolean()) types else types.second to types.first
-            runNextRand(x.first, count, x.second)
-            runNextRand(y.first, count, y.second)
-        }
+        val (calcTimes, genTimes) = runBlocks(10000000, calcBlock, genBlock)
         println("calc : ${calcTimes.average()}")
         println("gen  : ${genTimes.average()}")
     }

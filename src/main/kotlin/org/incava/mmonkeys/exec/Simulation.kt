@@ -11,7 +11,6 @@ abstract class Simulation(val params: SimulationParams) {
     val durations = mutableListOf<Long>()
 
     fun run() {
-        log(name())
         repeat(params.iterations) {
             runIteration()
         }
