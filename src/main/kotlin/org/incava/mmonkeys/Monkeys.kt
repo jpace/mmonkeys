@@ -25,7 +25,7 @@ class Monkeys (
                 found.get() -> {
                     return
                 }
-                matcher.runIteration() -> {
+                matcher.runIteration() != null -> {
                     iterations.incrementAndGet()
                     log("success", matcher.monkey.id)
                     log("iteration", iteration)

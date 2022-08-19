@@ -4,6 +4,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 internal class StringLengthMatcherTest : MatcherTest() {
@@ -16,7 +17,7 @@ internal class StringLengthMatcherTest : MatcherTest() {
         repeat(100) {
             val result = obj.runIteration()
             println("result = $result")
-            assertTrue(result, "it: $it")
+            assertNotNull(result, "it: $it")
         }
     }
 }

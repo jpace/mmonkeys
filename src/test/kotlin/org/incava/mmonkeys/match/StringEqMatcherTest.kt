@@ -1,13 +1,13 @@
 package org.incava.mmonkeys.match
 
-import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 internal class StringEqMatcherTest : MatcherTest() {
     @TestFactory
@@ -33,7 +33,7 @@ internal class StringEqMatcherTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringEqMatcher(monkey, "123")
         val result = obj.runIteration()
-        assertFalse(result)
+        assertNull(result)
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class StringEqMatcherTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringEqMatcher(monkey, "abcde")
         val result = obj.runIteration()
-        assertTrue(result)
+        assertNotNull(result)
     }
 
     @Test

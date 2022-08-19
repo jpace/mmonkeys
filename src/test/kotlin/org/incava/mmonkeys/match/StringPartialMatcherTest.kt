@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 internal class StringPartialMatcherPerfTest : MatcherTest() {
@@ -34,7 +36,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringPartialMatcher(monkey, "123")
         val result = obj.runIteration()
-        assertFalse(result)
+        assertNull(result)
     }
 
     @Test
@@ -43,7 +45,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringPartialMatcher(monkey, "abcde")
         val result = obj.runIteration()
-        assertTrue(result)
+        assertNotNull(result)
     }
 
     @Test

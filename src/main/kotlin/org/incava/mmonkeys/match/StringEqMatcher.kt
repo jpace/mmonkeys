@@ -3,8 +3,8 @@ package org.incava.mmonkeys.match
 import org.incava.mmonkeys.Monkey
 
 class StringEqMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
-    override fun runIteration(): Boolean {
+    override fun runIteration(): Any? {
         val word = monkey.nextString()
-        return word == sought
+        return if (word == sought) sought else null
     }
 }

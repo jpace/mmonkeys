@@ -3,7 +3,7 @@ package org.incava.mmonkeys.match
 import org.incava.mmonkeys.Monkey
 
 class StringPartialMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
-    override fun runIteration(): Boolean {
+    override fun runIteration(): String? {
         var idx = 0
         val len = sought.length
         while (idx < len) {
@@ -11,12 +11,12 @@ class StringPartialMatcher(monkey: Monkey, sought: String) : StringMatcher(monke
             if (ch == sought[idx]) {
                 ++idx
                 if (idx == len) {
-                    return monkey.nextChar() == ' '
+                    return if (monkey.nextChar() == ' ') sought else null
                 }
             } else {
                 break
             }
         }
-        return false
+        return null
     }
 }
