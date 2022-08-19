@@ -41,7 +41,7 @@ class MatcherSimulation {
             durations.plusAssign(simulation.durations.average())
         }
         types.forEach {
-            println("${it.first}.average = ${it.third.average()}")
+            println("${it.first}.average = ${it.third.average().toInt()}")
         }
     }
 }

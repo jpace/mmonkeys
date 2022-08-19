@@ -29,7 +29,7 @@ class Monkeys(
                 }
                 matcher.runIteration() != null -> {
                     iterations.incrementAndGet()
-                    Console.info(whence, "uccess", matcher.monkey.id)
+                    Console.info(whence, "success", matcher.monkey.id)
                     Console.info(whence, "iteration", iteration)
                     Console.info(whence, "iterations", iterations)
                     found.set(true)

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class StringEqMatcherTest : MatcherTest() {
     @TestFactory
@@ -33,7 +33,7 @@ internal class StringEqMatcherTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringEqMatcher(monkey, "123")
         val result = obj.runIteration()
-        assertNull(result)
+        assertFalse(result.isMatch)
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class StringEqMatcherTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringEqMatcher(monkey, "abcde")
         val result = obj.runIteration()
-        assertNotNull(result)
+        assertTrue(result.isMatch)
     }
 
     @Test

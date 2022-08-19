@@ -1,14 +1,12 @@
 package org.incava.mmonkeys.match
 
-import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 internal class StringPartialMatcherPerfTest : MatcherTest() {
@@ -36,7 +34,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringPartialMatcher(monkey, "123")
         val result = obj.runIteration()
-        assertNull(result)
+        assertFalse(result.isMatch)
     }
 
     @Test
@@ -45,7 +43,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val obj = StringPartialMatcher(monkey, "abcde")
         val result = obj.runIteration()
-        assertNotNull(result)
+        assertTrue(result.isMatch)
     }
 
     @Test

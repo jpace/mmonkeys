@@ -9,7 +9,7 @@ abstract class Matcher(open val monkey: Monkey) {
         iteration = 0L
         while (iteration < maxAttempts) {
             val result = runIteration()
-            if (result != null) {
+            if (result.isMatch) {
                 return iteration
             }
             ++iteration
@@ -18,5 +18,5 @@ abstract class Matcher(open val monkey: Monkey) {
         throw RuntimeException("failing after $iteration iterations")
     }
 
-    abstract fun runIteration(): Any?
+    abstract fun runIteration(): MatchData
 }
