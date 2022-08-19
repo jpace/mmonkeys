@@ -2,12 +2,13 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.StringSimulation
 import org.incava.mmonkeys.match.StringEqMatcher
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 import org.incava.mmonkeys.word.WordSimulation
 
 fun main(args: Array<String>) {
-    log("main")
-    log("args", args.toList())
+    val whence = "WordMain"
+    Console.info(whence, "main")
+    Console.info(whence, "args", args.toList())
     val charList = ('a'..'p').toList() + ' '
     val sought = "abcd"
     val eq = { monkey: Monkey, str: String -> StringEqMatcher(monkey, str) }
@@ -23,7 +24,7 @@ fun main(args: Array<String>) {
             StringSimulation(params)
         }
     }
-    log(simulation.name())
+    Console.info(whence, simulation.name())
     simulation.run()
     simulation.summarize()
 }

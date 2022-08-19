@@ -18,16 +18,16 @@ class CompOption(val name: String, val block: () -> Any) {
     }
 }
 
-class Comparison(vararg val options: CompOption) {
+class Comparison(private vararg val options: CompOption) {
     private val random = Random.Default
 
     fun run(count: Int) {
         repeat(10) {
             val offset = random.nextInt(options.size)
-            println("offset = ${offset}")
+            println("offset = $offset")
             options.indices.forEach {
                 val idx = it % offset
-                println("idx   = ${idx}")
+                println("idx   = $idx")
                 val x = options[idx]
                 println("x     = ${x.name}")
                 x.run(count)

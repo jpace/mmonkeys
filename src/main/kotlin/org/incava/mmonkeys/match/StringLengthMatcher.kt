@@ -13,11 +13,9 @@ class StringLengthMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey
         // an empty string
         // TODO: fix this casting to store the slots as longs, not doubles.
         val length = rand.nextRand().toInt()
-        println("length: $length")
-        println("soughtLen: $soughtLen")
         return if (length == soughtLen) {
             val word = monkey.nextChars(length - 1)
-            word
+            word == sought
         } else {
             null
         }

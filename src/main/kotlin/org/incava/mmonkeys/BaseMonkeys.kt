@@ -22,8 +22,8 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
             watcher.cancel()
             memory.showCurrent(iterations)
         }
-        log("found?", found.get())
-        log("iterations", iterations.get())
+//        log("found?", found.get())
+//        log("iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 
@@ -40,9 +40,7 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
             while (!found.get()) {
                 delay(1000L)
             }
-            log("watcher#found!")
             jobs.forEach {
-                // log("canceling", it)
                 it.cancel()
             }
         }

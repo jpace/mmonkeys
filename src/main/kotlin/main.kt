@@ -1,10 +1,9 @@
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.StringSimulation
-import org.incava.mmonkeys.word.WordSimulation
 import org.incava.mmonkeys.match.StringEqMatcher
-import org.incava.mmonkeys.match.StringPartialMatcher
 import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.word.WordSimulation
 
 fun main(args: Array<String>) {
     log("main")

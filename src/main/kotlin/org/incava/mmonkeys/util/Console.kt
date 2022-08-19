@@ -1,7 +1,17 @@
 package org.incava.mmonkeys.util
 
 object Console {
-    fun log(msg: String, obj: Any) {
+    fun info(whence: String,msg: String, obj: Any?) {
+        val str = String.format("%-25.25s | %-24s: %s", whence, msg, obj)
+        println(str)
+    }
+
+    fun info(whence: String,msg: String) {
+        val str = String.format("%-25.25s | %s", whence, msg)
+        println(str)
+    }
+
+    fun log(msg: String, obj: Any?) {
         val str = String.format("%-24s: %s", msg, obj)
         println(str)
     }

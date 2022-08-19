@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.perf.word
 
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 import org.incava.mmonkeys.word.Word
 import java.lang.Thread.sleep
 import kotlin.math.pow
@@ -9,6 +9,7 @@ import kotlin.system.measureTimeMillis
 
 class WordStringEqPerfTest {
     private fun runPerfTest(x: Any, y: Any, z: Any, type: String, iterations: Long) {
+        val whence = "WordStringEqPerfTest"
         val duration = measureTimeMillis {
             for (i in 0..iterations) {
                 val a = x == x
@@ -16,9 +17,9 @@ class WordStringEqPerfTest {
                 val c = x == z
             }
         }
-        log(type)
-        log("iterations", iterations)
-        log("duration", duration)
+        Console.info(whence, type)
+        Console.info(whence, "iterations", iterations)
+        Console.info(whence, "duration", duration)
     }
 
     private fun runPerfTestWord(s: String, t: String, iterations: Long) {
@@ -37,10 +38,11 @@ class WordStringEqPerfTest {
     }
 
     private fun runPerfTest(s: String, t: String, iterations: Long) {
+        val whence = "WordStringEqPerfTest"
         sleep(2000L)
         val b = Random.nextBoolean()
-        log("s", s)
-        log("t", t)
+        Console.info(whence, "s", s)
+        Console.info(whence, "t", t)
         if (b) {
             runPerfTestWord(s, t, iterations)
             sleep(2000L)

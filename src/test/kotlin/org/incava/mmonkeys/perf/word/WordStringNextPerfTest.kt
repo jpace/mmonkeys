@@ -37,6 +37,6 @@ class WordStringNextPerfTest {
 
 fun main() {
     val obj = WordStringNextPerfTest()
-    obj.`measure string performance`()
+    obj.`measure word performance`()
     obj.`measure string performance`()
 }

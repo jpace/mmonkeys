@@ -5,13 +5,13 @@ import org.incava.mmonkeys.match.StringEqMatcher
 import org.incava.mmonkeys.match.StringLengthMatcher
 import org.incava.mmonkeys.match.StringMatcher
 import org.incava.mmonkeys.match.StringPartialMatcher
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 import kotlin.random.Random
 
 class MatcherSimulation {
-    val charList = ('a'..'p').toList() + ' '
-    val sought = "abc"
-    val numMonkeys = 1000
+    private val charList = ('a'..'p').toList() + ' '
+    private val sought = "abc"
+    private val numMonkeys = 1000
 
     fun params(matcher: (Monkey, String) -> StringMatcher): SimulationParams {
         return SimulationParams(charList, numMonkeys, sought, matcher)
@@ -30,11 +30,11 @@ class MatcherSimulation {
             Triple("length", p3, mutableListOf())
         )
         repeat(50) {
-            println("iteration = $it")
+            Console.info("MatcherSimulation", "iteration", it)
             val idx = Random.Default.nextInt(types.size)
             val type = types[idx]
             val params = type.second
-            log("type", type.first)
+            Console.info("MatcherSimulation", "type", type.first)
             val simulation = StringSimulation(params)
             val durations = type.third
             simulation.run()

@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.exec
 
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 import kotlin.system.measureTimeMillis
 
 abstract class Simulation(val params: SimulationParams) {
@@ -15,13 +15,15 @@ abstract class Simulation(val params: SimulationParams) {
     abstract fun name(): String
 
     fun summarize() {
-        durations.forEach { log("${name()} duration", it) }
-        log("${name()}.average", durations.average().toLong())
+        val whence = "Simulation"
+        durations.forEach { Console.info(whence, "${name()} duration", it) }
+        Console.info(whence, "${name()}.average", durations.average().toLong())
     }
 
     protected fun runIteration(name: String, block: () -> Unit) {
+        val whence = "Simulation"
         val duration = measureTimeMillis(block)
-        log(".. $name duration", duration)
+        Console.info(whence, "$name duration", duration)
         durations.add(duration)
         Thread.sleep(sleepInterval)
     }
