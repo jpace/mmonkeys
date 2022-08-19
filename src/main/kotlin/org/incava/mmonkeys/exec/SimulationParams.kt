@@ -8,9 +8,8 @@ data class SimulationParams(
     val charList: List<Char> = ('a'..'z').toList() + ' ',
     val numMonkeys: Int = charList.size,
     val sought: String,
-    val maxAttempts: Long = 100_000_000L,
     val matching: ((monkey: Monkey, str: String) -> Matcher),
-    val iterations: Int = 1,
+    val maxAttempts: Long = 100_000_000L,
 ) {
     fun summarize() {
         log("char.last", charList.last())

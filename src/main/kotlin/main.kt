@@ -12,8 +12,7 @@ fun main(args: Array<String>) {
     val charList = ('a'..'p').toList() + ' '
     val sought = "abcd"
     val eqMatch = { monkey: Monkey, str: String -> StringEqMatcher(monkey, str) }
-    val partialMatch = { monkey: Monkey, str: String -> StringPartialMatcher(monkey, str) }
-    val params = SimulationParams(charList, 1000, sought, matching = eqMatch)
+    val params = SimulationParams(charList, 1000, sought, eqMatch)
     val simulation = when {
         args.isEmpty() || args[0] == "--string" || args[0] == "--stringmatch" -> {
             StringSimulation(params)

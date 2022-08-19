@@ -29,7 +29,7 @@ class Monkeys (
                     iterations.incrementAndGet()
                     log("success", matcher.monkey.id)
                     log("iteration", iteration)
-                    log("matcher iter", matcher.iteration)
+                    log("iterations", iterations)
                     found.set(true)
                     return
                 }

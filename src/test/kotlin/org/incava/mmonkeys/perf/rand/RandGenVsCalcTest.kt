@@ -18,11 +18,7 @@ class RandGenVsCalcTest {
         durations += duration
     }
 
-    private fun runBlocks(
-        count: Int,
-        firstBlock: () -> Any,
-        secondBlock: () -> Any,
-    ): Pair<List<Long>, List<Long>> {
+    private fun runBlocks(count: Int, firstBlock: () -> Any, secondBlock: () -> Any): Pair<List<Long>, List<Long>> {
         val firstTimes = mutableListOf<Long>()
         val secondTimes = mutableListOf<Long>()
         repeat(10) {

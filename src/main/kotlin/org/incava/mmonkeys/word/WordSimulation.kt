@@ -9,7 +9,7 @@ class WordSimulation(params: SimulationParams, private val sought: Word = Word(p
         return "word"
     }
 
-    override fun runIteration() {
+    override fun run() {
         runIteration("word") {
             val monkeyList = (0 until params.numMonkeys).map { WordMonkey(it, typewriter) }
             val monkeys = WordMonkeys(monkeyList, sought, maxAttempts)

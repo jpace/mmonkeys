@@ -1,14 +1,18 @@
 package org.incava.mmonkeys.type
 
-class DeterministicTypewriter(private val characters: List<Char>) : Typewriter {
-    private val numChars: Int = characters.size
+class DeterministicTypewriter(private val chars: List<Char>) : Typewriter {
+    private val numChars: Int = chars.size
     private var count = 0
 
+    override fun numChars(): Int {
+        return numChars
+    }
+
     override fun nextCharacter(): Char {
-        return characters[count++ % numChars]
+        return chars[count++ % numChars]
     }
 
     override fun toString(): String {
-        return "DeterministicTypewriter(characters=$characters, numChars=$numChars, count=$count)"
+        return "DeterministicTypewriter(chars=$chars, numChars=$numChars, count=$count)"
     }
 }

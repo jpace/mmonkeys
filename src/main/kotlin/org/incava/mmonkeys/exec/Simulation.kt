@@ -10,15 +10,9 @@ abstract class Simulation(val params: SimulationParams) {
     protected val maxAttempts = 100_000_000L
     val durations = mutableListOf<Long>()
 
-    fun run() {
-        repeat(params.iterations) {
-            runIteration()
-        }
-    }
+    abstract fun run()
 
-    abstract fun name() : String
-
-    abstract fun runIteration()
+    abstract fun name(): String
 
     fun summarize() {
         durations.forEach { log("${name()} duration", it) }

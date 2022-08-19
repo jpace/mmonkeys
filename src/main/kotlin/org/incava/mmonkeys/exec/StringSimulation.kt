@@ -10,8 +10,7 @@ class StringSimulation(params: SimulationParams) : Simulation(params) {
         return "string"
     }
 
-    override fun runIteration() {
-        log("string -------------------------------------")
+    override fun run() {
         runIteration("string") {
             val monkeyList = (0 until params.numMonkeys).map { Monkey(it, typewriter) }
             val monkeys = Monkeys(monkeyList, params.sought, params.matching, maxAttempts)

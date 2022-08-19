@@ -3,7 +3,7 @@ package org.incava.mmonkeys.word
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.type.Typewriter
 
-class WordMonkey(id: Int, private val typewriter: Typewriter) : Monkey(id, typewriter) {
+class WordMonkey(id: Int, typewriter: Typewriter) : Monkey(id, typewriter) {
     fun nextWord(): Word {
         val word = Word()
         while (true) {
