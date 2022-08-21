@@ -4,16 +4,16 @@ import kotlin.random.Random
 
 open class RandCalculated(size: Int, numSlots: Int) {
     private val random = Random.Default
-    val slots: Map<Int, Double>
+    val slots: Map<Int, Int>
 
     init {
         val rawSlots = Slots.calculate(size, numSlots)
         val reduced = Slots.reduceSlots(rawSlots, rawSlots.size / 100)
-        slots = reduced.mapValues { it.value.average() }
+        slots = reduced.mapValues { it.value.average().toInt() }
     }
 
-    fun nextRand() : Double {
+    fun nextRand() : Int {
         val index = random.nextInt(100)
-        return slots[index] ?: 0.0
+        return slots[index] ?: 0
     }
 }

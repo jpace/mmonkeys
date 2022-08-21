@@ -2,9 +2,11 @@ package org.incava.mmonkeys.word
 
 import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 
 class WordSimulation(params: SimulationParams, private val sought: Word = Word(params.sought)) : Simulation(params) {
+    private val whence = "WordSimulation"
+
     override fun name(): String {
         return "word"
     }
@@ -14,7 +16,7 @@ class WordSimulation(params: SimulationParams, private val sought: Word = Word(p
             val monkeyList = (0 until params.numMonkeys).map { WordMonkey(it, typewriter) }
             val monkeys = WordMonkeys(monkeyList, sought, maxAttempts)
             val iteration = monkeys.run()
-            log("iteration", iteration)
+            Console.info(whence, "iteration", iteration)
         }
     }
 }

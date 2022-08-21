@@ -9,7 +9,7 @@ import org.incava.mmonkeys.util.Console
 class Monkeys(
     private val list: List<Monkey>,
     private val sought: String,
-    private val matching: ((monkey: Monkey, sought: String) -> Matcher),
+    private val matching: ((Monkey, String) -> Matcher),
     maxAttempts: Long,
 ) : BaseMonkeys(maxAttempts) {
     private val whence = "Monkeys"
@@ -23,19 +23,18 @@ class Monkeys(
 
     private suspend fun runMatcher(matcher: Matcher) {
         (0 until maxAttempts).forEach { iteration ->
-            when {
-                found.get() -> {
-                    return
-                }
-                matcher.runIteration() != null -> {
+            if (found.get()) {
+                return
+            } else {
+                val md = matcher.runIteration()
+                if (md.isMatch) {
                     iterations.incrementAndGet()
                     Console.info(whence, "success", matcher.monkey.id)
                     Console.info(whence, "iteration", iteration)
                     Console.info(whence, "iterations", iterations)
                     found.set(true)
                     return
-                }
-                else -> {
+                } else {
                     iterations.incrementAndGet()
                     delay(5L)
                 }

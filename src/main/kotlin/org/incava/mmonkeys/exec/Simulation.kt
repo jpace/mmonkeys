@@ -17,7 +17,7 @@ abstract class Simulation(val params: SimulationParams) {
     fun summarize() {
         val whence = "Simulation"
         durations.forEach { Console.info(whence, "${name()} duration", it) }
-        Console.info(whence, "${name()}.average", durations.average().toLong())
+        Console.info(whence, "${name()}.average sec", durations.average().toLong() / 1000)
     }
 
     protected fun runIteration(name: String, block: () -> Unit) {

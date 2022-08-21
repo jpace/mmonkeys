@@ -2,17 +2,19 @@ package org.incava.mmonkeys
 
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 internal class MonkeyTest {
+    private val whence = "MonkeyTest"
+
     @ParameterizedTest
     @MethodSource("dataForSimulation")
     fun stringSimulation(expected: String, characters: List<Char>) {
-        log("#expected", expected.length)
-        log("#characters", characters.size)
+        Console.info(whence, "#expected", expected.length)
+        Console.info(whence, "#characters", characters.size)
         val typewriter = StandardTypewriter(characters)
         val monkey = Monkey(1, typewriter)
         val results = mutableListOf<Long>()
@@ -30,9 +32,9 @@ internal class MonkeyTest {
             }
         }
         val diff = System.currentTimeMillis() - start
-        log("total duration", diff / 1000.0)
+        Console.info(whence, "total duration", diff / 1000.0)
         val average = results.average().toLong()
-        log("average", average)
+        Console.info(whence, "average", average)
         println()
     }
 

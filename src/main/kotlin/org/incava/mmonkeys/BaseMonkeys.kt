@@ -1,7 +1,7 @@
 package org.incava.mmonkeys
 
 import kotlinx.coroutines.*
-import org.incava.mmonkeys.util.Console.log
+import org.incava.mmonkeys.util.Console
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -11,6 +11,7 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
     protected val found = AtomicBoolean(false)
     private val monitorInterval = 500L
     private val memory = Memory()
+    private val whence = "BaseMonkeys"
 
     fun run(): Int {
         runBlocking {
@@ -22,8 +23,8 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
             watcher.cancel()
             memory.showCurrent(iterations)
         }
-//        log("found?", found.get())
-//        log("iterations", iterations.get())
+        Console.info(whence, "found?", found.get())
+        Console.info(whence, "iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 

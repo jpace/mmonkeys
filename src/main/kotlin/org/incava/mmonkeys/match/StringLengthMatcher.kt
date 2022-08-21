@@ -11,8 +11,7 @@ class StringLengthMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey
         // number of keystrokes at which we'll hit the end-of-word character
         // thus length == 1 means we'll hit at the first invocation, with
         // an empty string
-        // TODO: fix this casting to store the slots as longs, not doubles.
-        val length = rand.nextRand().toInt()
+        val length = rand.nextRand()
         if (length == soughtLen) {
             val word = monkey.nextChars(length - 1)
             if (word == sought) {

@@ -10,9 +10,9 @@ object RandStringLength {
         return if (current == null) {
             val newRandom = RandCalculated(numChars, 10000)
             randoms[numChars] = newRandom
-            newRandom.nextRand().toInt()
+            newRandom.nextRand()
         } else {
-            current.nextRand().toInt()
+            current.nextRand()
         }
     }
 }
