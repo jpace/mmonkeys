@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class StringPartialMatcherPerfTest : MatcherTest() {
+internal class PartialMatcherPerfTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -23,7 +23,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val obj = StringPartialMatcher(monkey, inputs.second)
+                val obj = PartialMatcher(monkey, inputs.second)
                 run(obj, expected)
             }
         }
@@ -32,7 +32,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
     fun testRunIterationNoMatch() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = StringPartialMatcher(monkey, "123")
+        val obj = PartialMatcher(monkey, "123")
         val result = obj.runIteration()
         assertFalse(result.isMatch)
     }
@@ -41,7 +41,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
     fun testRunIterationMatch() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = StringPartialMatcher(monkey, "abcde")
+        val obj = PartialMatcher(monkey, "abcde")
         val result = obj.runIteration()
         assertTrue(result.isMatch)
     }
@@ -50,7 +50,7 @@ internal class StringPartialMatcherPerfTest : MatcherTest() {
     fun testIteration() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = StringPartialMatcher(monkey, "123")
+        val obj = PartialMatcher(monkey, "123")
         val result = obj.iteration
         assertEquals(-1L, result)
     }

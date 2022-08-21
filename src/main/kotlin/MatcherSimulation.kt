@@ -1,10 +1,7 @@
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
-import org.incava.mmonkeys.exec.StringSimulation
-import org.incava.mmonkeys.match.StringEqMatcher
-import org.incava.mmonkeys.match.StringLengthMatcher
-import org.incava.mmonkeys.match.StringMatcher
-import org.incava.mmonkeys.match.StringPartialMatcher
+import org.incava.mmonkeys.match.*
 import org.incava.mmonkeys.util.Console
 import kotlin.random.Random
 
@@ -13,16 +10,16 @@ class MatcherSimulation {
     private val sought = "abc"
     private val numMonkeys = 1000
 
-    fun params(matcher: (Monkey, String) -> StringMatcher): SimulationParams {
+    fun params(matcher: (Monkey, String) -> Matcher): SimulationParams {
         return SimulationParams(charList, numMonkeys, sought, matcher)
     }
 
     fun run() {
-        val p1 = params { monkey: Monkey, str: String -> StringEqMatcher(monkey, str) }
+        val p1 = params { monkey: Monkey, str: String -> EqMatcher(monkey, str) }
         p1.summarize()
-        val p2 = params { monkey: Monkey, str: String -> StringPartialMatcher(monkey, str) }
+        val p2 = params { monkey: Monkey, str: String -> PartialMatcher(monkey, str) }
         p2.summarize()
-        val p3 = params { monkey: Monkey, str: String -> StringLengthMatcher(monkey, str) }
+        val p3 = params { monkey: Monkey, str: String -> LengthMatcher(monkey, str) }
         p3.summarize()
         val types = listOf<Triple<String, SimulationParams, MutableList<Double>>>(
             Triple("equal", p1, mutableListOf()),
@@ -35,7 +32,7 @@ class MatcherSimulation {
             val type = types[idx]
             val params = type.second
             Console.info("MatcherSimulation", "type", type.first)
-            val simulation = StringSimulation(params)
+            val simulation = Simulation(params)
             val durations = type.third
             simulation.run()
             durations.plusAssign(simulation.durations.average())

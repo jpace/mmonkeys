@@ -1,15 +1,15 @@
 package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.StringMatcher
+import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.system.measureTimeMillis
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
-typealias MatcherCtor = (Monkey, String) -> StringMatcher
+typealias MatcherCtor = (Monkey, String) -> Matcher
 
 class PerfTrial(lastChar: Char, sought: String, typeCtor: TypewriterCtor, matchCtor: MatcherCtor) {
-    val matcher: StringMatcher
+    val matcher: Matcher
 
     init {
         val chars = ('a'..lastChar).toList() + ' '

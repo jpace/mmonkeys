@@ -22,7 +22,7 @@ class Monkeys(
     }
 
     private suspend fun runMatcher(matcher: Matcher) {
-        (0 until maxAttempts).forEach { iteration ->
+        (0 until maxAttempts).forEach { attempt ->
             if (found.get()) {
                 return
             } else {
@@ -30,7 +30,7 @@ class Monkeys(
                 if (md.isMatch) {
                     iterations.incrementAndGet()
                     Console.info(whence, "success", matcher.monkey.id)
-                    Console.info(whence, "iteration", iteration)
+                    Console.info(whence, "attempt", attempt)
                     Console.info(whence, "iterations", iterations)
                     found.set(true)
                     return

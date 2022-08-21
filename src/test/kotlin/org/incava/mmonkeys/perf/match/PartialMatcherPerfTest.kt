@@ -1,13 +1,13 @@
 package org.incava.mmonkeys.perf.match
 
-import org.incava.mmonkeys.match.StringPartialMatcher
+import org.incava.mmonkeys.match.PartialMatcher
 import org.incava.mmonkeys.perf.base.PerfTest
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
 
 class PartialMatcherPerfTest {
     private val typeCtor = ::StandardTypewriter
-    private val matchCtor = ::StringPartialMatcher
+    private val matchCtor = ::PartialMatcher
 
     fun run() {
         val test = PerfTest()

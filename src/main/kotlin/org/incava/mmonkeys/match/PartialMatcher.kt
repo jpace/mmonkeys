@@ -2,7 +2,7 @@ package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.Monkey
 
-class StringPartialMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
+class PartialMatcher(monkey: Monkey, sought: String) : Matcher(monkey, sought) {
     override fun runIteration(): MatchData {
         var idx = 0
         val len = sought.length

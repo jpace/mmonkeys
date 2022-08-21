@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class StringEqMatcherTest : MatcherTest() {
+internal class EqMatcherTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -22,7 +22,7 @@ internal class StringEqMatcherTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val obj = StringEqMatcher(monkey, inputs.second)
+                val obj = EqMatcher(monkey, inputs.second)
                 run(obj, expected)
             }
         }
@@ -31,7 +31,7 @@ internal class StringEqMatcherTest : MatcherTest() {
     fun testRunIterationNoMatch() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = StringEqMatcher(monkey, "123")
+        val obj = EqMatcher(monkey, "123")
         val result = obj.runIteration()
         assertFalse(result.isMatch)
     }
@@ -40,7 +40,7 @@ internal class StringEqMatcherTest : MatcherTest() {
     fun testRunIterationMatch() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = StringEqMatcher(monkey, "abcde")
+        val obj = EqMatcher(monkey, "abcde")
         val result = obj.runIteration()
         assertTrue(result.isMatch)
     }
@@ -49,7 +49,7 @@ internal class StringEqMatcherTest : MatcherTest() {
     fun testIteration() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = StringEqMatcher(monkey, "123")
+        val obj = EqMatcher(monkey, "123")
         val result = obj.iteration
         assertEquals(-1L, result)
     }

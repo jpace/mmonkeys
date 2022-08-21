@@ -2,7 +2,7 @@ package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.Monkey
 
-abstract class Matcher(open val monkey: Monkey) {
+abstract class Matcher(val monkey: Monkey, val sought: String) {
     var iteration = -1L
 
     fun run(maxAttempts: Long = 100_000_000_000_000L): Long {

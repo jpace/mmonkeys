@@ -3,7 +3,7 @@ package org.incava.mmonkeys.match
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.rand.CalculatedRandoms
 
-class StringLengthMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
+class LengthMatcher(monkey: Monkey, sought: String) : Matcher(monkey, sought) {
     val rand = CalculatedRandoms.getCalculated(monkey.typewriter.numChars())
     private val soughtLen = sought.length + 1
 
