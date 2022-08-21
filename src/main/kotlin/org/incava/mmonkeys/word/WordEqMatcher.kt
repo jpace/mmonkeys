@@ -7,8 +7,8 @@ class WordEqMatcher(override val monkey: WordMonkey, private val sought: Word) :
     override fun runIteration(): MatchData {
         val word = monkey.nextWord()
         return if (word == sought)
-            MatchData(true, word.length(), word)
+            match(word.length(), 0)
         else
-            MatchData(false, word.length(), null)
+            noMatch(word.length())
     }
 }

@@ -6,8 +6,8 @@ class StringEqMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, so
     override fun runIteration(): MatchData {
         val word = monkey.nextString()
         return if (word == sought)
-            MatchData(true, word.length, word)
+            match(word.length, 0)
         else
-            MatchData(false, word.length, null)
+            noMatch(word.length)
     }
 }

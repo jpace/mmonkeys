@@ -26,7 +26,8 @@ class WordVsStringSimulation {
         }
         Console.info(whence, "durations", durations)
         Console.info(whence, "string.average", durations[true]?.average())
-        Console.info(whence, "word.average", durations[false]?.average())    }
+        Console.info(whence, "word.average", durations[false]?.average())
+    }
 }
 
 fun main() {

@@ -15,9 +15,9 @@ class StringLengthMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey
         if (length == soughtLen) {
             val word = monkey.nextChars(length - 1)
             if (word == sought) {
-                return MatchData(true, length, sought)
+                return match(length, 0)
             }
         }
-        return MatchData(false, length, null)
+        return noMatch(length)
     }
 }

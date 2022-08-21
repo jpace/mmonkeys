@@ -11,12 +11,12 @@ class StringPartialMatcher(monkey: Monkey, sought: String) : StringMatcher(monke
             if (ch == sought[idx]) {
                 ++idx
                 if (idx == len) {
-                    return if (monkey.nextChar() == ' ') MatchData(true, len, sought) else MatchData(false, len, null)
+                    return if (monkey.nextChar() == ' ') match(len, 0) else noMatch(len)
                 }
             } else {
                 break
             }
         }
-        return MatchData(false, idx, null)
+        return noMatch(idx)
     }
 }
