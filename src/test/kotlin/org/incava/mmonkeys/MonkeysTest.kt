@@ -12,7 +12,7 @@ internal class MonkeysTest {
         val numMonkeys = 3
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
         val matching = { monkey: Monkey, sought: String -> EqMatcher(monkey, sought) }
-        val monkeys = Monkeys(monkeyList, "abc", matching, 10L)
+        val monkeys = Monkeys(monkeyList, "abc", matching, maxAttempts = 10L)
         val result = monkeys.run()
         assertEquals(1, result)
     }

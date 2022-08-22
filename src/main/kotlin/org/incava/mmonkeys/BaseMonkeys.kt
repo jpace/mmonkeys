@@ -10,10 +10,10 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
     protected val iterations = AtomicInteger(0)
     protected val found = AtomicBoolean(false)
     private val monitorInterval = 500L
-    private val memory = Memory()
     private val whence = "BaseMonkeys"
 
     fun run(): Int {
+        val memory = Memory()
         runBlocking {
             val timer = launchTimer(memory)
             val jobs = launchMonkeys()

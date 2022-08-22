@@ -8,15 +8,19 @@ import kotlin.system.measureTimeMillis
 open class Simulation(val params: SimulationParams) {
     private val sleepInterval = 1000L
     protected val typewriter = params.typewriterType(params.charList)
-    protected val maxAttempts = 100_000_000L
+    private val maxAttempts = 100_000_000L
     val durations = mutableListOf<Long>()
 
     fun run() {
-        runIteration {
+        val whence = "Simulation"
+        val duration = measureTimeMillis {
             val monkeys = makeMonkeys()
             val iteration = monkeys.run()
             Console.info("StringSimulation", "iteration", iteration)
         }
+        Console.info(whence, "duration", duration)
+        durations.add(duration)
+        Thread.sleep(sleepInterval)
     }
 
     private fun makeMonkeys(): Monkeys {
@@ -31,7 +35,7 @@ open class Simulation(val params: SimulationParams) {
         Console.info(whence, "average sec", durations.average().toLong() / 1000)
     }
 
-    protected fun runIteration(block: () -> Unit) {
+    private fun runIteration(block: () -> Unit) {
         val whence = "Simulation"
         val duration = measureTimeMillis(block)
         Console.info(whence, "duration", duration)

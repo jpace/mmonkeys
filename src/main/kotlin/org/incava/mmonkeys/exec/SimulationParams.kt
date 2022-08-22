@@ -14,12 +14,14 @@ data class SimulationParams(
     val matching: ((monkey: Monkey, str: String) -> Matcher),
     val maxAttempts: Long = 100_000_000L,
     val typewriterType: KFunction1<List<Char>, Typewriter> = ::StandardTypewriter,
+    val showMemory: Boolean = false,
 ) {
     fun summarize() {
         val whence = "SimulationParams"
         Console.info(whence, "# chars", charList.size)
         Console.info(whence, "# monkeys", numMonkeys)
         Console.info(whence, "sought", sought)
-        Console.info(whence, "matching", matching)
+//        Console.info(whence, "matching", matching)
+        Console.info(whence, "showMemory", showMemory)
     }
 }
