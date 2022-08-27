@@ -14,6 +14,6 @@ class RandIntCalculated(size: Int, numSlots: Int) : RandCalculated(size, numSlot
 
     fun nextInt() : Int {
         val index = random.nextInt(100)
-        return intArray[index] ?: 0
+        return intArray[index]
     }
 }

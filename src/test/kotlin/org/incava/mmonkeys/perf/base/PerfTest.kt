@@ -26,7 +26,7 @@ class PerfTest {
 
     fun addTrial(perfTrial: PerfTrial, numMatches: Int) {
         val results = perfTrial.run(numMatches)
-        addResults(numMatches, perfTrial.matcher.sought, results)
+        addResults(numMatches, perfTrial.stringMatcher.sought, results)
     }
 
     private fun memoryUsed() : Long {
@@ -37,8 +37,8 @@ class PerfTest {
         return total - free
     }
 
-    private fun addResults(numMatches: Int, string: String, results: PerfResults) {
-        val abbr = string.replace(Regex("^(\\w).*(\\w)$"), "..$2")
+    private fun addResults(numMatches: Int, sought: String, results: PerfResults) {
+        val abbr = sought.replace(Regex("^(\\w).*(\\w)$"), "..$2")
         val cells = arrayOf(
             abbr,
             results.averageDurations(),

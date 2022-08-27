@@ -2,23 +2,8 @@ package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.Monkey
 
-abstract class Matcher(val monkey: Monkey, val sought: String) {
-    var iteration = -1L
-
-    fun run(maxAttempts: Long = 100_000_000_000_000L): Long {
-        iteration = 0L
-        while (iteration < maxAttempts) {
-            val result = runIteration()
-            if (result.isMatch) {
-                return iteration
-            }
-            ++iteration
-        }
-        println("failing after $iteration iterations")
-        throw RuntimeException("failing after $iteration iterations")
-    }
-
-    abstract fun runIteration(): MatchData
+abstract class Matcher(val monkey: Monkey)  {
+    abstract fun check(): MatchData
 
     fun match(keystrokes: Int, index: Int) : MatchData {
         return MatchData(true, keystrokes, index)

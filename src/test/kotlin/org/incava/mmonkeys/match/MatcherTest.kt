@@ -9,15 +9,15 @@ open class MatcherTest {
         return (first..last).toList() + ' '
     }
 
-    fun run(matcher: Matcher, expected: Long?) {
+    fun run(stringMatcher: StringMatcher, expected: Long?) {
         if (expected == null) {
             assertThrows<RuntimeException> {
-                matcher.run(1000L)
+                stringMatcher.run(1000L)
             }
         } else {
-            val result = matcher.run(1000L)
+            val result = stringMatcher.run(1000L)
             Assertions.assertEquals(expected, result)
-            val iteration = matcher.iteration
+            val iteration = stringMatcher.iteration
             assertTrue(iteration >= 0)
         }
     }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class PartialMatcherPerfTest : MatcherTest() {
+internal class PartialStringMatcherPerfTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -23,7 +23,7 @@ internal class PartialMatcherPerfTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val obj = PartialMatcher(monkey, inputs.second)
+                val obj = PartialStringMatcher(monkey, Corpus(inputs.second))
                 run(obj, expected)
             }
         }
@@ -32,26 +32,28 @@ internal class PartialMatcherPerfTest : MatcherTest() {
     fun testRunIterationNoMatch() {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = PartialMatcher(monkey, "123")
-        val result = obj.runIteration()
+        val obj = createMatcher("123")
+        val result = obj.check()
         assertFalse(result.isMatch)
     }
 
     @Test
     fun testRunIterationMatch() {
-        val typewriter = DeterministicTypewriter(charList('a', 'e'))
-        val monkey = Monkey(1, typewriter)
-        val obj = PartialMatcher(monkey, "abcde")
-        val result = obj.runIteration()
+        val obj = createMatcher("abcde")
+        val result = obj.check()
         assertTrue(result.isMatch)
     }
 
     @Test
     fun testIteration() {
-        val typewriter = DeterministicTypewriter(charList('a', 'e'))
-        val monkey = Monkey(1, typewriter)
-        val obj = PartialMatcher(monkey, "123")
+        val obj = createMatcher("123")
         val result = obj.iteration
         assertEquals(-1L, result)
+    }
+
+    fun createMatcher(sought: String): PartialStringMatcher {
+        val typewriter = DeterministicTypewriter(charList('a', 'e'))
+        val monkey = Monkey(1, typewriter)
+        return PartialStringMatcher(monkey, Corpus(sought))
     }
 }
