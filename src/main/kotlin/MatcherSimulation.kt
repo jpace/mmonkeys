@@ -1,21 +1,24 @@
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
-import org.incava.mmonkeys.match.*
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.exec.TypewriterFactory
+import org.incava.mmonkeys.match.Corpus
+import org.incava.mmonkeys.match.EqStringMatcher
+import org.incava.mmonkeys.match.LengthStringMatcher
+import org.incava.mmonkeys.match.PartialStringMatcher
 import org.incava.mmonkeys.util.Console
 import kotlin.random.Random
 
 class MatcherSimulation {
     private var types: List<Triple<String, SimulationParams, MutableList<Double>>>
     private val charList = ('a'..'z').toList() + ' '
-    private val sought = Corpus("abcde")
+    private val corpus = Corpus("abcde")
     private val numMonkeys = 1000
+    private val typewriterFactory = TypewriterFactory(charList)
 
     init {
-        val p1 = SimulationParams(charList, numMonkeys, sought, ::EqStringMatcher)
-        val p2 = SimulationParams(charList, numMonkeys, sought, ::PartialStringMatcher)
-        val p3 = SimulationParams(charList, numMonkeys, sought, ::LengthStringMatcher)
+        val p1 = SimulationParams(numMonkeys, corpus, ::EqStringMatcher, typewriterFactory)
+        val p2 = SimulationParams(numMonkeys, corpus, ::PartialStringMatcher, typewriterFactory)
+        val p3 = SimulationParams(numMonkeys, corpus, ::LengthStringMatcher, typewriterFactory)
         types = listOf(
             Triple("equal", p1, mutableListOf()),
             Triple("partial", p2, mutableListOf()),

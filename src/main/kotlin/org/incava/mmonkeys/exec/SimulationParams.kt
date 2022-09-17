@@ -1,32 +1,38 @@
 package org.incava.mmonkeys.exec
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.Monkeys
 import org.incava.mmonkeys.match.Corpus
 import org.incava.mmonkeys.match.Matcher
-import org.incava.mmonkeys.match.StringMatcher
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.Console
-import kotlin.reflect.KFunction1
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
 typealias MatcherCtor = (Monkey, Corpus) -> Matcher
 
-data class SimulationParams(
-    val charList: List<Char> = ('a'..'z').toList() + ' ',
-    val numMonkeys: Int = charList.size,
+class SimulationParams(
+    private val numMonkeys: Int,
     val sought: Corpus,
-    val matching: MatcherCtor,
-    val maxAttempts: Long = 100_000_000L,
-    val typewriterType: TypewriterCtor = ::StandardTypewriter,
+    val matcher: MatcherCtor,
+    private val typewriterFactory: TypewriterFactory = TypewriterFactory(),
     val showMemory: Boolean = false,
 ) {
     fun summarize() {
         val whence = "SimulationParams"
-        Console.info(whence, "# chars", charList.size)
         Console.info(whence, "# monkeys", numMonkeys)
-        Console.info(whence, "sought", sought)
-//        Console.info(whence, "matching", matching)
+        Console.info(whence, "corpus", sought)
+        Console.info(whence, "matcher", matcher)
         Console.info(whence, "showMemory", showMemory)
+        Console.info(whence, "typewriterFactory", typewriterFactory)
+    }
+
+    fun makeMonkeys(): Monkeys {
+        // I don't make monkeys; I just train them!
+        val typewriter = typewriterFactory.typewriter()
+        println("typewriter = $typewriter")
+        val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
+        println("matcher = $matcher")
+        return Monkeys(monkeyList, sought, matcher)
     }
 }

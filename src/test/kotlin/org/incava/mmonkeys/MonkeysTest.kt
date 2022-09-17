@@ -12,9 +12,9 @@ internal class MonkeysTest {
         val typewriter = DeterministicTypewriter(('a'..'c').toList() + ' ')
         val numMonkeys = 3
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        val matching = { monkey: Monkey, sought: Corpus -> EqStringMatcher(monkey, sought) }
         val corpus = Corpus("abc")
-        val monkeys = Monkeys(monkeyList, corpus, matching, maxAttempts = 10L)
+        val matching = { monkey: Monkey, _: Corpus -> EqStringMatcher(monkey, corpus) }
+        val monkeys = Monkeys(monkeyList, corpus, matching)
         val result = monkeys.run()
         assertEquals(1, result)
     }

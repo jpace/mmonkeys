@@ -1,16 +1,18 @@
 package org.incava.mmonkeys
 
 import kotlinx.coroutines.*
+import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.util.Console
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
-abstract class BaseMonkeys(protected val maxAttempts: Long) {
-    protected val iterations = AtomicInteger(0)
-    protected val found = AtomicBoolean(false)
+abstract class BaseMonkeys {
+    private val iterations = AtomicInteger(0)
+    private val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
     private val whence = "BaseMonkeys"
+    private val maxAttempts = 100_000_000L
 
     fun run(): Int {
         val memory = Memory()
@@ -46,4 +48,28 @@ abstract class BaseMonkeys(protected val maxAttempts: Long) {
             }
         }
     }
+
+    protected suspend fun runMatcher(matcher: Matcher) {
+        (0 until maxAttempts).forEach { attempt ->
+            if (found.get() || checkMatcher(matcher, attempt)) {
+                return
+            }
+        }
+    }
+
+    private suspend fun checkMatcher(matcher: Matcher, attempt: Long): Boolean {
+        iterations.incrementAndGet()
+        val md = matcher.check()
+        if (md.isMatch) {
+            Console.info(whence, "success", matcher.monkey.id)
+            Console.info(whence, "attempt", attempt)
+            Console.info(whence, "iterations", iterations)
+            found.set(true)
+            return true
+        } else {
+            delay(5L)
+        }
+        return false
+    }
+
 }
