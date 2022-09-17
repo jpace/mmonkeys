@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.util.Duration
+import org.incava.mmonkeys.util.Memory
 import org.incava.mmonkeys.util.Table
 import kotlin.math.pow
 
@@ -26,19 +27,16 @@ class PerfTest {
 
     fun addTrial(perfTrial: PerfTrial, numMatches: Int) {
         val results = perfTrial.run(numMatches)
-        addResults(numMatches, perfTrial.stringMatcher.sought, results)
+        addResults(numMatches, perfTrial.matcher, results)
     }
 
     private fun memoryUsed() : Long {
-        val mb = 2.0.pow(20).toLong()
-        val runtime = Runtime.getRuntime()
-        val total = runtime.totalMemory() / mb
-        val free = runtime.freeMemory() / mb
-        return total - free
+        val current = Memory().currentMemory()
+        return current.third
     }
 
-    private fun addResults(numMatches: Int, sought: String, results: PerfResults) {
-        val abbr = sought.replace(Regex("^(\\w).*(\\w)$"), "..$2")
+    private fun addResults(numMatches: Int, sought: Any, results: PerfResults) {
+        val abbr = sought.toString().replace(Regex("^(\\w).*(\\w)$"), "..$2")
         val cells = arrayOf(
             abbr,
             results.averageDurations(),

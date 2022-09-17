@@ -2,12 +2,12 @@ package org.incava.mmonkeys.util
 
 object Console {
     fun info(whence: String, msg: String, obj: Any?) {
-        val str = String.format("%-25.25s | %-24s: %s", whence, msg, obj)
-        println(str)
+        val str = String.format("%-24s: %s", msg, obj)
+        info(whence, str)
     }
 
     fun info(whence: String, msg: String) {
-        val str = String.format("%-25.25s | %s", whence, msg)
+        val str = String.format("%-35.35s | %s", whence, msg)
         println(str)
     }
 

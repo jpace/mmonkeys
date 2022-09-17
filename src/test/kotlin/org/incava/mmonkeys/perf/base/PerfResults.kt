@@ -1,10 +1,10 @@
 package org.incava.mmonkeys.perf.base
 
-import org.incava.mmonkeys.match.StringMatcher
+import org.incava.mmonkeys.match.Matcher
 
 data class PerfResults(
     val name: String,
-    val stringMatcher: StringMatcher,
+    val matcher: Matcher,
     val duration: Long,
     val durations: MutableList<Long> = mutableListOf(),
     val iterations: MutableList<Long> = mutableListOf(),

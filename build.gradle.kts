@@ -31,3 +31,7 @@ tasks.withType<KotlinCompile>() {
 application {
     mainClassName = "MainKt"
 }
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    languageVersion = "1.4"
+}

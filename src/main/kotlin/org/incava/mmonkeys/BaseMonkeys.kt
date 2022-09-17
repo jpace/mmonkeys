@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger
 abstract class BaseMonkeys(protected val maxAttempts: Long) {
     protected val iterations = AtomicInteger(0)
     protected val found = AtomicBoolean(false)
-    private val monitorInterval = 500L
+    private val monitorInterval = 10_000L
     private val whence = "BaseMonkeys"
 
     fun run(): Int {

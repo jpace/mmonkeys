@@ -2,21 +2,21 @@ package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Corpus
-import org.incava.mmonkeys.match.StringMatcher
+import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.system.measureTimeMillis
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
-typealias MatcherCtor = (Monkey, Corpus) -> StringMatcher
+typealias MatcherCtor = (Monkey, Corpus) -> Matcher
 
 class PerfTrial(lastChar: Char, sought: Corpus, typeCtor: TypewriterCtor, matchCtor: MatcherCtor) {
-    val stringMatcher: StringMatcher
+    val matcher: Matcher
 
     init {
         val chars = ('a'..lastChar).toList() + ' '
         val typewriter = typeCtor.invoke(chars)
         val monkey = Monkey(38, typewriter)
-        stringMatcher = matchCtor.invoke(monkey, sought)
+        matcher = matchCtor(monkey, sought)
     }
 
     private fun pause() {
@@ -36,11 +36,11 @@ class PerfTrial(lastChar: Char, sought: Corpus, typeCtor: TypewriterCtor, matchC
         val duration = measureTimeMillis {
             repeat(numMatches) {
                 durations += measureTimeMillis {
-                    val result = stringMatcher.run()
+                    val result = matcher.run()
                     iterations += result
                 }
             }
         }
-        return PerfResults("name-s1", stringMatcher, duration, durations, iterations)
+        return PerfResults("name-s1", matcher, duration, durations, iterations)
     }
 }
