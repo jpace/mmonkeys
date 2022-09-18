@@ -9,17 +9,16 @@ import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.Console
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
-typealias MatcherCtor = (Monkey, Corpus) -> Matcher
 
-class SimulationParams(
+class SimulationParams<T>(
     private val numMonkeys: Int,
-    val sought: Corpus,
-    val matcher: MatcherCtor,
+    val sought: T,
+    val matcher: (Monkey, T) -> Matcher,
     private val typewriterFactory: TypewriterFactory = TypewriterFactory(),
     val showMemory: Boolean = false,
 ) {
     fun summarize() {
-        val whence = "SimulationParams"
+        val whence = this.javaClass.simpleName
         Console.info(whence, "# monkeys", numMonkeys)
         Console.info(whence, "corpus", sought)
         Console.info(whence, "matcher", matcher)
@@ -27,12 +26,13 @@ class SimulationParams(
         Console.info(whence, "typewriterFactory", typewriterFactory)
     }
 
-    fun makeMonkeys(): Monkeys {
+    fun makeMonkeys(): Monkeys<T> {
         // I don't make monkeys; I just train them!
+        val whence = this.javaClass.simpleName
         val typewriter = typewriterFactory.typewriter()
-        println("typewriter = $typewriter")
+        Console.info(whence, "typewriter", typewriter)
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        println("matcher = $matcher")
+        Console.info(whence, "matcher", matcher)
         return Monkeys(monkeyList, sought, matcher)
     }
 }

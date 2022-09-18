@@ -9,7 +9,7 @@ open class MatcherTest {
         return (first..last).toList() + ' '
     }
 
-    fun run(stringMatcher: StringMatcher, expected: Long?) {
+    fun run(stringMatcher: Matcher, expected: Long?) {
         if (expected == null) {
             assertThrows<RuntimeException> {
                 stringMatcher.run(1000L)

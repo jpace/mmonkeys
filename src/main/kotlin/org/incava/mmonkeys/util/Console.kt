@@ -1,6 +1,22 @@
 package org.incava.mmonkeys.util
 
+import java.util.regex.Pattern
+
 object Console {
+    fun info(msg: String, obj: Any?) {
+        val pattern = Pattern.compile(""".*\.(.*)""")
+        val cls = Thread.currentThread().stackTrace[2].className
+        val match = pattern.matcher(cls)
+        val whence = if (match.matches()) match.group(1) else cls
+        val str = String.format("%-24s: %s", msg, obj)
+        info(whence, str)
+    }
+
+    fun info(msg: String) {
+        val whence = Thread.currentThread().stackTrace[2].className.replaceFirst(".*\\.", "")
+        info(whence, msg)
+    }
+
     fun info(whence: String, msg: String, obj: Any?) {
         val str = String.format("%-24s: %s", msg, obj)
         info(whence, str)

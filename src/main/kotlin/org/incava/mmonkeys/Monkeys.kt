@@ -2,13 +2,12 @@ package org.incava.mmonkeys
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.incava.mmonkeys.match.Corpus
 import org.incava.mmonkeys.match.Matcher
 
-class Monkeys(
+class Monkeys<T>(
     private val list: List<Monkey>,
-    private val sought: Corpus,
-    private val matching: ((Monkey, Corpus) -> Matcher),
+    private val sought: T,
+    private val matching: ((Monkey, T) -> Matcher),
 ) : BaseMonkeys() {
     override fun CoroutineScope.launchMonkeys() = list.map { monkey ->
         launch {

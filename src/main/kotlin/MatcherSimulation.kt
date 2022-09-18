@@ -9,11 +9,10 @@ import org.incava.mmonkeys.util.Console
 import kotlin.random.Random
 
 class MatcherSimulation {
-    private var types: List<Triple<String, SimulationParams, MutableList<Double>>>
-    private val charList = ('a'..'z').toList() + ' '
+    private var types: List<Triple<String, SimulationParams<Corpus>, MutableList<Double>>>
     private val corpus = Corpus("abcde")
     private val numMonkeys = 1000
-    private val typewriterFactory = TypewriterFactory(charList)
+    private val typewriterFactory = TypewriterFactory('z')
 
     init {
         val p1 = SimulationParams(numMonkeys, corpus, ::EqStringMatcher, typewriterFactory)
@@ -26,7 +25,7 @@ class MatcherSimulation {
         )
     }
 
-    private fun runSimulation(name: String, params: SimulationParams, durations: MutableList<Double>) {
+    private fun runSimulation(name: String, params: SimulationParams<Corpus>, durations: MutableList<Double>) {
         Console.info("MatcherSimulation", "type", name)
         val simulation = Simulation(params)
         simulation.run()

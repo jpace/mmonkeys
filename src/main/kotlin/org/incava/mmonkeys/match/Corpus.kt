@@ -8,6 +8,10 @@ class Corpus(vararg ary: String) {
     }
 
     fun hasWord(word: String): Pair<Boolean, Int> {
-        return false to -1
+        val index = words.indexOf(word)
+        return if (index >= 0)
+            true to index
+        else
+            false to -1
     }
 }
