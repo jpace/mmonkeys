@@ -23,7 +23,7 @@ internal class PartialStringMatcherPerfTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val obj = PartialStringMatcher(monkey, Corpus(inputs.second))
+                val obj = PartialStringMatcher(monkey, inputs.second)
                 run(obj, expected)
             }
         }
@@ -51,9 +51,9 @@ internal class PartialStringMatcherPerfTest : MatcherTest() {
         assertEquals(-1L, result)
     }
 
-    fun createMatcher(sought: String): PartialStringMatcher {
+    private fun createMatcher(sought: String): PartialStringMatcher {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        return PartialStringMatcher(monkey, Corpus(sought))
+        return PartialStringMatcher(monkey, sought)
     }
 }

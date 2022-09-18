@@ -25,7 +25,7 @@ class PerfTest {
         table.printHeader()
     }
 
-    fun addTrial(perfTrial: PerfTrial, numMatches: Int) {
+    fun <T> addTrial(perfTrial: PerfTrial<T>, numMatches: Int) {
         val results = perfTrial.run(numMatches)
         addResults(numMatches, perfTrial.matcher, results)
     }

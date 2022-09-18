@@ -22,8 +22,7 @@ internal class EqStringMatcherTest : MatcherTest() {
                     "then the result should be \"$expected\"") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val corpus = Corpus(inputs.second)
-                val obj = EqStringMatcher(monkey, corpus)
+                val obj = EqStringMatcher(monkey, inputs.second)
                 run(obj, expected)
             }
         }
@@ -52,7 +51,7 @@ internal class EqStringMatcherTest : MatcherTest() {
     private fun createMatcher(sought: String): EqStringMatcher {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = EqStringMatcher(monkey, Corpus(sought))
+        val obj = EqStringMatcher(monkey, sought)
         return obj
     }
 }

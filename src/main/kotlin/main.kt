@@ -32,11 +32,12 @@ fun runStringTest(char: Char) {
     val sought = "abc"
     val x = "equal" to ::EqStringMatcher
     val m = x
-//    val matcher = { mky: Monkey, _: String -> m.second(mky, sought) }
-//    runSimulation(char, m.first, sought, matcher)
+    val matcher = { mky: Monkey, _: String -> m.second(mky, sought) }
+    runSimulation(char, m.first, sought, matcher)
 }
 
 fun main(args: Array<String>) {
     Console.info("main", "args", args.toList())
     runCorpusTest('g')
+    runStringTest('g')
 }

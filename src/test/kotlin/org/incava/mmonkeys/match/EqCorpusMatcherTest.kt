@@ -47,10 +47,10 @@ internal class EqCorpusMatcherTest : MatcherTest() {
         assertEquals(-1L, result)
     }
 
-    private fun createMatcher(vararg ary: String): EqStringMatcher {
+    private fun createMatcher(sought: String): EqStringMatcher {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = EqStringMatcher(monkey, Corpus(*ary))
+        val obj = EqStringMatcher(monkey, sought)
         return obj
     }
 }

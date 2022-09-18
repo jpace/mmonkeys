@@ -7,9 +7,8 @@ import org.incava.mmonkeys.type.Typewriter
 import kotlin.system.measureTimeMillis
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
-typealias MatcherCtor = (Monkey, Corpus) -> Matcher
 
-class PerfTrial(lastChar: Char, sought: Corpus, typeCtor: TypewriterCtor, matchCtor: MatcherCtor) {
+class PerfTrial<T>(lastChar: Char, sought: T, typeCtor: TypewriterCtor, matchCtor: (Monkey, T) -> Matcher) {
     val matcher: Matcher
 
     init {

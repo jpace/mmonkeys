@@ -33,7 +33,7 @@ class PartialMatcherPerfTest {
             println("lastChar: $lastChar")
             values.forEach { (sought, count) ->
                 val corpus = Corpus(sought)
-                val trial = PerfTrial(lastChar, corpus, typeCtor, matchCtor)
+                val trial = PerfTrial(lastChar, sought, typeCtor, matchCtor)
                 test.addTrial(trial, count)
             }
         }

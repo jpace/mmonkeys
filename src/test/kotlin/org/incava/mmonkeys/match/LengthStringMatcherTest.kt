@@ -12,7 +12,7 @@ internal class LengthStringMatcherTest : MatcherTest() {
     fun runIteration() {
         val typewriter = DeterministicTypewriter(charList('a', 'e') + ' ')
         val monkey = Monkey(1, typewriter)
-        val obj = LengthStringMatcher(monkey, Corpus("abcde"))
+        val obj = LengthStringMatcher(monkey, "abcde")
         repeat(100) {
             val result = obj.check()
             println("result = $result")
