@@ -8,13 +8,11 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 internal class MonkeyTest {
-    private val whence = "MonkeyTest"
-
     @ParameterizedTest
     @MethodSource("dataForSimulation")
     fun stringSimulation(expected: String, characters: List<Char>) {
-        Console.info(whence, "#expected", expected.length)
-        Console.info(whence, "#characters", characters.size)
+        Console.info("#expected", expected.length)
+        Console.info("#characters", characters.size)
         val typewriter = StandardTypewriter(characters)
         val monkey = Monkey(1, typewriter)
         val results = mutableListOf<Long>()
@@ -32,9 +30,9 @@ internal class MonkeyTest {
             }
         }
         val diff = System.currentTimeMillis() - start
-        Console.info(whence, "total duration", diff / 1000.0)
+        Console.info("total duration", diff / 1000.0)
         val average = results.average().toLong()
-        Console.info(whence, "average", average)
+        Console.info("average", average)
         println()
     }
 

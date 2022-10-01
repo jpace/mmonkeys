@@ -18,21 +18,19 @@ class SimulationParams<T>(
     val showMemory: Boolean = false,
 ) {
     fun summarize() {
-        val whence = this.javaClass.simpleName
-        Console.info(whence, "# monkeys", numMonkeys)
-        Console.info(whence, "corpus", sought)
-        Console.info(whence, "matcher", matcher)
-        Console.info(whence, "showMemory", showMemory)
-        Console.info(whence, "typewriterFactory", typewriterFactory)
+        Console.info("# monkeys", numMonkeys)
+        Console.info("corpus", sought)
+        Console.info("matcher", matcher)
+        Console.info("showMemory", showMemory)
+        Console.info("typewriterFactory", typewriterFactory)
     }
 
     fun makeMonkeys(): Monkeys<T> {
         // I don't make monkeys; I just train them!
-        val whence = this.javaClass.simpleName
         val typewriter = typewriterFactory.typewriter()
-        Console.info(whence, "typewriter", typewriter)
+        Console.info("typewriter", typewriter)
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        Console.info(whence, "matcher", matcher)
+        Console.info("matcher", matcher)
         return Monkeys(monkeyList, sought, matcher)
     }
 }

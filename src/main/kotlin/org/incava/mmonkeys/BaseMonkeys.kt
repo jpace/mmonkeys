@@ -11,7 +11,6 @@ abstract class BaseMonkeys {
     private val iterations = AtomicInteger(0)
     private val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
-    private val whence = "BaseMonkeys"
     private val maxAttempts = 100_000_000L
 
     fun run(): Int {
@@ -25,8 +24,8 @@ abstract class BaseMonkeys {
             watcher.cancel()
             memory.showCurrent(iterations)
         }
-        Console.info(whence, "found?", found.get())
-        Console.info(whence, "iterations", iterations.get())
+        Console.info("found?", found.get())
+        Console.info("iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 
@@ -61,9 +60,9 @@ abstract class BaseMonkeys {
         iterations.incrementAndGet()
         val md = matcher.check()
         if (md.isMatch) {
-            Console.info(whence, "success", matcher.monkey.id)
-            Console.info(whence, "attempt", attempt)
-            Console.info(whence, "iterations", iterations)
+            Console.info("success", matcher.monkey.id)
+            Console.info("attempt", attempt)
+            Console.info("iterations", iterations)
             found.set(true)
             return true
         } else {

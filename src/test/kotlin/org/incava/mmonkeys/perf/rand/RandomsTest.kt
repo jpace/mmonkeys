@@ -2,8 +2,6 @@ package org.incava.mmonkeys.perf.rand
 
 import org.incava.mmonkeys.util.Console
 import java.lang.Thread.sleep
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.math.abs
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
@@ -15,13 +13,12 @@ class RandomsTest(
     private val random = Random.Default
 
     init {
-        Console.info("RandomsTest", "numChars", numChars)
-        Console.info("RandomsTest", "strLength", strLength)
-        Console.info("RandomsTest", "iterations", iterations)
+        Console.info("numChars", numChars)
+        Console.info("strLength", strLength)
+        Console.info("iterations", iterations)
     }
 
     private fun runTest(block: () -> Unit) {
-        val whence = Thread.currentThread().stackTrace[2]
         val duration = measureTimeMillis {
             repeat(iterations) {
                 repeat(strLength) {
@@ -29,7 +26,7 @@ class RandomsTest(
                 }
             }
         }
-        Console.info(whence.methodName, "duration", duration)
+        Console.info("duration", duration)
     }
 
     private fun `int numChars`() {
@@ -78,7 +75,7 @@ class RandomsTest(
                 val str = sb.toString()
             }
         }
-        Console.info(whence.methodName, "duration", duration)
+        Console.info("duration", duration)
     }
 
     private fun `int numChars Array toString`() {
@@ -95,7 +92,7 @@ class RandomsTest(
                 val str = sb.toString()
             }
         }
-        Console.info(whence.methodName, "duration", duration)
+        Console.info("duration", duration)
     }
 
     private fun nextBytes() {
@@ -119,7 +116,7 @@ class RandomsTest(
                 }.joinToString("")
             }
         }
-        Console.info(whence.methodName, "duration", duration)
+        Console.info("duration", duration)
     }
 
     fun runTest() {
@@ -133,7 +130,7 @@ class RandomsTest(
             { `nextBytes`() },
             { `nextBytes toString`() },
         )
-        val shuffled = methods.shuffled()
+        // val shuffled = methods.shuffled()
         methods.forEach {
             it()
             sleep(500L)

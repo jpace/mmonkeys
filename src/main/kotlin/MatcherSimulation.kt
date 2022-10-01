@@ -27,7 +27,7 @@ class MatcherSimulation {
     }
 
     private fun runSimulation(name: String, params: SimulationParams<String>, durations: MutableList<Double>) {
-        Console.info("MatcherSimulation", "type", name)
+        Console.info("type", name)
         val simulation = Simulation(params)
         simulation.run()
         durations.plusAssign(simulation.durations.average())
@@ -35,11 +35,11 @@ class MatcherSimulation {
 
     fun run() {
         types.forEach {
-            Console.info("MatcherSimulation", it.first)
+            Console.info(it.first)
             it.second.summarize()
         }
         repeat(10) {
-            Console.info("MatcherSimulation", "iteration", it)
+            Console.info("iteration", it)
             val idx = Random.Default.nextInt(types.size)
             val type = types[idx]
             runSimulation(type.first, type.second, type.third)

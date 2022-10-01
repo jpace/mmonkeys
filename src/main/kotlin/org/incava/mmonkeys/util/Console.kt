@@ -1,30 +1,32 @@
 package org.incava.mmonkeys.util
 
+import java.io.PrintStream
 import java.util.regex.Pattern
 
 object Console {
+    var out: PrintStream = System.out
+
     fun info(msg: String, obj: Any?) {
-        val pattern = Pattern.compile(""".*\.(.*)""")
-        val cls = Thread.currentThread().stackTrace[2].className
-        val match = pattern.matcher(cls)
-        val whence = if (match.matches()) match.group(1) else cls
+        info(whence(), msg, obj)
+    }
+
+    fun info(from: Any?, msg: String, obj: Any?) {
         val str = String.format("%-24s: %s", msg, obj)
-        info(whence, str)
+        info(whence(), str)
     }
 
     fun info(msg: String) {
-        val whence = Thread.currentThread().stackTrace[2].className.replaceFirst(".*\\.", "")
-        info(whence, msg)
+        info(whence(), msg)
     }
 
     fun info(whence: String, msg: String, obj: Any?) {
-        val str = String.format("%-24s: %s", msg, obj)
+        val str = String.format("%-24s: <<>> %s", msg, obj)
         info(whence, str)
     }
 
     fun info(whence: String, msg: String) {
         val str = String.format("%-35.35s | %s", whence, msg)
-        println(str)
+        out.println(str)
     }
 
     fun info(whence: String, msg: String, number: Long) {
@@ -43,6 +45,23 @@ object Console {
 
     fun printf(fmt: String, vararg args: Any) {
         val str = String.format(fmt, *args)
-        println(str)
+        out.println(str)
+    }
+
+    fun whence(): String {
+        val pattern = Pattern.compile(""".*\.(.*)""")
+        var found = false
+        Thread.currentThread().stackTrace.forEach {
+            val cls = it.className
+            val match = pattern.matcher(cls)
+            if (match.matches()) {
+                if (match.group(1).equals("Console")) {
+                    found = true
+                } else if (found) {
+                    return match.group(1)
+                }
+            }
+        }
+        return "<?>"
     }
 }
