@@ -1,9 +1,8 @@
 package org.incava.mmonkeys.perf.base
 
-import org.incava.mmonkeys.util.Duration
+import org.incava.mmonkeys.time.Durations
 import org.incava.mmonkeys.util.Memory
 import org.incava.mmonkeys.util.Table
-import kotlin.math.pow
 
 class PerfTest {
     class PerfTable : Table() {
@@ -42,7 +41,7 @@ class PerfTest {
             results.averageDurations(),
             results.averageIterations(),
             numMatches,
-            Duration.millisToString(results.duration, 5000L),
+            Durations.millisToString(results.duration, 5000L),
             memoryUsed()
         )
         table.printRow(*cells)

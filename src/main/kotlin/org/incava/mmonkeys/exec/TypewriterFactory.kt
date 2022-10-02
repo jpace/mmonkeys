@@ -13,6 +13,6 @@ class TypewriterFactory(
     }
 
     override fun toString(): String {
-        return "TypewriterFactory(charList=$charList, typewriterType=$typewriterType)"
+        return "TypewriterFactory(toChar=$toChar, typewriterType=$typewriterType)"
     }
 }

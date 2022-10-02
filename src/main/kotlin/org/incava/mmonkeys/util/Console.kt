@@ -7,40 +7,40 @@ object Console {
     var out: PrintStream = System.out
 
     fun info(msg: String, obj: Any?) {
-        info(whence(), msg, obj)
+        println(whence(), format(msg, obj))
     }
 
-    fun info(from: Any?, msg: String, obj: Any?) {
-        val str = String.format("%-24s: %s", msg, obj)
-        info(whence(), str)
+    fun info(msg: String, value: Long) {
+        println(whence(), format(msg, value))
+    }
+
+    fun info(msg: String, value: Int) {
+        println(whence(), format(msg, value))
     }
 
     fun info(msg: String) {
-        info(whence(), msg)
+        println(whence(), msg)
     }
 
-    fun info(whence: String, msg: String, obj: Any?) {
-        val str = String.format("%-24s: <<>> %s", msg, obj)
-        info(whence, str)
+    private fun format(msg: String, obj: Any?) : String {
+        return String.format("%-24s: %s", msg, obj)
     }
 
-    fun info(whence: String, msg: String) {
+    private fun format(msg: String, value: Long) : String {
+        return String.format("%-24s: %,d", msg, value)
+    }
+
+    private fun format(msg: String, value: Int) : String {
+        return if (value >= 10_000) {
+            format(msg, value.toLong())
+        } else {
+            String.format("%-24s: %d", msg, value)
+        }
+    }
+
+    fun println(whence: String, msg: String) {
         val str = String.format("%-35.35s | %s", whence, msg)
         out.println(str)
-    }
-
-    fun info(whence: String, msg: String, number: Long) {
-        val str = String.format(if (number > 9999) "%,d" else "%d", number)
-        info(whence, msg, str)
-    }
-
-    fun info(whence: String, msg: String, number: Double) {
-        val str = String.format(if (number > 9999) "%,.2f" else "%.2f", number)
-        info(whence, msg, str)
-    }
-
-    fun info(whence: String, msg: String, number: Int) {
-        info(whence, msg, number.toLong())
     }
 
     fun printf(fmt: String, vararg args: Any) {
@@ -49,7 +49,7 @@ object Console {
     }
 
     fun whence(): String {
-        val pattern = Pattern.compile(""".*\.(.*)""")
+        val pattern = Pattern.compile("""(?:.*\.)?(.*)""")
         var found = false
         Thread.currentThread().stackTrace.forEach {
             val cls = it.className

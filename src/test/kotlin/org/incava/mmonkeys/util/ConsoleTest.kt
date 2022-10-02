@@ -1,9 +1,11 @@
 package org.incava.mmonkeys.util
 
+import org.incava.mmonkeys.test.assertContains
+import org.incava.mmonkeys.test.refuteContains
 import org.junit.jupiter.api.Test
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal class ConsoleTest {
     @Test
@@ -19,7 +21,10 @@ internal class ConsoleTest {
         Console.out = PrintStream(stream)
         Console.info("abc")
         val result = stream.toString()
-        assertTrue(result.contains("abc"), "result: " + result)
+        assertContains("abc", result)
+        assertContains("ConsoleTest", result)
+        val re = Regex("\\bConsole\\b")
+        refuteContains(re, result)
         Console.out = original
     }
 }

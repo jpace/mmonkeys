@@ -2,9 +2,7 @@ package org.incava.mmonkeys.exec
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.Monkeys
-import org.incava.mmonkeys.match.Corpus
 import org.incava.mmonkeys.match.Matcher
-import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.Console
 
@@ -28,9 +26,9 @@ class SimulationParams<T>(
     fun makeMonkeys(): Monkeys<T> {
         // I don't make monkeys; I just train them!
         val typewriter = typewriterFactory.typewriter()
-        Console.info("typewriter", typewriter)
+        // Console.info("typewriter", typewriter)
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        Console.info("matcher", matcher)
-        return Monkeys(monkeyList, sought, matcher)
+        // Console.info("matcher", matcher)
+        return Monkeys(monkeyList, sought, matcher, showMemory)
     }
 }

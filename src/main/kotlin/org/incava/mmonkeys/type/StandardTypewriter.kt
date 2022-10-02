@@ -15,6 +15,6 @@ open class StandardTypewriter(private val chars: List<Char> = ('a'..'z').toList(
     }
 
     override fun toString(): String {
-        return "StandardTypewriter(chars=$chars, numChars=$numChars)"
+        return "StandardTypewriter(toChar=${chars[numChars - 2]}, numChars=$numChars)"
     }
 }

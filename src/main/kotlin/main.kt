@@ -37,7 +37,8 @@ fun runStringTest(char: Char) {
 }
 
 fun main(args: Array<String>) {
-    Console.info("main", "args", args.toList())
+    Console.info("main")
+    Console.info("args", args.toList())
     runCorpusTest('g')
     runStringTest('g')
 }

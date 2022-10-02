@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.util
 
 import kotlinx.coroutines.delay
+import org.incava.mmonkeys.time.Durations
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.pow
 
@@ -15,7 +16,7 @@ class Memory {
 
     fun showCurrent(number: AtomicInteger) {
         val (total, free, used) = currentMemory()
-        val displayed = Duration.millisToString(System.currentTimeMillis() - start)
+        val displayed = Durations.millisToString(System.currentTimeMillis() - start, 6000L, 360L)
         table.printRow(displayed, number.get(), free, used, total)
     }
 
