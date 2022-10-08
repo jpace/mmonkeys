@@ -3,6 +3,7 @@ package org.incava.mmonkeys
 import org.incava.mmonkeys.util.Memory
 import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.test.assertEquals
 
 class RoutinesTest {
@@ -10,7 +11,7 @@ class RoutinesTest {
     fun testMemory() {
         val memory = Memory()
         memory.showBanner()
-        memory.showCurrent(AtomicInteger(0))
+        memory.showCurrent(AtomicLong(0))
     }
 
     @Test
@@ -18,7 +19,7 @@ class RoutinesTest {
         val routines = Routines()
         val count = 10
         val result = routines.memoryTest(count)
-        val expected = count * 100
+        val expected = count * 100L
         assertEquals(expected, result)
     }
 }

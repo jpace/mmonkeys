@@ -3,6 +3,7 @@ package org.incava.mmonkeys.util
 import kotlinx.coroutines.delay
 import org.incava.mmonkeys.time.Durations
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.pow
 
 class Memory {
@@ -14,7 +15,7 @@ class Memory {
         table.printHeader()
     }
 
-    fun showCurrent(number: AtomicInteger) {
+    fun showCurrent(number: AtomicLong) {
         val (total, free, used) = currentMemory()
         val displayed = Durations.millisToString(System.currentTimeMillis() - start, 6000L, 360L)
         table.printRow(displayed, number.get(), free, used, total)
@@ -28,7 +29,7 @@ class Memory {
         return Triple(total, free, used)
     }
 
-    suspend fun monitor(number: AtomicInteger, interval: Long = 500L) {
+    suspend fun monitor(number: AtomicLong, interval: Long = 500L) {
         showBanner()
         while (true) {
             showCurrent(number)

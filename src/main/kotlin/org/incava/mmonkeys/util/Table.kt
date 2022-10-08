@@ -1,36 +1,44 @@
 package org.incava.mmonkeys.util
 
+import java.io.PrintStream
+
+data class Column(val header: String, val type: Class<out Any>, val width: Int)
+
 abstract class Table {
+    var out: PrintStream = System.out
+
     fun printHeader() {
         val fmt = format(true)
         val header = getHeader()
         val str = String.format(fmt, *header)
-        println(str)
+        out.println(str)
     }
 
     abstract fun cells(): List<Triple<String, Class<out Any>, Int>>
 
+    fun columns(): Array<Column> {
+        return cells().map { Column(it.first, it.second, it.third) }.toTypedArray()
+    }
+
     fun printRow(vararg values: Any) {
         val fmt = format(false)
         val str = String.format(fmt, *values)
-        println(str)
+        out.println(str)
     }
 
-    private fun getHeader(): Array<String> {
-        return cells().map {
-            it.first
-        }.toTypedArray()
+    fun getHeader(): Array<String> {
+        return columns().map(Column::header).toTypedArray()
     }
 
-    private fun getWidths(header: Boolean): List<Pair<Class<out Any>, Int>> {
+    private fun getWidths(isHeader: Boolean): List<Pair<Class<out Any>, Int>> {
         return cells().map {
-            val cls = if (header) String::class.java else it.second
+            val cls = if (isHeader) String::class.java else it.second
             (cls to it.third)
         }
     }
 
-    fun format(header: Boolean): String {
-        val fields = getWidths(header).map {
+    fun format(isHeader: Boolean): String {
+        val fields = getWidths(isHeader).map {
             toFormat(it.first, it.second)
         }
         return fields.joinToString(" | ")

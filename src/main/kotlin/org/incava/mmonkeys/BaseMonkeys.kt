@@ -7,14 +7,15 @@ import org.incava.mmonkeys.util.Console
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 
 abstract class BaseMonkeys(private val showMemory: Boolean) {
-    private val iterations = AtomicInteger(0)
+    private val iterations = AtomicLong(0L)
     private val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
     private val maxAttempts = 100_000_000L
 
-    fun run(): Int {
+    fun run(): Long {
         val memory = Memory()
         runBlocking {
             val timer = launchTimer(memory)
@@ -23,7 +24,9 @@ abstract class BaseMonkeys(private val showMemory: Boolean) {
             jobs.forEach { it.join() }
             timer.cancel()
             watcher.cancel()
-            memory.showCurrent(iterations)
+            if (showMemory) {
+                memory.showCurrent(iterations)
+            }
         }
 //        Console.info("found?", found.get())
 //        Console.info("iterations", iterations.get())

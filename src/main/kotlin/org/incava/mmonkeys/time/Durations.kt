@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.time
 
 import java.time.Duration
-import kotlin.system.measureTimeMillis
 
 object Durations {
     fun millisToString(millis: Long, minSeconds: Long = 30L, minMinutes: Long = 3L): String {
@@ -25,8 +24,11 @@ object Durations {
         return String.format("%d %s", values.first, values.second)
     }
 
-    fun measureDuration(block: () -> Unit): Duration {
-        val millis = measureTimeMillis(block)
-        return Duration.ofMillis(millis)
+    fun <T> measureDuration(block: () -> T): Pair<T, Duration> {
+        val start = System.currentTimeMillis()
+        val result = block()
+        val done = System.currentTimeMillis()
+        val duration = done - start
+        return result to Duration.ofMillis(duration)
     }
 }

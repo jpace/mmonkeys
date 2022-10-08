@@ -37,7 +37,6 @@ internal class SlotsTest {
     fun calculate() {
         val input = 100
         val result = Slots.calculate(27, input)
-        println("result = $result")
         assertEquals(input, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }

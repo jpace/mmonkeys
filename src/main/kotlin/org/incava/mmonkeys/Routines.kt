@@ -5,11 +5,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.mmonkeys.util.Console.printf
 import org.incava.mmonkeys.util.Memory
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 
 class Routines {
-    fun memoryTest(count: Int): Int {
-        val number = AtomicInteger(0)
+    fun memoryTest(count: Int): Long {
+        val number = AtomicLong(0)
         val memory = Memory()
         runBlocking {
             memory.showBanner()
