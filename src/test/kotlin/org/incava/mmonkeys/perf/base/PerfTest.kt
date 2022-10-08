@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.perf.base
 
+import org.incava.mesa.Table
 import org.incava.mmonkeys.time.Durations
 import org.incava.mmonkeys.util.Memory
-import org.incava.mmonkeys.util.Table
 
 class PerfTest {
     class PerfTable : Table() {
@@ -36,7 +36,7 @@ class PerfTest {
 
     private fun addResults(numMatches: Int, sought: Any, results: PerfResults) {
         val abbr = sought.toString().replace(Regex("^(\\w).*(\\w)$"), "..$2")
-        val cells = arrayOf(
+        val cells = listOf(
             abbr,
             results.averageDurations(),
             results.averageIterations(),
@@ -44,6 +44,6 @@ class PerfTest {
             Durations.millisToString(results.duration, 5000L),
             memoryUsed()
         )
-        table.printRow(*cells)
+        table.printRow(cells)
     }
 }

@@ -1,8 +1,14 @@
-package org.incava.mmonkeys.util
+package org.incava.mesa
 
-import org.incava.mesa.Table
+import java.io.PrintStream
 
-class MemoryTable : Table() {
+class TableX(out: PrintStream = System.out) : Table(out) {
+    override fun cells(): List<Triple<String, Class<out Any>, Int>> {
+        return listOf(Triple("h1", String::class.java, 4))
+    }
+}
+
+class TableY : Table() {
     override fun cells(): List<Triple<String, Class<out Any>, Int>> {
         return listOf(
             Triple("elapsed", String::class.java, 7),

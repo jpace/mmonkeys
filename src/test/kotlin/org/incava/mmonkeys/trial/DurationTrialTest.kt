@@ -17,7 +17,7 @@ internal class DurationTrialTest {
     @Test
     fun durationsPresent() {
         val obj = DurationTrial<Any>()
-        obj.addTrial { println("hello") }
+        obj.addTrial { }
         val result = obj.durations
         assertEquals(1, result.size)
     }

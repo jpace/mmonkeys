@@ -51,7 +51,7 @@ internal class SlotsTest {
     @TestFactory
     fun generate() =
         listOf(
-            5_000 to 20.2,
+            5_000 to 22.0,
             10_000 to 10.2,
             50_000 to 7.2,
             100_000 to 3.2,
