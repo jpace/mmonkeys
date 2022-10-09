@@ -1,19 +1,22 @@
 package org.incava.mmonkeys.perf.base
 
+import org.incava.mesa.Column
+import org.incava.mesa.LongColumn
+import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.time.Durations
 import org.incava.mmonkeys.util.Memory
 
 class PerfTest {
     class PerfTable : Table() {
-        override fun cells(): List<Triple<String, Class<out Any>, Int>> {
+        override fun columns(): List<Column> {
             return listOf(
-                Triple("chars", String::class.java, 8),
-                Triple("avg time", Long::class.java, 12),
-                Triple("avg iters", Long::class.java, 16),
-                Triple("matches", Long::class.java, 8),
-                Triple("total time", String::class.java, 12),
-                Triple("mem used", Long::class.java, 8),
+                StringColumn("chars", 8),
+                LongColumn("avg time", 12),
+                LongColumn("avg iters", 16),
+                LongColumn("matches", 8),
+                StringColumn("total time", 12),
+                LongColumn("mem used", 8),
             )
         }
     }
