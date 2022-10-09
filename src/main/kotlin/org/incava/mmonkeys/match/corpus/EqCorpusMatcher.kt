@@ -1,6 +1,7 @@
-package org.incava.mmonkeys.match
+package org.incava.mmonkeys.match.corpus
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.match.MatchData
 
 class EqCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     override fun check(): MatchData {

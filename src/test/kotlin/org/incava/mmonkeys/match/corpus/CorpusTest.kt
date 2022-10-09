@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.match
+package org.incava.mmonkeys.match.corpus
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest

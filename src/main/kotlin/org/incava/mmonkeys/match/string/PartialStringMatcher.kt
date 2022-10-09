@@ -1,6 +1,7 @@
-package org.incava.mmonkeys.match
+package org.incava.mmonkeys.match.string
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.match.MatchData
 
 class PartialStringMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
     override fun check(): MatchData {

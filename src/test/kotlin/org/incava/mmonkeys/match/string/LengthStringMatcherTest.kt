@@ -1,6 +1,7 @@
-package org.incava.mmonkeys.match
+package org.incava.mmonkeys.match.string
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

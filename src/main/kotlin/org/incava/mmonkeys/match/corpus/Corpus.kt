@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.match
+package org.incava.mmonkeys.match.corpus
 
 class Corpus(vararg ary: String) {
     val words = mutableListOf<String>()

@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.Corpus
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.system.measureTimeMillis

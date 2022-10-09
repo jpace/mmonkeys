@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.perf.match
 
-import org.incava.mmonkeys.match.Corpus
-import org.incava.mmonkeys.match.PartialStringMatcher
+import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.string.PartialStringMatcher
 import org.incava.mmonkeys.perf.base.PerfTest
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter

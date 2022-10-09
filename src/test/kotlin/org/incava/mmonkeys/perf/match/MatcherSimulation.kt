@@ -3,6 +3,10 @@ import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.*
+import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.string.EqStringMatcher
+import org.incava.mmonkeys.match.string.LengthStringMatcher
+import org.incava.mmonkeys.match.string.PartialStringMatcher
 import org.incava.mmonkeys.trial.DurationTrial
 import org.incava.mmonkeys.util.Console.printf
 import java.lang.Thread.sleep
