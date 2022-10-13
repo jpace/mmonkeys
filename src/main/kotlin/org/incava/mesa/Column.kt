@@ -10,9 +10,9 @@ open class Column(val header: String, val width: Int) {
     }
 }
 
-class StringColumn(header: String, width: Int) : Column(header, width) {
+class StringColumn(header: String, width: Int, private val leftJustified: Boolean = false) : Column(header, width) {
     override fun toRowFormat(): String {
-        return "%${width}s"
+        return if (leftJustified) "%-${width}s" else "%${width}s"
     }
 }
 
@@ -35,4 +35,3 @@ class DoubleColumn(header: String, width: Int, private val precision: Int) : Col
         return "%${width}.${precision}f"
     }
 }
-

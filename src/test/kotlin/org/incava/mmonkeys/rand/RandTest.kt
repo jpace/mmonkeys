@@ -1,8 +1,5 @@
 package org.incava.mmonkeys.rand
 
-import kotlin.math.abs
-import kotlin.test.assertTrue
-
 open class RandTest {
     val inputs: List<Pair<Int, Double>> = listOf(
         5_000 to 20.2,
@@ -15,9 +12,4 @@ open class RandTest {
     )
     val exp98 = 112.271
     val exp99 = 148.909
-
-    fun assertWithin(expected: Double, result: Double, maxDistance: Double) {
-        val diff = abs(result - expected)
-        assertTrue(diff <= maxDistance, "expected: $diff within $maxDistance of $expected")
-    }
 }
