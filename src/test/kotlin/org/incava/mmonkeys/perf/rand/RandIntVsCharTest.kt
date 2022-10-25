@@ -45,7 +45,7 @@ class RandIntVsCharTest {
         val nextLong = { random.nextLong(); Unit }
         val numCharsInt = 6
         val charSizeInt = 27.0.pow(numCharsInt).toInt()
-        val numCharsLong = 9
+        val numCharsLong = 13
         val charSizeLong = 27.0.pow(numCharsLong).toLong()
         val nextIntSize = { random.nextInt(charSizeInt); Unit }
         val nextLongInt = { random.nextLong(charSizeInt.toLong()); Unit }
@@ -83,24 +83,33 @@ class RandIntVsCharTest {
         }
         val longAppend = {
             val sb = StringBuilder()
-            repeat(numCharsInt) {
-                val ch = random.nextInt(0, 27)
+            repeat(numCharsLong) {
+                val ch = random.nextInt(0, 26)
                 sb.append(ch)
             }
         }
         val longIf = {
-            repeat(numCharsInt) {
+            repeat(numCharsLong) {
                 val ch = random.nextInt(0, 27)
                 val b = ch == 26
             }
         }
         val longIfAppend = {
             val sb = StringBuilder()
-            repeat(numCharsInt) {
+            repeat(numCharsLong) {
                 val ch = random.nextInt(0, 27)
                 if (ch != 26)
                     sb.append(ch)
             }
+        }
+        val intValue = {
+            // (26 ** 5) << 1
+            val x = random.nextInt(0, 617831552)
+        }
+
+        val longValue = {
+            // (26 ** 13) << 1
+            val x = random.nextLong(0, 4962305746407473152L)
         }
         val trials = listOf(
             RandTrial("nextInt ", nextInt),
@@ -116,10 +125,18 @@ class RandIntVsCharTest {
             RandTrial("longAppend * $numCharsLong", longAppend),
             RandTrial("longIf * $numCharsLong", longIf),
             RandTrial("longIfAppend * $numCharsLong", longIfAppend),
+            RandTrial("intValue", intValue),
+            RandTrial("longValue", longValue),
         )
-        repeat(10) {
+        val trials2 = listOf(
+            RandTrial("intAppend * $numCharsInt", intAppend),
+            RandTrial("longAppend * $numCharsLong", longAppend),
+            RandTrial("intValue", intValue),
+            RandTrial("longValue", longValue),
+        )
+        repeat(20) {
             info("iteration", it)
-            val shuffled = trials.shuffled()
+            val shuffled = trials2.shuffled()
             shuffled.forEach { trial ->
                 runTrial(count, trial)
             }
@@ -127,7 +144,7 @@ class RandIntVsCharTest {
         println()
         val table = RandTrialTable()
         table.printHeader()
-        trials.forEach { trial ->
+        trials2.forEach { trial ->
             table.printRow(trial.name, trial.durations.average())
         }
     }

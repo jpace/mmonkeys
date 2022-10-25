@@ -1,54 +1,8 @@
 package org.incava.mmonkeys.util
 
 import org.junit.jupiter.api.Test
-import kotlin.math.pow
 
 internal class CharsTest {
-    fun encodeNumbers(numbers: List<Int>): Int {
-        var value = 1
-        numbers.forEach {
-            value = (value * 26) + it
-        }
-        return value
-    }
-
-    fun decodeNumbers(value: Int): List<Int> {
-        var nums: MutableList<Int>? = null
-        var idx = 7
-        var current = value
-        while (idx >= 0) {
-            val amt = 26.0.pow(idx).toInt()
-            val x = current / amt
-            if (x == 1 && nums == null) {
-                nums = mutableListOf()
-            } else if (nums != null) {
-                nums += x
-            }
-            current -= (x * amt)
-            idx -= 1
-        }
-        return nums ?: emptyList()
-    }
-
-    fun decodeString1(value: Int): String {
-        var sb: StringBuilder? = null
-        var idx = 7
-        var current = value
-        while (idx >= 0) {
-            val amt = 26.0.pow(idx).toInt()
-            val x = current / amt
-            if (x == 1 && sb == null) {
-                sb = StringBuilder()
-            } else if (sb != null) {
-                var ch = (97 + x).toChar()
-                sb.append(ch)
-            }
-            current -= (x * amt)
-            idx -= 1
-        }
-        return sb.toString()
-    }
-
     fun decodeString2(value: Int): String {
         val sb = StringBuilder()
         var current = value
@@ -110,8 +64,6 @@ internal class CharsTest {
         Console.info("# chars", str.length)
         val value = encodeNumbers(str)
         Console.info("value", value)
-        val result1 = decodeString1(value)
-        Console.info("result1", result1)
         val result2 = decodeString2(value)
         Console.info("result2", result2)
         val asInt = encodeNumbers(str)
@@ -127,6 +79,8 @@ internal class CharsTest {
 
     @Test
     fun convertString() {
+        // int works up through 6 chars
+        // long through 13
         Console.info("int max", Int.MAX_VALUE)
         runTest("")
         runTest("a")
@@ -135,6 +89,7 @@ internal class CharsTest {
         runTest("abcd")
         runTest("abcde")
         runTest("abcdef")
+        runTest("zzzzzz")
         runTest("abcdefg")
         runTest("abcdefgh")
         runTest("abcdefghi")
@@ -145,14 +100,5 @@ internal class CharsTest {
         runTest("abcdefghijklmn")
         runTest("abcdefghijklmno")
         runTest("abcdefghijklmnop")
-    }
-
-    @Test
-    fun convert() {
-        val numbers = listOf(3, 1, 8)
-        val value = encodeNumbers(numbers)
-        Console.info("value", value)
-        val result = decodeNumbers(value)
-        Console.info("result", result)
     }
 }
