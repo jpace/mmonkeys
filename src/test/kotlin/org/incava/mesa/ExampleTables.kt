@@ -8,7 +8,7 @@ class TableX(out: PrintStream = System.out) : Table(out) {
     }
 }
 
-class TableY : Table() {
+class TableY(out: PrintStream) : Table(out) {
     override fun columns(): List<Column> {
         return listOf(
             StringColumn("elapsed", 7),
@@ -16,6 +16,16 @@ class TableY : Table() {
             LongColumn("free", 6),
             LongColumn("used", 6),
             LongColumn("total", 6),
+        )
+    }
+}
+
+class TableZ(out: PrintStream) : Table(out) {
+    override fun columns(): List<Column> {
+        return listOf(
+            StringColumn("h1", 5),
+            LongColumn("h2", 4),
+            IntColumn("h3", 3),
         )
     }
 }

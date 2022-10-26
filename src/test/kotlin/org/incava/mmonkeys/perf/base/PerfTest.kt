@@ -24,7 +24,7 @@ class PerfTest {
     private val table = PerfTable()
 
     init {
-        table.printHeader()
+        table.writeHeader()
     }
 
     fun <T> addTrial(perfTrial: PerfTrial<T>, numMatches: Int) {
@@ -47,6 +47,6 @@ class PerfTest {
             Durations.millisToString(results.duration, 5000L),
             memoryUsed()
         )
-        table.printRow(cells)
+        table.writeRow(cells)
     }
 }

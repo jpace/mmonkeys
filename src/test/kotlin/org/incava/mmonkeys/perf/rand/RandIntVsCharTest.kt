@@ -134,7 +134,7 @@ class RandIntVsCharTest {
             RandTrial("intValue", intValue),
             RandTrial("longValue", longValue),
         )
-        repeat(20) {
+        repeat(10) {
             info("iteration", it)
             val shuffled = trials2.shuffled()
             shuffled.forEach { trial ->
@@ -143,9 +143,9 @@ class RandIntVsCharTest {
         }
         println()
         val table = RandTrialTable()
-        table.printHeader()
+        table.writeHeader()
         trials2.forEach { trial ->
-            table.printRow(trial.name, trial.durations.average())
+            table.writeRow(trial.name, trial.durations.average())
         }
     }
 }

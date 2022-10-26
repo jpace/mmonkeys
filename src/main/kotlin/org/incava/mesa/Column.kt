@@ -1,29 +1,37 @@
 package org.incava.mesa
 
-open class Column(val header: String, val width: Int) {
-    fun toHeaderFormat(): String {
+open class Column(private val header: String, val width: Int) {
+    open fun headerFormat(): String {
         return "%-${width}s"
     }
 
-    open fun toRowFormat(): String {
+    open fun cellFormat(): String {
         return "%s"
+    }
+
+    fun formatHeader() : String {
+        return headerFormat().format(header)
+    }
+
+    open fun formatCell(value: Any) : String {
+        return cellFormat().format(value)
     }
 }
 
 class StringColumn(header: String, width: Int, private val leftJustified: Boolean = false) : Column(header, width) {
-    override fun toRowFormat(): String {
+    override fun cellFormat(): String {
         return if (leftJustified) "%-${width}s" else "%${width}s"
     }
 }
 
 class LongColumn(header: String, width: Int) : Column(header, width) {
-    override fun toRowFormat(): String {
+    override fun cellFormat(): String {
         return "%,${width}d"
     }
 }
 
 class IntColumn(header: String, width: Int) : Column(header, width) {
-    override fun toRowFormat(): String {
+    override fun cellFormat(): String {
         return "%${width}d"
     }
 }
@@ -31,7 +39,7 @@ class IntColumn(header: String, width: Int) : Column(header, width) {
 class AnyColumn(header: String, width: Int) : Column(header, width)
 
 class DoubleColumn(header: String, width: Int, private val precision: Int) : Column(header, width) {
-    override fun toRowFormat(): String {
+    override fun cellFormat(): String {
         return "%${width}.${precision}f"
     }
 }

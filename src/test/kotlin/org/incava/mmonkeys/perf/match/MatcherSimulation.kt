@@ -1,3 +1,4 @@
+import org.incava.mesa.*
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
@@ -18,7 +19,6 @@ import kotlin.random.Random
 class MatchDurationTrial(val name: String, private val params: SimulationParams<String>) : DurationTrial<Long>() {
     fun run(): Pair<Long, Duration> {
         return addTrial {
-            // printf("%-10.10s", name)
             val simulation = Simulation(params)
             val result = simulation.run()
             result.first
@@ -26,15 +26,31 @@ class MatchDurationTrial(val name: String, private val params: SimulationParams<
     }
 }
 
+class DurationColumn(header: String, width: Int) : Column(header, width) {
+
+}
+
+class MatchSimTable : Table() {
+    override fun columns(): List<Column> {
+        return listOf(
+            IntColumn("trial", 5),
+            StringColumn("type", 12, leftJustified = true),
+            LongColumn("iterations", 15),
+            StringColumn("duration", 15),
+        )
+    }
+}
+
 class MatcherSimulation {
     private val numMonkeys = 1000
     private val typewriterFactory = TypewriterFactory('z')
+    private val table = MatchSimTable()
 
     private fun simParams(sought: String, matcher: (Monkey, String) -> Matcher): SimulationParams<String> {
         return SimulationParams(numMonkeys, sought, matcher, typewriterFactory, false)
     }
 
-    fun option(condition: Boolean, x: String, y: String): String {
+    private fun option(condition: Boolean, x: String, y: String): String {
         return if (condition) x else y
     }
 
@@ -47,12 +63,6 @@ class MatcherSimulation {
         )
         return fields.stream().collect(Collectors.joining(" | "))
     }
-
-//    fun duration(value: Duration) : String {
-//        val seconds = value.seconds
-//        val millis = value.nano
-//        return String.format("%d:%02d:%02d.%0", seconds / 100)
-//    }
 
     fun writeRow(trial: String, type: String, iterations: String, duration: String) {
         val fmt = format(isTrialNumber = false, isIterationNumber = false, isDurationRight = false)
@@ -82,40 +92,34 @@ class MatcherSimulation {
         }
     }
 
-    fun formatDuration(duration: Duration): String {
+    private fun formatDuration(duration: Duration): String {
         return formatDuration(duration.seconds, duration.nano)
     }
 
-    fun writeRow(trial: Int, type: String, iterations: Number, duration: Duration) {
+    private fun writeRow(trial: Int, type: String, iterations: Number, duration: Duration) {
         val fmt = format(isTrialNumber = true, isIterationNumber = true, isDurationRight = true)
-        // val durstr = Durations.formatted(duration, 180L)
         val str = formatDuration(duration)
         printf(fmt, trial, type, iterations, str)
+        table.writeRow(trial, type, iterations, str)
     }
 
     fun writeRow(trial: String, type: String, iterations: Number, duration: Duration) {
         val fmt = format(isTrialNumber = false, isIterationNumber = true, isDurationRight = true)
         val str = formatDuration(duration)
         printf(fmt, trial, type, iterations, str)
+        table.writeRow(trial, type, iterations, str)
     }
 
-    fun writeHeader() {
-        writeRow("trial", "type", "iterations", "duration")
+    private fun writeTrialAverage(trial: MatchDurationTrial) {
+        val iterations = trial.results.average().toInt()
+        val durations = trial.average()
+        writeRow(666, trial.name, iterations, durations)
     }
 
-    fun writeBanner(ch: Char) {
-        val dashes = StringBuilder(ch.toString()).repeat(20)
-        writeRow(dashes, dashes, dashes, dashes)
-    }
-
-    fun summarize(trials: List<MatchDurationTrial>) {
-        writeBanner('=')
-        trials.forEach {
-            val iterations = it.results.average().toInt()
-            val durations = it.average()
-            writeRow("  avg", it.name, iterations, durations)
-        }
-        writeBanner('=')
+    private fun summarize(trials: List<MatchDurationTrial>) {
+        table.writeBreak('=')
+        trials.forEach(this::writeTrialAverage)
+        table.writeBreak('=')
     }
 
     fun run(numTrials: Int, word: String) {
@@ -130,15 +134,15 @@ class MatcherSimulation {
         val shuffled = trials.shuffled()
         printf("word.length: ${word.length}")
         println("# trials: $numTrials")
-        writeHeader()
-        writeBanner('=')
+        table.writeHeader()
+        table.writeBreak('=')
         repeat(numTrials) { num ->
             if (num > 0) {
                 if (num % 3 == 0) {
                     summarize(trials)
                 } else {
-                    writeBanner('-')
-                    sleep(500L)
+                    table.writeBreak('-')
+                    sleep(100L)
                 }
             }
             val offset = Random.Default.nextInt(shuffled.size)
@@ -162,10 +166,10 @@ fun main() {
     val word4 = "abcdef"
     val corpus = Corpus(word1)
     val obj = MatcherSimulation()
-    obj.run(10, word1)
-    obj.run(5, word2)
-    obj.run(1, word3)
-    obj.run(0, word4)
+    obj.run(10 / 2, word1)
+    obj.run(5 / 2, word2)
+//    obj.run(1, word3)
+//    obj.run(0, word4)
     val done = ZonedDateTime.now()
     println("done")
     val duration = Duration.between(start, done)

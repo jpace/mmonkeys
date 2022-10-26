@@ -52,7 +52,6 @@ internal class EqCorpusMatcherTest : MatcherTest() {
     private fun createMatcher(sought: String): EqStringMatcher {
         val typewriter = DeterministicTypewriter(charList('a', 'e'))
         val monkey = Monkey(1, typewriter)
-        val obj = EqStringMatcher(monkey, sought)
-        return obj
+        return EqStringMatcher(monkey, sought)
     }
 }

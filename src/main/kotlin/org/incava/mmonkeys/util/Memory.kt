@@ -2,7 +2,6 @@ package org.incava.mmonkeys.util
 
 import kotlinx.coroutines.delay
 import org.incava.mmonkeys.time.Durations
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.pow
 
@@ -12,13 +11,13 @@ class Memory {
     private val table = MemoryTable()
 
     fun showBanner() {
-        table.printHeader()
+        table.writeHeader()
     }
 
     fun showCurrent(number: AtomicLong) {
         val (total, free, used) = currentMemory()
         val displayed = Durations.millisToString(System.currentTimeMillis() - start, 6000L, 360L)
-        table.printRow(displayed, number.get(), free, used, total)
+        table.writeRow(displayed, number.get(), free, used, total)
     }
 
     fun currentMemory(): Triple<Long, Long, Long> {
