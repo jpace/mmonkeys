@@ -1,6 +1,7 @@
 package org.incava.mmonkeys
 
 import org.incava.mmonkeys.type.DeterministicTypewriter
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.params.ParameterizedTest
@@ -48,7 +49,7 @@ internal class MonkeyTest {
     companion object {
         @JvmStatic
         fun dataForSimulation(): List<Arguments> {
-            val range = 1..3
+            val range = 1..4
             val string = "abcdefghi"
             val charList = charList('p')
             return range.map { length ->
@@ -71,11 +72,11 @@ internal class MonkeyTest {
         }
 
         private fun charList(last: Int): List<Char> {
-            return (0 until last).map { 'a' + it }.toList() + ' '
+            return (0 until last).map { 'a' + it }.toList() + Keys.END_CHAR
         }
 
-        private fun charList(last: Char): List<Char> {
-            return ('a'..last).toList() + ' '
+        private fun charList(toChar: Char): List<Char> {
+            return Keys.keyList(toChar)
         }
     }
 }

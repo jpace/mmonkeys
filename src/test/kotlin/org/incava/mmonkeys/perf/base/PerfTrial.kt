@@ -2,6 +2,7 @@ package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Matcher
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.system.measureTimeMillis
 
@@ -11,7 +12,7 @@ class PerfTrial<T>(lastChar: Char, sought: T, typeCtor: TypewriterCtor, matchCto
     val matcher: Matcher
 
     init {
-        val chars = ('a'..lastChar).toList() + ' '
+        val chars = Keys.keyList(lastChar)
         val typewriter = typeCtor.invoke(chars)
         val monkey = Monkey(38, typewriter)
         matcher = matchCtor(monkey, sought)

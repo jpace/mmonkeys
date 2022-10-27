@@ -55,7 +55,7 @@ internal class SlotsTest {
             10_000 to 10.2,
             50_000 to 7.2,
             100_000 to 3.2,
-            500_000 to 1.2,
+            500_000 to 1.6,
             1_000_000 to 1.0,
             5_000_000 to 0.7,
         ).map { (input, expected) ->

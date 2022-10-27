@@ -3,7 +3,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.match.*
+import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
@@ -26,17 +26,51 @@ class MatchDurationTrial(val name: String, private val params: SimulationParams<
     }
 }
 
-class DurationColumn(header: String, width: Int) : Column(header, width) {
+class DurationColumn(header: String, width: Int) : StringColumn(header, width, leftJustified = false) {
+    override fun formatCell(value: Any): String {
+        val duration = value as Duration
+        val seconds = duration.seconds
+        val nanos = duration.nano
+        val str = when {
+            seconds >= 3600 -> {
+                String.format("%d:%02d:%02d.%01d",
+                    (seconds / 3600),
+                    (seconds % 3600) / 60,
+                    seconds % 60,
+                    nanos / 100_000_000L)
+            }
+            (seconds % 3600) / 60 >= 60 -> {
+                String.format("%d:%02d.%01d",
+                    (seconds % 3600) / 60,
+                    seconds % 60,
+                    nanos / 100_000_000L)
+            }
+            else -> {
+                String.format("%d.%01d",
+                    seconds % 60,
+                    nanos / 100_000_000L)
+            }
+        }
+        return cellFormat().format(str)
+    }
+}
 
+class IntStringColumn(header: String, width: Int) : IntColumn(header, width) {
+    override fun formatCell(value: Any): String {
+        return if (value.javaClass == String::class.java)
+            "%-${width}s".format(value)
+        else
+            super.formatCell(value)
+    }
 }
 
 class MatchSimTable : Table() {
     override fun columns(): List<Column> {
         return listOf(
-            IntColumn("trial", 5),
+            IntStringColumn("trial", 5),
             StringColumn("type", 12, leftJustified = true),
             LongColumn("iterations", 15),
-            StringColumn("duration", 15),
+            DurationColumn("duration", 15),
         )
     }
 }
@@ -50,70 +84,10 @@ class MatcherSimulation {
         return SimulationParams(numMonkeys, sought, matcher, typewriterFactory, false)
     }
 
-    private fun option(condition: Boolean, x: String, y: String): String {
-        return if (condition) x else y
-    }
-
-    fun format(isTrialNumber: Boolean, isIterationNumber: Boolean, isDurationRight: Boolean): String {
-        val fields = mutableListOf(
-            option(isTrialNumber, "%5d", "%-5.5s"),
-            "%-12.12s",
-            option(isIterationNumber, "%,15d", "%-15.15s"),
-            option(isDurationRight, "%15.15s", "%-15.15s")
-        )
-        return fields.stream().collect(Collectors.joining(" | "))
-    }
-
-    fun writeRow(trial: String, type: String, iterations: String, duration: String) {
-        val fmt = format(isTrialNumber = false, isIterationNumber = false, isDurationRight = false)
-        printf(fmt, trial, type, iterations, duration)
-    }
-
-    fun formatDuration(seconds: Long, nanos: Int): String {
-        return when {
-            seconds >= 3600 -> {
-                String.format("%d:%02d:%02d.%03d",
-                    (seconds / 3600),
-                    (seconds % 3600) / 60,
-                    seconds % 60,
-                    nanos / 1_000_000L)
-            }
-            (seconds % 3600) / 60 >= 60 -> {
-                String.format("%d:%02d.%03d",
-                    (seconds % 3600) / 60,
-                    seconds % 60,
-                    nanos / 1_000_000L)
-            }
-            else -> {
-                String.format("%d.%03d",
-                    seconds % 60,
-                    nanos / 1_000_000L)
-            }
-        }
-    }
-
-    private fun formatDuration(duration: Duration): String {
-        return formatDuration(duration.seconds, duration.nano)
-    }
-
-    private fun writeRow(trial: Int, type: String, iterations: Number, duration: Duration) {
-        val fmt = format(isTrialNumber = true, isIterationNumber = true, isDurationRight = true)
-        val str = formatDuration(duration)
-        printf(fmt, trial, type, iterations, str)
-        table.writeRow(trial, type, iterations, str)
-    }
-
-    fun writeRow(trial: String, type: String, iterations: Number, duration: Duration) {
-        val fmt = format(isTrialNumber = false, isIterationNumber = true, isDurationRight = true)
-        val str = formatDuration(duration)
-        printf(fmt, trial, type, iterations, str)
-        table.writeRow(trial, type, iterations, str)
-    }
-
     private fun writeTrialAverage(trial: MatchDurationTrial) {
         val iterations = trial.results.average().toInt()
         val durations = trial.average()
-        writeRow(666, trial.name, iterations, durations)
+        table.writeRow("avg", trial.name, iterations, durations)
     }
 
     private fun summarize(trials: List<MatchDurationTrial>) {
@@ -138,7 +112,7 @@ class MatcherSimulation {
         table.writeBreak('=')
         repeat(numTrials) { num ->
             if (num > 0) {
-                if (num % 3 == 0) {
+                if (num % 5 == 0) {
                     summarize(trials)
                 } else {
                     table.writeBreak('-')
@@ -150,7 +124,7 @@ class MatcherSimulation {
                 val idx = (offset + index) % shuffled.size
                 val type = shuffled[idx]
                 val result = type.run()
-                writeRow(num, type.name, result.first, result.second)
+                table.writeRow(num, type.name, result.first, result.second)
             }
         }
         summarize(trials)
@@ -166,10 +140,10 @@ fun main() {
     val word4 = "abcdef"
     val corpus = Corpus(word1)
     val obj = MatcherSimulation()
-    obj.run(10 / 2, word1)
-    obj.run(5 / 2, word2)
-//    obj.run(1, word3)
-//    obj.run(0, word4)
+    obj.run(10, word1)
+//    obj.run(20, word2)
+//    obj.run(5, word3)
+    // obj.run(1, word4)
     val done = ZonedDateTime.now()
     println("done")
     val duration = Duration.between(start, done)

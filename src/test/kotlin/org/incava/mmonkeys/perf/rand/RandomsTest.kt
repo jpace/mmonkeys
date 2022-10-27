@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.perf.rand
 
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random
@@ -36,7 +37,7 @@ class RandomsTest(
     }
 
     private fun `int numChars List`() {
-        val list = ('a'..'z').toList() + ' '
+        val list = Keys.fullList()
         runTest {
             val x = random.nextInt(numChars)
             val y = list[x]
@@ -44,7 +45,7 @@ class RandomsTest(
     }
 
     private fun `int numChars Array`() {
-        val ary = (('a'..'z').toList() + ' ').toTypedArray()
+        val ary = Keys.fullList().toTypedArray()
         runTest {
             val x = random.nextInt(numChars)
             val y = ary[x]
@@ -52,7 +53,7 @@ class RandomsTest(
     }
 
     private fun `int numChars List StringBuffer`() {
-        val list = ('a'..'z').toList() + ' '
+        val list = Keys.fullList()
         val sb = StringBuilder()
         runTest {
             val x = random.nextInt(numChars)
@@ -62,7 +63,7 @@ class RandomsTest(
     }
 
     private fun `int numChars List toString`() {
-        val list = ('a'..'z').toList() + ' '
+        val list = Keys.fullList()
         val whence = Thread.currentThread().stackTrace[1]
         val duration = measureTimeMillis {
             repeat(iterations) {
@@ -79,7 +80,7 @@ class RandomsTest(
     }
 
     private fun `int numChars Array toString`() {
-        val ary = (('a'..'z').toList() + ' ').toTypedArray()
+        val ary = Keys.fullList().toTypedArray()
         val whence = Thread.currentThread().stackTrace[1]
         val duration = measureTimeMillis {
             repeat(iterations) {
@@ -104,7 +105,7 @@ class RandomsTest(
 
     private fun `nextBytes toString`() {
         val bytes = ByteArray(strLength)
-        val list = ('a'..'z').toList() + ' '
+        val list = Keys.fullList()
         val whence = Thread.currentThread().stackTrace[1]
         val duration = measureTimeMillis {
             repeat(iterations) {

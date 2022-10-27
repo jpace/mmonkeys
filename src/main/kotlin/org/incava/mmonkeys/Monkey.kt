@@ -1,5 +1,6 @@
 package org.incava.mmonkeys
 
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
 open class Monkey(val id: Int, val typewriter: Typewriter) {
@@ -11,7 +12,7 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
         val builder = StringBuilder()
         while (true) {
             val ch = nextChar()
-            if (ch == ' ') {
+            if (ch == Keys.END_CHAR) {
                 return builder.toString()
             } else {
                 builder.append(ch)
@@ -24,7 +25,7 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
         val builder = StringBuilder()
         while (builder.length < length) {
             val ch = nextChar()
-            if (ch != ' ') {
+            if (ch != Keys.END_CHAR) {
                 builder.append(ch)
             }
         }

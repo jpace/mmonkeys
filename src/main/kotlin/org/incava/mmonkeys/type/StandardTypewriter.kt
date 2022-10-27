@@ -2,7 +2,7 @@ package org.incava.mmonkeys.type
 
 import kotlin.random.Random
 
-open class StandardTypewriter(private val chars: List<Char> = ('a'..'z').toList() + ' ') : Typewriter {
+open class StandardTypewriter(private val chars: List<Char> = Keys.fullList()) : Typewriter {
     private val numChars: Int = chars.size
 
     override fun numChars(): Int {

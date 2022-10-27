@@ -5,10 +5,6 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertTrue
 
 open class MatcherTest {
-    internal fun charList(first: Char, last: Char): List<Char> {
-        return (first..last).toList() + ' '
-    }
-
     fun run(stringMatcher: Matcher, expected: Long?) {
         if (expected == null) {
             assertThrows<RuntimeException> {
