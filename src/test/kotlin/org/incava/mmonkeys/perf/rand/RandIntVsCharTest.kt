@@ -47,6 +47,7 @@ class RandIntVsCharTest {
         val charSizeInt = 27.0.pow(numCharsInt).toInt()
         val numCharsLong = 13
         val charSizeLong = 27.0.pow(numCharsLong).toLong()
+        println("charSizeLong: $charSizeLong")
         val nextIntSize = { random.nextInt(charSizeInt); Unit }
         val nextLongInt = { random.nextLong(charSizeInt.toLong()); Unit }
         val nextLongLong = { random.nextLong(charSizeLong); Unit }

@@ -4,9 +4,11 @@ import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import kotlin.test.assertEquals
 
 internal class MonkeyTest {
     @ParameterizedTest
@@ -43,7 +45,18 @@ internal class MonkeyTest {
         val typewriter = DeterministicTypewriter(characters)
         val obj = Monkey(id = 37, typewriter = typewriter)
         val result = obj.nextString()
-        kotlin.test.assertEquals(expected, result)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun nextInt() {
+        val charList = Keys.keyList('z')
+        val typewriter = DeterministicTypewriter(charList)
+        val obj = Monkey(id = 37, typewriter = typewriter)
+        Console.info("obj", obj)
+        val result = obj.nextInt(6)
+        Console.info("result", result)
+        // assertEquals(expected, result)
     }
 
     companion object {

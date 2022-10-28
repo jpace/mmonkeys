@@ -43,6 +43,6 @@ fun runStringTest(toChar: Char) {
 fun main(args: Array<String>) {
     Console.info("main")
     Console.info("args", args.toList())
-    runCorpusTest('i')
-    runStringTest('i')
+    runCorpusTest('z')
+    runStringTest('z')
 }
