@@ -3,6 +3,7 @@ package org.incava.mmonkeys
 import kotlinx.coroutines.*
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.Matcher
+import org.incava.mmonkeys.util.Console
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -31,8 +32,8 @@ class Monkeys<T>(
                 memory.showCurrent(iterations)
             }
         }
-//        Console.info("found?", found.get())
-//        Console.info("iterations", iterations.get())
+        Console.info("found?", found.get())
+        Console.info("iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 

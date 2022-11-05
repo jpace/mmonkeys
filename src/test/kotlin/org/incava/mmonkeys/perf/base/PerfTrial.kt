@@ -2,20 +2,23 @@ package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Matcher
+import org.incava.mmonkeys.time.Durations
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.util.Console
 import kotlin.system.measureTimeMillis
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
+typealias MatcherCtor<T> = (Monkey, T) -> Matcher
 
-class PerfTrial<T>(lastChar: Char, sought: T, typeCtor: TypewriterCtor, matchCtor: (Monkey, T) -> Matcher) {
+class PerfTrial<T>(lastChar: Char, val sought: T, typeCtor: TypewriterCtor, matcherCtor: MatcherCtor<T>) {
     val matcher: Matcher
 
     init {
         val chars = Keys.keyList(lastChar)
         val typewriter = typeCtor.invoke(chars)
         val monkey = Monkey(38, typewriter)
-        matcher = matchCtor(monkey, sought)
+        matcher = matcherCtor(monkey, sought)
     }
 
     private fun pause() {
@@ -32,14 +35,15 @@ class PerfTrial<T>(lastChar: Char, sought: T, typeCtor: TypewriterCtor, matchCto
         val durations = mutableListOf<Long>()
         val iterations = mutableListOf<Long>()
         pause()
-        val duration = measureTimeMillis {
+        val duration = Durations.measureDuration {
             repeat(numMatches) {
-                durations += measureTimeMillis {
+                val dur = measureTimeMillis {
                     val result = matcher.run()
                     iterations += result
                 }
+                durations += dur
             }
         }
-        return PerfResults("name-s1", matcher, duration, durations, iterations)
+        return PerfResults("name-s1", matcher, duration.second, durations, iterations)
     }
 }

@@ -4,8 +4,9 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.rand.CalculatedRandoms
+import org.incava.mmonkeys.util.Console
 
-class NumberMatcher(monkey: Monkey, val sought: String) : Matcher(monkey) {
+class NumberIntMatcher(monkey: Monkey, val sought: String) : Matcher(monkey) {
     val number = StringEncoder.encode(sought)
     val rand = CalculatedRandoms.getCalculated(monkey.typewriter.numChars())
     private val soughtLen = sought.length

@@ -1,11 +1,12 @@
 package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.match.Matcher
+import java.time.Duration
 
 data class PerfResults(
     val name: String,
     val matcher: Matcher,
-    val duration: Long,
+    val duration: Duration,
     val durations: MutableList<Long> = mutableListOf(),
     val iterations: MutableList<Long> = mutableListOf(),
 ) {

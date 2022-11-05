@@ -28,6 +28,10 @@ class Memory {
         return Triple(total, free, used)
     }
 
+    fun usedMemory() : Long {
+        return currentMemory().third
+    }
+
     suspend fun monitor(number: AtomicLong, interval: Long = 500L) {
         showBanner()
         while (true) {

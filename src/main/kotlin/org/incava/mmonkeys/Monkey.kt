@@ -1,9 +1,8 @@
 package org.incava.mmonkeys
 
+import org.incava.mmonkeys.match.number.Maths
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
-import org.incava.mmonkeys.util.Console
-import kotlin.math.pow
 import kotlin.random.Random
 
 open class Monkey(val id: Int, val typewriter: Typewriter) {
@@ -37,12 +36,14 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
         return builder.toString()
     }
 
-    fun nextInt(digits: Int) : Int {
-        val max = numValidChars.toDouble().pow(digits).toInt() * 2
-        // Console.info("max", max)
-        val value = Random.nextInt(max)
-        // Console.info("value", value)
-        return value
+    fun nextInt(digits: Int): Int {
+        val max = Maths.power2(numValidChars, digits) * 2
+        return Random.nextInt(max)
+    }
+
+    fun nextLong(digits: Int): Long {
+        val max = Maths.power2(numValidChars.toLong(), digits) * 2
+        return Random.nextLong(max)
     }
 
     override fun toString(): String {
