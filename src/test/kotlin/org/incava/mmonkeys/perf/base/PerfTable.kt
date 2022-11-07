@@ -12,12 +12,15 @@ class PerfTable : Table() {
             DurationColumn("total time", 14),
             LongColumn("avg iters", 20),
             DurationColumn("avg time", 12),
+            LongColumn("iters/sec", 12),
         )
     }
 
     fun addResults(type: String, numMatches: Int, size: Int, results: PerfResults) {
         val avgLong = results.averageDurations()
+        val durSecs = results.durations.sum() / 1000
         val avgDur = Duration.ofMillis(avgLong)
+        val itersSec = results.iterations.sum() / durSecs
         val cells = listOf(
             type,
             size,
@@ -25,6 +28,7 @@ class PerfTable : Table() {
             results.duration,
             results.averageIterations(),
             avgDur,
+            itersSec,
         )
         writeRow(cells)
     }

@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.util
 
 import java.io.PrintStream
+import java.util.concurrent.atomic.AtomicLong
 import java.util.regex.Pattern
 
 object Console {
@@ -12,6 +13,10 @@ object Console {
 
     fun info(msg: String, value: Long) {
         println(whence(), format(msg, value))
+    }
+
+    fun info(msg: String, value: AtomicLong) {
+        println(whence(), format(msg, value.get()))
     }
 
     fun info(msg: String, value: Int) {

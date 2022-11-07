@@ -12,6 +12,7 @@ class RandomsTest(
     private val iterations: Int = 100_000_000,
 ) {
     private val random = Random.Default
+    private val jdkRandom = java.util.Random()
 
     init {
         Console.info("numChars", numChars)

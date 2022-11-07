@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.perf.match
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.Matcher
@@ -9,11 +10,22 @@ import org.incava.mmonkeys.match.number.NumberMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
+import org.incava.mmonkeys.trial.DurationTrial
 import org.incava.mmonkeys.util.Console.printf
 import java.lang.Thread.sleep
 import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.random.Random
+
+class MatchDurationTrial(val name: String, private val params: SimulationParams<String>) : DurationTrial<Long>() {
+    fun run(): Pair<Long, Duration> {
+        return addTrial {
+            val simulation = Simulation(params)
+            val result = simulation.run()
+            result.first
+        }
+    }
+}
 
 class MatcherSimulation {
     private val numMonkeys = 1000
