@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.rand
 
-object CalculatedRandoms {
+object RandomFactory {
     private val randoms = mutableMapOf<Int, RandCalculated>()
 
     fun getCalculated(numChars: Int): RandCalculated {

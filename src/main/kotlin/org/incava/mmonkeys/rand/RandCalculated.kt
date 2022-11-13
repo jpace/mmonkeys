@@ -3,14 +3,8 @@ package org.incava.mmonkeys.rand
 import kotlin.random.Random
 
 open class RandCalculated(size: Int, numSlots: Int) {
-    private val random = Random.Default
-    val slots: Map<Int, Int>
-
-    init {
-        val rawSlots = Slots.calculate(size, numSlots)
-        val reduced = Slots.reduceSlots(rawSlots, rawSlots.size / 100)
-        slots = reduced.mapValues { it.value.average().toInt() }
-    }
+    val random = Random.Default
+    val slots: Map<Int, Int> = Slots.calculateAndReduce(size, numSlots)
 
     fun nextRand(): Int {
         val index = random.nextInt(100)

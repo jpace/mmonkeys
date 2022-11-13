@@ -33,7 +33,6 @@ internal class PartialStringMatcherPerfTest : MatcherTest() {
     @Test
     fun testRunIterationNoMatch() {
         val typewriter = DeterministicTypewriter(Keys.keyList('e'))
-        val monkey = Monkey(1, typewriter)
         val obj = createMatcher("123")
         val result = obj.check()
         assertFalse(result.isMatch)

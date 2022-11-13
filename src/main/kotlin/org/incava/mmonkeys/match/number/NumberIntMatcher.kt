@@ -3,8 +3,6 @@ package org.incava.mmonkeys.match.number
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.Matcher
-import org.incava.mmonkeys.rand.CalculatedRandoms
-import org.incava.mmonkeys.util.Console
 
 class NumberIntMatcher(monkey: Monkey, val sought: String) : Matcher(monkey) {
     val number = StringEncoder.encodeToInt(sought)

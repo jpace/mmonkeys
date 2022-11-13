@@ -1,10 +1,8 @@
-package org.incava.mmonkeys.time
+package org.incava.time
 
 import java.time.Duration
 
 class DurationList() : ArrayList<Duration>() {
-    constructor(vararg ary: Duration) : this(ary.toList())
-
     constructor(args: Collection<Duration>) : this() {
         addAll(args)
     }

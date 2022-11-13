@@ -18,13 +18,19 @@ abstract class Table(private val out: PrintStream = System.out) {
 
     fun writeRow(values: List<Any>) {
         val cols = columns()
-        val line = cols.indices.map { cols[it].formatCell(values[it]) }.joinToString(" | ")
+        val line = cols.indices.joinToString(" | ") { formatCell(cols, values, it) }
         writeLine(line)
     }
 
     fun writeRow(vararg values: Any) {
         writeRow(values.toList())
     }
+
+    private fun formatCell(
+        cols: List<Column>,
+        values: List<Any>,
+        it: Int,
+    ) = cols[it].formatCell(values[it])
 
     private fun writeStrings(ary: List<String>) {
         val line = ary.joinToString(" | ")

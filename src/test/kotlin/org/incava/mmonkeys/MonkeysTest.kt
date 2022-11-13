@@ -14,8 +14,8 @@ internal class MonkeysTest {
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
         val sought = "abc"
         val matching = { monkey: Monkey, _: String -> EqStringMatcher(monkey, sought) }
-        val monkeys = Monkeys(monkeyList, sought, matching, true)
-        val result = monkeys.run()
+        val obj = Monkeys(monkeyList, sought, matching, true)
+        val result = obj.run()
         assertEquals(1, result)
     }
 }

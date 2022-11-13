@@ -3,7 +3,7 @@ package org.incava.mmonkeys.match.number
 import kotlin.math.pow
 
 object Maths {
-    val cached: MutableMap<Pair<Int, Int>, Int> = mutableMapOf()
+    private val cached: MutableMap<Pair<Int, Int>, Int> = mutableMapOf()
 
     fun power(base: Int, exponent: Int): Int {
         // no integer math in kotlin/java?

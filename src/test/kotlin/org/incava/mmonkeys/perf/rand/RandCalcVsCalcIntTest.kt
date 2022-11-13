@@ -2,44 +2,33 @@ package org.incava.mmonkeys.perf.rand
 
 import org.incava.mmonkeys.rand.RandCalculated
 import org.incava.mmonkeys.rand.RandIntCalculated
+import org.incava.mmonkeys.testutil.InvokeTrials
+import org.incava.mmonkeys.testutil.InvokeUnitTrial
+import org.incava.mmonkeys.util.Console
+import org.incava.time.DurationList
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
 
-class CompOption(val name: String, val block: () -> Any) {
-    val times = mutableListOf<Long>()
-
-    fun run(count: Int) {
-        val duration = measureTimeMillis {
-            repeat(count) {
-                block()
-            }
-        }
-        times += duration
-    }
-}
-
-class Comparison(private vararg val options: CompOption) {
+class Comparison(private vararg val options: Pair<String, InvokeTrials<Any>>) {
     private val random = Random.Default
 
-    fun run(count: Int) {
+    fun run(count: Long) {
         repeat(10) {
             val offset = random.nextInt(options.size)
-            println("offset = $offset")
+            Console.info("offset", offset)
             options.indices.forEach {
-                val idx = it % offset
-                println("idx   = $idx")
+                val idx = if (offset == 0) it else it % offset
+                Console.info("idx", idx)
                 val x = options[idx]
-                println("x     = ${x.name}")
-                x.run(count)
+                Console.info("x", x.first)
+                x.second.run(count)
             }
-//            a.run(count)
-//            b.run(count)
         }
     }
 
     fun summarize() {
+        Console.info("name", "durations.average")
         options.forEach {
-            println("${it.name} : ${it.times.average()}")
+            Console.info(it.first, it.second.durations.average())
         }
     }
 }
@@ -50,10 +39,14 @@ class RandCalcVsCalcIntTest {
         val size = 27
         val xc = RandCalculated(size, 10000)
         val yc = RandIntCalculated(size, 10000)
-        val count = 10_000_000
-        val xt = CompOption("int.map") { yc.nextMapInt() }
-        val yt = CompOption("int.int") { yc.nextInt() }
-        val comp = Comparison(xt, yt, xt, yt)
+        val yd = RandIntCalculated(size, 100)
+        val count = 10_000_000L
+        val comp = Comparison(
+            Pair("int(1).map", InvokeTrials { yc.nextRand() }),
+            Pair("int(1).int", InvokeTrials { yc.nextInt() }),
+            Pair("int(2).map", InvokeTrials { yd.nextRand() }),
+            Pair("int(2).int", InvokeTrials { yd.nextInt() }),
+        )
         comp.run(count)
         comp.summarize()
     }

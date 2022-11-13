@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.time
+package org.incava.time
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
@@ -10,7 +10,7 @@ internal class DurationsTest {
     @ParameterizedTest
     @MethodSource("dataForMillisToString")
     fun millisToString(expected: String, args: LongArray) {
-        // cannot spread a List<T> to (T x, T y, T z)?
+        // cannot deconstruct a List<T> to (T x, T y, T z)?
         val result = when (args.size) {
             3 -> {
                 Durations.millisToString(args[0], args[1], args[2])

@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.match.number
 
-import org.junit.jupiter.api.AfterEach
+import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 
@@ -23,14 +22,6 @@ internal class StringEncoderTest {
         "aaaaaaaaaaaaa" to 2481152873203736576L,
         "zzzzzzzzzzzzz" to 4962305746407473151L,
     )
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @TestFactory
     fun `given a string, the encoded int value should be`() =
@@ -88,6 +79,36 @@ internal class StringEncoderTest {
                     "then the result should be $expected") {
                 val result = StringEncoder.encodeToLong(input)
                 assertEquals(expected, result)
+            }
+        }
+
+    @TestFactory
+    fun `given a long string, it should encode and decode into its original`() =
+        longValues.map { (str, _) ->
+            DynamicTest.dynamicTest("given $str of size ${str.length}, " +
+                    "when encoding then decoding, " +
+                    "then the result should be the original") {
+                val encoded = StringEncoder.encodeToLong(str)
+                Console.info("str", str)
+                Console.info("encoded", encoded)
+                val result = StringEncoder.decode(encoded)
+                Console.info("result", result)
+                assertEquals(str, result)
+            }
+        }
+
+    @TestFactory
+    fun `given a short string, it should encode and decode into its original`() =
+        intValues.map { (str, _) ->
+            DynamicTest.dynamicTest("given $str of size ${str.length}, " +
+                    "when encoding then decoding, " +
+                    "then the result should be the original") {
+                val encoded = StringEncoder.encodeToInt(str)
+                Console.info("str", str)
+                Console.info("encoded", encoded)
+                val result = StringEncoder.decode(encoded)
+                Console.info("result", result)
+                assertEquals(str, result)
             }
         }
 }

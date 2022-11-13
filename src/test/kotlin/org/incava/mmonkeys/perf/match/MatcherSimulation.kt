@@ -10,7 +10,7 @@ import org.incava.mmonkeys.match.number.NumberMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.trial.DurationTrial
+import org.incava.mmonkeys.testutil.DurationTrial
 import org.incava.mmonkeys.util.Console.printf
 import java.lang.Thread.sleep
 import java.time.Duration

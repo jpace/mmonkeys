@@ -1,13 +1,10 @@
 package org.incava.mmonkeys
 
-import org.incava.mmonkeys.match.number.Maths
+import org.incava.mmonkeys.rand.Randough
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
-import kotlin.random.Random
 
-open class Monkey(val id: Int, val typewriter: Typewriter) {
-    private var numValidChars = typewriter.numChars() - 1
-
+open class Monkey(val id: Int, val typewriter: Typewriter) : Randough(typewriter.numChars() - 1) {
     fun nextChar(): Char {
         return typewriter.nextCharacter()
     }
@@ -34,16 +31,6 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
             }
         }
         return builder.toString()
-    }
-
-    fun nextInt(digits: Int): Int {
-        val max = Maths.power2(numValidChars, digits) * 2
-        return Random.nextInt(max)
-    }
-
-    fun nextLong(digits: Int): Long {
-        val max = Maths.power2(numValidChars.toLong(), digits) * 2
-        return Random.nextLong(max)
     }
 
     override fun toString(): String {

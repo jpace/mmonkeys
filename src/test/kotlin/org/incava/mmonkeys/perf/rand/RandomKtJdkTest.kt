@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.perf.rand
 
+import org.incava.mmonkeys.testutil.InvokeUnitTrial
 import org.incava.mmonkeys.util.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
 
 class RandomKtJdkTest(private val numChars: Int, private val strLength: Int, val iterations: Int) {
     private val ktRandom = Random.Default
@@ -15,13 +15,9 @@ class RandomKtJdkTest(private val numChars: Int, private val strLength: Int, val
     }
 
     private fun runTest(name: String, block: () -> Unit) {
-        val duration = measureTimeMillis {
-            repeat(iterations) {
-                repeat(strLength) {
-                    block()
-                }
-            }
-        }
+        val numInvokes = iterations.toLong() * strLength
+        val trial = InvokeUnitTrial(block)
+        val duration = trial.run(numInvokes)
         Console.info(name, duration)
     }
 

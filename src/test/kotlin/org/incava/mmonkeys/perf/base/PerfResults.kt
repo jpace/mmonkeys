@@ -7,8 +7,8 @@ data class PerfResults(
     val name: String,
     val matcher: Matcher,
     val duration: Duration,
-    val durations: MutableList<Long> = mutableListOf(),
-    val iterations: MutableList<Long> = mutableListOf(),
+    val durations: MutableList<Long>,
+    val iterations: MutableList<Long>,
 ) {
     fun averageDurations(): Long {
         return durations.average().toLong()

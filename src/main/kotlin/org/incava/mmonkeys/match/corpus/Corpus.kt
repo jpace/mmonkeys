@@ -1,11 +1,7 @@
 package org.incava.mmonkeys.match.corpus
 
 class Corpus(vararg ary: String) {
-    val words = mutableListOf<String>()
-
-    init {
-        words.addAll(ary)
-    }
+    val words = mutableListOf(*ary)
 
     fun hasWord(word: String): Pair<Boolean, Int> {
         val index = words.indexOf(word)

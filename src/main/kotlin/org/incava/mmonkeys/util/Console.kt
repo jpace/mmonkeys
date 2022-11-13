@@ -1,6 +1,8 @@
 package org.incava.mmonkeys.util
 
+import org.incava.time.Durations
 import java.io.PrintStream
+import java.time.Duration
 import java.util.concurrent.atomic.AtomicLong
 import java.util.regex.Pattern
 
@@ -21,6 +23,10 @@ object Console {
 
     fun info(msg: String, value: Int) {
         println(whence(), format(msg, value))
+    }
+
+    fun info(msg: String, value: Duration) {
+        println(whence(), format(msg, Durations.formatted(value)))
     }
 
     fun info(msg: String) {

@@ -1,6 +1,9 @@
 package org.incava.mmonkeys.rand
 
-import org.junit.jupiter.api.*
+import org.incava.mmonkeys.util.Console
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -8,14 +11,6 @@ import kotlin.test.assertTrue
 internal class SlotsTest {
     private val exp98 = 112.271
     private val exp99 = 148.909
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     fun reduceSlots() {
@@ -37,6 +32,23 @@ internal class SlotsTest {
     fun calculate() {
         val input = 100
         val result = Slots.calculate(27, input)
+        Console.info("result", result)
+        assertEquals(input, result.size)
+        (1 until result.size).forEach {
+            assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
+        }
+        val reduced = Slots.reduceSlots(result)
+        Console.info("reduced", reduced)
+        val slots = reduced.mapValues { it.value.average().toInt() }
+        Console.info("slots", slots)
+
+    }
+
+    @Test
+    fun calculateAndReduce() {
+        val input = 100
+        val result = Slots.calculateAndReduce(27, input)
+        Console.info("result", result)
         assertEquals(input, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
@@ -48,8 +60,23 @@ internal class SlotsTest {
         assertTrue(diff <= maxDistance, "expected: $diff within $maxDistance of $expected")
     }
 
+    @Test
+    fun generate() {
+        // at 10M or so, we get out of heap space errors
+        val numTrials = 1_000_000
+        val results = Slots.generate(27, numTrials)
+        val maxDistance = 0.7
+        Console.info("results", results)
+        // slot 98
+        val result98 = results.getOrDefault(98, 0.0)
+        assertWithin(112.271, result98, maxDistance)
+        // slot 99
+        val result99 = results.getOrDefault(99, 0.0)
+        assertWithin(148.909, result99, maxDistance)
+    }
+
     @TestFactory
-    fun generate() =
+    fun generateDelta() =
         listOf(
             5_000 to 22.0,
             10_000 to 10.2,
@@ -63,10 +90,12 @@ internal class SlotsTest {
                     "when running the generate method, " +
                     "then the result should be within distance $expected") {
                 val results = Slots.generate(27, input)
+                // slot 98
                 val result98 = results.getOrDefault(98, 0.0)
-                assertWithin(exp98, result98, expected)
+                assertWithin(112.271, result98, expected)
+                // slot 99
                 val result99 = results.getOrDefault(99, 0.0)
-                assertWithin(exp99, result99, expected)
+                assertWithin(148.909, result99, expected)
             }
         }
 }

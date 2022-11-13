@@ -1,18 +1,14 @@
 package org.incava.mmonkeys.perf.rand
 
+import org.incava.mmonkeys.testutil.InvokeUnitTrial
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-class RandomsTest(
-    private val numChars: Int = 27,
-    private val strLength: Int = 6,
-    private val iterations: Int = 100_000_000,
-) {
+class RandomsTest(private val numChars: Int, private val strLength: Int, private val iterations: Int) {
     private val random = Random.Default
-    private val jdkRandom = java.util.Random()
 
     init {
         Console.info("numChars", numChars)
@@ -21,13 +17,9 @@ class RandomsTest(
     }
 
     private fun runTest(block: () -> Unit) {
-        val duration = measureTimeMillis {
-            repeat(iterations) {
-                repeat(strLength) {
-                    block()
-                }
-            }
-        }
+        val numInvokes = iterations.toLong() * strLength
+        val trial = InvokeUnitTrial(block)
+        val duration = trial.run(numInvokes)
         Console.info("duration", duration)
     }
 
@@ -65,7 +57,6 @@ class RandomsTest(
 
     private fun `int numChars List toString`() {
         val list = Keys.fullList()
-        val whence = Thread.currentThread().stackTrace[1]
         val duration = measureTimeMillis {
             repeat(iterations) {
                 val sb = StringBuilder()
@@ -82,7 +73,6 @@ class RandomsTest(
 
     private fun `int numChars Array toString`() {
         val ary = Keys.fullList().toTypedArray()
-        val whence = Thread.currentThread().stackTrace[1]
         val duration = measureTimeMillis {
             repeat(iterations) {
                 val sb = StringBuilder()
@@ -107,7 +97,6 @@ class RandomsTest(
     private fun `nextBytes toString`() {
         val bytes = ByteArray(strLength)
         val list = Keys.fullList()
-        val whence = Thread.currentThread().stackTrace[1]
         val duration = measureTimeMillis {
             repeat(iterations) {
                 val str = (bytes.indices).map { idx ->

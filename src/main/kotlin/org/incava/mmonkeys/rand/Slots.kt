@@ -5,11 +5,18 @@ import kotlin.math.pow
 import kotlin.random.Random
 
 object Slots {
+    fun calculateAndReduce(size: Int, numSlots: Int) : Map<Int, Int> {
+        val calculated = calculate(size, numSlots)
+        val reduced = reduceSlots(calculated)
+        return reduced.mapValues { it.value.average().toInt() }
+    }
+
     /**
      * Converts the input map of keys 0 .. N into a map of 0 .. 99.
      */
     fun reduceSlots(entries: Map<Int, Int>, slotSize: Int = entries.size / 100): Map<Int, List<Int>> {
-        val reduced = (0 until 100).map { it to mutableListOf<Int>() }.toMap()
+        val numSlots = 100
+        val reduced = (0 until numSlots).map { it to mutableListOf<Int>() }.toMap()
         entries.forEach { (key, value) ->
             val idx = key / slotSize
             reduced[idx]?.plusAssign(value)
@@ -40,7 +47,8 @@ object Slots {
         val result = (0 until numTrials).map {
             (1..maxAttempts).find { random.nextInt(size) == 0 } ?: throw RuntimeException("not generated in $maxAttempts attempts")
         }.sorted()
-        val pctSize = numTrials / 100
+        val numSlots = 100
+        val pctSize = numTrials / numSlots
         return (0 until 100).map { index ->
             val fromIndex = index * pctSize
             val toIndex = (index + 1) * pctSize

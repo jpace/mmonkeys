@@ -3,7 +3,7 @@ package org.incava.mmonkeys.rand
 import org.incava.mmonkeys.test.assertWithin
 import org.junit.jupiter.api.Test
 
-internal class RandGeneratedTest : RandTest() {
+internal class RandGeneratedTest {
     @Test
     fun nextRand() {
         val obj = RandGenerated(27, 1000)

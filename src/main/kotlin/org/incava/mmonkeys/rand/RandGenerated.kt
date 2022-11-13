@@ -7,7 +7,7 @@ class RandGenerated(size: Int, numTrials: Int) {
     private val slots: Map<Int, Double> = Slots.generate(size, numTrials)
 
     fun nextRand() : Double {
-        val rnd =  random.nextInt(100)
+        val rnd = random.nextInt(100)
         return slots[rnd] ?: 0.0
     }
 }

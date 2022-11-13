@@ -1,10 +1,8 @@
 package org.incava.mmonkeys.exec
 
 import org.incava.mmonkeys.util.Console
-import org.incava.mmonkeys.time.DurationList
-import org.incava.mmonkeys.time.Durations
-import org.incava.mmonkeys.time.Durations.measureDuration
-import java.lang.Thread.sleep
+import org.incava.time.DurationList
+import org.incava.time.Durations.measureDuration
 import java.time.Duration
 
 open class Simulation<T>(private val params: SimulationParams<T>) {

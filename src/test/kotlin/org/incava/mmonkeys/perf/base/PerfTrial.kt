@@ -2,10 +2,9 @@ package org.incava.mmonkeys.perf.base
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Matcher
-import org.incava.mmonkeys.time.Durations
+import org.incava.time.Durations
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
-import org.incava.mmonkeys.util.Console
 import kotlin.system.measureTimeMillis
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter

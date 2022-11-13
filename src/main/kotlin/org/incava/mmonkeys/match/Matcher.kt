@@ -1,13 +1,13 @@
 package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.rand.CalculatedRandoms
+import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.util.Console
 import java.time.ZonedDateTime
 import java.util.concurrent.atomic.AtomicLong
 
 abstract class Matcher(val monkey: Monkey) {
-    val rand = CalculatedRandoms.getCalculated(monkey.typewriter.numChars())
+    val rand = RandomFactory.getCalculated(monkey.typewriter.numChars())
     var iteration = -1L
     private val counter = AtomicLong()
 
@@ -36,7 +36,7 @@ abstract class Matcher(val monkey: Monkey) {
             ++iteration
         }
         println("failing after $iteration iterations")
-        throw RuntimeException("failing after $iteration iterations")
+        throw RuntimeException("failed after $iteration iterations")
     }
 
     fun tick() {

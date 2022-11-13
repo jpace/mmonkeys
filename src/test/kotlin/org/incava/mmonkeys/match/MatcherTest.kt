@@ -8,10 +8,10 @@ open class MatcherTest {
     fun run(stringMatcher: Matcher, expected: Long?) {
         if (expected == null) {
             assertThrows<RuntimeException> {
-                stringMatcher.run(1000L)
+                stringMatcher.run()
             }
         } else {
-            val result = stringMatcher.run(1000L)
+            val result = stringMatcher.run()
             Assertions.assertEquals(expected, result)
             val iteration = stringMatcher.iteration
             assertTrue(iteration >= 0)

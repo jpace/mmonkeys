@@ -1,10 +1,7 @@
-package org.incava.mmonkeys.perf.match
+package org.incava.mesa
 
-import org.incava.mesa.DurationColumn
-import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import java.time.Duration
 import java.time.temporal.ChronoUnit
@@ -20,22 +17,6 @@ internal class DurationColumnTest {
         return values.keys.fold(Duration.ZERO) { dur, unit ->
             val value = values[unit]
             if (value == null) dur else dur.plus(value, unit)
-        }
-    }
-
-    @Test
-    fun wtf() {
-        val dur = Duration.ZERO
-        println("dur = $dur")
-        val result = dur.plus(300, ChronoUnit.MILLIS)
-        println("result = ${result}")
-    }
-
-    private fun withDuration(duration: Duration, value: Long?, plusser: (Duration, Long) -> Duration): Duration {
-        return if (value != null) {
-            plusser(duration, value)
-        } else {
-            duration
         }
     }
 

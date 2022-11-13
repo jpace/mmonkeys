@@ -2,32 +2,29 @@ package org.incava.mmonkeys.perf.rand
 
 import org.incava.mmonkeys.rand.RandCalculated
 import org.incava.mmonkeys.rand.RandGenerated
+import org.incava.mmonkeys.testutil.InvokeUnitTrial
+import org.incava.mmonkeys.util.Console
+import org.incava.time.DurationList
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
 
 class RandGenVsCalcTest {
     private val random = Random.Default
     private val size = 27
 
-    private fun runBlock(durations: MutableList<Long>, count: Int, block: () -> Any) {
-        val duration = measureTimeMillis {
-            repeat(count) {
-                block()
-            }
-        }
-        durations += duration
-    }
-
-    private fun runBlocks(count: Int, firstBlock: () -> Any, secondBlock: () -> Any): Pair<List<Long>, List<Long>> {
-        val firstTimes = mutableListOf<Long>()
-        val secondTimes = mutableListOf<Long>()
+    private fun runBlocks(
+        count: Long,
+        first: InvokeUnitTrial<Unit>,
+        second: InvokeUnitTrial<Unit>,
+    ): Pair<DurationList, DurationList> {
+        val firstTimes = DurationList()
+        val secondTimes = DurationList()
         repeat(10) {
             if (random.nextBoolean()) {
-                runBlock(firstTimes, count, firstBlock)
-                runBlock(secondTimes, count, secondBlock)
+                firstTimes += first.also { it.run(count) }.duration
+                secondTimes += second.also { it.run(count) }.duration
             } else {
-                runBlock(secondTimes, count, secondBlock)
-                runBlock(firstTimes, count, firstBlock)
+                secondTimes += second.also { it.run(count) }.duration
+                firstTimes += first.also { it.run(count) }.duration
             }
         }
         return firstTimes to secondTimes
@@ -35,9 +32,9 @@ class RandGenVsCalcTest {
 
     fun ctor() {
         println("ctor")
-        val calcBlock = { RandCalculated(size, 10000) }
-        val genBlock = { RandGenerated(size, 10000) }
-        val (calcTimes, genTimes) = runBlocks(500, calcBlock, genBlock)
+        val calcBlock = InvokeUnitTrial<Unit> { RandCalculated(size, 10000) }
+        val genBlock = InvokeUnitTrial<Unit> { RandGenerated(size, 10000) }
+        val (calcTimes, genTimes) = runBlocks(1000, calcBlock, genBlock)
         println("calc : ${calcTimes.average()}")
         println("gen  : ${genTimes.average()}")
     }
@@ -46,11 +43,12 @@ class RandGenVsCalcTest {
         println("nextRand")
         val calc = RandCalculated(size, 10000)
         val gen = RandGenerated(size, 10000)
-        val calcBlock = { calc.nextRand() }
-        val genBlock = { gen.nextRand() }
-        val (calcTimes, genTimes) = runBlocks(10000000, calcBlock, genBlock)
-        println("calc : ${calcTimes.average()}")
-        println("gen  : ${genTimes.average()}")
+        val calcBlock = InvokeUnitTrial<Unit> { calc.nextRand() }
+        val genBlock = InvokeUnitTrial<Unit> { gen.nextRand() }
+        val (calcTimes, genTimes) = runBlocks(50_000_000L, calcBlock, genBlock)
+        Console.info("calc avg", calcTimes.average())
+        // not so.
+        Console.info("gen avg", genTimes.average())
     }
 }
 

@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.util
 
 import kotlinx.coroutines.delay
-import org.incava.mmonkeys.time.Durations
+import org.incava.time.Durations
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.pow
 
@@ -20,16 +20,12 @@ class Memory {
         table.writeRow(displayed, number.get(), free, used, total)
     }
 
-    fun currentMemory(): Triple<Long, Long, Long> {
+    private fun currentMemory(): Triple<Long, Long, Long> {
         val runtime = Runtime.getRuntime()
         val total = runtime.totalMemory() / mb
         val free = runtime.freeMemory() / mb
         val used = total - free
         return Triple(total, free, used)
-    }
-
-    fun usedMemory() : Long {
-        return currentMemory().third
     }
 
     suspend fun monitor(number: AtomicLong, interval: Long = 500L) {

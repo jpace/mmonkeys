@@ -1,45 +1,31 @@
 package org.incava.mmonkeys.perf.rand
 
 import org.incava.mesa.Column
-import org.incava.mesa.DoubleColumn
+import org.incava.mesa.DurationColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
+import org.incava.mmonkeys.testutil.InvokeTrials
 import org.incava.mmonkeys.util.Console.info
 import kotlin.math.pow
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
 
 class RandTrialTable : Table() {
     override fun columns(): List<Column> {
         return listOf(
             StringColumn("name", 32, true),
-            DoubleColumn("average", 8, 1)
+            DurationColumn("average", 8)
         )
     }
 }
 
-class RandTrial(val name: String, val block: () -> Unit) {
-    val durations: MutableList<Long> = mutableListOf()
-
-    fun average(): Double {
-        return durations.average()
-    }
-}
-
 class RandIntVsCharTest {
-    private fun runTrial(count: Int, trial: RandTrial) {
-        val blk = trial.block
-        val duration = measureTimeMillis {
-            repeat(count) {
-                blk()
-            }
-        }
-        trial.durations += duration
+    private fun invokeTrials(name: String, block: () -> Unit): Pair<String, InvokeTrials<Any>> {
+        return Pair(name, InvokeTrials(block))
     }
 
     fun nextInt() {
         println("nextRand")
-        val count = 10_000_000
+        val count = 10_000_000L
         val random = Random.Default
         val nextInt = { random.nextInt(); Unit }
         val nextLong = { random.nextLong(); Unit }
@@ -113,40 +99,40 @@ class RandIntVsCharTest {
             val x = random.nextLong(0, 4962305746407473152L)
         }
         val trials = listOf(
-            RandTrial("nextInt ", nextInt),
-            RandTrial("nextInt $numCharsInt", nextIntSize),
-            RandTrial("nextLong", nextLong),
-            RandTrial("nextLongInt $numCharsInt", nextLongInt),
-            RandTrial("nextLongLong $numCharsLong", nextLongLong),
-            RandTrial("int * $numCharsInt", intChars),
-            RandTrial("intAppend * $numCharsInt", intAppend),
-            RandTrial("intIf * $numCharsInt", intIf),
-            RandTrial("intIfAppend * $numCharsInt", intIfAppend),
-            RandTrial("long * $numCharsLong", longChars),
-            RandTrial("longAppend * $numCharsLong", longAppend),
-            RandTrial("longIf * $numCharsLong", longIf),
-            RandTrial("longIfAppend * $numCharsLong", longIfAppend),
-            RandTrial("intValue", intValue),
-            RandTrial("longValue", longValue),
+            invokeTrials("nextInt ", nextInt),
+            invokeTrials("nextInt $numCharsInt", nextIntSize),
+            invokeTrials("nextLong", nextLong),
+            invokeTrials("nextLongInt $numCharsInt", nextLongInt),
+            invokeTrials("nextLongLong $numCharsLong", nextLongLong),
+            invokeTrials("int * $numCharsInt", intChars),
+            invokeTrials("intAppend * $numCharsInt", intAppend),
+            invokeTrials("intIf * $numCharsInt", intIf),
+            invokeTrials("intIfAppend * $numCharsInt", intIfAppend),
+            invokeTrials("long * $numCharsLong", longChars),
+            invokeTrials("longAppend * $numCharsLong", longAppend),
+            invokeTrials("longIf * $numCharsLong", longIf),
+            invokeTrials("longIfAppend * $numCharsLong", longIfAppend),
+            invokeTrials("intValue", intValue),
+            invokeTrials("longValue", longValue),
         )
         val trials2 = listOf(
-            RandTrial("intAppend * $numCharsInt", intAppend),
-            RandTrial("longAppend * $numCharsLong", longAppend),
-            RandTrial("intValue", intValue),
-            RandTrial("longValue", longValue),
+            invokeTrials("intAppend * $numCharsInt", intAppend),
+            invokeTrials("longAppend * $numCharsLong", longAppend),
+            invokeTrials("intValue", intValue),
+            invokeTrials("longValue", longValue),
         )
         repeat(10) {
             info("iteration", it)
             val shuffled = trials2.shuffled()
             shuffled.forEach { trial ->
-                runTrial(count, trial)
+                trial.second.run(count)
             }
         }
         println()
         val table = RandTrialTable()
         table.writeHeader()
         trials2.forEach { trial ->
-            table.writeRow(trial.name, trial.durations.average())
+            table.writeRow(trial.first, trial.second.durations.average())
         }
     }
 }
