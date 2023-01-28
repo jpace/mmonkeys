@@ -10,6 +10,8 @@ internal class StringEncoderTest {
         "a" to 26,
         "z" to 51,
         "aa" to 676,
+        "ab" to 677,
+        "it" to 903,
         "zz" to 1351,
         "zzzzzz" to 617831551,
     )
@@ -105,6 +107,77 @@ internal class StringEncoderTest {
                     "then the result should be the original") {
                 val encoded = StringEncoder.encodeToInt(str)
                 Console.info("str", str)
+                Console.info("encoded", encoded)
+                val result = StringEncoder.decode(encoded)
+                Console.info("result", result)
+                assertEquals(str, result)
+            }
+        }
+
+    @TestFactory
+    fun decode() =
+        listOf(
+            26L to "a",
+            676L to "aa",
+            677L to "ab",
+            678L to "ac",
+            903L to "it"
+        ).map { (number, str) ->
+            DynamicTest.dynamicTest("number: $number, str: $str") {
+                Console.info("number", number)
+                val result = StringEncoder.decode(number)
+                Console.info("result", result)
+                Console.info("")
+                assertEquals(str, result)
+            }
+        }
+
+
+    @TestFactory
+    fun encodeToInt() =
+        listOf(
+            26 to "a",
+            27 to "b",
+            676 to "aa",
+            677 to "ab",
+            677 to "ab",
+            903L to "it"
+        ).map { (number, str) ->
+            DynamicTest.dynamicTest("number: $number, str: $str") {
+                val encoded = StringEncoder.encodeToInt(str)
+                Console.info("number", number)
+                Console.info("encoded", encoded)
+                val result = StringEncoder.decode(encoded)
+                Console.info("result", result)
+                assertEquals(str, result)
+            }
+        }
+
+    @TestFactory
+    fun encodeToLong() =
+        listOf(
+            903L to "aa",
+            903L to "ab",
+            903L to "it"
+        ).map { (number, str) ->
+            DynamicTest.dynamicTest("number: $number, str: $str") {
+                val encoded = StringEncoder.encodeToLong(str)
+                Console.info("number", number)
+                Console.info("encoded", encoded)
+                val result = StringEncoder.decode(encoded)
+                Console.info("result", result)
+                assertEquals(str, result)
+            }
+        }
+
+    @TestFactory
+    fun encodeToLongThenDecode() =
+        listOf(
+            903L to "it"
+        ).map { (number, str) ->
+            DynamicTest.dynamicTest("number: $number, str: $str") {
+                val encoded = StringEncoder.encodeToLong(str)
+                Console.info("number", number)
                 Console.info("encoded", encoded)
                 val result = StringEncoder.decode(encoded)
                 Console.info("result", result)

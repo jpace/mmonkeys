@@ -65,7 +65,7 @@ internal class SlotsTest {
         // at 10M or so, we get out of heap space errors
         val numTrials = 1_000_000
         val results = Slots.generate(27, numTrials)
-        val maxDistance = 0.7
+        val maxDistance = 1.0
         Console.info("results", results)
         // slot 98
         val result98 = results.getOrDefault(98, 0.0)

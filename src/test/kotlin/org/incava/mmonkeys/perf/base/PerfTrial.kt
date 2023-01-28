@@ -5,21 +5,13 @@ import org.incava.mmonkeys.match.Matcher
 import org.incava.time.Durations
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.util.Console
 import kotlin.system.measureTimeMillis
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
 typealias MatcherCtor<T> = (Monkey, T) -> Matcher
 
-class PerfTrial<T>(lastChar: Char, val sought: T, typeCtor: TypewriterCtor, matcherCtor: MatcherCtor<T>) {
-    val matcher: Matcher
-
-    init {
-        val chars = Keys.keyList(lastChar)
-        val typewriter = typeCtor.invoke(chars)
-        val monkey = Monkey(38, typewriter)
-        matcher = matcherCtor(monkey, sought)
-    }
-
+class PerfTrial<T>(private val lastChar: Char, val sought: T, private val typeCtor: TypewriterCtor, val matcherCtor: MatcherCtor<T>) {
     private fun pause() {
         Thread.sleep(100L)
     }
@@ -33,16 +25,27 @@ class PerfTrial<T>(lastChar: Char, val sought: T, typeCtor: TypewriterCtor, matc
     private fun runTrials(numMatches: Int): PerfResults {
         val durations = mutableListOf<Long>()
         val iterations = mutableListOf<Long>()
+        val chars = Keys.keyList(lastChar)
+        val typewriter = typeCtor.invoke(chars)
+        val monkey = Monkey(38, typewriter)
         pause()
+        val start = System.currentTimeMillis()
         val duration = Durations.measureDuration {
             repeat(numMatches) {
+                val matcher = matcherCtor(monkey, sought)
                 val dur = measureTimeMillis {
-                    val result = matcher.run()
-                    iterations += result
+                    while (!matcher.isComplete()) {
+                        val result = matcher.run()
+                        iterations += result
+                        val now = System.currentTimeMillis()
+                        if (now - start > 1000L * 60 * 1) {
+                            break
+                        }
+                    }
                 }
                 durations += dur
             }
         }
-        return PerfResults("name-s1", matcher, duration.second, durations, iterations)
+        return PerfResults(duration.second, durations, iterations)
     }
 }

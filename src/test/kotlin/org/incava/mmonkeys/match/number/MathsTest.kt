@@ -1,43 +1,49 @@
 package org.incava.mmonkeys.match.number
 
-import org.incava.mmonkeys.testutil.InvokeUnitTrial
-import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
+import kotlin.test.assertEquals
 
 internal class MathsTest {
-    private val iterations = 100_000_000L
-
-    private fun timeIt(name: String, block: () -> Unit) {
-        val invokeTrial = InvokeUnitTrial(block)
-        invokeTrial.run(iterations)
-        Console.info(name, invokeTrial.duration)
-    }
-
     @Test
     fun power1() {
-        timeIt("power - 26.pow(6)") {
-            Maths.power(26, 6)
-        }
+        val expected = 308915776
+        val result = Maths.power(26, 6)
+        assertEquals(expected, result)
     }
 
     @Test
-    fun power2() {
-        timeIt("power2 - repeat") {
-            Maths.power2(26, 6)
-        }
+    fun power2Int() {
+        val expected = 308915776
+        val result = Maths.power2(26, 6)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun power2Long() {
+        val expected = 308915776
+        val result = Maths.power2(26, 6)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun power2BigInteger() {
+        val expected = BigInteger.valueOf(308915776)
+        val result = Maths.power2(BigInteger.valueOf(26), 6)
+        assertEquals(expected, result)
     }
 
     @Test
     fun power3() {
-        timeIt("power3 - recurse") {
-            Maths.power3(26, 6)
-        }
+        val expected = 308915776
+        val result = Maths.power3(26, 6)
+        assertEquals(expected, result)
     }
 
     @Test
     fun power4() {
-        timeIt("power4 - cached") {
-            Maths.power4(26, 6)
-        }
+        val expected = 308915776
+        val result = Maths.power4(26, 6)
+        assertEquals(expected, result)
     }
 }

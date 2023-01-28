@@ -3,9 +3,7 @@ package org.incava.mmonkeys.perf.rand
 import org.incava.mmonkeys.rand.RandCalculated
 import org.incava.mmonkeys.rand.RandIntCalculated
 import org.incava.mmonkeys.testutil.InvokeTrials
-import org.incava.mmonkeys.testutil.InvokeUnitTrial
 import org.incava.mmonkeys.util.Console
-import org.incava.time.DurationList
 import kotlin.random.Random
 
 class Comparison(private vararg val options: Pair<String, InvokeTrials<Any>>) {

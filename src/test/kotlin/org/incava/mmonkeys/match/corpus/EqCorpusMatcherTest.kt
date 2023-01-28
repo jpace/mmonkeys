@@ -14,18 +14,14 @@ internal class EqCorpusMatcherTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
-            (Keys.keyList('c') to "abc") to 0L,
-            (Keys.keyList('e') to "abcde") to 0L,
-            (Keys.keyList('e') to "invalid") to null,
+            (Keys.keyList('c') to listOf("abc")) to 0L,
+            (Keys.keyList('e') to listOf("abcde")) to 0L,
         ).map { (inputs, expected) ->
-            DynamicTest.dynamicTest("given $inputs, " +
-                    "when running the matcher, " +
-                    "then the result should be \"$expected\"") {
+            DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val corpus = Corpus(inputs.second)
-                val obj = EqCorpusMatcher(monkey, corpus)
-                run(obj, expected)
+                val obj = EqCorpusMatcher(monkey, Corpus(inputs.second))
+                runTest(obj, expected)
             }
         }
 

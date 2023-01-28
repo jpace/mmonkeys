@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.match.number
 
+import java.math.BigInteger
 import kotlin.math.pow
 
 object Maths {
@@ -7,6 +8,10 @@ object Maths {
 
     fun power(base: Int, exponent: Int): Int {
         // no integer math in kotlin/java?
+        return base.toDouble().pow(exponent).toInt()
+    }
+
+    fun power(base: Long, exponent: Int): Int {
         return base.toDouble().pow(exponent).toInt()
     }
 
@@ -20,6 +25,14 @@ object Maths {
 
     fun power2(base: Long, exponent: Int): Long {
         var result = 1L
+        repeat(exponent) {
+            result *= base
+        }
+        return result
+    }
+
+    fun power2(base: BigInteger, exponent: Int): BigInteger {
+        var result = BigInteger.valueOf(1L)
         repeat(exponent) {
             result *= base
         }

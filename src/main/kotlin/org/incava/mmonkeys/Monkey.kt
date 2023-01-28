@@ -9,6 +9,10 @@ open class Monkey(val id: Int, val typewriter: Typewriter) : Randough(typewriter
         return typewriter.nextCharacter()
     }
 
+    fun nextWordChar(): Char {
+        return typewriter.nextWordCharacter()
+    }
+
     fun nextString(): String {
         val builder = StringBuilder()
         while (true) {
@@ -31,6 +35,14 @@ open class Monkey(val id: Int, val typewriter: Typewriter) : Randough(typewriter
             }
         }
         return builder.toString()
+    }
+
+    fun nextWordChars(length: Int): String {
+        // returns a string of the given length
+        return (0 until length).fold(StringBuilder()) { sb, _ ->
+            val ch = nextWordChar()
+            sb.append(ch)
+        }.toString()
     }
 
     override fun toString(): String {

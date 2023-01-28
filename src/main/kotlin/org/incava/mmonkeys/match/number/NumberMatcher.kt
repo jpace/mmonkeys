@@ -2,9 +2,9 @@ package org.incava.mmonkeys.match.number
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.Matcher
+import org.incava.mmonkeys.match.string.StringMatcher
 
-class NumberMatcher(monkey: Monkey, val sought: String) : Matcher(monkey) {
+class NumberMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
     val number = StringEncoder.encode(sought)
     private val soughtLen = sought.length
 

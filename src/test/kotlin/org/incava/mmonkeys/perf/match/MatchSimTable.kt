@@ -8,7 +8,7 @@ class MatchSimTable : Table() {
             IntStringColumn("trial", 5),
             StringColumn("type", 12, leftJustified = true),
             LongColumn("iterations", 15),
-            DurationColumn("duration", 15),
+            LongColumn("duration", 15),
             LongColumn("iters/sec", 15),
         )
     }

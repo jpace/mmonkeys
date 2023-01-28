@@ -9,7 +9,6 @@ import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console
 import java.time.Duration
 import java.time.ZonedDateTime
-import kotlin.random.Random
 
 class MatchersPerfTest {
     private val perfTable = PerfTable()
@@ -22,23 +21,19 @@ class MatchersPerfTest {
     fun run(sought: String, numMatches: Int) {
         Console.info("sought", sought)
         val factory = MatcherFactory()
-        val longTypes = listOf(
+        val types = listOf(
             "partial",
-            // "eq"
+            "eq",
             "length",
-        )
-        val allTypes = longTypes + "number"
-        val types = allTypes.map {
-            it to factory.createMatcherCtor(it, sought)
+            "number",
+        ).map {
+            it to factory.createCorpusMatcherCtor(it, sought)
         }
         val shuffled = types.shuffled()
-        val offset = Random.Default.nextInt(shuffled.size)
-        val results = shuffled.indices.map { index ->
-            val idx = (offset + index) % shuffled.size
-            val type = shuffled[idx]
-            Console.info("type", type.first)
+        val results = shuffled.map { type ->
+            Console.info(type.first)
             val result = runMatch(sought, numMatches, type.second)
-            Console.info("result", result)
+            Console.info(type.first, result.durations.average())
             type.first to result
         }
         results.sortedBy { it.first }.forEach {
@@ -57,13 +52,13 @@ class MatchersPerfTest {
 fun main() {
     val start = ZonedDateTime.now()
     val strings = mapOf(
-//        "ab" to 10_000,
-//        "abc" to 1_000,
-//        "abcd" to 100,
-//        "abcde" to 1,
+        "ab" to 1000,
+        "abc" to 100,
+        "abcd" to 5,
+//        "abcde" to 5,
 //        "abcdef" to 1,
 //        "abcdefg" to 1,
-        "abcdefgh" to 1,
+//        "abcdefgh" to 1,
     )
     val obj = MatchersPerfTest()
     strings.forEach { (sought, count) ->

@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.match.number
 
+import org.incava.mmonkeys.util.Console
 import java.lang.StringBuilder
 
 object StringEncoder {
@@ -29,7 +30,7 @@ object StringEncoder {
         val sb = StringBuilder()
         var value = number
         while (true) {
-            val x = number % 26
+            val x = value % 26
             value /= 26
             if (value == 0) {
                 break
@@ -45,7 +46,7 @@ object StringEncoder {
         val sb = StringBuilder()
         var value = number
         while (true) {
-            val x = (number % 26).toInt()
+            val x = (value % 26).toInt()
             value /= 26
             if (value == 0L) {
                 break

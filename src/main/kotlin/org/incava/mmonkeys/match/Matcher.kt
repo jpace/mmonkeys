@@ -13,7 +13,7 @@ abstract class Matcher(val monkey: Monkey) {
 
     abstract fun check(): MatchData
 
-    fun match(keystrokes: Int, index: Int): MatchData {
+    open fun match(keystrokes: Int, index: Int): MatchData {
         return MatchData(true, keystrokes, index)
     }
 
@@ -26,7 +26,9 @@ abstract class Matcher(val monkey: Monkey) {
         return MatchData(false, estimated, -1)
     }
 
-    fun run(maxAttempts: Long = 100_000_000_000_000L): Long {
+    abstract fun isComplete(): Boolean
+
+    open fun run(maxAttempts: Long = 100_000_000_000_000L): Long {
         iteration = 0L
         while (iteration < maxAttempts) {
             val result = check()

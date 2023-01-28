@@ -32,8 +32,8 @@ class Monkeys<T>(
                 memory.showCurrent(iterations)
             }
         }
-        Console.info("found?", found.get())
-        Console.info("iterations", iterations.get())
+        // Console.info("found?", found.get())
+        // Console.info("iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 

@@ -10,7 +10,7 @@ import kotlin.test.assertNotNull
 
 internal class LengthStringMatcherTest : MatcherTest() {
     @Test
-    fun runIteration() {
+    fun check() {
         val typewriter = DeterministicTypewriter(Keys.keyList('e'))
         val monkey = Monkey(1, typewriter)
         val obj = LengthStringMatcher(monkey, "abcde")

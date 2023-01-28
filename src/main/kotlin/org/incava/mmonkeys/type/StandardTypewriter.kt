@@ -4,6 +4,7 @@ import kotlin.random.Random
 
 open class StandardTypewriter(private val chars: List<Char> = Keys.fullList()) : Typewriter {
     private val numChars: Int = chars.size
+    private val numWordChars: Int = chars.size - 1
 
     override fun numChars(): Int {
         return numChars
@@ -11,6 +12,11 @@ open class StandardTypewriter(private val chars: List<Char> = Keys.fullList()) :
 
     override fun nextCharacter(): Char {
         val idx = Random.nextInt(numChars)
+        return chars[idx]
+    }
+
+    override fun nextWordCharacter(): Char {
+        val idx = Random.nextInt(numWordChars)
         return chars[idx]
     }
 

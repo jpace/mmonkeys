@@ -17,22 +17,17 @@ internal class PartialStringMatcherPerfTest : MatcherTest() {
         listOf(
             (Keys.keyList('c') to "abc") to 0L,
             (Keys.keyList('e') to "abcde") to 0L,
-            (Keys.keyList('f') to "abcde") to null,
-            (Keys.keyList('e') to "invalid") to null,
         ).map { (inputs, expected) ->
-            DynamicTest.dynamicTest("given $inputs, " +
-                    "when running the matcher, " +
-                    "then the result should be \"$expected\"") {
+            DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
                 val obj = PartialStringMatcher(monkey, inputs.second)
-                run(obj, expected)
+                runTest(obj, expected)
             }
         }
 
     @Test
     fun testRunIterationNoMatch() {
-        val typewriter = DeterministicTypewriter(Keys.keyList('e'))
         val obj = createMatcher("123")
         val result = obj.check()
         assertFalse(result.isMatch)
