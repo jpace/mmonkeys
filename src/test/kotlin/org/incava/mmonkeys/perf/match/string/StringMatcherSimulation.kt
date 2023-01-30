@@ -1,15 +1,17 @@
-package org.incava.mmonkeys.perf.match
+package org.incava.mmonkeys.perf.match.string
 
+import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.number.NumberIntMatcher
 import org.incava.mmonkeys.match.number.NumberLongMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.util.Console.printf
+import org.incava.mmonkeys.match.string.StringMatcher
+import org.incava.mmonkeys.perf.match.MatchSimTable
+import org.incava.mmonkeys.perf.match.NoOpMatcher
 import org.incava.time.DurationList
 import java.lang.Thread.sleep
 import java.time.Duration
@@ -30,9 +32,8 @@ class MatcherDurationTrial(val name: String, private val params: SimulationParam
     }
 }
 
-class MatcherSimulation {
+class StringMatcherSimulation {
     private val numMonkeys = 1000
-    private val typewriterFactory = TypewriterFactory('z')
     private val table = MatchSimTable()
 
     private fun writeTrialAverage(trial: MatcherDurationTrial) {
@@ -48,8 +49,8 @@ class MatcherSimulation {
         table.writeBreak('=')
     }
 
-    fun run(numTrials: Int, word: String) {
-        val trials = listOf(
+    private fun getMatchers(word: String) : List<Pair<String, (Monkey, String) -> StringMatcher>> {
+        return listOf(
             "equal str" to ::EqStringMatcher,
             "partial str" to ::PartialStringMatcher,
             "length str" to ::LengthStringMatcher,
@@ -57,13 +58,18 @@ class MatcherSimulation {
             "no op" to ::NoOpMatcher,
             "num (int)" to ::NumberIntMatcher,
             "num (long)" to ::NumberLongMatcher,
-        ).map {
+        )
+    }
+
+    fun run(numTrials: Int, word: String) {
+        val typewriterFactory = TypewriterFactory('z')
+        val trials = getMatchers(word).map {
             val params = SimulationParams(numMonkeys, word, it.second, typewriterFactory, false)
             MatcherDurationTrial(it.first, params)
         }
         val shuffled = trials.shuffled()
-        printf("word.length: ${word.length}")
-        println("# trials: $numTrials")
+        // printf("word.length: ${word.length}")
+        // println("# trials: $numTrials")
         table.writeHeader()
         table.writeBreak('=')
         repeat(numTrials) { num ->
@@ -105,13 +111,12 @@ fun main() {
     val word2 = "abcd"
     val word3 = "abcde"
     val word4 = "abcdef"
-    val toMatch = word1
-    val corpus = Corpus(listOf(toMatch))
-    val obj = MatcherSimulation()
-    obj.run(20, word0)
-    obj.run(10, word1)
-    obj.run(5, word2)
-    obj.run(3, word3)
+    val obj = StringMatcherSimulation()
+    obj.run(10, word0)
+    obj.run(3, word1)
+    obj.run(2, word2)
+    obj.run(0, word3)
+    obj.run(0, word4)
     // obj.run(4, word3)
     // obj.run(1, word4)
     val done = ZonedDateTime.now()

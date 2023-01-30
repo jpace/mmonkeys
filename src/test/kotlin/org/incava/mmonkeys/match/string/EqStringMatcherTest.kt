@@ -40,13 +40,6 @@ internal class EqStringMatcherTest : MatcherTest() {
         assertTrue(result.isMatch)
     }
 
-    @Test
-    fun testIteration() {
-        val obj = createMatcher("123")
-        val result = obj.iteration
-        assertEquals(-1L, result)
-    }
-
     private fun createMatcher(sought: String): EqStringMatcher {
         val typewriter = DeterministicTypewriter(Keys.keyList('e'))
         val monkey = Monkey(1, typewriter)

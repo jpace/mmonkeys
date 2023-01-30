@@ -45,13 +45,6 @@ internal class EqStringsMatcherTest : MatcherTest() {
     }
 
     @Test
-    fun testIteration() {
-        val obj = createMatcher("123")
-        val result = obj.iteration
-        assertEquals(-1L, result)
-    }
-
-    @Test
     fun testCheck() {
         val typewriter = StandardTypewriter(Keys.keyList('z'))
         val monkey = Monkey(1, typewriter)

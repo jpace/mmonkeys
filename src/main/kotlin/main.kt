@@ -8,6 +8,7 @@ import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.EqStringsMatcher
 import org.incava.mmonkeys.match.string.LengthStringsMatcher
 import org.incava.mmonkeys.util.Console
+import java.lang.Thread.sleep
 
 fun <T> runSimulation(char: Char, type: String, sought: T, matcher: (Monkey, T) -> Matcher) {
     val typewriterFactory = TypewriterFactory(toChar = char)
@@ -40,9 +41,22 @@ fun runStringTest(toChar: Char) {
     runSimulation(toChar, m.first, sought, matcher)
 }
 
-fun main(args: Array<String>) {
+fun mainOrig(args: Array<String>) {
     Console.info("main")
     Console.info("args", args.toList())
     runCorpusTest('z')
     runStringTest('z')
+}
+
+fun main(args: Array<String>) {
+    (0 until 10).forEach { i ->
+        // only works on Linux, clearing the terminal:
+        print("\u001b[H\u001b[2J")
+        println("testing $i")
+        (0 until 10).forEach { j ->
+            println("this is a test $j")
+            sleep(50)
+        }
+        sleep(200)
+    }
 }

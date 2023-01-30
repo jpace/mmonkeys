@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong
 internal class LengthStringsMatcherTest : MatcherTest() {
     @Test
     fun soughtByLens() {
-        val typewriter = StandardTypewriter(Keys.keyList('z'))
+        val typewriter = StandardTypewriter(Keys.fullList())
         val monkey = Monkey(1, typewriter)
         val sought = listOf("ab", "cd", "def", "defg", "ghi", "lmnop")
         val obj = LengthStringsMatcher(monkey, Corpus(sought))
@@ -29,13 +29,12 @@ internal class LengthStringsMatcherTest : MatcherTest() {
 
     @Test
     fun check() {
-        val typewriter = StandardTypewriter(Keys.keyList('z'))
+        val typewriter = StandardTypewriter(Keys.fullList())
         val monkey = Monkey(1, typewriter)
         val sought = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = LengthStringsMatcher(monkey, Corpus(sought))
-        val iterations = AtomicLong()
         while (obj.sought.isNotEmpty()) {
-            val result = obj.check()
+            obj.check()
         }
         assert(obj.sought.isEmpty())
     }

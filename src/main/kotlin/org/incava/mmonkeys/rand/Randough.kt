@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.mmonkeys.match.number.Maths
-import org.incava.mmonkeys.util.Console
+import org.incava.mmonkeys.util.Maths
 import kotlin.random.Random
 
 open class Randough(val length: Int) {

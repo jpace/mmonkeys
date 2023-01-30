@@ -6,7 +6,6 @@ import org.incava.mmonkeys.type.Keys
 
 class PartialStringMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
     override fun check(): MatchData {
-        tick()
         var idx = 0
         val len = sought.length
         while (idx < len) {
@@ -27,5 +26,10 @@ class PartialStringMatcher(monkey: Monkey, sought: String) : StringMatcher(monke
             }
         }
         return noMatch()
+    }
+
+    fun noMatch(): MatchData {
+        val estimated = rand.nextRand()
+        return MatchData(false, estimated, -1)
     }
 }

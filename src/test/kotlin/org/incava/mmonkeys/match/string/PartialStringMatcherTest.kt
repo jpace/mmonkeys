@@ -11,7 +11,7 @@ import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class PartialStringMatcherPerfTest : MatcherTest() {
+internal class PartialStringMatcherTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -38,13 +38,6 @@ internal class PartialStringMatcherPerfTest : MatcherTest() {
         val obj = createMatcher("abcde")
         val result = obj.check()
         assertTrue(result.isMatch)
-    }
-
-    @Test
-    fun testIteration() {
-        val obj = createMatcher("123")
-        val result = obj.iteration
-        assertEquals(-1L, result)
     }
 
     private fun createMatcher(sought: String): PartialStringMatcher {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class NumberMatcherTest {
     @Test
     fun checkInt() {
-        val typewriter = DeterministicTypewriter(Keys.keyList('z'))
+        val typewriter = DeterministicTypewriter(Keys.fullList())
         val monkey = Monkey(1, typewriter)
         val input = "abc"
         val obj = NumberIntMatcher(monkey, input)
@@ -24,7 +24,7 @@ internal class NumberMatcherTest {
 
     @Test
     fun checkLong() {
-        val typewriter = DeterministicTypewriter(Keys.keyList('z'))
+        val typewriter = DeterministicTypewriter(Keys.fullList())
         val monkey = Monkey(1, typewriter)
         val input = "abcdefg"
         val obj = NumberLongMatcher(monkey, input)

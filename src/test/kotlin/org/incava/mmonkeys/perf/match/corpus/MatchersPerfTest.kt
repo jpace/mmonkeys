@@ -1,10 +1,11 @@
-package org.incava.mmonkeys.perf.match
+package org.incava.mmonkeys.perf.match.corpus
 
 import org.incava.mmonkeys.match.MatcherFactory
 import org.incava.mmonkeys.perf.base.MatcherCtor
 import org.incava.mmonkeys.perf.base.PerfResults
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console
 import java.time.Duration
@@ -43,8 +44,7 @@ class MatchersPerfTest {
     }
 
     private fun <T> runMatch(sought: T, numMatches: Int, matchCtor: MatcherCtor<T>): PerfResults {
-        val typeCtor = ::StandardTypewriter
-        val trial = PerfTrial('z', sought, typeCtor, matchCtor)
+        val trial = PerfTrial(sought, StandardTypewriter(), matchCtor)
         return trial.run(numMatches)
     }
 }

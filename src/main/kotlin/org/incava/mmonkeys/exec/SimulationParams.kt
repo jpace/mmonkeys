@@ -26,9 +26,7 @@ class SimulationParams<T>(
     fun makeMonkeys(): Monkeys<T> {
         // I don't make monkeys; I just train them!
         val typewriter = typewriterFactory.typewriter()
-        // Console.info("typewriter", typewriter)
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        // Console.info("matcher", matcher)
         return Monkeys(monkeyList, sought, matcher, showMemory)
     }
 }

@@ -50,8 +50,7 @@ internal class MonkeyTest {
 
     @Test
     fun nextInt() {
-        val charList = Keys.keyList('z')
-        val typewriter = DeterministicTypewriter(charList)
+        val typewriter = DeterministicTypewriter(Keys.fullList())
         val obj = Monkey(id = 37, typewriter = typewriter)
         Console.info("obj", obj)
         val result = obj.nextInt(6)

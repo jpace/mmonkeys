@@ -71,8 +71,7 @@ class Monkeys<T>(
         }
     }
 
-    fun onMatch(monkey: Monkey, match: MatchData, attempt: Long, iterations: Long) {
-    }
+    fun onMatch(monkey: Monkey, match: MatchData, attempt: Long, iterations: Long) {}
 
     private suspend fun checkMatcher(matcher: Matcher, attempt: Long): Boolean {
         iterations.incrementAndGet()

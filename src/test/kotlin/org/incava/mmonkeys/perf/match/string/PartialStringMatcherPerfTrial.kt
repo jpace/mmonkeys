@@ -1,13 +1,12 @@
-package org.incava.mmonkeys.perf.match
+package org.incava.mmonkeys.perf.match.string
 
-import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.string.PartialStringMatcher
 import org.incava.mmonkeys.perf.base.PerfTest
 import org.incava.mmonkeys.perf.base.PerfTrial
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 
-class PartialMatcherPerfTest {
-    private val typeCtor = ::StandardTypewriter
+class PartialStringMatcherPerfTrial {
     private val matchCtor = ::PartialStringMatcher
 
     fun run() {
@@ -31,9 +30,9 @@ class PartialMatcherPerfTest {
         )
         params.forEach { (lastChar, values) ->
             println("lastChar: $lastChar")
+            val typewriter = StandardTypewriter(Keys.keyList(lastChar))
             values.forEach { (sought, count) ->
-                val corpus = Corpus(listOf(sought))
-                val trial = PerfTrial(lastChar, sought, typeCtor, matchCtor)
+                val trial = PerfTrial(sought, typewriter, matchCtor)
                 test.addTrial("partial", trial, count)
             }
         }
@@ -41,6 +40,6 @@ class PartialMatcherPerfTest {
 }
 
 fun main() {
-    val obj = PartialMatcherPerfTest()
+    val obj = PartialStringMatcherPerfTrial()
     obj.run()
 }
