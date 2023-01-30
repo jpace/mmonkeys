@@ -35,3 +35,13 @@ val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
     languageVersion = "1.4"
 }
+
+tasks.jar {
+    manifest{
+        attributes["Main-Class"] = "MainKt"
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absolutePath))
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
