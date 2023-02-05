@@ -2,7 +2,7 @@ package org.incava.mmonkeys.match.corpus
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 
 class EqCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     override fun check(): MatchData {

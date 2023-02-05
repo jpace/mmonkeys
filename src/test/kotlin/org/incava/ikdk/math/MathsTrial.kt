@@ -1,13 +1,12 @@
-package org.incava.mmonkeys.perf.util
+package org.incava.ikdk.math
 
+import org.incava.ikdk.io.Console.printf
 import org.incava.mmonkeys.testutil.InvokeUnitTrial
-import org.incava.mmonkeys.util.Console.printf
-import org.incava.mmonkeys.util.Maths
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 import java.math.BigInteger
 
-class MathsTest {
+class MathsTrial {
     private val iterations = 100_000_000L
 
     fun timeIt(name: String, block: () -> Unit) {
@@ -19,7 +18,7 @@ class MathsTest {
 }
 
 fun main() {
-    val test = MathsTest()
+    val test = MathsTrial()
     test.timeIt("power - 26.pow(6)") {
         Maths.power(26, 6)
     }

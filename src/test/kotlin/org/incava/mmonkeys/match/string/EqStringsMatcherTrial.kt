@@ -4,7 +4,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {

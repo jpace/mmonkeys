@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.rand
 
 import org.incava.mmonkeys.test.assertWithin
+import org.incava.rando.RandGenerated
 import org.junit.jupiter.api.Test
 
 class RandomTest {

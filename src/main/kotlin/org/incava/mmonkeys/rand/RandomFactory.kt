@@ -1,5 +1,7 @@
 package org.incava.mmonkeys.rand
 
+import org.incava.rando.RandCalculated
+
 object RandomFactory {
     private val randoms = mutableMapOf<Int, RandCalculated>()
 

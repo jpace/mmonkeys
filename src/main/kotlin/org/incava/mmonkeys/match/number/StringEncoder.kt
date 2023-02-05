@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.match.number
 
-import org.incava.mmonkeys.util.Console
 import java.lang.StringBuilder
 
 object StringEncoder {

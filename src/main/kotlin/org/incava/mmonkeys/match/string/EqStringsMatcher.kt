@@ -4,7 +4,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.time.ZonedDateTime
 
 class EqStringsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {

@@ -3,7 +3,7 @@ package org.incava.mmonkeys
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

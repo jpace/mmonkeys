@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.exec
 
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import org.incava.time.DurationList
 import org.incava.time.Durations.measureDuration
 import java.time.Duration

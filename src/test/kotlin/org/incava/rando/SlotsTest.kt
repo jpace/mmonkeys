@@ -1,6 +1,6 @@
-package org.incava.mmonkeys.rand
+package org.incava.rando
 
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -9,9 +9,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class SlotsTest {
-    private val exp98 = 112.271
-    private val exp99 = 148.909
-
     @Test
     fun reduceSlots() {
         // inputs from RandCalculated are ascending
@@ -41,7 +38,6 @@ internal class SlotsTest {
         Console.info("reduced", reduced)
         val slots = reduced.mapValues { it.value.average().toInt() }
         Console.info("slots", slots)
-
     }
 
     @Test

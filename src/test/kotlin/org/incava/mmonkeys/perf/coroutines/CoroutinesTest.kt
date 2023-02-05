@@ -2,7 +2,7 @@ package org.incava.mmonkeys.perf.coroutines
 
 import kotlinx.coroutines.*
 import org.incava.mmonkeys.perf.rand.Maths
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.lang.Thread.sleep
 import java.time.Duration
 import kotlin.concurrent.thread

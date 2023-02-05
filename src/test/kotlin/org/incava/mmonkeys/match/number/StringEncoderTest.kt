@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.match.number
 
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory

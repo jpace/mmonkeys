@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.perf.rand
 
 import org.incava.mmonkeys.testutil.InvokeUnitTrial
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random
 

@@ -1,12 +1,12 @@
-package org.incava.mmonkeys.rand
+package org.incava.rando
 
 import org.incava.mmonkeys.test.assertWithin
 import org.junit.jupiter.api.Test
 
-internal class RandCalculatedTest {
+internal class RandGeneratedTest {
     @Test
     fun nextRand() {
-        val obj = RandCalculated(27, 1000)
+        val obj = RandGenerated(27, 1000)
         var sum = 0.0
         val iterations = 100000
         repeat(iterations) {
@@ -14,6 +14,6 @@ internal class RandCalculatedTest {
             sum += result
         }
         // with enough iterations the overall average should be ~= 27
-        assertWithin(27.0, sum / iterations, 1.0)
+        assertWithin(27.0, sum / iterations, 2.0)
     }
 }

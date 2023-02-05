@@ -3,7 +3,7 @@ package org.incava.mmonkeys
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.incava.mmonkeys.util.Console.printf
+import org.incava.ikdk.io.Console.printf
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicLong
 

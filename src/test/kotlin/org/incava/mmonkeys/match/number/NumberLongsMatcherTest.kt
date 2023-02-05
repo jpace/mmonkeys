@@ -3,7 +3,7 @@ package org.incava.mmonkeys.match.number
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

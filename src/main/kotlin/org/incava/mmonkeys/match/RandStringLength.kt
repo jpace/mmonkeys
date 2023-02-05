@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.match
 
-import org.incava.mmonkeys.rand.RandCalculated
+import org.incava.rando.RandCalculated
 
 object RandStringLength {
     private val randoms = mutableMapOf<Int, RandCalculated>()

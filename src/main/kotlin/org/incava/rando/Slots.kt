@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.rand
+package org.incava.rando
 
 import java.lang.RuntimeException
 import kotlin.math.pow

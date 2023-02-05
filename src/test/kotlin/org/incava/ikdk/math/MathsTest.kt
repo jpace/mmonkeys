@@ -1,5 +1,6 @@
-package org.incava.mmonkeys.util
+package org.incava.ikdk.math
 
+import org.incava.ikdk.math.Maths
 import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import kotlin.test.assertEquals

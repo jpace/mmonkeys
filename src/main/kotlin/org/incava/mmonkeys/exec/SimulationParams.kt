@@ -4,7 +4,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.Monkeys
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.type.Typewriter
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 
 typealias TypewriterCtor = (List<Char>) -> Typewriter
 

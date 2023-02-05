@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.perf.rand
 
-import org.incava.mmonkeys.rand.RandCalculated
-import org.incava.mmonkeys.rand.RandIntCalculated
+import org.incava.rando.RandCalculated
+import org.incava.rando.RandIntCalculated
 import org.incava.mmonkeys.testutil.InvokeTrials
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import kotlin.random.Random
 
 class Comparison(private vararg val options: Pair<String, InvokeTrials<Any>>) {

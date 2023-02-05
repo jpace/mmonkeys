@@ -7,7 +7,7 @@ import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.EqStringsMatcher
 import org.incava.mmonkeys.match.string.LengthStringsMatcher
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.lang.Thread.sleep
 
 fun <T> runSimulation(char: Char, type: String, sought: T, matcher: (Monkey, T) -> Matcher) {

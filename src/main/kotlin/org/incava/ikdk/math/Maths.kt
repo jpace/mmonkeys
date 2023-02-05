@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.util
+package org.incava.ikdk.math
 
 import java.math.BigInteger
 import kotlin.math.pow

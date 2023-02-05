@@ -5,10 +5,8 @@ import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.util.concurrent.atomic.AtomicLong
 
 internal class LengthStringsMatcherTest : MatcherTest() {
     @Test

@@ -5,7 +5,7 @@ import org.incava.mesa.DurationColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.testutil.InvokeTrials
-import org.incava.mmonkeys.util.Console.info
+import org.incava.ikdk.io.Console.info
 import kotlin.math.pow
 import kotlin.random.Random
 

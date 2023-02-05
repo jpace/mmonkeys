@@ -6,7 +6,7 @@ import org.incava.mmonkeys.perf.base.PerfResults
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.time.Duration
 import java.time.ZonedDateTime
 

@@ -2,7 +2,7 @@ package org.incava.mmonkeys.perf.coroutines
 
 import org.incava.mesa.*
 import org.incava.time.Durations
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import java.lang.Thread.sleep
 import java.time.Duration
 

@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.rand
+package org.incava.rando
 
 import kotlin.random.Random
 

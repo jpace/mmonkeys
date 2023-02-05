@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.perf.rand
 
-import org.incava.mmonkeys.rand.RandCalculated
+import org.incava.rando.RandCalculated
 import org.incava.mmonkeys.testutil.InvokeUnitTrial
-import org.incava.mmonkeys.util.Console
+import org.incava.ikdk.io.Console
 import kotlin.random.Random
 
 class RandCalcVsRandomTrial {
