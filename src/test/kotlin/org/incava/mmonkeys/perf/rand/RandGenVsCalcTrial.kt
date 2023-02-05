@@ -7,7 +7,7 @@ import org.incava.mmonkeys.util.Console
 import org.incava.time.DurationList
 import kotlin.random.Random
 
-class RandGenVsCalcTest {
+class RandGenVsCalcTrial {
     private val random = Random.Default
     private val size = 27
 
@@ -53,7 +53,7 @@ class RandGenVsCalcTest {
 }
 
 fun main() {
-    val obj = RandGenVsCalcTest()
+    val obj = RandGenVsCalcTrial()
     obj.ctor()
     obj.nextRand()
 }

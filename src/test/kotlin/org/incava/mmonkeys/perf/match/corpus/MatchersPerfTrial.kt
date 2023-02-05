@@ -5,13 +5,12 @@ import org.incava.mmonkeys.perf.base.MatcherCtor
 import org.incava.mmonkeys.perf.base.PerfResults
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
-import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.util.Console
 import java.time.Duration
 import java.time.ZonedDateTime
 
-class MatchersPerfTest {
+class MatchersPerfTrial {
     private val perfTable = PerfTable()
 
     init {
@@ -60,7 +59,7 @@ fun main() {
 //        "abcdefg" to 1,
 //        "abcdefgh" to 1,
     )
-    val obj = MatchersPerfTest()
+    val obj = MatchersPerfTrial()
     strings.forEach { (sought, count) ->
         if (count > 0)
             obj.run(sought, count)

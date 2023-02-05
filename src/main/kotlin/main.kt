@@ -55,7 +55,7 @@ fun main(args: Array<String>) {
         println("testing $i")
         (0 until 10).forEach { j ->
             println("this is a test $j")
-            sleep(50)
+            sleep(100)
         }
         sleep(200)
     }

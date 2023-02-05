@@ -37,9 +37,7 @@ internal class TableTest {
             '-' to "----- | ---- | ---\n",
             '=' to "===== | ==== | ===\n",
         ).map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input, " +
-                    "when running this method, " +
-                    "then the result should be $expected") {
+            DynamicTest.dynamicTest("given $input, the break line should be $expected") {
                 val result = runTest(::TableZ) { table: Table -> table.writeBreak(input) }
                 assertEquals(expected, result)
             }

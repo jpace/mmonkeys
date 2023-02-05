@@ -1,16 +1,20 @@
 package org.incava.mmonkeys.perf.match.string
 
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.perf.base.PerfTest
+import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 
 class PartialStringMatcherPerfTrial {
     private val matchCtor = ::PartialStringMatcher
+    private val table = PerfTable()
+
+    init {
+        table.writeHeader()
+    }
 
     fun run() {
-        val test = PerfTest()
         val params = mapOf(
             'h' to listOf(
                 "abc" to 50_000,
@@ -33,7 +37,8 @@ class PartialStringMatcherPerfTrial {
             val typewriter = StandardTypewriter(Keys.keyList(lastChar))
             values.forEach { (sought, count) ->
                 val trial = PerfTrial(sought, typewriter, matchCtor)
-                test.addTrial("partial", trial, count)
+                val results = trial.run(count)
+                table.addResults("partial", count, sought.length, results)
             }
         }
     }

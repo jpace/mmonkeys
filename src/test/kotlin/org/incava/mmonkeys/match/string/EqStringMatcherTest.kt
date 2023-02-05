@@ -4,7 +4,6 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -43,7 +42,6 @@ internal class EqStringMatcherTest : MatcherTest() {
     private fun createMatcher(sought: String): EqStringMatcher {
         val typewriter = DeterministicTypewriter(Keys.keyList('e'))
         val monkey = Monkey(1, typewriter)
-        val obj = EqStringMatcher(monkey, sought)
-        return obj
+        return EqStringMatcher(monkey, sought)
     }
 }

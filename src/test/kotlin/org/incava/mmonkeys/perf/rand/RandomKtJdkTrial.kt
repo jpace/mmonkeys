@@ -5,7 +5,7 @@ import org.incava.mmonkeys.util.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random
 
-class RandomKtJdkTest(private val numChars: Int, private val strLength: Int, val iterations: Int) {
+class RandomKtJdkTrial(private val numChars: Int, private val strLength: Int, val iterations: Int) {
     private val ktRandom = Random.Default
     private val jdkRandom = java.util.Random()
 
@@ -79,7 +79,7 @@ fun main() {
         9 to 100,
     )
     params.forEach {
-        val obj = RandomKtJdkTest(27, it.first, it.second * 1_000_000)
+        val obj = RandomKtJdkTrial(27, it.first, it.second * 1_000_000)
         obj.runTest()
     }
 }

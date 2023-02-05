@@ -28,9 +28,7 @@ internal class StringEncoderTest {
     @TestFactory
     fun `given a string, the encoded int value should be`() =
         intValues.map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input, " +
-                    "when encoding the value to an integer, " +
-                    "then the result should be $expected") {
+            DynamicTest.dynamicTest("given $input, when encoding to an integer, the result should be $expected") {
                 val result = StringEncoder.encodeToInt(input)
                 assertEquals(expected, result)
             }

@@ -37,7 +37,6 @@ internal class DurationColumnTest {
                     "then the result should be \"$expected\"") {
                 val obj = DurationColumn("h1", 5)
                 val result = obj.formatCell(input)
-                println("result = $result")
                 assertEquals(expected, result)
             }
         }

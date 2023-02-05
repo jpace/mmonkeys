@@ -18,7 +18,7 @@ class RandTrialTable : Table() {
     }
 }
 
-class RandIntVsCharTest {
+class RandIntVsCharTrial {
     private fun invokeTrials(name: String, block: () -> Unit): Pair<String, InvokeTrials<Any>> {
         return Pair(name, InvokeTrials(block))
     }
@@ -138,6 +138,6 @@ class RandIntVsCharTest {
 }
 
 fun main() {
-    val obj = RandIntVsCharTest()
+    val obj = RandIntVsCharTrial()
     obj.nextInt()
 }

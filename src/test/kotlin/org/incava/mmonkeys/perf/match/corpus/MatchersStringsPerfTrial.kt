@@ -9,7 +9,7 @@ import org.incava.mmonkeys.util.Console
 import java.time.Duration
 import java.time.ZonedDateTime
 
-class MatchersStringsPerfTest {
+class MatchersStringsPerfTrial {
     private val perfTable = PerfTable()
 
     init {
@@ -46,7 +46,7 @@ class MatchersStringsPerfTest {
 
 fun main() {
     val start = ZonedDateTime.now()
-    val file = MatchersStringsPerfTest::class.java.classLoader.getResource("pg100.txt") ?: return
+    val file = MatchersStringsPerfTrial::class.java.classLoader.getResource("pg100.txt") ?: return
     Console.info("file", file)
     val lines = file.readText().split("\r\n")
     val sonnet = lines.subList(5, 18)
@@ -65,7 +65,7 @@ fun main() {
 
     val strings = mapOf(words to 1)
 
-    val obj = MatchersStringsPerfTest()
+    val obj = MatchersStringsPerfTrial()
     strings.forEach { (sought, count) ->
         if (count > 0)
             obj.run(sought, count)

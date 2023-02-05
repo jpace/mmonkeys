@@ -5,13 +5,9 @@ import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.mmonkeys.util.Console
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
-import java.util.concurrent.atomic.AtomicLong
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -42,28 +38,6 @@ internal class EqStringsMatcherTest : MatcherTest() {
         val obj = createMatcher("abcde")
         val result = obj.check()
         assertTrue(result.isMatch)
-    }
-
-    @Test
-    fun testCheck() {
-        val typewriter = StandardTypewriter(Keys.keyList('z'))
-        val monkey = Monkey(1, typewriter)
-        val sought = listOf("abc", "cde", "efg")
-        val obj = EqStringsMatcher(monkey, Corpus(sought))
-        Console.info("sought", obj.sought)
-        val iterations = AtomicLong()
-        while (obj.sought.isNotEmpty()) {
-            val result = obj.check()
-            iterations.incrementAndGet()
-            if (iterations.incrementAndGet() % 1_000_000L == 0L) {
-                Console.info("(1) iterations", iterations)
-            }
-            if (result.isMatch) {
-                Console.info("(2) iterations", iterations)
-                Console.info("sought", sought)
-            }
-        }
-        Console.info("iterations", iterations)
     }
 
     private fun createMatcher(sought: String): EqStringsMatcher {

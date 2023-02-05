@@ -7,7 +7,7 @@ import java.lang.Thread.sleep
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-class RandomsTest(private val numChars: Int, private val strLength: Int, private val iterations: Int) {
+class RandomsTrial(private val numChars: Int, private val strLength: Int, private val iterations: Int) {
     private val random = Random.Default
 
     init {
@@ -140,7 +140,7 @@ fun main() {
         9 to 1_000_000,
     )
     params.forEach {
-        val obj = RandomsTest(27, it.first, it.second * 10)
+        val obj = RandomsTrial(27, it.first, it.second * 10)
         obj.runTest()
     }
 }

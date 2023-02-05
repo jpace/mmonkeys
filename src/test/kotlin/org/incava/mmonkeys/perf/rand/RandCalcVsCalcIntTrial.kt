@@ -31,7 +31,7 @@ class Comparison(private vararg val options: Pair<String, InvokeTrials<Any>>) {
     }
 }
 
-class RandCalcVsCalcIntTest {
+class RandCalcVsCalcIntTrial {
     fun nextRand() {
         println("nextRand")
         val size = 27
@@ -51,6 +51,6 @@ class RandCalcVsCalcIntTest {
 }
 
 fun main() {
-    val obj = RandCalcVsCalcIntTest()
+    val obj = RandCalcVsCalcIntTrial()
     obj.nextRand()
 }

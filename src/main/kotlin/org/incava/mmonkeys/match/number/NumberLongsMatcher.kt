@@ -45,7 +45,6 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
                 if (forEncoded.isEmpty()) {
                     forLength.remove(num)
                 }
-
                 if (forLength.isEmpty()) {
                     numbers.remove(soughtLen)
                 }

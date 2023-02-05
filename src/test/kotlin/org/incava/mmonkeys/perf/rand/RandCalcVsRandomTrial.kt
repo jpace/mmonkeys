@@ -5,7 +5,7 @@ import org.incava.mmonkeys.testutil.InvokeUnitTrial
 import org.incava.mmonkeys.util.Console
 import kotlin.random.Random
 
-class RandCalcVsRandomTest {
+class RandCalcVsRandomTrial {
     fun nextRand() {
         println("nextRandNew")
         val size = 27
@@ -28,6 +28,6 @@ class RandCalcVsRandomTest {
 }
 
 fun main() {
-    val obj = RandCalcVsRandomTest()
+    val obj = RandCalcVsRandomTrial()
     obj.nextRand()
 }

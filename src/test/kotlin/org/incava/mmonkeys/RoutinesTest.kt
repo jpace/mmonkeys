@@ -2,7 +2,6 @@ package org.incava.mmonkeys
 
 import org.incava.mmonkeys.util.Memory
 import org.junit.jupiter.api.Test
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.test.assertEquals
 
