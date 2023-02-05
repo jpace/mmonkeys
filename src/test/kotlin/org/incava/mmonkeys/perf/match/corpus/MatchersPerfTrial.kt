@@ -1,12 +1,16 @@
 package org.incava.mmonkeys.perf.match.corpus
 
-import org.incava.mmonkeys.match.MatcherFactory
+import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.match.number.NumberIntMatcher
+import org.incava.mmonkeys.match.number.NumberLongMatcher
+import org.incava.mmonkeys.match.string.EqStringMatcher
+import org.incava.mmonkeys.match.string.LengthStringMatcher
+import org.incava.mmonkeys.match.string.PartialStringMatcher
 import org.incava.mmonkeys.perf.base.MatcherCtor
 import org.incava.mmonkeys.perf.base.PerfResults
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.ikdk.io.Console
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -20,15 +24,12 @@ class MatchersPerfTrial {
 
     fun run(sought: String, numMatches: Int) {
         Console.info("sought", sought)
-        val factory = MatcherFactory()
         val types = listOf(
-            "partial",
-            "eq",
-            "length",
-            "number",
-        ).map {
-            it to factory.createCorpusMatcherCtor(it, sought)
-        }
+            "length" to ::LengthStringMatcher,
+            "eq" to ::EqStringMatcher,
+            "partial" to ::PartialStringMatcher,
+            "number" to if (sought.length > 6) ::NumberLongMatcher else ::NumberIntMatcher,
+        )
         val shuffled = types.shuffled()
         val results = shuffled.map { type ->
             Console.info(type.first)

@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.perf.match.string
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
@@ -24,7 +25,7 @@ class MatcherDurationTrial(val name: String, private val params: SimulationParam
     val durations = DurationList()
 
     fun run(): Pair<Long, Duration> {
-        val simulation = Simulation(params)
+        val simulation = CoroutineSimulation(params)
         val result = simulation.run()
         results += result.first
         durations += result.second
@@ -32,8 +33,7 @@ class MatcherDurationTrial(val name: String, private val params: SimulationParam
     }
 }
 
-class StringMatcherSimulation {
-    private val numMonkeys = 1000
+class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
     private val table = MatchSimTable()
 
     private fun writeTrialAverage(trial: MatcherDurationTrial) {
@@ -68,8 +68,6 @@ class StringMatcherSimulation {
             MatcherDurationTrial(it.first, params)
         }
         val shuffled = trials.shuffled()
-        // printf("word.length: ${word.length}")
-        // println("# trials: $numTrials")
         table.writeHeader()
         table.writeBreak('=')
         repeat(numTrials) { num ->

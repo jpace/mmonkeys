@@ -23,10 +23,10 @@ class SimulationParams<T>(
         Console.info("typewriterFactory", typewriterFactory)
     }
 
-    fun makeMonkeys(): Monkeys<T> {
+    fun makeMonkeys(): Monkeys {
         // I don't make monkeys; I just train them!
         val typewriter = typewriterFactory.typewriter()
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        return Monkeys(monkeyList, sought, matcher, showMemory)
+        return Monkeys(monkeyList)
     }
 }

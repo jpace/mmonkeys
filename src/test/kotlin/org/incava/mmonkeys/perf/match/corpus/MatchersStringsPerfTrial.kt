@@ -1,11 +1,11 @@
 package org.incava.mmonkeys.perf.match.corpus
 
-import org.incava.mmonkeys.match.MatcherFactory
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.string.LengthStringsMatcher
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.ikdk.io.Console
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -19,15 +19,12 @@ class MatchersStringsPerfTrial {
 
     fun run(sought: List<String>, numMatches: Int) {
         Console.info("sought.#", sought.size)
-        val factory = MatcherFactory()
         val types = listOf(
-            // "partial",
-            "length",
-//            "number",
-//            "eq",
-        ).map {
-            it to factory.createCorpusMatcherCtor(it)
-        }
+            // "partial" to ::PartialStringMatcher,
+            "length" to ::LengthStringsMatcher,
+//            "number" to ::NumberLongsMatcher,
+//            "eq" to ::EqStringsMatcher,
+        )
         val corpus = Corpus(sought)
         val results = types.map { (name, matcher) ->
             Console.info(name)

@@ -5,18 +5,16 @@ import org.incava.time.DurationList
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
 
-open class Simulation<T>(private val params: SimulationParams<T>) {
+abstract class Simulation<T>(val params: SimulationParams<T>) {
     val durations = DurationList()
 
     fun run(): Pair<Long, Duration> {
-        val result = measureDuration {
-            val monkeys = params.makeMonkeys()
-            val iteration = monkeys.run()
-            iteration
+        return measureDuration {
+            process()
         }
-        // Console.info("result", result)
-        return result
     }
+
+    abstract fun process(): Long
 
     fun summarize() {
         durations.forEach { Console.info("duration", it) }
