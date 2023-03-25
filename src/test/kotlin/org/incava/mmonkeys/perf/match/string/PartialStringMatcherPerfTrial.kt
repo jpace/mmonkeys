@@ -37,6 +37,7 @@ class PartialStringMatcherPerfTrial {
             val typewriter = StandardTypewriter(Keys.keyList(lastChar))
             values.forEach { (sought, count) ->
                 val trial = PerfTrial(sought, typewriter, matchCtor)
+                Thread.sleep(100L)
                 val results = trial.run(count)
                 table.addResults("partial", count, sought.length, results)
             }

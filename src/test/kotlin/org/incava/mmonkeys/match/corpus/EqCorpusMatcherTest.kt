@@ -1,17 +1,18 @@
-package org.incava.mmonkeys.match.string
+package org.incava.mmonkeys.match.corpus
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatcherTest
-import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.string.EqCorpusMatcher
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class EqStringsMatcherTest : MatcherTest() {
+internal class EqCorpusMatcherTest : MatcherTest() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -21,8 +22,9 @@ internal class EqStringsMatcherTest : MatcherTest() {
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
-                val obj = EqStringsMatcher(monkey, Corpus(inputs.second))
-                runTest(obj, expected)
+                val obj = EqCorpusMatcher(monkey, Corpus(inputs.second))
+                val result = runTest(obj)
+                assertEquals(expected, result)
             }
         }
 
@@ -40,9 +42,9 @@ internal class EqStringsMatcherTest : MatcherTest() {
         assertTrue(result.isMatch)
     }
 
-    private fun createMatcher(sought: String): EqStringsMatcher {
+    private fun createMatcher(sought: String): EqCorpusMatcher {
         val typewriter = DeterministicTypewriter(Keys.keyList('e'))
         val monkey = Monkey(1, typewriter)
-        return EqStringsMatcher(monkey, Corpus(listOf(sought)))
+        return EqCorpusMatcher(monkey, Corpus(listOf(sought)))
     }
 }

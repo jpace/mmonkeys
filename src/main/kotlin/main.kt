@@ -1,12 +1,11 @@
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.string.EqStringMatcher
-import org.incava.mmonkeys.match.string.EqStringsMatcher
-import org.incava.mmonkeys.match.string.LengthStringsMatcher
+import org.incava.mmonkeys.match.string.EqCorpusMatcher
+import org.incava.mmonkeys.match.string.LengthCorpusMatcher
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import java.lang.Thread.sleep
@@ -25,8 +24,8 @@ fun <T> runSimulation(char: Char, type: String, sought: T, matcher: (Monkey, T) 
 fun runCorpusTest(toChar: Char) {
     Console.info("toChar", toChar)
     val sought = listOf("abc")
-    val x = "equal" to ::EqStringsMatcher
-    val y = "length" to ::LengthStringsMatcher
+    val x = "equal" to ::EqCorpusMatcher
+    val y = "length" to ::LengthCorpusMatcher
     val m = x
     val corpus = Corpus(sought)
     val matcher = { mky: Monkey, _: Corpus -> m.second(mky, corpus) }

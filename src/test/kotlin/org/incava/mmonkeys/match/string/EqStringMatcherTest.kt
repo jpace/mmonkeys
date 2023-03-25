@@ -7,6 +7,7 @@ import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -21,7 +22,8 @@ internal class EqStringMatcherTest : MatcherTest() {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
                 val obj = EqStringMatcher(monkey, inputs.second)
-                runTest(obj, expected)
+                val result = runTest(obj)
+                assertEquals(expected, result)
             }
         }
 

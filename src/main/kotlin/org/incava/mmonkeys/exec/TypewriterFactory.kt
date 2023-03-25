@@ -4,16 +4,11 @@ import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.mmonkeys.type.Typewriter
 
-class TypewriterFactory(
-    private val toChar: Char = 'z',
-    private val typewriterType: TypewriterCtor = ::StandardTypewriter,
-    private val charList: List<Char> = Keys.keyList(toChar)
-) {
-    fun typewriter(): Typewriter {
-        return typewriterType(charList)
-    }
+class TypewriterFactory(toChar: Char = 'z') {
+    private val charList = Keys.keyList(toChar)
+    private val ctor: TypewriterCtor = ::StandardTypewriter
 
-    override fun toString(): String {
-        return "TypewriterFactory(toChar=$toChar, typewriterType=$typewriterType)"
+    fun typewriter(): Typewriter {
+        return ctor(charList)
     }
 }

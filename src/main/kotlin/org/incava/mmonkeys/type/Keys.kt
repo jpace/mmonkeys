@@ -10,8 +10,4 @@ object Keys {
     fun fullList(): List<Char> {
         return keyList('z')
     }
-
-    fun wordChars(): List<Char> {
-        return ('a'..'z').toList()
-    }
 }

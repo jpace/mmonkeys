@@ -22,7 +22,8 @@ internal class PartialStringMatcherTest : MatcherTest() {
                 val typewriter = DeterministicTypewriter(inputs.first)
                 val monkey = Monkey(1, typewriter)
                 val obj = PartialStringMatcher(monkey, inputs.second)
-                runTest(obj, expected)
+                val result = runTest(obj)
+                assertEquals(expected, result)
             }
         }
 

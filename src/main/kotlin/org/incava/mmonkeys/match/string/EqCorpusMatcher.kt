@@ -7,7 +7,7 @@ import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.ikdk.io.Console
 import java.time.ZonedDateTime
 
-class EqStringsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
+class EqCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     override fun check(): MatchData {
         val word = monkey.nextString()
         val match = sought.hasWord(word)

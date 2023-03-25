@@ -33,7 +33,9 @@ class MatchersPerfTrial {
         val shuffled = types.shuffled()
         val results = shuffled.map { type ->
             Console.info(type.first)
-            val result = runMatch(sought, numMatches, type.second)
+            Thread.sleep(100L)
+            val trial = PerfTrial(sought, StandardTypewriter(), type.second)
+            val result = trial.run(numMatches)
             Console.info(type.first, result.durations.average())
             type.first to result
         }
@@ -41,11 +43,6 @@ class MatchersPerfTrial {
             perfTable.addResults(it.first, numMatches, sought.length, it.second)
         }
         perfTable.writeBreak('-')
-    }
-
-    private fun <T> runMatch(sought: T, numMatches: Int, matchCtor: MatcherCtor<T>): PerfResults {
-        val trial = PerfTrial(sought, StandardTypewriter(), matchCtor)
-        return trial.run(numMatches)
     }
 }
 

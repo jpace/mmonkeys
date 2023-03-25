@@ -5,7 +5,7 @@ import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 
-class LengthStringsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
+class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     val soughtByLength: MutableMap<Int, MutableList<String>> = mutableMapOf()
 
     init {

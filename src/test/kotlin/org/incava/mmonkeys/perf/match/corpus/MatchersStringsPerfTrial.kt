@@ -2,7 +2,7 @@ package org.incava.mmonkeys.perf.match.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.string.LengthStringsMatcher
+import org.incava.mmonkeys.match.string.LengthCorpusMatcher
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
@@ -21,7 +21,7 @@ class MatchersStringsPerfTrial {
         Console.info("sought.#", sought.size)
         val types = listOf(
             // "partial" to ::PartialStringMatcher,
-            "length" to ::LengthStringsMatcher,
+            "length" to ::LengthCorpusMatcher,
 //            "number" to ::NumberLongsMatcher,
 //            "eq" to ::EqStringsMatcher,
         )
@@ -30,6 +30,7 @@ class MatchersStringsPerfTrial {
             Console.info(name)
             val typewriter = StandardTypewriter()
             val trial = PerfTrial(corpus, typewriter, matcher)
+            Thread.sleep(100L)
             val result = trial.run(numMatches)
             Console.info(name, result.durations.average())
             name to result

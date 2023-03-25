@@ -11,7 +11,7 @@ fun main() {
     val typewriter = StandardTypewriter(Keys.keyList('z'))
     val monkey = Monkey(1, typewriter)
     val sought = listOf("abc", "cde", "efg")
-    val obj = EqStringsMatcher(monkey, Corpus(sought))
+    val obj = EqCorpusMatcher(monkey, Corpus(sought))
     Console.info("obj", obj)
     Console.info("sought", obj.sought)
     Console.info("sought.present?", obj.sought.isNotEmpty())
