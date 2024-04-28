@@ -1,10 +1,9 @@
 package org.incava.mmonkeys
 
-import org.incava.mmonkeys.rand.Randough
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
-open class Monkey(val id: Int, val typewriter: Typewriter) : Randough(typewriter.numChars() - 1) {
+open class Monkey(val id: Int, val typewriter: Typewriter) {
     fun nextChar(): Char {
         return typewriter.nextCharacter()
     }

@@ -5,10 +5,13 @@ import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.math.Maths
+import kotlin.random.Random
 
 class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
     // length to [ encoded to [ indices in sought ] ]
     val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
+    private val charCount = monkey.typewriter.numChars().toLong() - 1
 
     init {
         val encoded = mutableMapOf<String, Long>()
@@ -34,7 +37,7 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
         val soughtLen = length - 1
         val forLength = numbers[soughtLen]
         if (forLength != null) {
-            val num = monkey.nextLong(soughtLen)
+            val num = randomLong(soughtLen)
             val forEncoded = forLength[num]
             if (forEncoded != null && forEncoded.isNotEmpty()) {
                 val word = StringEncoder.decode(num)
@@ -57,7 +60,12 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
         return noMatch(length)
     }
 
-    fun showUnmatched() {
+    private fun randomLong(digits: Int): Long {
+        val max = Maths.powerLongCached(charCount, digits) * 2
+        return Random.nextLong(max)
+    }
+
+    private fun showUnmatched() {
         // val str = String.format("%8d | %8d | %8d | %8d", )
         val lenToCount = lengthToCount()
         val total = lenToCount.values.sum()
