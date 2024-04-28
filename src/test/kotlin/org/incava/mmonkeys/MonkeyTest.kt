@@ -4,6 +4,7 @@ import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.math.Maths
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -51,10 +52,26 @@ internal class MonkeyTest {
     @Test
     fun nextInt() {
         val typewriter = DeterministicTypewriter(Keys.fullList())
+        val length = typewriter.numChars() - 1
+        Console.info("length", length)
         val obj = Monkey(id = 37, typewriter = typewriter)
         Console.info("obj", obj)
         val result = obj.nextInt(6)
         Console.info("result", result)
+        // assertEquals(expected, result)
+    }
+
+    @Test
+    fun nextInt2() {
+        val length = 4
+        Console.info("length", length)
+        val digits = 3
+        val max1 = Maths.powerIntRepeat(length, digits) * 2
+        val max2 = Maths.powerIntRepeat(length, digits)
+        val max3 = Maths.powerIntRepeat(length + 1, digits)
+        Console.info("max1", max1)
+        Console.info("max2", max2)
+        Console.info("max3", max3)
         // assertEquals(expected, result)
     }
 
@@ -80,7 +97,7 @@ internal class MonkeyTest {
                 Arguments.of("abc", charList(3)),
                 Arguments.of("abcd", charList(4)),
                 Arguments.of("abcde", charList(5))
-            );
+            )
         }
 
         private fun charList(last: Int): List<Char> {
@@ -90,5 +107,15 @@ internal class MonkeyTest {
         private fun charList(toChar: Char): List<Char> {
             return Keys.keyList(toChar)
         }
+    }
+
+    @Test
+    fun nextWordChars() {
+        val typewriter = DeterministicTypewriter(Keys.fullList())
+        val obj = Monkey(id = 37, typewriter = typewriter)
+        Console.info("obj", obj)
+        val result = obj.nextWordChars(6)
+        Console.info("result", result)
+        assertEquals("abcdef", result)
     }
 }

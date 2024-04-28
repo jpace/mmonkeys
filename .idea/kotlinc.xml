@@ -3,4 +3,7 @@
   <component name="KotlinCompilerSettings">
     <option name="additionalArguments" value="-version -Xms256m -Xmx2048m" />
   </component>
+  <component name="KotlinJpsPluginSettings">
+    <option name="version" value="1.6.0" />
+  </component>
 </project>

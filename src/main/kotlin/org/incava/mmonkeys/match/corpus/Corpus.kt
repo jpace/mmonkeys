@@ -31,18 +31,18 @@ class Corpus(val words: List<String>) {
     fun isNotEmpty() = !isEmpty()
 
     fun write() {
-//        words.withIndex().forEach { (index, value) ->
-//            if (index != 0) {
-//                print(" ")
-//            }
-//            print(value)
-//        }
-//        println()
-        words.withIndex().forEach { (index, value) ->
-            if (index != 0) {
-                print(" ")
+        words.withIndex().forEach { (index, word) ->
+            if (index > 0) {
+                if (index % 24 == 0)
+                    println()
+                else
+                    print(" ")
             }
-            if (matched.contains(index)) print(value) else print(value.replace(Regex("."), "-"))
+            val str = if (matched.contains(index))
+                word
+            else
+                "-".repeat(word.length)
+            print(str)
         }
         println()
     }

@@ -2,7 +2,6 @@ package org.incava.mmonkeys.perf.match.string
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.exec.Simulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.number.NumberIntMatcher

@@ -38,11 +38,12 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
         return noMatch(toEndOfWord)
     }
 
-    fun showUnmatched() {
+    private fun showUnmatched() {
         val total = soughtByLength.entries.fold(0) { sum, entry -> sum + entry.value.size }
         val str = soughtByLength.entries
             .sortedBy { (key, _) -> key }
             .joinToString(", ") { it.key.toString() + ": " + it.value.size }
+        print("\u001b[H\u001b[2J")
         println("total: $total; $str")
         sought.write()
     }

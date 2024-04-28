@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.perf.base
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.type.Typewriter
@@ -22,16 +23,16 @@ class PerfTrial<T>(val sought: T, val typewriter: Typewriter, val matcherCtor: M
                 val dur = measureTimeMillis {
                     while (!matcher.isComplete()) {
                         var iteration = 0L
-                        while (iteration < maxAttempts) {
-                            val result = matcher.check()
-                            if (result.isMatch) {
-                                break
-                            }
+                        do {
                             ++iteration
-                        }
+                            val result = matcher.check()
+                        } while (!result.isMatch && iteration < maxAttempts)
+                        Console.info("iteration: $iteration")
+                        Console.info("")
                         iterations += iteration
                         val now = System.currentTimeMillis()
-                        if (now - start > 1000L * 60 * 1) {
+                        if (now - start > 1000L * 60 * 4) {
+                            Console.info("stopping at: ${now - start}")
                             break
                         }
                     }
@@ -40,5 +41,9 @@ class PerfTrial<T>(val sought: T, val typewriter: Typewriter, val matcherCtor: M
             }
         }
         return PerfResults(duration.second, durations, iterations)
+    }
+
+    private fun runCheck(matcher: Matcher) {
+
     }
 }

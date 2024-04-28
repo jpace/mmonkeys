@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.regex.Pattern
 
 object Console {
-    var out: PrintStream = System.out
+    private var out: PrintStream = System.out
 
     fun info(msg: String, obj: Any?) {
         println(whence(), format(msg, obj))
@@ -59,7 +59,7 @@ object Console {
         out.println(str)
     }
 
-    fun whence(): String {
+    private fun whence(): String {
         val pattern = Pattern.compile("""(?:.*\.)?(.*)""")
         var found = false
         Thread.currentThread().stackTrace.forEach {

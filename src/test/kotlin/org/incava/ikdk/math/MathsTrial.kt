@@ -9,42 +9,66 @@ import java.math.BigInteger
 class MathsTrial {
     private val iterations = 100_000_000L
 
-    fun timeIt(name: String, block: () -> Unit) {
-        val invokeTrial = InvokeUnitTrial(block)
-        invokeTrial.run(iterations)
-        val dur = Durations.formatted(invokeTrial.duration)
-        printf("%-40.40s: %-10s", name, dur)
+    private fun runIt(name: String, iterations: Long, powerFunction: () -> Any) {
+        Maths.clear()
+        try {
+            val result = powerFunction()
+            val invokeTrial = InvokeUnitTrial(powerFunction)
+            val duration = invokeTrial.run(iterations)
+            val durStr = Durations.formatted(duration)
+            printf("%-24.24s | %-,16d | %-10s", name, result, durStr)
+        } catch (ex: Exception) {
+            printf("%-24.24s | %-16s | %-10s", name, "exception", ex)
+        }
+        sleep(500)
+    }
+
+    fun runTrial(base: Int, exponent: Int, iterations: Long = this.iterations) {
+        println("$base ** $exponent ($iterations)")
+
+        val intTrials = mapOf(
+            "Int Pow" to Maths::powerIntPow,
+            "Int Repeat" to Maths::powerIntRepeat,
+            "Int Recurse" to Maths::powerIntRecurse,
+            "Int Cached" to Maths::powerIntCached,
+            "Int Repeat Exact" to Maths::powerIntRepeatExact,
+            "Int Recurse Exact" to Maths::powerIntRecurseExact,
+            "Int Cached Exact" to Maths::powerIntCachedExact,
+        )
+        val longTrials = mapOf(
+            "Long Pow" to Maths::powerLongPow,
+            "Long Repeat" to Maths::powerLongRepeat,
+            "Long Recurse" to Maths::powerLongRecurse,
+            "Long Cached" to Maths::powerLongCached,
+        )
+        val bigIntTrials = mapOf(
+            "Big Repeat" to Maths::powerBigRepeat,
+            "Big Recurse" to Maths::powerBigRecurse,
+            "Big Cached" to Maths::powerBigCached,
+        )
+        intTrials.forEach { (name, function) ->
+            runIt(name, iterations) { function(base, exponent) }
+        }
+        println()
+        val baseLong = base.toLong()
+        longTrials.forEach { (name, function) ->
+            runIt(name, iterations) { function(baseLong, exponent) }
+        }
+        println()
+        val baseBigInt = BigInteger.valueOf(baseLong)
+        bigIntTrials.forEach { (name, function) ->
+            runIt(name, iterations) { function(baseBigInt, exponent) }
+        }
+        println()
     }
 }
 
 fun main() {
     val test = MathsTrial()
-    test.timeIt("power - 26.pow(6)") {
-        Maths.power(26, 6)
-    }
-    sleep(500)
-    test.timeIt("power2 - repeat (*)int)") {
-        Maths.power2(26, 6)
-    }
-    sleep(500)
-    test.timeIt("power3 - recurse") {
-        Maths.power3(26, 6)
-    }
-    sleep(500)
-    test.timeIt("power4 - cached") {
-        Maths.power4(26, 6)
-    }
-    sleep(500)
-    test.timeIt("power2 - repeat (long)") {
-        Maths.power2(26L, 6)
-    }
-    sleep(500)
-    test.timeIt("power2 - repeat - init(big int)") {
-        Maths.power2(BigInteger.valueOf(26), 6)
-    }
-    sleep(500)
-    val bi = BigInteger.valueOf(26)
-    test.timeIt("power2 - repeat - no init(big int)") {
-        Maths.power2(bi, 6)
-    }
+    test.runTrial(26, 6)
+    test.runTrial(26, 4)
+    test.runTrial(200, 3)
+    test.runTrial(10, 10, 10_000_000)
+    test.runTrial(1000, 10, 10_000_000)
+    test.runTrial(10, 26, 10_000_000L)
 }
