@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.perf.rand
+package org.incava.mmonkeys.trials.perf.rand
 
 import org.incava.rando.RandCalculated
 import org.incava.rando.RandGenerated

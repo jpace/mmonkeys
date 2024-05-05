@@ -6,8 +6,8 @@ import org.incava.mmonkeys.match.number.NumberLongMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.perf.base.PerfTable
-import org.incava.mmonkeys.perf.base.PerfTrial
+import org.incava.mmonkeys.trials.perf.base.PerfTable
+import org.incava.mmonkeys.trials.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
 import java.time.Duration
 import java.time.ZonedDateTime

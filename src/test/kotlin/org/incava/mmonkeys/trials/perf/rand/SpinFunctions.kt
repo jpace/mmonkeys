@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.perf.rand
+package org.incava.mmonkeys.trials.perf.rand
 
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.pow

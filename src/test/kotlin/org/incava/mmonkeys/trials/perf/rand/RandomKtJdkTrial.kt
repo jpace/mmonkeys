@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.perf.rand
+package org.incava.mmonkeys.trials.perf.rand
 
 import org.incava.mmonkeys.testutil.InvokeUnitTrial
 import org.incava.ikdk.io.Console

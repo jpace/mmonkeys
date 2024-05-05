@@ -3,8 +3,8 @@ package org.incava.mmonkeys.perf.match.corpus
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.string.LengthCorpusMatcher
-import org.incava.mmonkeys.perf.base.PerfTable
-import org.incava.mmonkeys.perf.base.PerfTrial
+import org.incava.mmonkeys.trials.perf.base.PerfTable
+import org.incava.mmonkeys.trials.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
 import java.time.Duration
 import java.time.ZonedDateTime

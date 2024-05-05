@@ -1,8 +1,8 @@
-package org.incava.mmonkeys.perf.match.string
+package org.incava.mmonkeys.trials.perf.match.string
 
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.perf.base.PerfTable
-import org.incava.mmonkeys.perf.base.PerfTrial
+import org.incava.mmonkeys.trials.perf.base.PerfTable
+import org.incava.mmonkeys.trials.perf.base.PerfTrial
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 

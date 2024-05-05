@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.perf.base
+package org.incava.mmonkeys.trials.perf.base
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
