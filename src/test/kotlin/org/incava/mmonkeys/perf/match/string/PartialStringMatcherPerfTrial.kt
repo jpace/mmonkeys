@@ -35,11 +35,10 @@ class PartialStringMatcherPerfTrial {
         params.forEach { (lastChar, values) ->
             println("lastChar: $lastChar")
             val typewriter = StandardTypewriter(Keys.keyList(lastChar))
-            values.forEach { (sought, count) ->
-                val trial = PerfTrial(sought, typewriter, matchCtor)
+            values.forEach { (sought, numMatches) ->
+                val trial = PerfTrial(sought, typewriter, matchCtor, numMatches)
                 Thread.sleep(100L)
-                val results = trial.run(count)
-                table.addResults("partial", count, sought.length, results)
+                table.addResults("partial", numMatches, sought.length, trial.results)
             }
         }
     }

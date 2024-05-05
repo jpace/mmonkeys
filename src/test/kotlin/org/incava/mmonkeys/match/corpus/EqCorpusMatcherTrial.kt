@@ -1,10 +1,10 @@
-package org.incava.mmonkeys.match.string
+package org.incava.mmonkeys.match.corpus
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.match.string.EqCorpusMatcher
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {

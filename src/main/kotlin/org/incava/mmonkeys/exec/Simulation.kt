@@ -8,10 +8,8 @@ import java.time.Duration
 abstract class Simulation<T>(val params: SimulationParams<T>) {
     val durations = DurationList()
 
-    fun run(): Pair<Long, Duration> {
-        return measureDuration {
-            process()
-        }
+    fun run(): Pair<Long, Duration> = measureDuration {
+        process()
     }
 
     abstract fun process(): Long

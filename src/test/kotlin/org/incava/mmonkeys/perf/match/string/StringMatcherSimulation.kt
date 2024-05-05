@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.perf.match.string
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.SimulationParams
@@ -29,6 +30,10 @@ class MatcherDurationTrial(val name: String, private val params: SimulationParam
         results += result.first
         durations += result.second
         return result
+    }
+
+    override fun toString(): String {
+        return "MatcherDurationTrial(name='$name', params=$params, results=$results, durations=$durations)"
     }
 }
 
@@ -79,11 +84,15 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
                 }
             }
             val offset = Random.Default.nextInt(shuffled.size)
+            Console.info("offset", offset)
             val byName = mutableMapOf<String, Pair<Long, Duration>>()
             shuffled.indices.forEach { index ->
+                Console.info("index", index)
                 val idx = (offset + index) % shuffled.size
                 val type = shuffled[idx]
+                Console.info("type", type)
                 val result = type.run()
+                Console.info("result", result)
                 byName[type.name] = result
             }
             byName.toSortedMap().forEach { (key, value) ->

@@ -29,4 +29,8 @@ class SimulationParams<T>(
         val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
         return Monkeys(monkeyList)
     }
+
+    override fun toString(): String {
+        return "SimulationParams(numMonkeys=$numMonkeys, sought=$sought, matcher=$matcher, typewriterFactory=$typewriterFactory, showMemory=$showMemory)"
+    }
 }

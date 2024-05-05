@@ -7,7 +7,7 @@ import org.incava.mmonkeys.match.string.StringMatcher
 import kotlin.random.Random
 
 class NumberLongMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
-    val number = StringEncoder.encodeToLong(sought)
+    private val number = StringEncoder.encodeToLong(sought)
     private val soughtLen = sought.length
     private val max = Maths.powerLongRepeat(monkey.typewriter.numChars().toLong(), soughtLen) * 2
 

@@ -6,8 +6,6 @@ import org.incava.mmonkeys.match.number.NumberLongMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.perf.base.MatcherCtor
-import org.incava.mmonkeys.perf.base.PerfResults
 import org.incava.mmonkeys.perf.base.PerfTable
 import org.incava.mmonkeys.perf.base.PerfTrial
 import org.incava.mmonkeys.type.StandardTypewriter
@@ -34,8 +32,8 @@ class MatchersPerfTrial {
         val results = shuffled.map { type ->
             Console.info(type.first)
             Thread.sleep(100L)
-            val trial = PerfTrial(sought, StandardTypewriter(), type.second)
-            val result = trial.run(numMatches)
+            val trial = PerfTrial(sought, StandardTypewriter(), type.second, numMatches)
+            val result = trial.results
             Console.info(type.first, result.durations.average())
             type.first to result
         }

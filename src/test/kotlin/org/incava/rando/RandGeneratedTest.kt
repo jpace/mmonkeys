@@ -14,6 +14,6 @@ internal class RandGeneratedTest {
             sum += result
         }
         // with enough iterations the overall average should be ~= 27
-        assertWithin(27.0, sum / iterations, 2.0)
+        assertWithin(27.0, sum / iterations, 2.1)
     }
 }

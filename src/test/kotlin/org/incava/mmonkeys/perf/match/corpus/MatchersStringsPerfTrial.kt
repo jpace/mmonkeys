@@ -29,11 +29,10 @@ class MatchersStringsPerfTrial {
         val results = types.map { (name, matcher) ->
             Console.info(name)
             val typewriter = StandardTypewriter()
-            val trial = PerfTrial(corpus, typewriter, matcher)
+            val trial = PerfTrial(corpus, typewriter, matcher, numMatches)
             Thread.sleep(100L)
-            val result = trial.run(numMatches)
-            Console.info(name, result.durations.average())
-            name to result
+            Console.info(name, trial.results.durations.average())
+            name to trial.results
         }
         results.sortedBy { it.first }.forEach {
             perfTable.addResults(it.first, numMatches, sought.size, it.second)
