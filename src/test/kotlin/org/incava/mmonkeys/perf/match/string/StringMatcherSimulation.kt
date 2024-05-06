@@ -53,7 +53,7 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
         table.writeBreak('=')
     }
 
-    private fun getMatchers(word: String) : List<Pair<String, (Monkey, String) -> StringMatcher>> {
+    private fun getMatchers(word: String): List<Pair<String, (Monkey, String) -> StringMatcher>> {
         return listOf(
             "equal str" to ::EqStringMatcher,
             "partial str" to ::PartialStringMatcher,
@@ -84,25 +84,24 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
                 }
             }
             val offset = Random.Default.nextInt(shuffled.size)
-            Console.info("offset", offset)
-            val byName = mutableMapOf<String, Pair<Long, Duration>>()
-            shuffled.indices.forEach { index ->
-                Console.info("index", index)
+            val byName = shuffled.indices.associate { index ->
                 val idx = (offset + index) % shuffled.size
                 val type = shuffled[idx]
-                Console.info("type", type)
                 val result = type.run()
-                Console.info("result", result)
-                byName[type.name] = result
+                type.name to result
             }
             byName.toSortedMap().forEach { (key, value) ->
                 val duration = value.second.toMillis()
-                table.writeRow(num,
+                val rate = 1000L * value.first / max(1, duration)
+                Console.info("rate", rate)
+                Console.info("rate.class", rate.javaClass)
+                table.writeRow(
+                    num,
                     key,
                     value.first,
                     duration,
-                    1000 * value.first / max(1, duration))
-
+                    1000L * value.first / max(1, duration)
+                )
             }
         }
         summarize(trials)
@@ -121,7 +120,7 @@ fun main() {
     obj.run(10, word0)
     obj.run(3, word1)
     obj.run(2, word2)
-    obj.run(0, word3)
+    obj.run(1, word3)
     obj.run(0, word4)
     // obj.run(4, word3)
     // obj.run(1, word4)
