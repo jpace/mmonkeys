@@ -6,26 +6,30 @@ import org.incava.ikdk.io.Console
 import java.time.Duration
 import kotlin.concurrent.thread
 
-data class CompareParams(val numThreads: Int = 10, val numIterations: Int = 100, val outerCount: Int = 10_000, val innerCount: Int = 10_000)
+data class CompareParams(
+    val numThreads: Int = 10,
+    val numIterations: Int = 100,
+    val outerCount: Int = 10_000,
+    val innerCount: Int = 10_000,
+)
 
 open class AsyncCompare(val params: CompareParams) {
     private val tick = (params.numIterations * 0.25).toInt()
 
-    private val table = object : Table() {
-        override fun columns(): List<Column> {
-            return listOf(
-                StringColumn("type", 40, leftJustified = true),
-                IntColumn("number", 10),
-                IntColumn("invocation", 10),
-                StringColumn("name", 20, leftJustified = true)
-            )
-        }
+    private val table = Table(
+        listOf(
+            StringColumn("type", 40, leftJustified = true),
+            IntColumn("number", 10),
+            IntColumn("invocation", 10),
+            StringColumn("name", 20, leftJustified = true)
+        )
+    )
 
-        init {
-            writeHeader()
-            writeBreak('=')
-        }
+    init {
+        table.writeHeader()
+        table.writeBreak('=')
     }
+
 
     fun runThreads(meth: (Int) -> Thread): Duration {
         val start = System.currentTimeMillis()
@@ -64,14 +68,12 @@ open class AsyncCompare(val params: CompareParams) {
     fun summarize(durations: List<Pair<String, Duration>>) {
         Console.info("# threads", params.numThreads)
         Console.info("# iterations", params.numIterations)
-        val summaryTable = object : Table() {
-            override fun columns(): List<Column> {
-                return listOf(
-                    StringColumn("type", 40, leftJustified = true),
-                    DurationColumn("duration", 10)
-                )
-            }
-        }
+        val summaryTable = Table(
+            listOf(
+                StringColumn("type", 40, leftJustified = true),
+                DurationColumn("duration", 10)
+            )
+        )
         summaryTable.writeHeader()
         summaryTable.writeBreak('=')
         durations.sortedBy { it.first }.forEach { (type, duration) ->

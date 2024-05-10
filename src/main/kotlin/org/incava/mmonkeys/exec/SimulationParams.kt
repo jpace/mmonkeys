@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.exec
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.Monkeys
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.ikdk.io.Console
@@ -23,11 +22,10 @@ class SimulationParams<T>(
         Console.info("typewriterFactory", typewriterFactory)
     }
 
-    fun makeMonkeys(): Monkeys {
+    fun makeMonkeys(): List<Monkey> {
         // I don't make monkeys; I just train them!
         val typewriter = typewriterFactory.typewriter()
-        val monkeyList = (0 until numMonkeys).map { Monkey(it, typewriter) }
-        return Monkeys(monkeyList)
+        return (0 until numMonkeys).map { Monkey(it, typewriter) }
     }
 
     override fun toString(): String {

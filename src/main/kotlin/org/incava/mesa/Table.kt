@@ -2,35 +2,26 @@ package org.incava.mesa
 
 import java.io.PrintStream
 
-abstract class Table(private val out: PrintStream = System.out) {
-    abstract fun columns(): List<Column>
-
+open class Table(private val columns: List<Column>, private val out: PrintStream = System.out) {
     fun writeHeader() {
-        val names = columns().map(Column::formatHeader)
+        val names = columns.map(Column::formatHeader)
         writeStrings(names)
     }
 
     fun writeBreak(char: Char) {
         val sb = StringBuilder(char.toString())
-        val chars = columns().map { it.headerFormat().format(sb.repeat(it.width)) }
-        writeStrings(chars)
+        val breaks = columns.map { it.formatBreak(char) }
+        writeStrings(breaks)
     }
 
     fun writeRow(values: List<Any>) {
-        val cols = columns()
-        val line = cols.indices.joinToString(" | ") { formatCell(cols, values, it) }
+        val line = columns.zip(values).joinToString(" | ") { (column, value) -> column.formatCell(value) }
         writeLine(line)
     }
 
     fun writeRow(vararg values: Any) {
         writeRow(values.toList())
     }
-
-    private fun formatCell(
-        cols: List<Column>,
-        values: List<Any>,
-        it: Int,
-    ) = cols[it].formatCell(values[it])
 
     private fun writeStrings(ary: List<String>) {
         val line = ary.joinToString(" | ")

@@ -1,6 +1,10 @@
 package org.incava.mmonkeys.perf.match.string
 
 import org.incava.ikdk.io.Console
+import org.incava.mesa.IntStringColumn
+import org.incava.mesa.LongColumn
+import org.incava.mesa.StringColumn
+import org.incava.mesa.Table
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.SimulationParams
@@ -11,7 +15,6 @@ import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
 import org.incava.mmonkeys.match.string.StringMatcher
-import org.incava.mmonkeys.perf.match.MatchSimTable
 import org.incava.mmonkeys.perf.match.NoOpMatcher
 import org.incava.time.DurationList
 import java.lang.Thread.sleep
@@ -38,7 +41,16 @@ class MatcherDurationTrial(val name: String, private val params: SimulationParam
 }
 
 class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
-    private val table = MatchSimTable()
+    private val table = Table(
+        listOf(
+            StringColumn("word", 7),
+            IntStringColumn("trial", 5),
+            StringColumn("type", 12, leftJustified = true),
+            LongColumn("iterations", 15),
+            LongColumn("duration", 15),
+            LongColumn("iters/sec", 15),
+        )
+    )
 
     private fun writeTrialAverage(word: String, trial: MatcherDurationTrial) {
         val iterations = trial.results.average().toLong()
@@ -84,7 +96,7 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
                     sleep(100L)
                 }
             }
-            val offset = Random.Default.nextInt(shuffled.size)
+            val offset = Random.nextInt(shuffled.size)
             val byName = shuffled.indices.associate { index ->
                 val idx = (offset + index) % shuffled.size
                 val type = shuffled[idx]

@@ -37,7 +37,7 @@ class CoroutineSimulation<T>(params: SimulationParams<T>) : Simulation<T>(params
         return if (found.get()) iterations.get() else -1
     }
 
-    private fun CoroutineScope.launchMonkeys() = monkeys.list.map { monkey ->
+    private fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
         launch {
             val matcher = params.matcher(monkey, sought)
             runMatcher(matcher)

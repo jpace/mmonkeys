@@ -15,20 +15,18 @@ class AsyncFunctionTrials(val params: CompareParams) {
         }
     }
 
-    private val table = object : Table() {
-        override fun columns(): List<Column> {
-            return listOf(
-                StringColumn("type", 40, leftJustified = true),
-                IntColumn("number", 10),
-                IntColumn("invocation", 10),
-                StringColumn("name", 20, leftJustified = true)
-            )
-        }
+    private val table = Table(
+        listOf(
+            StringColumn("type", 40, leftJustified = true),
+            IntColumn("number", 10),
+            IntColumn("invocation", 10),
+            StringColumn("name", 20, leftJustified = true)
+        )
+    )
 
-        init {
-            writeHeader()
-            writeBreak('=')
-        }
+    init {
+        table.writeHeader()
+        table.writeBreak('=')
     }
 
     fun runThreads(asyncFunction: AsyncFunction): TrialResult {
@@ -67,15 +65,14 @@ class AsyncFunctionTrials(val params: CompareParams) {
     fun summarize(results: List<TrialResult>) {
 //        Console.info("# threads", params.numThreads)
 //        Console.info("# iterations", params.numIterations)
-        val summaryTable = object : Table() {
-            override fun columns(): List<Column> {
-                return listOf(
-                    StringColumn("type", 60, leftJustified = true),
-                    DurationColumn("duration", 10),
-                    LongColumn("count", 14)
-                )
-            }
-        }
+        val summaryTable = Table(
+            listOf(
+                StringColumn("type", 60, leftJustified = true),
+                DurationColumn("duration", 10),
+                LongColumn("count", 14)
+            )
+        )
+
         summaryTable.writeHeader()
         summaryTable.writeBreak('=')
         results.sortedBy { it.name }.forEach {

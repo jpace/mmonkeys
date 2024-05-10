@@ -11,7 +11,7 @@ import kotlin.system.measureTimeMillis
 
 typealias MatcherCtor<T> = (Monkey, T) -> Matcher
 
-class PerfTrial<T>(private val sought: T, val typewriter: Typewriter, val matcherCtor: MatcherCtor<T>, private val numMatches: Int = 1) {
+class PerfTrial<T>(private val sought: T, val typewriter: Typewriter, matcherCtor: MatcherCtor<T>, private val numMatches: Int = 1) {
     val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()

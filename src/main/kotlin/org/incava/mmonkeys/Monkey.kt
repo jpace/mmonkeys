@@ -8,10 +8,6 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
         return typewriter.nextCharacter()
     }
 
-    fun nextWordChar(): Char {
-        return typewriter.nextWordCharacter()
-    }
-
     fun nextString(): String {
         val builder = StringBuilder()
         while (true) {
@@ -39,7 +35,7 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
     fun nextWordChars(length: Int): String {
         // returns a string of the given length
         return (0 until length).fold(StringBuilder()) { sb, _ ->
-            val ch = nextWordChar()
+            val ch = typewriter.nextWordCharacter()
             sb.append(ch)
         }.toString()
     }

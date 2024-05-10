@@ -1,22 +1,12 @@
 package org.incava.mmonkeys.trials.perf.rand
 
-import org.incava.mesa.Column
+import org.incava.ikdk.io.Console.info
 import org.incava.mesa.DurationColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.testutil.InvokeTrials
-import org.incava.ikdk.io.Console.info
 import kotlin.math.pow
 import kotlin.random.Random
-
-class RandTrialTable : Table() {
-    override fun columns(): List<Column> {
-        return listOf(
-            StringColumn("name", 32, true),
-            DurationColumn("average", 8)
-        )
-    }
-}
 
 class RandIntVsCharTrial {
     private fun invokeTrials(name: String, block: () -> Unit): Pair<String, InvokeTrials<Any>> {
@@ -129,7 +119,12 @@ class RandIntVsCharTrial {
             }
         }
         println()
-        val table = RandTrialTable()
+        val table = Table(
+            listOf(
+                StringColumn("name", 32, true),
+                DurationColumn("average", 8)
+            )
+        )
         table.writeHeader()
         trials2.forEach { trial ->
             table.writeRow(trial.first, trial.second.durations.average())

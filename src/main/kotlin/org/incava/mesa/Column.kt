@@ -13,6 +13,11 @@ open class Column(private val header: String, val width: Int) {
         return headerFormat().format(header)
     }
 
+    fun formatBreak(char: Char): String {
+        val str = char.toString().repeat(width)
+        return headerFormat().format(str)
+    }
+
     open fun formatCell(value: Any): String {
         return cellFormat().format(value)
     }

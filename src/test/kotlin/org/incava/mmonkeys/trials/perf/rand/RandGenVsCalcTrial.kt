@@ -11,11 +11,7 @@ class RandGenVsCalcTrial {
     private val random = Random.Default
     private val size = 27
 
-    private fun runBlocks(
-        count: Long,
-        first: InvokeTrial<Unit>,
-        second: InvokeTrial<Unit>,
-    ): Pair<DurationList, DurationList> {
+    private fun runBlocks(first: InvokeTrial<Unit>, second: InvokeTrial<Unit>): Pair<DurationList, DurationList> {
         val firstTimes = DurationList()
         val secondTimes = DurationList()
         repeat(10) {
@@ -35,7 +31,7 @@ class RandGenVsCalcTrial {
         val numInvokes = 1000L
         val calcBlock = InvokeTrial<Unit>(numInvokes) { RandCalculated(size, 10000) }
         val genBlock = InvokeTrial<Unit>(numInvokes) { RandGenerated(size, 10000) }
-        val (calcTimes, genTimes) = runBlocks(1000, calcBlock, genBlock)
+        val (calcTimes, genTimes) = runBlocks(calcBlock, genBlock)
         println("calc : ${calcTimes.average()}")
         println("gen  : ${genTimes.average()}")
     }
@@ -47,7 +43,7 @@ class RandGenVsCalcTrial {
         val numInvokes = 1000L
         val calcBlock = InvokeTrial<Unit>(numInvokes) { calc.nextRand() }
         val genBlock = InvokeTrial<Unit>(numInvokes) { gen.nextRand() }
-        val (calcTimes, genTimes) = runBlocks(50_000_000L, calcBlock, genBlock)
+        val (calcTimes, genTimes) = runBlocks(calcBlock, genBlock)
         Console.info("calc avg", calcTimes.average())
         // not so.
         Console.info("gen avg", genTimes.average())

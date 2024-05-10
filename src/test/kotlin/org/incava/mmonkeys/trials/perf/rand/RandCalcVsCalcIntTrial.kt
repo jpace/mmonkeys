@@ -37,9 +37,9 @@ class RandCalcVsCalcIntTrial {
         val yd = RandIntCalculated(size, 100)
         val count = 100_000_000L
         val comp = Comparison(
-            Pair("int(" + yc.numSlots + ").map", InvokeTrials { yc.nextRand() }),
+            Pair("int(" + yc.numSlots + ").rand", InvokeTrials { yc.nextRand() }),
             Pair("int(" + yc.numSlots + ").int", InvokeTrials { yc.nextInt() }),
-            Pair("int(" + yd.numSlots + ").map", InvokeTrials { yd.nextRand() }),
+            Pair("int(" + yd.numSlots + ").rand", InvokeTrials { yd.nextRand() }),
             Pair("int(" + yd.numSlots + ").int", InvokeTrials { yd.nextInt() }),
         )
         comp.run(count)
