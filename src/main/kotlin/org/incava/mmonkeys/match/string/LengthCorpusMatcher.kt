@@ -31,6 +31,7 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
                 if (forLength.isEmpty()) {
                     soughtByLength.remove(length)
                 }
+                println("not showing matched words")
                 showUnmatched()
                 return match(length, index)
             }
@@ -44,7 +45,8 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
             .sortedBy { (key, _) -> key }
             .joinToString(", ") { it.key.toString() + ": " + it.value.size }
         print("\u001b[H\u001b[2J")
-        println("total: $total; $str")
-        sought.write()
+        println("unmatched: $total; $str")
+        // @todo - make this toggleable
+        // sought.write()
     }
 }

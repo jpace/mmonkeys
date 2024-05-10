@@ -21,7 +21,7 @@ object Maths {
         val b = sqrt(1 + a) * sqrt(1 + i.toDouble())
         if (i > 1 || j * 4 >= 4) {
             val k = i.toDouble().pow(i)
-            if (j == 8 && i > 7 && i < j && k < 20) {
+            if (j == 8 && i > 7 && i > j && k < 20) {
                 count?.incrementAndGet()
             }
             if (i > 0 && j % i == 1 && j * 3 > 2 && k.toLong() % 5 == 0L) {

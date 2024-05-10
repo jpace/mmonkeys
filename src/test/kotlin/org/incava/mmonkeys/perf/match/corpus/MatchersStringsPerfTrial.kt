@@ -46,7 +46,7 @@ fun main() {
     val file = MatchersStringsPerfTrial::class.java.classLoader.getResource("pg100.txt") ?: return
     Console.info("file", file)
     val lines = file.readText().split("\r\n")
-    val sonnet = lines.subList(5, 100)
+    val sonnet = lines.subList(5, 20000)
     Console.info("sonnet")
     Console.info(sonnet.first())
     Console.info(sonnet.last())
@@ -56,8 +56,8 @@ fun main() {
         .split(Regex(" +"))
         .map(String::toLowerCase)
         .map { it.replace(Regex("[^a-z+]"), "") }
-        .filter { it.length in 1..8 }
-    Console.info("words", words)
+        .filter { it.length in 1..15 }
+    Console.info("words.#", words.size)
 
     val obj = MatchersStringsPerfTrial()
     obj.run(words, 1)

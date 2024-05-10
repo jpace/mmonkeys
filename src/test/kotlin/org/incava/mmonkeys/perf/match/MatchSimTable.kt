@@ -9,6 +9,7 @@ import org.incava.mesa.Table
 class MatchSimTable : Table() {
     override fun columns(): List<Column> {
         return listOf(
+            StringColumn("word", 7),
             IntStringColumn("trial", 5),
             StringColumn("type", 12, leftJustified = true),
             LongColumn("iterations", 15),

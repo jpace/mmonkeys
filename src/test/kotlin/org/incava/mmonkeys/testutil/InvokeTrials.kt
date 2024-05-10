@@ -2,12 +2,12 @@ package org.incava.mmonkeys.testutil
 
 import org.incava.time.DurationList
 
-class InvokeTrials<T>(val block: () -> T) {
+class InvokeTrials<T>(private val block: () -> T) {
     val durations = DurationList()
 
-    fun run(count: Long) {
-        val trial = InvokeUnitTrial(block)
-        trial.run(count)
+    fun run(numInvokes: Long) {
+        val trial = InvokeTrial(numInvokes, block)
+        trial.run()
         durations += trial.duration
     }
 }

@@ -40,16 +40,16 @@ class MatcherDurationTrial(val name: String, private val params: SimulationParam
 class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
     private val table = MatchSimTable()
 
-    private fun writeTrialAverage(trial: MatcherDurationTrial) {
-        val iterations = trial.results.average().toInt()
+    private fun writeTrialAverage(word: String, trial: MatcherDurationTrial) {
+        val iterations = trial.results.average().toLong()
         val durations = trial.durations.average().toMillis()
-        val throughput = 1000 * iterations / max(1, durations)
-        table.writeRow("avg", trial.name, iterations, durations, throughput)
+        val throughput = 1000L * iterations / max(1, durations)
+        table.writeRow(word, "avg", trial.name, iterations, durations, throughput)
     }
 
-    private fun summarize(trials: List<MatcherDurationTrial>) {
+    private fun summarize(word: String, trials: List<MatcherDurationTrial>) {
         table.writeBreak('=')
-        trials.sortedBy { it.name }.forEach(this::writeTrialAverage)
+        trials.sortedBy { it.name }.forEach { writeTrialAverage(word, it) }
         table.writeBreak('=')
     }
 
@@ -66,6 +66,7 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
     }
 
     fun run(numTrials: Int, word: String) {
+        Console.info("word", word)
         val typewriterFactory = TypewriterFactory('z')
         val trials = getMatchers(word).map {
             val params = SimulationParams(numMonkeys, word, it.second, typewriterFactory, false)
@@ -77,7 +78,7 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
         repeat(numTrials) { num ->
             if (num > 0) {
                 if (num % 5 == 0) {
-                    summarize(trials)
+                    summarize(word, trials)
                 } else {
                     table.writeBreak('-')
                     sleep(100L)
@@ -93,18 +94,10 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
             byName.toSortedMap().forEach { (key, value) ->
                 val duration = value.second.toMillis()
                 val rate = 1000L * value.first / max(1, duration)
-                Console.info("rate", rate)
-                Console.info("rate.class", rate.javaClass)
-                table.writeRow(
-                    num,
-                    key,
-                    value.first,
-                    duration,
-                    1000L * value.first / max(1, duration)
-                )
+                table.writeRow(word, num, key, value.first, duration, rate)
             }
         }
-        summarize(trials)
+        summarize(word, trials)
         println()
     }
 }

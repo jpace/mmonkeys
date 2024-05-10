@@ -12,12 +12,9 @@ class Comparison(private vararg val options: Pair<String, InvokeTrials<Any>>) {
     fun run(count: Long) {
         repeat(10) {
             val offset = random.nextInt(options.size)
-            Console.info("offset", offset)
             options.indices.forEach {
                 val idx = if (offset == 0) it else it % offset
-                Console.info("idx", idx)
                 val x = options[idx]
-                Console.info("x", x.first)
                 x.second.run(count)
             }
         }
@@ -38,12 +35,12 @@ class RandCalcVsCalcIntTrial {
         val xc = RandCalculated(size, 10000)
         val yc = RandIntCalculated(size, 10000)
         val yd = RandIntCalculated(size, 100)
-        val count = 10_000_000L
+        val count = 100_000_000L
         val comp = Comparison(
-            Pair("int(1).map", InvokeTrials { yc.nextRand() }),
-            Pair("int(1).int", InvokeTrials { yc.nextInt() }),
-            Pair("int(2).map", InvokeTrials { yd.nextRand() }),
-            Pair("int(2).int", InvokeTrials { yd.nextInt() }),
+            Pair("int(" + yc.numSlots + ").map", InvokeTrials { yc.nextRand() }),
+            Pair("int(" + yc.numSlots + ").int", InvokeTrials { yc.nextInt() }),
+            Pair("int(" + yd.numSlots + ").map", InvokeTrials { yd.nextRand() }),
+            Pair("int(" + yd.numSlots + ").int", InvokeTrials { yd.nextInt() }),
         )
         comp.run(count)
         comp.summarize()

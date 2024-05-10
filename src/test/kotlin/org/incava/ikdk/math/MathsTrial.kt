@@ -1,7 +1,7 @@
 package org.incava.ikdk.math
 
 import org.incava.ikdk.io.Console.printf
-import org.incava.mmonkeys.testutil.InvokeUnitTrial
+import org.incava.mmonkeys.testutil.InvokeTrial
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 import java.math.BigInteger
@@ -13,8 +13,8 @@ class MathsTrial {
         Maths.clear()
         try {
             val result = powerFunction()
-            val invokeTrial = InvokeUnitTrial(powerFunction)
-            val duration = invokeTrial.run(iterations)
+            val invokeTrial = InvokeTrial(iterations, powerFunction)
+            val duration = invokeTrial.run()
             val durStr = Durations.formatted(duration)
             printf("%-24.24s | %-,16d | %-10s", name, result, durStr)
         } catch (ex: Exception) {

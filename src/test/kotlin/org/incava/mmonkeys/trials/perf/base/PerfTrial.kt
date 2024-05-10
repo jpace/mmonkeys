@@ -11,11 +11,12 @@ import kotlin.system.measureTimeMillis
 
 typealias MatcherCtor<T> = (Monkey, T) -> Matcher
 
-class PerfTrial<T>(val sought: T, val typewriter: Typewriter, val matcherCtor: MatcherCtor<T>, private val numMatches: Int = 1) {
+class PerfTrial<T>(private val sought: T, val typewriter: Typewriter, val matcherCtor: MatcherCtor<T>, private val numMatches: Int = 1) {
     val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
+    private val timeLimit = Duration.ofMinutes(10L)
 
     init {
         Console.info("this is <init>")
@@ -44,7 +45,7 @@ class PerfTrial<T>(val sought: T, val typewriter: Typewriter, val matcherCtor: M
             iterations += iteration
             val now = ZonedDateTime.now()
             val elapsed = Duration.between(start, now)
-            if (elapsed > Duration.ofMinutes(4L)) {
+            if (elapsed > timeLimit) {
                 Console.info("stopping at: $elapsed")
                 return
             }

@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.trials.perf.rand
 
-import org.incava.mmonkeys.testutil.InvokeUnitTrial
+import org.incava.mmonkeys.testutil.InvokeTrial
 import org.incava.ikdk.io.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random
@@ -16,8 +16,8 @@ class RandomKtJdkTrial(private val numChars: Int, private val strLength: Int, va
 
     private fun runTest(name: String, block: () -> Unit) {
         val numInvokes = iterations.toLong() * strLength
-        val trial = InvokeUnitTrial(block)
-        val duration = trial.run(numInvokes)
+        val trial = InvokeTrial(numInvokes, block)
+        val duration = trial.run()
         Console.info(name, duration)
     }
 
