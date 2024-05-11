@@ -30,7 +30,6 @@ open class AsyncCompare(val params: CompareParams) {
         table.writeBreak('=')
     }
 
-
     fun runThreads(meth: (Int) -> Thread): Duration {
         val start = System.currentTimeMillis()
         val threads = (0 until params.numThreads).map(meth)

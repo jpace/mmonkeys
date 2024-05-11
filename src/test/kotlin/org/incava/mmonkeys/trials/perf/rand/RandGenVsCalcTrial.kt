@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.trials.perf.rand
 
 import org.incava.mmonkeys.testutil.InvokeTrial
+import org.incava.mmonkeys.testutil.Trial
 import org.incava.rando.RandCalculated
 import org.incava.rando.RandGenerated
 
@@ -10,11 +11,11 @@ class RandGenVsCalcTrial {
     fun ctor() {
         println("ctor2")
         val numInvokes = 1000L
-        val calcBlock = InvokeTrial<Unit>(numInvokes) { RandCalculated(size, 10000) }
-        val genBlock = InvokeTrial<Unit>(numInvokes) { RandGenerated(size, 10000) }
-        val comparison = Comparison("calc" to calcBlock, "gen" to genBlock)
-        comparison.run()
-        comparison.summarize()
+        val calcBlock = InvokeTrial("calc", numInvokes) { RandCalculated(size, 10000) }
+        val genBlock = InvokeTrial("gen", numInvokes) { RandGenerated(size, 10000) }
+        val trial = Trial(calcBlock, genBlock)
+        trial.run()
+        trial.summarize()
     }
 
     fun nextRand() {
@@ -22,11 +23,11 @@ class RandGenVsCalcTrial {
         val calc = RandCalculated(size, 10000)
         val gen = RandGenerated(size, 10000)
         val numInvokes = 1_000_000L
-        val calcBlock = InvokeTrial<Unit>(numInvokes) { calc.nextRand() }
-        val genBlock = InvokeTrial<Unit>(numInvokes) { gen.nextRand() }
-        val comparison = Comparison("calc" to calcBlock, "gen" to genBlock)
-        comparison.run()
-        comparison.summarize()
+        val calcBlock = InvokeTrial("calc", numInvokes) { calc.nextRand() }
+        val genBlock = InvokeTrial("gen", numInvokes) { gen.nextRand() }
+        val trial = Trial(calcBlock, genBlock)
+        trial.run()
+        trial.summarize()
     }
 }
 

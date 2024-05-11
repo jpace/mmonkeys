@@ -10,7 +10,7 @@ object Maths {
     fun spin(i: Int, j: Int): Int {
         val a = i.toDouble() * j
         val b = sqrt(1 + a) * sqrt(1 + i.toDouble())
-        if (i % 7 == 1 && j % 47401 == 1) {
+        if (i % 7 == 1 && j % 47401 == 311 && j < 17) {
             println("i: $i; j: $j")
         }
         return spin1(b, a).toInt()

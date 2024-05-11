@@ -116,8 +116,8 @@ class CoroutinesTest(params: CompareParams) : AsyncCompare(params) {
     }
 
     private fun repeatLoop(i: Int, j: Int) {
-        val iters = i.toLong() * j.toLong()
-        for (it in 0 until iters) {
+        val iterations = i.toLong() * j.toLong()
+        for (it in 0 until iterations) {
             Maths.spin(i, j)
         }
     }
@@ -150,11 +150,11 @@ fun main() {
         "repeat { repeat }" to obj::createRepeatRepeatThread,
         "repeat { repeat } (blk)" to obj::createRepeatRepeatThreadBlock,
     )
-    val durations = methods.entries.shuffled().map { entry ->
-        println("key: ${entry.key}")
-        val result = obj.runThreads(entry.value)
+    val durations = methods.entries.shuffled().map { (name, method) ->
+        println(name)
+        val result = obj.runThreads(method)
         sleep(1000)
-        entry.key to result
+        name to result
     }
 
     Console.info("main done")

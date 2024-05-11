@@ -21,7 +21,6 @@ import java.lang.Thread.sleep
 import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.math.max
-import kotlin.random.Random
 
 class MatcherDurationTrial(val name: String, private val params: SimulationParams<String>) {
     val results = mutableListOf<Long>()
@@ -84,7 +83,6 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
             val params = SimulationParams(numMonkeys, word, it.second, typewriterFactory, false)
             MatcherDurationTrial(it.first, params)
         }
-        val shuffled = trials.shuffled()
         table.writeHeader()
         table.writeBreak('=')
         repeat(numTrials) { num ->
@@ -96,12 +94,9 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
                     sleep(100L)
                 }
             }
-            val offset = Random.nextInt(shuffled.size)
-            val byName = shuffled.indices.associate { index ->
-                val idx = (offset + index) % shuffled.size
-                val type = shuffled[idx]
-                val result = type.run()
-                type.name to result
+            val byName = trials.shuffled().associate {
+                val result = it.run()
+                it.name to result
             }
             byName.toSortedMap().forEach { (key, value) ->
                 val duration = value.second.toMillis()

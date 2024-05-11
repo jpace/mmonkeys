@@ -3,7 +3,8 @@ package org.incava.mmonkeys.testutil
 import org.incava.time.DurationList
 import java.time.Duration
 
-class InvokeTrial<T>(private val numInvokes: Long, val block: () -> T) {
+class InvokeTrial(val name: String, private val numInvokes: Long, val block: () -> Any) {
+
     lateinit var duration: Duration
     val durations = DurationList()
 

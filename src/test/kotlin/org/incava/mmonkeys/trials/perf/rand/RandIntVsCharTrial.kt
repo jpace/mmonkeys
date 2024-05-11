@@ -1,10 +1,10 @@
 package org.incava.mmonkeys.trials.perf.rand
 
-import org.incava.ikdk.io.Console.info
 import org.incava.mesa.DurationColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.testutil.InvokeTrial
+import org.incava.mmonkeys.testutil.Trial
 import kotlin.math.pow
 import kotlin.random.Random
 
@@ -108,9 +108,9 @@ class RandIntVsCharTrial {
             "intValue" to intValue,
             "longValue" to longValue,
         )
-        val toTest = trials3.map { (name, block) -> name to InvokeTrial(numInvokes, block) }
-        val comparison = Comparison(*toTest.toTypedArray())
-        comparison.run()
+        val toTest = trials3.map { (name, block) -> InvokeTrial(name, numInvokes, block) }
+        val trial = Trial(*toTest.toTypedArray())
+        trial.run()
         println()
         val table = Table(
             listOf(
@@ -119,8 +119,8 @@ class RandIntVsCharTrial {
             )
         )
         table.writeHeader()
-        toTest.forEach { trial ->
-            table.writeRow(trial.first, trial.second.durations.average())
+        toTest.forEach {
+            table.writeRow(it.name, it.average())
         }
     }
 }
