@@ -4,18 +4,14 @@ import org.incava.ikdk.io.Console.info
 import org.incava.mesa.DurationColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.testutil.InvokeTrials
+import org.incava.mmonkeys.testutil.InvokeTrial
 import kotlin.math.pow
 import kotlin.random.Random
 
 class RandIntVsCharTrial {
-    private fun invokeTrials(name: String, block: () -> Unit): Pair<String, InvokeTrials<Any>> {
-        return Pair(name, InvokeTrials(block))
-    }
-
     fun nextInt() {
         println("nextRand")
-        val count = 10_000_000L
+        val numInvokes = 100_000_000L
         val random = Random.Default
         val nextInt = { random.nextInt(); Unit }
         val nextLong = { random.nextLong(); Unit }
@@ -88,45 +84,42 @@ class RandIntVsCharTrial {
             // (26 ** 13) << 1
             val x = random.nextLong(0, 4962305746407473152L)
         }
-        val trials = listOf(
-            invokeTrials("nextInt ", nextInt),
-            invokeTrials("nextInt $numCharsInt", nextIntSize),
-            invokeTrials("nextLong", nextLong),
-            invokeTrials("nextLongInt $numCharsInt", nextLongInt),
-            invokeTrials("nextLongLong $numCharsLong", nextLongLong),
-            invokeTrials("int * $numCharsInt", intChars),
-            invokeTrials("intAppend * $numCharsInt", intAppend),
-            invokeTrials("intIf * $numCharsInt", intIf),
-            invokeTrials("intIfAppend * $numCharsInt", intIfAppend),
-            invokeTrials("long * $numCharsLong", longChars),
-            invokeTrials("longAppend * $numCharsLong", longAppend),
-            invokeTrials("longIf * $numCharsLong", longIf),
-            invokeTrials("longIfAppend * $numCharsLong", longIfAppend),
-            invokeTrials("intValue", intValue),
-            invokeTrials("longValue", longValue),
+        val trials3 = listOf(
+            "nextInt " to nextInt,
+            "nextInt $numCharsInt" to nextIntSize,
+            "nextLong" to nextLong,
+            "nextLongInt $numCharsInt" to nextLongInt,
+            "nextLongLong $numCharsLong" to nextLongLong,
+            "int * $numCharsInt" to intChars,
+            "intAppend * $numCharsInt" to intAppend,
+            "intIf * $numCharsInt" to intIf,
+            "intIfAppend * $numCharsInt" to intIfAppend,
+            "long * $numCharsLong" to longChars,
+            "longAppend * $numCharsLong" to longAppend,
+            "longIf * $numCharsLong" to longIf,
+            "longIfAppend * $numCharsLong" to longIfAppend,
+            "intValue" to intValue,
+            "longValue" to longValue,
+            "longValue2" to longValue
         )
         val trials2 = listOf(
-            invokeTrials("intAppend * $numCharsInt", intAppend),
-            invokeTrials("longAppend * $numCharsLong", longAppend),
-            invokeTrials("intValue", intValue),
-            invokeTrials("longValue", longValue),
+            "intAppend * $numCharsInt" to intAppend,
+            "longAppend * $numCharsLong" to longAppend,
+            "intValue" to intValue,
+            "longValue" to longValue,
         )
-        repeat(10) {
-            info("iteration", it)
-            val shuffled = trials2.shuffled()
-            shuffled.forEach { trial ->
-                trial.second.run(count)
-            }
-        }
+        val toTest = trials3.map { (name, block) -> name to InvokeTrial(numInvokes, block) }
+        val comparison = Comparison(*toTest.toTypedArray())
+        comparison.run()
         println()
         val table = Table(
             listOf(
                 StringColumn("name", 32, true),
-                DurationColumn("average", 8)
+                DurationColumn("avg duration", 8)
             )
         )
         table.writeHeader()
-        trials2.forEach { trial ->
+        toTest.forEach { trial ->
             table.writeRow(trial.first, trial.second.durations.average())
         }
     }

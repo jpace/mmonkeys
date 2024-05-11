@@ -5,6 +5,7 @@ import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 
 internal class NumberLongsMatcherTest {
@@ -29,12 +30,12 @@ internal class NumberLongsMatcherTest {
     @Test
     fun numbers1() {
         val input = listOf("this", "is", "a", "test", "as", "well", "as", "x", "this", "test", "a", "well")
-        val expected = mutableMapOf(4 to
-                mutableMapOf(
-                    795878L to mutableListOf(0, 8),
-                    794111L to mutableListOf(3, 9),
-                    846649L to mutableListOf(5, 11)
-                ),
+        val expected = mutableMapOf(
+            4 to mutableMapOf(
+                        795878L to mutableListOf(0, 8),
+                        794111L to mutableListOf(3, 9),
+                        846649L to mutableListOf(5, 11)
+                    ),
             2 to mutableMapOf(
                 902L to mutableListOf(1),
                 694L to mutableListOf(4, 6)
@@ -60,10 +61,9 @@ internal class NumberLongsMatcherTest {
     @Test
     fun isComplete() {
         val input = listOf("this", "is", "a", "test")
-        val expected = false
         val obj = NumberLongsMatcher(monkey, Corpus(input))
         val result = obj.isComplete()
-        assertEquals(expected, result)
+        assertFalse(result)
     }
 
     @Test

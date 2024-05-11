@@ -24,21 +24,6 @@ internal class CorpusTest {
             }
         }
 
-    @TestFactory
-    fun matchWord() =
-        listOf(
-            "abc" to 0,
-            "def" to 1,
-            "xyz" to null,
-        ).map { (word, expected) ->
-            DynamicTest.dynamicTest("given $word, " +
-                    "the result should be \"$expected\"") {
-                val obj = Corpus(listOf("abc", "def", "ghi"))
-                val result = obj.matchWord(word)
-                assertEquals(expected, result) { "word: $word" }
-            }
-        }
-
     @Test
     fun getWords() {
         val obj = Corpus(listOf("abc", "def", "ghi"))

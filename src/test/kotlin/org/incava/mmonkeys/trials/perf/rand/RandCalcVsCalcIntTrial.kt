@@ -1,29 +1,26 @@
 package org.incava.mmonkeys.trials.perf.rand
 
+import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.testutil.InvokeTrial
 import org.incava.rando.RandCalculated
 import org.incava.rando.RandIntCalculated
-import org.incava.mmonkeys.testutil.InvokeTrials
-import org.incava.ikdk.io.Console
-import kotlin.random.Random
 
-class Comparison(private vararg val options: Pair<String, InvokeTrials<Any>>) {
-    private val random = Random.Default
+class Comparison(private vararg val options: Pair<String, InvokeTrial<Unit>>) {
+    private val trialInvokes = 10
 
-    fun run(count: Long) {
-        repeat(10) {
-            val offset = random.nextInt(options.size)
-            options.indices.forEach {
-                val idx = if (offset == 0) it else it % offset
-                val x = options[idx]
-                x.second.run(count)
+    fun run() {
+        val trialsList = options.toList()
+        repeat(trialInvokes) {
+            trialsList.shuffled().forEach { (_, trial) ->
+                trial.run()
             }
         }
     }
 
     fun summarize() {
-        Console.info("name", "durations.average")
-        options.forEach {
-            Console.info(it.first, it.second.durations.average())
+        options.forEach { (name, trial) ->
+            Console.info("$name - average", trial.durations.average())
+            Console.info("$name - durations", trial.durations)
         }
     }
 }
@@ -35,14 +32,14 @@ class RandCalcVsCalcIntTrial {
         val xc = RandCalculated(size, 10000)
         val yc = RandIntCalculated(size, 10000)
         val yd = RandIntCalculated(size, 100)
-        val count = 100_000_000L
+        val numInvokes = 100_000_000L
         val comp = Comparison(
-            Pair("int(" + yc.numSlots + ").rand", InvokeTrials { yc.nextRand() }),
-            Pair("int(" + yc.numSlots + ").int", InvokeTrials { yc.nextInt() }),
-            Pair("int(" + yd.numSlots + ").rand", InvokeTrials { yd.nextRand() }),
-            Pair("int(" + yd.numSlots + ").int", InvokeTrials { yd.nextInt() }),
+            Pair("int(" + yc.numSlots + ").rand", InvokeTrial<Unit>(numInvokes) { yc.nextRand() }),
+            Pair("int(" + yc.numSlots + ").int", InvokeTrial<Unit>(numInvokes) { yc.nextInt() }),
+            Pair("int(" + yd.numSlots + ").rand", InvokeTrial<Unit>(numInvokes) { yd.nextRand() }),
+            Pair("int(" + yd.numSlots + ").int", InvokeTrial<Unit>(numInvokes) { yd.nextInt() }),
         )
-        comp.run(count)
+        comp.run()
         comp.summarize()
     }
 }

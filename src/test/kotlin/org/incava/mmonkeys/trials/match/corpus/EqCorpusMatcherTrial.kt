@@ -15,9 +15,9 @@ fun main() {
     val obj = EqCorpusMatcher(monkey, Corpus(sought))
     Console.info("obj", obj)
     Console.info("sought", obj.sought)
-    Console.info("sought.present?", obj.sought.isNotEmpty())
+    Console.info("sought.present?", !obj.sought.isEmpty())
     val iterations = AtomicLong()
-    while (obj.sought.isNotEmpty()) {
+    while (!obj.sought.isEmpty()) {
         val result = obj.check()
         iterations.incrementAndGet()
         if (iterations.incrementAndGet() % 1_000_000L == 0L) {

@@ -31,7 +31,7 @@ internal class LengthCorpusMatcherTest : MatcherTest() {
         val monkey = Monkey(1, typewriter)
         val sought = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = LengthCorpusMatcher(monkey, Corpus(sought))
-        while (obj.sought.isNotEmpty()) {
+        while (!obj.sought.isEmpty()) {
             obj.check()
         }
         assert(obj.sought.isEmpty())
