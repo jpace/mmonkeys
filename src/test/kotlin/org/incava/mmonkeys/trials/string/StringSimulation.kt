@@ -1,11 +1,10 @@
-package org.incava.mmonkeys.perf.match.string
+package org.incava.mmonkeys.trials.string
 
 import org.incava.ikdk.io.Console
 import org.incava.mesa.IntStringColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
@@ -14,33 +13,28 @@ import org.incava.mmonkeys.match.number.NumberLongMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.LengthStringMatcher
 import org.incava.mmonkeys.match.string.PartialStringMatcher
-import org.incava.mmonkeys.match.string.StringMatcher
-import org.incava.mmonkeys.perf.match.NoOpMatcher
 import org.incava.time.DurationList
 import java.lang.Thread.sleep
 import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.math.max
 
-class MatcherDurationTrial(val name: String, private val params: SimulationParams<String>) {
-    val results = mutableListOf<Long>()
-    val durations = DurationList()
+class StringSimulation(private val numMonkeys: Int = 1_000_000) {
+    class StringSimulationRunner(val name: String, private val params: SimulationParams<String>) {
+        val results = mutableListOf<Long>()
+        val durations = DurationList()
 
-    fun run(): Pair<Long, Duration> {
-        val simulation = CoroutineSimulation(params)
-        val result = simulation.run()
-        results += result.first
-        durations += result.second
-        return result
+        fun run(): Pair<Long, Duration> {
+            val simulation = CoroutineSimulation(params)
+            simulation.params.summarize()
+            val result = simulation.run()
+            results += result.first
+            durations += result.second
+            return result
+        }
     }
 
-    override fun toString(): String {
-        return "MatcherDurationTrial(name='$name', params=$params, results=$results, durations=$durations)"
-    }
-}
-
-class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
-    private val table = Table(
+    private val table = object : Table(
         listOf(
             StringColumn("word", 7),
             IntStringColumn("trial", 5),
@@ -49,46 +43,51 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
             LongColumn("duration", 15),
             LongColumn("iters/sec", 15),
         )
-    )
+    ) {
+        private fun writeTrialAverage(word: String, trial: StringSimulationRunner) {
+            val iterations = trial.results.average().toLong()
+            val durations = trial.durations.average().toMillis()
+            val throughput = 1000L * iterations / max(1, durations)
+            writeRow(word, "avg", trial.name, iterations, durations, throughput)
+        }
 
-    private fun writeTrialAverage(word: String, trial: MatcherDurationTrial) {
-        val iterations = trial.results.average().toLong()
-        val durations = trial.durations.average().toMillis()
-        val throughput = 1000L * iterations / max(1, durations)
-        table.writeRow(word, "avg", trial.name, iterations, durations, throughput)
-    }
+        fun summarize(word: String, trials: List<StringSimulationRunner>) {
+            writeBreak('=')
+            trials.sortedBy { it.name }.forEach { writeTrialAverage(word, it) }
+            writeBreak('=')
+        }
 
-    private fun summarize(word: String, trials: List<MatcherDurationTrial>) {
-        table.writeBreak('=')
-        trials.sortedBy { it.name }.forEach { writeTrialAverage(word, it) }
-        table.writeBreak('=')
-    }
-
-    private fun getMatchers(word: String): List<Pair<String, (Monkey, String) -> StringMatcher>> {
-        return listOf(
-            "equal str" to ::EqStringMatcher,
-            "partial str" to ::PartialStringMatcher,
-            "length str" to ::LengthStringMatcher,
-            "num (<*>)" to if (word.length > 6) ::NumberLongMatcher else ::NumberIntMatcher,
-            "no op" to ::NoOpMatcher,
-            "num (int)" to ::NumberIntMatcher,
-            "num (long)" to ::NumberLongMatcher,
-        )
+        fun addResults(word: String, type: String, num: Int, iterations: Long, duration: Long) {
+            val rate = 1000L * iterations / max(1, duration)
+            writeRow(word, num, type, iterations, duration, rate)
+        }
     }
 
     fun run(numTrials: Int, word: String) {
+        if (numTrials <= 0) {
+            return
+        }
         Console.info("word", word)
-        val typewriterFactory = TypewriterFactory('z')
-        val trials = getMatchers(word).map {
+        val typewriterFactory = TypewriterFactory()
+        val matchers = listOf(
+            "equal str" to ::EqStringMatcher,
+            "partial str" to ::PartialStringMatcher,
+            "length str" to ::LengthStringMatcher,
+            "no op" to ::NoOpMatcher,
+            "num (int)" to ::NumberIntMatcher,
+            "num (long)" to ::NumberLongMatcher,
+            "num (<*>)" to if (word.length > 6) ::NumberLongMatcher else ::NumberIntMatcher
+        )
+        val trials = matchers.map {
             val params = SimulationParams(numMonkeys, word, it.second, typewriterFactory, false)
-            MatcherDurationTrial(it.first, params)
+            StringSimulationRunner(it.first, params)
         }
         table.writeHeader()
         table.writeBreak('=')
         repeat(numTrials) { num ->
             if (num > 0) {
                 if (num % 5 == 0) {
-                    summarize(word, trials)
+                    table.summarize(word, trials)
                 } else {
                     table.writeBreak('-')
                     sleep(100L)
@@ -98,29 +97,28 @@ class StringMatcherSimulation(private val numMonkeys: Int = 1_000_000) {
                 val result = it.run()
                 it.name to result
             }
-            byName.toSortedMap().forEach { (key, value) ->
-                val duration = value.second.toMillis()
-                val rate = 1000L * value.first / max(1, duration)
-                table.writeRow(word, num, key, value.first, duration, rate)
+            byName.toSortedMap().forEach { (name, result) ->
+                table.addResults(word, name, num, result.first, result.second.toMillis())
             }
         }
-        summarize(word, trials)
+        table.summarize(word, trials)
         println()
     }
 }
 
 fun main() {
+    // a partial trial, using only a single string, with coroutines
     val start = ZonedDateTime.now()
     val word0 = "ab"
     val word1 = "abc"
     val word2 = "abcd"
     val word3 = "abcde"
     val word4 = "abcdef"
-    val obj = StringMatcherSimulation()
-    obj.run(10, word0)
-    obj.run(3, word1)
-    obj.run(2, word2)
-    obj.run(1, word3)
+    val obj = StringSimulation()
+    obj.run(20, word0)
+    obj.run(10, word1)
+    obj.run(5, word2)
+    obj.run(3, word3)
     obj.run(0, word4)
     // obj.run(4, word3)
     // obj.run(1, word4)

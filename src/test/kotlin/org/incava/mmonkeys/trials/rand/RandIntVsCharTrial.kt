@@ -1,17 +1,16 @@
-package org.incava.mmonkeys.trials.perf.rand
+package org.incava.mmonkeys.trials.rand
 
 import org.incava.mesa.DurationColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.testutil.InvokeTrial
-import org.incava.mmonkeys.testutil.Trial
+import org.incava.mmonkeys.trials.base.InvokeTrial
+import org.incava.mmonkeys.trials.base.Trial
 import kotlin.math.pow
 import kotlin.random.Random
 
 class RandIntVsCharTrial {
     fun nextInt() {
-        println("nextRand")
-        val numInvokes = 100_000_000L
+        val numInvokes = 10_000_000L
         val random = Random.Default
         val nextInt = { random.nextInt(); Unit }
         val nextLong = { random.nextLong(); Unit }
@@ -19,7 +18,6 @@ class RandIntVsCharTrial {
         val charSizeInt = 27.0.pow(numCharsInt).toInt()
         val numCharsLong = 13
         val charSizeLong = 27.0.pow(numCharsLong).toLong()
-        println("charSizeLong: $charSizeLong")
         val nextIntSize = { random.nextInt(charSizeInt); Unit }
         val nextLongInt = { random.nextLong(charSizeInt.toLong()); Unit }
         val nextLongLong = { random.nextLong(charSizeLong); Unit }

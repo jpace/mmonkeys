@@ -1,15 +1,16 @@
 package org.incava.mmonkeys.match.number
 
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 
 internal class NumberLongsMatcherTest {
-    private val monkey = Monkey(1, StandardTypewriter())
+    private val monkey = MonkeyFactory().createMonkey()
 
     @Test
     fun numbers() {

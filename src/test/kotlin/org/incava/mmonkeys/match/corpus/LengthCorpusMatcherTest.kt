@@ -1,18 +1,21 @@
 package org.incava.mmonkeys.match.corpus
 
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
-import org.incava.mmonkeys.match.string.LengthCorpusMatcher
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.StandardTypewriter
+import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class LengthCorpusMatcherTest : MatcherTest() {
+    private fun makeMonkey(): Monkey {
+        return MonkeyFactory { Typewriter() }.createMonkey()
+    }
+
     @Test
     fun soughtByLens() {
-        val typewriter = StandardTypewriter(Keys.fullList())
-        val monkey = Monkey(1, typewriter)
+        val monkey = makeMonkey()
         val sought = listOf("ab", "cd", "def", "defg", "ghi", "lmnop")
         val obj = LengthCorpusMatcher(monkey, Corpus(sought))
         val expected = mapOf(
@@ -27,8 +30,7 @@ internal class LengthCorpusMatcherTest : MatcherTest() {
 
     @Test
     fun check() {
-        val typewriter = StandardTypewriter(Keys.fullList())
-        val monkey = Monkey(1, typewriter)
+        val monkey = makeMonkey()
         val sought = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = LengthCorpusMatcher(monkey, Corpus(sought))
         while (!obj.sought.isEmpty()) {

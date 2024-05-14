@@ -30,16 +30,13 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
     }
 
     override fun check(): MatchData {
-        // number of keystrokes at which we'll hit the end-of-word character
-        // thus length == 1 means we'll hit at the first invocation, with
-        // an empty string
-        val length = rand.nextRand()
+        val length = randomLength()
         val soughtLen = length - 1
         val forLength = numbers[soughtLen]
         if (forLength != null) {
             val num = randomLong(soughtLen)
             val forEncoded = forLength[num]
-            if (forEncoded != null && forEncoded.isNotEmpty()) {
+            if (!forEncoded.isNullOrEmpty()) {
                 val word = StringEncoder.decode(num)
                 Console.info("word", word)
                 val index = forEncoded.removeAt(0)

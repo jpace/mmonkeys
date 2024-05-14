@@ -1,7 +1,7 @@
 package org.incava.ikdk.math
 
 import org.incava.ikdk.io.Console.printf
-import org.incava.mmonkeys.testutil.InvokeTrial
+import org.incava.mmonkeys.trials.base.InvokeTrial
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 import java.math.BigInteger

@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.match.corpus
 
-import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
-import org.incava.mmonkeys.match.string.EqCorpusMatcher
+import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
@@ -21,7 +21,8 @@ internal class EqCorpusMatcherTest : MatcherTest() {
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val typewriter = DeterministicTypewriter(inputs.first)
-                val monkey = Monkey(1, typewriter)
+                val monkeyFactory = MonkeyFactory { typewriter }
+                val monkey = monkeyFactory.createMonkey(typewriter)
                 val obj = EqCorpusMatcher(monkey, Corpus(inputs.second))
                 val result = runTest(obj)
                 assertEquals(expected, result)
@@ -43,8 +44,7 @@ internal class EqCorpusMatcherTest : MatcherTest() {
     }
 
     private fun createMatcher(sought: String): EqCorpusMatcher {
-        val typewriter = DeterministicTypewriter(Keys.keyList('e'))
-        val monkey = Monkey(1, typewriter)
+        val monkey = MonkeyUtils.createDeterministicMonkey(chars = Keys.keyList(toChar = 'e'))
         return EqCorpusMatcher(monkey, Corpus(listOf(sought)))
     }
 }

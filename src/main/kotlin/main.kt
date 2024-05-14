@@ -4,8 +4,8 @@ import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.string.EqStringMatcher
-import org.incava.mmonkeys.match.string.EqCorpusMatcher
-import org.incava.mmonkeys.match.string.LengthCorpusMatcher
+import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
+import org.incava.mmonkeys.match.corpus.LengthCorpusMatcher
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import java.lang.Thread.sleep

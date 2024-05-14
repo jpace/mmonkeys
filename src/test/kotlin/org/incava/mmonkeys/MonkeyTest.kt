@@ -1,10 +1,9 @@
 package org.incava.mmonkeys
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.StandardTypewriter
-import org.incava.ikdk.io.Console
-import org.incava.ikdk.math.Maths
+import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -17,7 +16,7 @@ internal class MonkeyTest {
     fun stringSimulation(expected: String, characters: List<Char>) {
         Console.info("#expected", expected.length)
         Console.info("#characters", characters.size)
-        val typewriter = StandardTypewriter(characters)
+        val typewriter = Typewriter(characters)
         val monkey = Monkey(1, typewriter)
         val results = mutableListOf<Long>()
         val targetMatches = 3
@@ -84,12 +83,10 @@ internal class MonkeyTest {
     }
 
     @Test
-    fun nextWordChars() {
+    fun nextChars() {
         val typewriter = DeterministicTypewriter(Keys.fullList())
         val obj = Monkey(id = 37, typewriter = typewriter)
-        Console.info("obj", obj)
-        val result = obj.nextWordChars(6)
-        Console.info("result", result)
+        val result = obj.nextChars(6)
         assertEquals("abcdef", result)
     }
 }

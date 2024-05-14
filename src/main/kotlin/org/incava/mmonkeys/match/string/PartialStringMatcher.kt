@@ -28,8 +28,8 @@ class PartialStringMatcher(monkey: Monkey, sought: String) : StringMatcher(monke
         return noMatch()
     }
 
-    fun noMatch(): MatchData {
-        val estimated = rand.nextRand()
+    private fun noMatch(): MatchData {
+        val estimated = randomLength()
         return MatchData(false, estimated, -1)
     }
 }

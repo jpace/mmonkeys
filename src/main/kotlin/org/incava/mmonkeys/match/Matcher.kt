@@ -16,5 +16,11 @@ abstract class Matcher(val monkey: Monkey) {
         return MatchData(false, keystrokes, -1)
     }
 
+    // number of keystrokes at which we'll hit the end-of-word character
+    // thus length == 1 means we'll hit at the first invocation, with
+    // an empty string, 8 means we had 7 (hypothetical) characters,
+    // and so on and so forth.
+    fun randomLength() = rand.nextRand()
+
     abstract fun isComplete(): Boolean
 }

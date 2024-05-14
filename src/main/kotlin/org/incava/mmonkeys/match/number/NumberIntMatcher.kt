@@ -15,7 +15,7 @@ class NumberIntMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, s
         // thus length == 1 means we'll hit at the first invocation, with
         // number of keystrokes at which we'll hit the end-of-word character
         // an empty string
-        val length = rand.nextRand()
+        val length = randomLength()
         if (length == soughtLen + 1) {
             val num = Random.nextInt(max)
             if (num == number) {

@@ -1,7 +1,7 @@
-package org.incava.mmonkeys.trials.perf.rand
+package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.testutil.InvokeTrial
-import org.incava.mmonkeys.testutil.Trial
+import org.incava.mmonkeys.trials.base.InvokeTrial
+import org.incava.mmonkeys.trials.base.Trial
 import org.incava.rando.RandCalculated
 import org.incava.rando.RandGenerated
 
@@ -9,13 +9,13 @@ class RandGenVsCalcTrial {
     private val size = 27
 
     fun ctor() {
-        println("ctor2")
+        println("ctor")
         val numInvokes = 1000L
         val calcBlock = InvokeTrial("calc", numInvokes) { RandCalculated(size, 10000) }
         val genBlock = InvokeTrial("gen", numInvokes) { RandGenerated(size, 10000) }
         val trial = Trial(calcBlock, genBlock)
         trial.run()
-        trial.summarize()
+        trial.logSummarize()
     }
 
     fun nextRand() {
@@ -27,7 +27,7 @@ class RandGenVsCalcTrial {
         val genBlock = InvokeTrial("gen", numInvokes) { gen.nextRand() }
         val trial = Trial(calcBlock, genBlock)
         trial.run()
-        trial.summarize()
+        trial.logSummarize()
     }
 }
 

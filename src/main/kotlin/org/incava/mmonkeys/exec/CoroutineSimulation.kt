@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
@@ -32,8 +33,10 @@ class CoroutineSimulation<T>(params: SimulationParams<T>) : Simulation<T>(params
                 memory.showCurrent(iterations)
             }
         }
-        // Console.info("found?", found.get())
-        // Console.info("iterations", iterations.get())
+        println("found: ${found.get()}")
+        Console.info("found?", found.get())
+        // this is how many iterations it took to complete:
+        Console.info("iterations", iterations.get())
         return if (found.get()) iterations.get() else -1
     }
 
@@ -69,6 +72,7 @@ class CoroutineSimulation<T>(params: SimulationParams<T>) : Simulation<T>(params
                 return
             }
         }
+        Console.info("match failed", this)
     }
 
     private suspend fun checkMatcher(matcher: Matcher, attempt: Long): Boolean {

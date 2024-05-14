@@ -1,16 +1,13 @@
-package org.incava.mmonkeys.trials.match.corpus
+package org.incava.mmonkeys.trials.corpus
 
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.StandardTypewriter
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.string.EqCorpusMatcher
+import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {
-    val typewriter = StandardTypewriter(Keys.keyList('z'))
-    val monkey = Monkey(1, typewriter)
+    val monkey = MonkeyFactory().createMonkey()
     val sought = listOf("abc", "cde", "efg")
     val obj = EqCorpusMatcher(monkey, Corpus(sought))
     Console.info("obj", obj)

@@ -1,9 +1,7 @@
-package org.incava.mmonkeys.match.string
+package org.incava.mmonkeys.match.corpus
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMatcher
 
 class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     val soughtByLength: MutableMap<Int, MutableList<String>> = mutableMapOf()
@@ -16,14 +14,16 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
     }
 
     override fun check(): MatchData {
+        val verbose = false
+
         // number of keystrokes at which we'll hit the end-of-word character
         // thus length == 1 means we'll hit at the first invocation, with
         // an empty string
-        val toEndOfWord = rand.nextRand()
+        val toEndOfWord = randomLength()
         val length = toEndOfWord - 1
         val forLength = soughtByLength[length]
         if (forLength != null) {
-            val word = monkey.nextWordChars(length)
+            val word = monkey.nextChars(length)
             val index = forLength.indexOf(word)
             if (index >= 0) {
                 sought.remove(word)
@@ -31,8 +31,10 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
                 if (forLength.isEmpty()) {
                     soughtByLength.remove(length)
                 }
-                println("not showing matched words")
-                showUnmatched()
+//                if (verbose) {
+//                    println("not showing matched words")
+//                }
+                // showUnmatched()
                 return match(length, index)
             }
         }

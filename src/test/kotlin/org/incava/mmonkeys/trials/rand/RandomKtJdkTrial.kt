@@ -1,6 +1,6 @@
-package org.incava.mmonkeys.trials.perf.rand
+package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.testutil.InvokeTrial
+import org.incava.mmonkeys.trials.base.InvokeTrial
 import org.incava.ikdk.io.Console
 import java.lang.Thread.sleep
 import kotlin.random.Random

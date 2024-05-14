@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.trials.perf.base
+package org.incava.mmonkeys.trials.base
 
 import java.time.Duration
 

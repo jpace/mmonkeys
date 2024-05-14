@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.perf.match
+package org.incava.mmonkeys.trials.string
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData

@@ -22,18 +22,6 @@ open class Monkey(val id: Int, val typewriter: Typewriter) {
 
     fun nextChars(length: Int): String {
         // returns a string of the given length
-        val builder = StringBuilder()
-        while (builder.length < length) {
-            val ch = nextChar()
-            if (ch != Keys.END_CHAR) {
-                builder.append(ch)
-            }
-        }
-        return builder.toString()
-    }
-
-    fun nextWordChars(length: Int): String {
-        // returns a string of the given length
         return (0 until length).fold(StringBuilder()) { sb, _ ->
             val ch = typewriter.nextWordCharacter()
             sb.append(ch)

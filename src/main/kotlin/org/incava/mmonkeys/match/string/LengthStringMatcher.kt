@@ -7,10 +7,7 @@ class LengthStringMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey
     private val soughtLen = sought.length + 1
 
     override fun check(): MatchData {
-        // number of keystrokes at which we'll hit the end-of-word character
-        // thus length == 1 means we'll hit at the first invocation, with
-        // an empty string
-        val length = rand.nextRand()
+        val length = randomLength()
         if (length == soughtLen) {
             val word = monkey.nextChars(length - 1)
             if (word == sought) {

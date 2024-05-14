@@ -1,11 +1,9 @@
 package org.incava.mmonkeys.exec
 
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.Matcher
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.ikdk.io.Console
-
-typealias TypewriterCtor = (List<Char>) -> Typewriter
+import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.match.Matcher
 
 class SimulationParams<T>(
     private val numMonkeys: Int,
@@ -16,16 +14,16 @@ class SimulationParams<T>(
 ) {
     fun summarize() {
         Console.info("# monkeys", numMonkeys)
-        Console.info("corpus", sought)
+        Console.info("sought", sought)
         Console.info("matcher", matcher)
         Console.info("showMemory", showMemory)
         Console.info("typewriterFactory", typewriterFactory)
     }
 
     fun makeMonkeys(): List<Monkey> {
+        val monkeyFactory = MonkeyFactory { typewriterFactory.create() }
         // I don't make monkeys; I just train them!
-        val typewriter = typewriterFactory.typewriter()
-        return (0 until numMonkeys).map { Monkey(it, typewriter) }
+        return (0 until numMonkeys).map { monkeyFactory.createMonkey(id = it) }
     }
 
     override fun toString(): String {

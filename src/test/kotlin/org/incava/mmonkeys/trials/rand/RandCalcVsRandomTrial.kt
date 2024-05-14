@@ -1,9 +1,8 @@
-package org.incava.mmonkeys.trials.perf.rand
+package org.incava.mmonkeys.trials.rand
 
 import org.incava.rando.RandCalculated
-import org.incava.mmonkeys.testutil.InvokeTrial
-import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.testutil.Trial
+import org.incava.mmonkeys.trials.base.InvokeTrial
+import org.incava.mmonkeys.trials.base.Trial
 import kotlin.random.Random
 
 class RandCalcVsRandomTrial {
@@ -13,11 +12,12 @@ class RandCalcVsRandomTrial {
         val calc = RandCalculated(size, 10000)
         val numInvokes = 500_000_000L
         val random = Random.Default
-        val xt = InvokeTrial("random", numInvokes) { random.nextInt() }
-        val yt = InvokeTrial("calc", numInvokes) { calc.nextRand() }
-        val trial = Trial(xt, yt)
+        val trial = Trial(
+            InvokeTrial("random", numInvokes) { random.nextInt() },
+            InvokeTrial("calc", numInvokes) { calc.nextRand() }
+        )
         trial.run()
-        trial.summarize()
+        trial.logSummarize()
     }
 }
 
