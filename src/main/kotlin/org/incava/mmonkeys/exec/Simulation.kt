@@ -5,7 +5,7 @@ import org.incava.time.DurationList
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
 
-abstract class Simulation<T>(val params: SimulationParams<T>) {
+abstract class Simulation(val params: SimulationParams) {
     val durations = DurationList()
 
     fun run(): Pair<Long, Duration> = measureDuration {

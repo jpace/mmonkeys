@@ -8,6 +8,6 @@ import org.incava.mmonkeys.type.Keys
 object MonkeyUtils {
     fun createDeterministicMonkey(chars: List<Char> = Keys.fullList()): Monkey {
         val typewriter = DeterministicTypewriter(chars)
-        return MonkeyFactory({ typewriter }, { chars }).createMonkey()
+        return MonkeyFactory({ typewriter }, chars = chars).createMonkey()
     }
 }

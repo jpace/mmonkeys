@@ -6,7 +6,7 @@ import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.exec.SimulationParams
+import org.incava.mmonkeys.exec.StringSimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.number.NumberIntMatcher
 import org.incava.mmonkeys.match.number.NumberLongMatcher
@@ -20,7 +20,7 @@ import java.time.ZonedDateTime
 import kotlin.math.max
 
 class StringSimulation(private val numMonkeys: Int = 1_000_000) {
-    class StringSimulationRunner(val name: String, private val params: SimulationParams<String>) {
+    class StringSimulationRunner(val name: String, private val params: StringSimulationParams) {
         val results = mutableListOf<Long>()
         val durations = DurationList()
 
@@ -79,7 +79,7 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
             "num (<*>)" to if (word.length > 6) ::NumberLongMatcher else ::NumberIntMatcher
         )
         val trials = matchers.map {
-            val params = SimulationParams(numMonkeys, word, it.second, typewriterFactory, false)
+            val params = StringSimulationParams(numMonkeys, word, it.second, typewriterFactory)
             StringSimulationRunner(it.first, params)
         }
         table.writeHeader()

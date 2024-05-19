@@ -11,14 +11,13 @@ import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-class CoroutineSimulation<T>(params: SimulationParams<T>) : Simulation<T>(params) {
+class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
     private val iterations = AtomicLong(0L)
     private val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
     private val maxAttempts = 100_000_000L
     private val showMemory = false
     private val monkeys = params.makeMonkeys()
-    private val sought: T = params.sought
 
     override fun process(): Long {
         val memory = Memory()
@@ -42,7 +41,7 @@ class CoroutineSimulation<T>(params: SimulationParams<T>) : Simulation<T>(params
 
     private fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
         launch {
-            val matcher = params.matcher(monkey, sought)
+            val matcher = params.matcher(monkey)
             runMatcher(matcher)
         }
     }
@@ -79,9 +78,11 @@ class CoroutineSimulation<T>(params: SimulationParams<T>) : Simulation<T>(params
         iterations.incrementAndGet()
         val md = matcher.check()
         if (md.isMatch) {
-//            Console.info("success", matcher.monkey.id)
-//            Console.info("attempt", attempt)
-//            Console.info("iterations", iterations.get())
+            //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
+            Console.info("success", matcher.monkey.id)
+            Console.info("md", md)
+            Console.info("attempt", attempt)
+            Console.info("iterations", iterations.get())
             found.set(true)
             return true
         } else {

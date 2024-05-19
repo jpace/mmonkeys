@@ -1,14 +1,10 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.trials.base.PerfResults
-import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -16,9 +12,8 @@ import kotlin.system.measureTimeMillis
 
 class CorpusTrialRunner(
     sought: Corpus,
-    matcherCtor: (Monkey, Corpus) -> CorpusMatcher,
+    private val monkeyFactory: MonkeyFactory,
     private val timeLimit: Duration,
-    typewriter: Typewriter = Typewriter(),
 ) {
     val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
@@ -26,13 +21,10 @@ class CorpusTrialRunner(
     private val start = ZonedDateTime.now()
 
     init {
-        val charSupplier = { Keys.fullList() }
-        val matcherSupplier: (Monkey, Corpus) -> CorpusMatcher = { monkey, _ -> matcherCtor(monkey, sought) }
-        val monkeyFactory = MonkeyFactory({ _: List<Char> -> typewriter }, charSupplier, matcherSupplier)
         val monkey = monkeyFactory.createMonkey()
         val durations = mutableListOf<Long>()
         val totalDuration = Durations.measureDuration {
-            val matcher = matcherCtor(monkey, sought)
+            val matcher = monkeyFactory.corpusMatcher(monkey, sought)
             durations += measureTimeMillis {
                 runMatch(matcher)
             }

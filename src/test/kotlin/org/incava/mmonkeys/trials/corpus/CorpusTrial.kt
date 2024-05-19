@@ -6,10 +6,14 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
+import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import org.incava.mmonkeys.match.corpus.LengthCorpusMatcher
 import org.incava.mmonkeys.trials.base.PerfResults
+import org.incava.mmonkeys.type.Typewriter
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -48,7 +52,9 @@ class CorpusTrial(val sought: Corpus, private val timeLimit: Duration) {
         )
         val results = types.shuffled().associate { (name, matcher) ->
             Console.info(name)
-            val runner = CorpusTrialRunner(sought, matcher, timeLimit)
+            // kotlin infers lambda from KFunction ... amazing.
+            val monkeyFactory = MonkeyFactory({ Typewriter() }, matcher)
+            val runner = CorpusTrialRunner(sought, monkeyFactory, timeLimit)
             Thread.sleep(100L)
             Console.info(name, runner.results.durations.average())
             name to runner.results

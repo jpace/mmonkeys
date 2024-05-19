@@ -44,7 +44,7 @@ internal class EqCorpusMatcherTest : MatcherTest() {
     }
 
     private fun createMatcher(sought: String): EqCorpusMatcher {
-        val monkey = MonkeyUtils.createDeterministicMonkey(chars = Keys.keyList(toChar = 'e'))
+        val monkey = MonkeyUtils.createDeterministicMonkey(Keys.keyList('e'))
         return EqCorpusMatcher(monkey, Corpus(listOf(sought)))
     }
 }

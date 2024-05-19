@@ -19,10 +19,7 @@ class PerfTrial<T>(
     private val timeLimit: Duration,
     private val numMatches: Int = 1,
 ) {
-    constructor(sought: T, typewriter: Typewriter, matcherCtor: MatcherCtor<T>, numMatches: Int = 1) :
-            this(sought, typewriter, matcherCtor, Duration.ofMinutes(10L), numMatches)
-
-    val results: PerfResults
+    private val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
