@@ -79,8 +79,8 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
         val md = matcher.check()
         if (md.isMatch) {
             //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
-            Console.info("success", matcher.monkey.id)
-            Console.info("md", md)
+            Console.info("md.match", md)
+            Console.info("monkey.id", matcher.monkey.id)
             Console.info("attempt", attempt)
             Console.info("iterations", iterations.get())
             found.set(true)

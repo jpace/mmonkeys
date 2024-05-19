@@ -6,12 +6,8 @@ import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 
-class CorpusSimulationParams(
-    numMonkeys: Int,
-    val sought: Corpus,
-    matcher: (Monkey, Corpus) -> CorpusMatcher,
-    typewriterFactory: TypewriterFactory = TypewriterFactory(),
-) : SimulationParams(numMonkeys, MonkeyFactory({ typewriterFactory.create() }, corpusMatcher = matcher)) {
+class CorpusSimulationParams(numMonkeys: Int, val sought: Corpus, monkeyFactory: MonkeyFactory) :
+    SimulationParams(numMonkeys, monkeyFactory) {
     override fun matcher(monkey: Monkey): Matcher {
         return monkeyFactory.corpusMatcher(monkey, sought)
     }

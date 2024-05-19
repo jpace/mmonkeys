@@ -19,7 +19,7 @@ class MonkeyFactoryTest {
         Console.info("monkey", monkey)
         assertAll(
             { assertEquals(Typewriter::class.java, monkey.typewriter.javaClass) },
-            { assertEquals(LengthCorpusMatcher::class.java, obj.createCorpusMatcher(monkey, Corpus(emptyList())).javaClass) }
+            { assertEquals(LengthCorpusMatcher::class.java, obj.corpusMatcher(monkey, Corpus(emptyList())).javaClass) }
         )
     }
 }

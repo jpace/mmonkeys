@@ -3,6 +3,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CorpusSimulationParams
 import org.incava.mmonkeys.exec.SimulationParams
+import org.incava.mmonkeys.exec.SimulationParamsFactory
 import org.incava.mmonkeys.exec.StringSimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.corpus.Corpus
@@ -24,13 +25,13 @@ fun runSimulation(type: String, params: SimulationParams) {
 
 fun runStringSimulation(toChar: Char, type: String, sought: String, matcher: (Monkey, String) -> StringMatcher) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val params = StringSimulationParams(10, sought, matcher, typewriterFactory)
+    val params = SimulationParamsFactory.createStringParams(10, sought, matcher, typewriterFactory)
     runSimulation(type, params)
 }
 
 fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, matcher: (Monkey, Corpus) -> CorpusMatcher) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val params = CorpusSimulationParams(10, sought, matcher, typewriterFactory)
+    val params = SimulationParamsFactory.createCorpusParams(10, sought, matcher, typewriterFactory)
     Console.info("sought", sought.words)
     runSimulation(type, params)
 }

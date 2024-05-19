@@ -16,7 +16,7 @@ class PartialStringMatcher(monkey: Monkey, sought: String) : StringMatcher(monke
                 ++idx
                 if (idx == len) {
                     return if (monkey.nextChar() == Keys.END_CHAR)
-                        match(len, 0)
+                        match(len)
                     else {
                         noMatch()
                     }

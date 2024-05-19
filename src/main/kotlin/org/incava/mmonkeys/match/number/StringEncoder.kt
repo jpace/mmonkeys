@@ -3,10 +3,13 @@ package org.incava.mmonkeys.match.number
 import java.lang.StringBuilder
 
 object StringEncoder {
+    // a .. z (no numbers yet)
+    private const val NUM_CHARS = 26
+
     fun encodeToInt(string: String) : Int {
         var value = 1
         string.toCharArray().forEach {
-            value *= 26
+            value *= NUM_CHARS
             value += it - 'a'
         }
         return value
@@ -15,7 +18,7 @@ object StringEncoder {
     fun encodeToLong(string: String) : Long {
         var value = 1L
         string.toCharArray().forEach {
-            value *= 26L
+            value *= NUM_CHARS.toLong()
             value += it - 'a'
         }
         return value
@@ -29,8 +32,8 @@ object StringEncoder {
         val sb = StringBuilder()
         var value = number
         while (true) {
-            val x = value % 26
-            value /= 26
+            val x = value % NUM_CHARS
+            value /= NUM_CHARS
             if (value == 0) {
                 break
             } else {
@@ -45,8 +48,8 @@ object StringEncoder {
         val sb = StringBuilder()
         var value = number
         while (true) {
-            val x = (value % 26).toInt()
-            value /= 26
+            val x = (value % NUM_CHARS).toInt()
+            value /= NUM_CHARS
             if (value == 0L) {
                 break
             } else {

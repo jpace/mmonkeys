@@ -6,6 +6,6 @@ import org.incava.mmonkeys.match.string.StringMatcher
 
 class NoOpMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, sought) {
     override fun check(): MatchData {
-        return match(0, 0)
+        return match(0)
     }
 }

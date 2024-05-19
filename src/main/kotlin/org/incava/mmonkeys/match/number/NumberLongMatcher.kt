@@ -19,7 +19,7 @@ class NumberLongMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, 
         if (length == soughtLen + 1) {
             val num = Random.nextLong(max)
             if (num == number) {
-                return match(length, 0)
+                return match(length)
             }
         }
         return noMatch(length)

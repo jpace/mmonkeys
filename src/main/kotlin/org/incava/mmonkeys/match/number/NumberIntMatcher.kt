@@ -19,7 +19,7 @@ class NumberIntMatcher(monkey: Monkey, sought: String) : StringMatcher(monkey, s
         if (length == soughtLen + 1) {
             val num = Random.nextInt(max)
             if (num == number) {
-                return match(length, 0)
+                return match(length)
             }
         }
         return noMatch(length)

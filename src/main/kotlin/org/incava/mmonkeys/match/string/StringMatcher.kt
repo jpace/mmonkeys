@@ -15,4 +15,7 @@ abstract class StringMatcher(monkey: Monkey, val sought: String) : Matcher(monke
         complete = true
         return super.match(keystrokes, index)
     }
+
+    // string matches are always index 0
+    fun match(keystrokes: Int) = match(keystrokes, 0)
 }
