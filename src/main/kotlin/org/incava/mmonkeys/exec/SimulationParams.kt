@@ -21,7 +21,7 @@ class SimulationParams<T>(
     }
 
     fun makeMonkeys(): List<Monkey> {
-        val monkeyFactory = MonkeyFactory { typewriterFactory.create() }
+        val monkeyFactory = MonkeyFactory({ typewriterFactory.create() })
         // I don't make monkeys; I just train them!
         return (0 until numMonkeys).map { monkeyFactory.createMonkey(id = it) }
     }

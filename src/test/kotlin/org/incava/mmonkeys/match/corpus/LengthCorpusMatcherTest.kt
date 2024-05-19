@@ -3,14 +3,13 @@ package org.incava.mmonkeys.match.corpus
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
-import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class LengthCorpusMatcherTest : MatcherTest() {
     private fun makeMonkey(): Monkey {
-        return MonkeyFactory { Typewriter() }.createMonkey()
+        return MonkeyFactory({ Typewriter() }).createMonkey()
     }
 
     @Test

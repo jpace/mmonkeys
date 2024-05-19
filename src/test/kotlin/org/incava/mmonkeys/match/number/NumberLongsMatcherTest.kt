@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.match.number
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.type.Typewriter

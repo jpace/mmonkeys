@@ -5,8 +5,9 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.trials.base.MatcherCtor
+import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.trials.base.PerfResults
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations
 import java.time.Duration
@@ -15,7 +16,7 @@ import kotlin.system.measureTimeMillis
 
 class CorpusTrialRunner(
     sought: Corpus,
-    matcherCtor: MatcherCtor<Corpus>,
+    matcherCtor: (Monkey, Corpus) -> CorpusMatcher,
     private val timeLimit: Duration,
     typewriter: Typewriter = Typewriter(),
 ) {
@@ -25,15 +26,20 @@ class CorpusTrialRunner(
     private val start = ZonedDateTime.now()
 
     init {
-        val monkey = MonkeyFactory { typewriter }.createMonkey()
+        val charSupplier = { Keys.fullList() }
+        val matcherSupplier: (Monkey, Corpus) -> CorpusMatcher = { monkey, _ -> matcherCtor(monkey, sought) }
+        val monkeyFactory = MonkeyFactory({ _: List<Char> -> typewriter }, charSupplier, matcherSupplier)
+        val monkey = monkeyFactory.createMonkey()
         val durations = mutableListOf<Long>()
-        val duration = Durations.measureDuration {
+        val totalDuration = Durations.measureDuration {
             val matcher = matcherCtor(monkey, sought)
             durations += measureTimeMillis {
                 runMatch(matcher)
             }
         }
-        results = PerfResults(duration.second, durations, iterations)
+        println("durations: $durations")
+        println("totalDuration: $totalDuration")
+        results = PerfResults(totalDuration.second, durations, iterations)
     }
 
     private fun runMatch(matcher: Matcher) {
@@ -44,7 +50,7 @@ class CorpusTrialRunner(
                 ++iteration
                 val result = matcher.check()
             } while (!result.isMatch && iteration < maxAttempts)
-            if (verbose && iterations.size % 1000 == 0) {
+            if (verbose && iterations.isNotEmpty() && iterations.size % 5000 == 0) {
                 Console.info("iterations.#: ${iterations.size}")
             }
             iterations += iteration

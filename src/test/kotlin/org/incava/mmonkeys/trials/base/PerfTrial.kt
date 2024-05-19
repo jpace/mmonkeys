@@ -28,7 +28,7 @@ class PerfTrial<T>(
     private val start = ZonedDateTime.now()
 
     init {
-        val monkey = MonkeyFactory { typewriter }.createMonkey(id = 38)
+        val monkey = MonkeyFactory({ typewriter }).createMonkey(id = 38)
         val durations = mutableListOf<Long>()
         val duration = Durations.measureDuration {
             repeat(numMatches) {

@@ -21,8 +21,8 @@ internal class EqCorpusMatcherTest : MatcherTest() {
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val typewriter = DeterministicTypewriter(inputs.first)
-                val monkeyFactory = MonkeyFactory { typewriter }
-                val monkey = monkeyFactory.createMonkey(typewriter)
+                val monkeyFactory = MonkeyFactory({ typewriter })
+                val monkey = monkeyFactory.createMonkey()
                 val obj = EqCorpusMatcher(monkey, Corpus(inputs.second))
                 val result = runTest(obj)
                 assertEquals(expected, result)
