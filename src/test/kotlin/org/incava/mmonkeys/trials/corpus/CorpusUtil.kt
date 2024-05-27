@@ -12,12 +12,9 @@ object CorpusUtil {
 
     fun readFile(name: String, numLines: Int, wordSizeLimit: Int): Corpus {
         val file = getResource(name)
-        Console.info("file", file)
+        // Console.info("file", file)
         val lines = file.readText().split("\r\n")
         val sonnet = lines.subList(0, min(numLines, lines.size))
-        Console.info("sonnet")
-        Console.info(sonnet.first())
-        Console.info(sonnet.last())
 
         // I forgot numbers.
         val words = sonnet.joinToString()
@@ -26,7 +23,6 @@ object CorpusUtil {
             .map { it.replace(Regex("[^a-z+]"), "") }
             .filter { it.length in 1..wordSizeLimit }
         Console.info("words.#", words.size)
-
         return Corpus(words)
     }
 }

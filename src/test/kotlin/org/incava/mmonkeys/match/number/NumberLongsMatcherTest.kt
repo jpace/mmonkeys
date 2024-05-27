@@ -75,6 +75,15 @@ internal class NumberLongsMatcherTest {
     }
 
     @Test
+    fun checkMany() {
+        (0 until 100_000_000L).forEach {
+            val input = listOf("this", "is", "a", "test")
+            val obj = NumberLongsMatcher(monkey, Corpus(input))
+            val result = obj.check()
+        }
+    }
+
+    @Test
     fun getSought() {
     }
 }

@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.match.corpus
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
@@ -32,9 +33,12 @@ internal class LengthCorpusMatcherTest : MatcherTest() {
         val monkey = makeMonkey()
         val sought = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = LengthCorpusMatcher(monkey, Corpus(sought))
+        var iterations = 0
         while (!obj.sought.isEmpty()) {
-            obj.check()
+            val result = obj.check()
+            iterations++
         }
+        Console.info("iterations", iterations)
         assert(obj.sought.isEmpty())
     }
 }

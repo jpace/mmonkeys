@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.match.corpus
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
 
@@ -7,6 +8,7 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
     val soughtByLength: MutableMap<Int, MutableList<String>> = mutableMapOf()
 
     init {
+        Console.info("creating corpus")
         sought.words.withIndex().forEach { word ->
             val length = word.value.length
             soughtByLength.computeIfAbsent(length) { mutableListOf() }.also { it.add(word.value) }

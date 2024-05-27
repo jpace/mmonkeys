@@ -1,10 +1,12 @@
 package org.incava.mmonkeys.match.corpus
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -46,5 +48,19 @@ internal class EqCorpusMatcherTest : MatcherTest() {
     private fun createMatcher(sought: String): EqCorpusMatcher {
         val monkey = MonkeyUtils.createDeterministicMonkey(Keys.keyList('e'))
         return EqCorpusMatcher(monkey, Corpus(listOf(sought)))
+    }
+
+    @Test
+    fun check() {
+        val monkey = MonkeyFactory({ Typewriter() }).createMonkey()
+        val sought = listOf("ab", "cd", "def", "defg", "ghi")
+        val obj = EqCorpusMatcher(monkey, Corpus(sought))
+        var iterations = 0
+        while (!obj.sought.isEmpty()) {
+            val result = obj.check()
+            iterations++
+        }
+        Console.info("iterations", iterations)
+        assert(obj.sought.isEmpty())
     }
 }

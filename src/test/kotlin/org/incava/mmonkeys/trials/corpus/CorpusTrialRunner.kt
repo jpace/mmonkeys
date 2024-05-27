@@ -2,6 +2,7 @@ package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.trials.base.PerfResults
@@ -10,15 +11,13 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.system.measureTimeMillis
 
-class CorpusTrialRunner(
-    sought: Corpus,
-    private val monkeyFactory: MonkeyFactory,
-    private val timeLimit: Duration,
-) {
+class CorpusTrialRunner(val sought: Corpus, monkeyFactory: MonkeyFactory, private val timeLimit: Duration, private val tickSize: Int = 20000) {
     val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
+    private val matches = mutableListOf<MatchData>()
+    var verbose = false
 
     init {
         val monkey = monkeyFactory.createMonkey()
@@ -29,27 +28,38 @@ class CorpusTrialRunner(
                 runMatch(matcher)
             }
         }
-        println("durations: $durations")
-        println("totalDuration: $totalDuration")
-        results = PerfResults(totalDuration.second, durations, iterations)
+        results = PerfResults(totalDuration.second, durations, iterations, matches)
     }
 
     private fun runMatch(matcher: Matcher) {
-        val verbose = true
+        Console.info("matcher", matcher.javaClass.name)
         while (!matcher.isComplete()) {
             var iteration = 0L
+            var result: MatchData
             do {
                 ++iteration
-                val result = matcher.check()
+                result = matcher.check()
             } while (!result.isMatch && iteration < maxAttempts)
-            if (verbose && iterations.isNotEmpty() && iterations.size % 5000 == 0) {
-                Console.info("iterations.#: ${iterations.size}")
+            if (verbose) {
+                Console.info("result.match?", result.isMatch)
+                if (result.isMatch) {
+                    Console.info("matcher.class", matcher.javaClass)
+                    Console.info("result.keystrokes", result.keystrokes)
+                    Console.info("result.index", result.index)
+                    Console.info("word", sought.words[result.index])
+                }
+            }
+            if (result.isMatch) {
+                matches += result
             }
             iterations += iteration
+            if (iterations.size % tickSize == 0) {
+                Console.info("iterations.#", iterations.size)
+            }
             val now = ZonedDateTime.now()
             val elapsed = Duration.between(start, now)
             if (elapsed > timeLimit) {
-                Console.info("stopping at: $elapsed")
+                Console.info("stopping", elapsed)
                 return
             }
         }

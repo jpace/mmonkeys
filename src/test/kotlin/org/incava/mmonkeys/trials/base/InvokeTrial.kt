@@ -4,8 +4,6 @@ import org.incava.ikdk.io.Console
 import org.incava.time.DurationList
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
-import java.time.ZonedDateTime
-import kotlin.time.measureTime
 
 class InvokeTrial(val name: String, private val numInvokes: Long, val block: () -> Any) {
     lateinit var duration: Duration

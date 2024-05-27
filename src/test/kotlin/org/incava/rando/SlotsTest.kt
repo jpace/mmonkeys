@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertAll
 import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -13,24 +14,25 @@ internal class SlotsTest {
     fun reduceSlots() {
         // inputs from RandCalculated are ascending
         val slotSize = 100
-        val inputs = (0 until 1000).map {
-            val value = it / slotSize
-            Pair(it, value)
-        }.toMap()
+        val inputs = (0 until 1000).associateWith {
+            it / slotSize
+        }
         val result = Slots.reduceSlots(inputs, inputs.size / slotSize)
-        assertEquals(100, result.size)
-        assertEquals(0, result.keys.first())
-        assertEquals(99, result.keys.last())
-        assertEquals(10, result[0]?.size)
-        assertEquals(10, result.entries.last().value.size)
+        assertAll(
+            { assertEquals(100, result.size) },
+            { assertEquals(0, result.keys.first()) },
+            { assertEquals(99, result.keys.last()) },
+            { assertEquals(10, result[0]?.size) },
+            { assertEquals(10, result.entries.last().value.size) },
+        )
     }
 
     @Test
     fun calculate() {
-        val input = 100
-        val result = Slots.calculate(27, input)
+        val numSlots = 100
+        val result = Slots.calculate(27, numSlots)
         Console.info("result", result)
-        assertEquals(input, result.size)
+        assertEquals(numSlots, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
         }
@@ -42,10 +44,10 @@ internal class SlotsTest {
 
     @Test
     fun calculateAndReduce() {
-        val input = 100
-        val result = Slots.calculateAndReduce(27, input)
+        val numSlots = 100
+        val result = Slots.calculateAndReduce(27, numSlots)
         Console.info("result", result)
-        assertEquals(input, result.size)
+        assertEquals(numSlots, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
         }
@@ -65,10 +67,12 @@ internal class SlotsTest {
         Console.info("results", results)
         // slot 98
         val result98 = results.getOrDefault(98, 0.0)
-        assertWithin(112.271, result98, maxDistance)
         // slot 99
         val result99 = results.getOrDefault(99, 0.0)
-        assertWithin(148.909, result99, maxDistance)
+        assertAll(
+            { assertWithin(112.271, result98, maxDistance) },
+            { assertWithin(148.909, result99, maxDistance) }
+        )
     }
 
     @TestFactory
@@ -82,16 +86,20 @@ internal class SlotsTest {
             1_000_000 to 1.0,
             5_000_000 to 0.7,
         ).map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input, " +
-                    "when running the generate method, " +
-                    "then the result should be within distance $expected") {
+            DynamicTest.dynamicTest(
+                "given $input, " +
+                        "when running the generate method, " +
+                        "then the result should be within distance $expected"
+            ) {
                 val results = Slots.generate(27, input)
                 // slot 98
                 val result98 = results.getOrDefault(98, 0.0)
-                assertWithin(112.271, result98, expected)
                 // slot 99
                 val result99 = results.getOrDefault(99, 0.0)
-                assertWithin(148.909, result99, expected)
+                assertAll(
+                    { assertWithin(112.271, result98, expected) },
+                    { assertWithin(148.909, result99, expected) },
+                )
             }
         }
 }

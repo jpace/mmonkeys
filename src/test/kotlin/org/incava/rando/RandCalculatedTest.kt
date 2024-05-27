@@ -9,20 +9,20 @@ internal class RandCalculatedTest {
     fun nextRand() {
         val obj = RandCalculated(27, 1000)
         var sum = 0.0
-        val iterations = 100000
+        val iterations = 100_000
         val found = mutableSetOf<Int>()
         repeat(iterations) {
             val result = obj.nextRand()
-            if (!found.contains(result)) {
-                found.add(result)
-                Console.info("result", result)
-                found += result
-            }
+            found += result
             sum += result
         }
+        val average = sum / iterations
         Console.info("found", found.sorted())
+        Console.info("sum", sum)
+        Console.info("iterations", iterations)
+        Console.info("average", average)
 
         // with enough iterations the overall average should be ~= 27
-        assertWithin(27.0, sum / iterations, 1.0)
+        assertWithin(27.0, average, 1.0)
     }
 }

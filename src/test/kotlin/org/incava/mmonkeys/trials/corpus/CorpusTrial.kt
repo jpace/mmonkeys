@@ -1,47 +1,44 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mesa.DurationColumn
-import org.incava.mesa.IntColumn
-import org.incava.mesa.LongColumn
-import org.incava.mesa.StringColumn
-import org.incava.mesa.Table
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import org.incava.mmonkeys.match.corpus.LengthCorpusMatcher
+import org.incava.mmonkeys.match.number.NumberLongsMatcher
 import org.incava.mmonkeys.trials.base.PerfResults
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.time.Durations.measureDuration
 import java.time.Duration
-import java.time.ZonedDateTime
+import java.time.Duration.ofMinutes
+import java.time.Duration.ofSeconds
 
-class CorpusTrial(val sought: Corpus, private val timeLimit: Duration) {
-    private val table = object : Table(
-        listOf(
-            StringColumn("type", 12, leftJustified = true),
-            IntColumn("size", 8),
-            DurationColumn("total time", 14),
-            LongColumn("#matches", 20),
-            LongColumn("iterations.avg", 20),
-            LongColumn("duration.avg", 12),
-            LongColumn("#matches/sec", 14),
-        )
+class CorpusTrial(private val sought: Corpus, private val params: Params) {
+    private val table = CorpusTrialTable(sought.words.size, params.wordSizeLimit)
+
+    data class Params(
+        val wordSizeLimit: Int,
+        val numLines: Int,
+        val timeLimit: Duration,
+        val tickSize: Int,
     ) {
-        fun addResults(type: String, size: Int, results: PerfResults) {
-            val durSecs = results.durations.sum() / 1000
-            val cells = listOf(
-                type,
-                size,
-                results.duration,
-                results.iterations.size,
-                results.averageIterations(),
-                results.averageDurations(),
-                if (durSecs == 0L) 0 else results.iterations.size / durSecs,
-            )
-            writeRow(cells)
-        }
+        constructor(
+            wordSizeLimit: Int,
+            numLines: Int,
+            timeLimit: Long,
+            tickSize: Int,
+        ) : this(wordSizeLimit, numLines, ofSeconds(timeLimit), tickSize)
+    }
+
+    fun runTrial(name: String, matcher: (Monkey, Corpus) -> CorpusMatcher): PerfResults {
+        Console.info(name)
+        // kotlin infers lambda from KFunction ... hey now!
+        val monkeyFactory = MonkeyFactory(corpusMatcher = matcher)
+        val runner = CorpusTrialRunner(sought, monkeyFactory, params.timeLimit, params.tickSize)
+        Thread.sleep(100L)
+        Console.info(name, runner.results.durations.average())
+        return runner.results
     }
 
     fun run() {
@@ -49,61 +46,86 @@ class CorpusTrial(val sought: Corpus, private val timeLimit: Duration) {
         val types = listOf(
             "length" to ::LengthCorpusMatcher,
             "eq" to ::EqCorpusMatcher,
+            "longs" to ::NumberLongsMatcher,
         )
         val results = types.shuffled().associate { (name, matcher) ->
-            Console.info(name)
-            // kotlin infers lambda from KFunction ... amazing.
-            val monkeyFactory = MonkeyFactory({ Typewriter() }, matcher)
-            val runner = CorpusTrialRunner(sought, monkeyFactory, timeLimit)
-            Thread.sleep(100L)
-            Console.info(name, runner.results.durations.average())
-            name to runner.results
+            val result = runTrial(name, matcher)
+            name to result
         }.toSortedMap()
-        showResults(results)
-    }
-
-    fun showResults(results: Map<String, PerfResults>) {
-        table.writeHeader()
-        table.writeBreak('=')
         results.forEach { (name, res) ->
-            table.addResults(name, sought.words.size, res)
+            Console.info("name", name)
+            // Console.info("res", res.matches)
+            val byLength = res.matches.fold(mutableMapOf<Int, Int>()) { acc, match ->
+                acc.merge(match.keystrokes, 1) { prev, _ -> prev + 1 }
+                acc
+            }
+            byLength.toSortedMap().forEach { (keystrokes, count) ->
+                Console.info("keystrokes", keystrokes)
+                Console.info("count", count)
+            }
+            println()
         }
-        table.writeBreak('-')
+        table.summarize(results)
     }
 }
 
-class CorpusTrials(val params: List<Triple<Int, Int, Duration>>) {
+class CorpusTrials(val params: List<CorpusTrial.Params>) {
     fun run() {
-        val start = ZonedDateTime.now()
-        params.forEach { (wordSizeLimit, numLines, duration) ->
-            runTrial(wordSizeLimit, numLines, duration)
+        val trialsDuration = measureDuration {
+            params.forEach(::runTrial)
         }
-        val done = ZonedDateTime.now()
-        println("done")
-        val duration = Duration.between(start, done)
-        println("duration: $duration")
+        println("trials duration: $trialsDuration")
     }
 
-    fun runTrial(wordSizeLimit: Int, numLines: Int, timeLimit: Duration) {
-        val start = ZonedDateTime.now()
-        val corpus = CorpusUtil.readFile("pg100.txt", numLines, wordSizeLimit)
-        val obj = CorpusTrial(corpus, timeLimit)
-        obj.run()
-        val done = ZonedDateTime.now()
-        println("done")
-        val duration = Duration.between(start, done)
-        println("duration: $duration")
+    fun runTrial(params: CorpusTrial.Params) {
+        val corpus = CorpusUtil.readFile("pg100.txt", params.numLines, params.wordSizeLimit)
+        val trialDuration = measureDuration {
+            val trial = CorpusTrial(corpus, params)
+            trial.run()
+        }
+        println("trial duration: $trialDuration")
     }
 }
+
+private typealias Params = CorpusTrial.Params
 
 fun main() {
     val trials = CorpusTrials(
         listOf(
-            Triple(7, 5000, Duration.ofMinutes(1L)),
-            Triple(12, 50000, Duration.ofMinutes(3L)),
-//            Triple(12, 1000, Duration.ofMinutes(1L)),
-//            Triple(15, 100000, Duration.ofMinutes(120L)),
-//            Triple(15, 200000, Duration.ofMinutes(240L)),
+            // NumberLongsMatcher can only support up through words of length 13
+//           Params(4, 500, ofSeconds(3L), 1000),
+//            Params(4, 500, ofSeconds(30L), 1000),
+
+//            Params(7, 5000, ofMinutes(1L), 1000),
+//            Params(7, 5000, ofMinutes(3L), 10000),
+//            Params(7, 5000, ofMinutes(7L), 10000),
+
+//            Params(7, 10000, ofMinutes(1L), 10000),
+//            Params(7, 10000, ofMinutes(3L), 10000),
+          Params(7, 10000, ofMinutes(7L), 10000),
+//
+//            Params(13, 5000, ofMinutes(1L), 10000),
+//            Params(13, 5000, ofMinutes(3L), 10000),
+//            Params(13, 5000, ofMinutes(7L), 10000),
+//
+//            Params(13, 10000, ofMinutes(1L), 10000),
+//            Params(13, 10000, ofMinutes(3L), 10000),
+//            Params(13, 10000, ofMinutes(7L), 10000),
+//
+//            Params(13, 5000, ofMinutes(15L), 10000),
+//            Params(13, 5000, ofMinutes(30L), 10000),
+//
+//            Params(13, 10000, ofMinutes(15L), 10000),
+//            Params(13, 10000, ofMinutes(30L), 10000),
+//
+//            Params(13, 50000, ofMinutes(15L), 10000),
+//            Params(13, 50000, ofMinutes(30L), 10000),
+//
+//            Params(13, 100000, ofMinutes(15L), 10000),
+//            Params(13, 100000, ofMinutes(30L), 10000),
+//
+//            Params(13, 150000, ofMinutes(120L), 100_000),
+//            Params(13, 150000, ofMinutes(240L), 10000),
         )
     )
     trials.run()

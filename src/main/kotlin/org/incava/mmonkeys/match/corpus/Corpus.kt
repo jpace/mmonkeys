@@ -1,11 +1,25 @@
 package org.incava.mmonkeys.match.corpus
-
 class Corpus(val words: List<String>) {
     private val matched = mutableSetOf<Int>()
 
     fun hasWord(word: String): Pair<Boolean, Int> {
-        val index = words.indexOf(word)
-        return Pair(index >= 0, index)
+        words.indices.forEach { index ->
+            // not sure which condition is faster:
+            if (words[index] == word && !matched.contains(index)) {
+                return Pair(true, index)
+            }
+        }
+        return Pair(false, -1)
+    }
+
+    fun match(word: String): Int {
+        words.indices.forEach { index ->
+            // not sure which condition is faster:
+            if (words[index] == word && !matched.contains(index)) {
+                return index
+            }
+        }
+        return -1
     }
 
     fun remove(word: String) {
@@ -17,7 +31,9 @@ class Corpus(val words: List<String>) {
         }
     }
 
-    fun removeAt(index: Int) = matched.add(index)
+    fun removeAt(index: Int) {
+        matched.add(index)
+    }
 
     fun isEmpty(): Boolean = matched.size == words.size
 

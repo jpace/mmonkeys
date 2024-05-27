@@ -6,12 +6,14 @@ import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.math.Maths
+import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import kotlin.random.Random
 
-class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
+class NumberLongsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     // length to [ encoded to [ indices in sought ] ]
     val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
     private val charCount = monkey.typewriter.numChars().toLong() - 1
+    val verbose = false
 
     init {
         val encoded = mutableMapOf<String, Long>()
@@ -21,8 +23,10 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
                 .computeIfAbsent(word.value.length) { mutableMapOf() }
                 .computeIfAbsent(enc) { mutableListOf() }.also { it.add(word.index) }
         }
-        Console.info("numbers", numbers)
-        showUnmatched()
+        if (verbose) {
+            Console.info("numbers", numbers)
+            showUnmatched()
+        }
     }
 
     override fun isComplete(): Boolean {
@@ -38,9 +42,10 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
             val forEncoded = forLength[num]
             if (!forEncoded.isNullOrEmpty()) {
                 val word = StringEncoder.decode(num)
-                Console.info("word", word)
+//                Console.info("word", word)
                 val index = forEncoded.removeAt(0)
-                // Console.info("index", index)
+//                Console.info("index", index)
+//                Console.info("sought.word[$index]", sought.words[index])
                 // this is the index into sought
                 if (forEncoded.isEmpty()) {
                     forLength.remove(num)
@@ -50,8 +55,7 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
                 }
                 showUnmatched()
                 // showNumbers()
-                // ugh -- need the index from `sought`
-                return match(length, 0)
+                return match(soughtLen, index)
             }
         }
         return noMatch(length)
@@ -59,10 +63,20 @@ class NumberLongsMatcher(monkey: Monkey, val sought: Corpus) : Matcher(monkey) {
 
     private fun randomLong(digits: Int): Long {
         val max = Maths.powerLongCached(charCount, digits) * 2
+        if (max <= 0) {
+            Console.info("max", max);
+            Console.info("charCount", charCount);
+            Console.info("digits", digits);
+            throw IllegalArgumentException("bound must be positive, not: $max")
+        }
         return Random.nextLong(max)
     }
 
     private fun showUnmatched() {
+        if (!verbose) {
+            return
+        }
+
         // val str = String.format("%8d | %8d | %8d | %8d", )
         val lenToCount = lengthToCount()
         val total = lenToCount.values.sum()

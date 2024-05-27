@@ -18,6 +18,7 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
     private val maxAttempts = 100_000_000L
     private val showMemory = false
     private val monkeys = params.makeMonkeys()
+    val verbose = false
 
     override fun process(): Long {
         val memory = Memory()
@@ -32,10 +33,11 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
                 memory.showCurrent(iterations)
             }
         }
-        println("found: ${found.get()}")
-        Console.info("found?", found.get())
-        // this is how many iterations it took to complete:
-        Console.info("iterations", iterations.get())
+        if (verbose) {
+            Console.info("found?", found.get())
+            // this is how many iterations it took to complete:
+            Console.info("iterations", iterations.get())
+        }
         return if (found.get()) iterations.get() else -1
     }
 
@@ -79,10 +81,12 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
         val md = matcher.check()
         if (md.isMatch) {
             //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
-            Console.info("md.match", md)
-            Console.info("monkey.id", matcher.monkey.id)
-            Console.info("attempt", attempt)
-            Console.info("iterations", iterations.get())
+            if (verbose) {
+                Console.info("md.match", md)
+                Console.info("monkey.id", matcher.monkey.id)
+                Console.info("attempt", attempt)
+                Console.info("iterations", iterations.get())
+            }
             found.set(true)
             return true
         } else {

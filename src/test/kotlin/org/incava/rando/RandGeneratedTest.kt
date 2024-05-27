@@ -8,7 +8,7 @@ internal class RandGeneratedTest {
     fun nextRand() {
         val obj = RandGenerated(27, 1000)
         var sum = 0.0
-        val iterations = 100000
+        val iterations = 100_000
         repeat(iterations) {
             val result = obj.nextRand()
             sum += result
