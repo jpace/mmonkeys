@@ -44,7 +44,7 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
     }
 
     private fun showUnmatched() {
-        val total = soughtByLength.entries.fold(0) { sum, entry -> sum + entry.value.size }
+        val total = soughtByLength.values.sumOf { it.size }
         val str = soughtByLength.entries
             .sortedBy { (key, _) -> key }
             .joinToString(", ") { it.key.toString() + ": " + it.value.size }

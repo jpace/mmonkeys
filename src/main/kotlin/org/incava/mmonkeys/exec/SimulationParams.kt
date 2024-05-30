@@ -5,10 +5,7 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.Matcher
 
-abstract class SimulationParams(
-    private val numMonkeys: Int,
-    val monkeyFactory: MonkeyFactory,
-) {
+abstract class SimulationParams(private val numMonkeys: Int, val monkeyFactory: MonkeyFactory) {
     fun summarize() {
         Console.info("# monkeys", numMonkeys)
     }

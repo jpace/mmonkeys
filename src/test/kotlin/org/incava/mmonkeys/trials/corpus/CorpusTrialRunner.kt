@@ -11,7 +11,12 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.system.measureTimeMillis
 
-class CorpusTrialRunner(val sought: Corpus, monkeyFactory: MonkeyFactory, private val timeLimit: Duration, private val tickSize: Int = 20000) {
+class CorpusTrialRunner(
+    val sought: Corpus,
+    monkeyFactory: MonkeyFactory,
+    private val timeLimit: Duration,
+    private val tickSize: Int = 20000,
+) {
     val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
@@ -33,7 +38,7 @@ class CorpusTrialRunner(val sought: Corpus, monkeyFactory: MonkeyFactory, privat
 
     private fun runMatch(matcher: Matcher) {
         Console.info("matcher", matcher.javaClass.name)
-        while (!matcher.isComplete()) {
+        while (sought.hasUnmatched()) {
             var iteration = 0L
             var result: MatchData
             do {

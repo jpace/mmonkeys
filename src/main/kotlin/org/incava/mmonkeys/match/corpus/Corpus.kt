@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.match.corpus
 class Corpus(val words: List<String>) {
-    private val matched = mutableSetOf<Int>()
+    val matched = mutableSetOf<Int>()
 
     fun hasWord(word: String): Pair<Boolean, Int> {
         words.indices.forEach { index ->
@@ -34,6 +34,8 @@ class Corpus(val words: List<String>) {
     fun removeAt(index: Int) {
         matched.add(index)
     }
+
+    fun hasUnmatched(): Boolean = matched.size < words.size
 
     fun isEmpty(): Boolean = matched.size == words.size
 

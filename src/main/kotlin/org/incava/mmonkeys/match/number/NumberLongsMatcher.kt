@@ -2,7 +2,6 @@ package org.incava.mmonkeys.match.number
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.Matcher
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.math.Maths
@@ -27,10 +26,6 @@ class NumberLongsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey,
             Console.info("numbers", numbers)
             showUnmatched()
         }
-    }
-
-    override fun isComplete(): Boolean {
-        return numbers.isEmpty()
     }
 
     override fun check(): MatchData {

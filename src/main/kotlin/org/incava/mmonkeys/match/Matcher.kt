@@ -1,26 +1,13 @@
 package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.rand.RandomFactory
 
-abstract class Matcher(val monkey: Monkey) {
-    val rand = RandomFactory.getCalculated(monkey.typewriter.numChars())
+abstract class Matcher(val monkey: Monkey) : Matching {
+    // @todo - integrate this into Monkey class
 
-    abstract fun check(): MatchData
+    override fun match(keystrokes: Int, index: Int): MatchData = monkey.match(keystrokes, index)
 
-    open fun match(keystrokes: Int, index: Int): MatchData {
-        return MatchData(true, keystrokes, index)
-    }
+    override fun noMatch(keystrokes: Int): MatchData = monkey.noMatch(keystrokes)
 
-    fun noMatch(keystrokes: Int): MatchData {
-        return MatchData(false, keystrokes, -1)
-    }
-
-    // number of keystrokes at which we'll hit the end-of-word character
-    // thus length == 1 means we'll hit at the first invocation, with
-    // an empty string, 8 means we had 7 (hypothetical) characters,
-    // and so on and so forth.
-    fun randomLength() = rand.nextRand()
-
-    abstract fun isComplete(): Boolean
+    override fun randomLength() = monkey.randomLength()
 }

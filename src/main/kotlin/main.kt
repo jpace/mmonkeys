@@ -1,10 +1,8 @@
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.exec.CorpusSimulationParams
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.SimulationParamsFactory
-import org.incava.mmonkeys.exec.StringSimulationParams
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher

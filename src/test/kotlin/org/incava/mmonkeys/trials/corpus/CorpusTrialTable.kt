@@ -18,7 +18,7 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
         LongColumn("duration.avg", 12),
         LongColumn("#matches/sec", 14),
         LongColumn("avg keystrokes", 14),
-        LongColumn("total keystrokes", 14),
+        LongColumn("total keystrokes", 16),
     )
 ) {
     fun summarize(results: Map<String, PerfResults>) {
@@ -26,7 +26,7 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
         writeBreak('=')
         results.forEach { (name, res) ->
             val durSecs = res.durations.sum() / 1000
-            val totalKeystrokes = res.matches.fold(0) { acc, match -> acc + match.keystrokes }
+            val totalKeystrokes = res.matches.sumOf { it.keystrokes }
             val avgKeystrokes = if (res.matches.isNotEmpty()) totalKeystrokes / res.matches.size else 0
             val cells = listOf(
                 name,

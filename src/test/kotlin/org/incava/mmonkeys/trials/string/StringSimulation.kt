@@ -25,11 +25,11 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
             "num (long)" to ::NumberLongMatcher,
             "num (<*>)" to if (word.length > 6) ::NumberLongMatcher else ::NumberIntMatcher
         )
-        val trials = matchers.map {
-            val params = SimulationParamsFactory.createStringParams(numMonkeys, word, it.second)
-            StringSimulationRunner(it.first, params)
+        val trials = matchers.map { (type, ctor) ->
+            val params = SimulationParamsFactory.createStringParams(numMonkeys, word, ctor)
+            StringSimulationRunner(type, params)
         }
-        val table = StringSimTable(word)
+        val table = StringSimulationTable(word)
         repeat(numTrials) { num ->
             if (num > 0) {
                 if (num % 5 == 0) {
@@ -49,6 +49,17 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
         println()
     }
 }
+
+interface Foo<in T> {
+    operator fun compareTo(other: T): Int
+}
+
+fun demo(x: Foo<Number>) {
+    x.compareTo(44) // 1.0 has type Double, which is a subtype of Number
+    // Thus, you can assign x to a variable of type Comparable<Double>
+    val y: Foo<Double> = x // OK!
+}
+
 
 fun main() {
     // a partial trial, using only a single string, with coroutines

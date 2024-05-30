@@ -4,7 +4,9 @@ import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
+import org.incava.mmonkeys.match.string.PartialStringMonkey
 import org.incava.mmonkeys.match.string.StringMatcher
+import org.incava.mmonkeys.match.string.StringMonkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
@@ -19,6 +21,11 @@ class MonkeyFactory(
     fun createMonkey(id: Int = this.id++): Monkey {
         val typewriter = typewriterSupplier(chars)
         return Monkey(id, typewriter)
+    }
+
+    fun createPartialStringMonkey(sought: String, id: Int = this.id++): PartialStringMonkey {
+        val typewriter = typewriterSupplier(chars)
+        return PartialStringMonkey(sought, id, typewriter)
     }
 
     fun createCorpusMatcher(monkey: Monkey, corpus: Corpus): CorpusMatcher {

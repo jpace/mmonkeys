@@ -45,8 +45,8 @@ class CorpusTrial(private val sought: Corpus, private val params: Params) {
         Console.info("sought.#", sought.words.size)
         val types = listOf(
             "length" to ::LengthCorpusMatcher,
-            "eq" to ::EqCorpusMatcher,
-            "longs" to ::NumberLongsMatcher,
+            // "eq" to ::EqCorpusMatcher,
+            // "longs" to ::NumberLongsMatcher,
         )
         val results = types.shuffled().associate { (name, matcher) ->
             val result = runTrial(name, matcher)
@@ -94,7 +94,7 @@ fun main() {
         listOf(
             // NumberLongsMatcher can only support up through words of length 13
 //           Params(4, 500, ofSeconds(3L), 1000),
-//            Params(4, 500, ofSeconds(30L), 1000),
+            Params(4, 10, ofSeconds(30L), 1),
 
 //            Params(7, 5000, ofMinutes(1L), 1000),
 //            Params(7, 5000, ofMinutes(3L), 10000),
@@ -102,7 +102,7 @@ fun main() {
 
 //            Params(7, 10000, ofMinutes(1L), 10000),
 //            Params(7, 10000, ofMinutes(3L), 10000),
-          Params(7, 10000, ofMinutes(7L), 10000),
+//          Params(7, 10000, ofMinutes(7L), 10000),
 //
 //            Params(13, 5000, ofMinutes(1L), 10000),
 //            Params(13, 5000, ofMinutes(3L), 10000),

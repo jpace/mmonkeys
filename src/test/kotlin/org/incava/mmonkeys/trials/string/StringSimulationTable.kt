@@ -7,7 +7,7 @@ import org.incava.mesa.Table
 import java.time.Duration
 import kotlin.math.max
 
-class StringSimTable(private val word: String) : Table(
+class StringSimulationTable(private val word: String) : Table(
     listOf(
         StringColumn("word", 7),
         IntStringColumn("trial", 5),
