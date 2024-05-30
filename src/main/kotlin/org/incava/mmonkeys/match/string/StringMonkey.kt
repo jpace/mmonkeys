@@ -2,12 +2,11 @@ package org.incava.mmonkeys.match.string
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
+import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.type.Typewriter
 
-abstract class StringMonkey(val sought: String, id: Int, typewriter: Typewriter) : Monkey(id, typewriter) {
+abstract class StringMonkey(val sought: String, id: Int, typewriter: Typewriter) : Monkey(id, typewriter), Matching {
     private var complete = false
-
-    abstract fun check(): MatchData
 
     override fun match(keystrokes: Int, index: Int): MatchData {
         complete = true

@@ -4,6 +4,7 @@ import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.SimulationParams
 import org.incava.mmonkeys.exec.SimulationParamsFactory
 import org.incava.mmonkeys.exec.TypewriterFactory
+import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
@@ -12,30 +13,32 @@ import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.StringMatcher
 import java.lang.Thread.sleep
 
-fun runSimulation(type: String, params: SimulationParams) {
-    params.summarize()
-    val simulation = CoroutineSimulation(params)
+fun <T> runSimulation(type: String, sought: T, params: SimulationParams<T>, matcher: (Monkey, T) -> Matching) {
+    Console.info("type", type)
+    val simulation = CoroutineSimulation(params.numMonkeys, params.monkeyFactory, sought, matcher)
+    Console.info("# monkeys", simulation.numMonkeys)
     Console.info("main", "simulation")
     Console.info("type", type)
     simulation.run()
     simulation.summarize()
+    println()
 }
 
 fun runStringSimulation(toChar: Char, type: String, sought: String, matcher: (Monkey, String) -> StringMatcher) {
     val typewriterFactory = TypewriterFactory(toChar)
     val params = SimulationParamsFactory.createStringParams(10, sought, matcher, typewriterFactory)
-    runSimulation(type, params)
+    runSimulation(type, sought, params, matcher)
 }
 
 fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, matcher: (Monkey, Corpus) -> CorpusMatcher) {
     val typewriterFactory = TypewriterFactory(toChar)
     val params = SimulationParamsFactory.createCorpusParams(10, sought, matcher, typewriterFactory)
     Console.info("sought", sought.words)
-    runSimulation(type, params)
+    runSimulation(type, sought, params, matcher)
 }
 
 fun runCorpusTest(toChar: Char) {
-    Console.info("toChar", toChar)
+    Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
     val x = "equal" to ::EqCorpusMatcher
     val y = "length" to ::LengthCorpusMatcher
@@ -46,6 +49,7 @@ fun runCorpusTest(toChar: Char) {
 }
 
 fun runStringTest(toChar: Char) {
+    Console.info("string test")
     Console.info("toChar", toChar)
     val sought = "abc"
     val x = "equal" to ::EqStringMatcher

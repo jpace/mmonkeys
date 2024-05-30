@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.Matcher
+import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.time.Durations
@@ -36,7 +37,7 @@ class CorpusTrialRunner(
         results = PerfResults(totalDuration.second, durations, iterations, matches)
     }
 
-    private fun runMatch(matcher: Matcher) {
+    private fun runMatch(matcher: Matching) {
         Console.info("matcher", matcher.javaClass.name)
         while (sought.hasUnmatched()) {
             var iteration = 0L

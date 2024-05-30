@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.match
 
 open class MatcherTest {
-    fun runTest(matcher: Matcher, maxAttempts: Long = 100_000_000_000_000L) : Long {
+    fun runTest(matcher: Matching, maxAttempts: Long = 100_000_000_000_000L) : Long {
         var iteration = 0L
         while (iteration < maxAttempts) {
             val result = matcher.check()

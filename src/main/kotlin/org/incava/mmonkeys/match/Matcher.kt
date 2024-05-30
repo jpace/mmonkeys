@@ -10,4 +10,8 @@ abstract class Matcher(val monkey: Monkey) : Matching {
     override fun noMatch(keystrokes: Int): MatchData = monkey.noMatch(keystrokes)
 
     override fun randomLength() = monkey.randomLength()
+
+    override fun toString(): String {
+        return "monkey.id: ${monkey.id}"
+    }
 }

@@ -6,21 +6,46 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.match.Matcher
+import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.util.Memory
+import org.incava.time.DurationList
+import org.incava.time.Durations
+import java.time.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
+class CoroutineSimulation<T>(
+    val numMonkeys: Int,
+    private val monkeyFactory: MonkeyFactory,
+    private val sought: T,
+    private val matchCtor: (Monkey, T) -> Matching,
+) {
     private val iterations = AtomicLong(0L)
     private val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
     private val maxAttempts = 100_000_000L
     private val showMemory = false
-    private val monkeys = params.makeMonkeys()
+    private val monkeys: List<Monkey>
+    val durations = DurationList()
     val verbose = false
 
-    override fun process(): Long {
+    init {
+        // I don't make monkeys; I just train them!
+        monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(it) }
+    }
+
+    fun run(): Pair<Long, Duration> = Durations.measureDuration {
+        process()
+    }
+
+    fun summarize() {
+        durations.forEach { Console.info("duration", it) }
+        Console.info("average sec", durations.average().toMillis() / 1000)
+    }
+
+    private fun process(): Long {
         val memory = Memory()
         runBlocking {
             val timer = launchTimer(memory)
@@ -43,7 +68,7 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
 
     private fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
         launch {
-            val matcher = params.matcher(monkey)
+            val matcher = matchCtor(monkey, sought)
             runMatcher(matcher)
         }
     }
@@ -67,7 +92,7 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
         }
     }
 
-    private suspend fun runMatcher(matcher: Matcher) {
+    private suspend fun runMatcher(matcher: Matching) {
         (0 until maxAttempts).forEach { attempt ->
             if (found.get() || checkMatcher(matcher, attempt)) {
                 return
@@ -76,14 +101,14 @@ class CoroutineSimulation(params: SimulationParams) : Simulation(params) {
         Console.info("match failed", this)
     }
 
-    private suspend fun checkMatcher(matcher: Matcher, attempt: Long): Boolean {
+    private suspend fun checkMatcher(matcher: Matching, attempt: Long): Boolean {
         iterations.incrementAndGet()
         val md = matcher.check()
         if (md.isMatch) {
             //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
             if (verbose) {
                 Console.info("md.match", md)
-                Console.info("monkey.id", matcher.monkey.id)
+                Console.info("matcher.to_s", matcher)
                 Console.info("attempt", attempt)
                 Console.info("iterations", iterations.get())
             }
