@@ -25,12 +25,15 @@ fun runSimulation(type: String, simulation: CoroutineSimulation) {
 }
 
 fun runSimulation(type: String, sought: String, numMonkeys: Int, monkeyFactory: MonkeyFactory, matcher: (Monkey, String) -> Matching) {
-    val simulation = CoroutineStringSimulation(numMonkeys, monkeyFactory, sought, matcher)
+    // I don't make monkeys; I just train them!
+    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(it) }
+    val simulation = CoroutineStringSimulation(sought, matcher, monkeys)
     runSimulation(type, simulation)
 }
 
 fun runSimulation(type: String, sought: Corpus, numMonkeys: Int, monkeyFactory: MonkeyFactory, matcher: (Monkey, Corpus) -> Matching) {
-    val simulation = CoroutineCorpusSimulation(numMonkeys, monkeyFactory, sought, matcher)
+    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(it) }
+    val simulation = CoroutineCorpusSimulation(sought, matcher, monkeys)
     runSimulation(type, simulation)
 }
 

@@ -43,7 +43,7 @@ internal class MonkeyTest {
     @MethodSource("dataForNextString")
     fun nextString(expected: String, characters: List<Char>) {
         val typewriter = DeterministicTypewriter(characters)
-        val obj = Monkey(id = 37, typewriter = typewriter)
+        val obj = Monkey(37, typewriter)
         val result = obj.nextString()
         assertEquals(expected, result)
     }

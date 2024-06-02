@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.util.Memory
 import org.incava.time.DurationList
@@ -16,19 +15,14 @@ import java.time.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-abstract class CoroutineSimulation(val numMonkeys: Int, private val monkeyFactory: MonkeyFactory) {
+abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
+    val numMonkeys = monkeys.size
     val iterations = AtomicLong(0L)
     val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
     private val showMemory = false
-    val monkeys: List<Monkey>
     val durations = DurationList()
     val verbose = false
-
-    init {
-        // I don't make monkeys; I just train them!
-        monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(it) }
-    }
 
     fun run(): Pair<Long, Duration> = Durations.measureDuration {
         process()

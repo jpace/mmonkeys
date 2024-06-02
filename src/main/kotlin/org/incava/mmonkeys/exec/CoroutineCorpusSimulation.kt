@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.exec
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
@@ -12,17 +13,18 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 open class CoroutineCorpusSimulation(
-    numMonkeys: Int,
-    monkeyFactory: MonkeyFactory,
     private val sought: Corpus,
     private val matchCtor: (Monkey, Corpus) -> Matching,
-) : CoroutineSimulation(numMonkeys, monkeyFactory) {
+    monkeys: List<Monkey>
+) : CoroutineSimulation(monkeys) {
     private val maxAttempts = 100_000_000L
 
-    override fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
-        launch {
-            val matcher = matchCtor(monkey, sought)
-            runMatcher(matcher)
+    override fun CoroutineScope.launchMonkeys(): List<Job> {
+        return monkeys.map { monkey ->
+            launch {
+                val matcher = matchCtor(monkey, sought)
+                runMatcher(matcher)
+            }
         }
     }
 

@@ -5,16 +5,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.Matching
-import java.util.concurrent.atomic.AtomicLong
 
 class CoroutineStringSimulation(
-    numMonkeys: Int,
-    monkeyFactory: MonkeyFactory,
     private val sought: String,
     private val matchCtor: (Monkey, String) -> Matching,
-) : CoroutineSimulation(numMonkeys, monkeyFactory) {
+    monkeys: List<Monkey>,
+) : CoroutineSimulation(monkeys) {
     private val maxAttempts = 100_000_000L
 
     override fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->

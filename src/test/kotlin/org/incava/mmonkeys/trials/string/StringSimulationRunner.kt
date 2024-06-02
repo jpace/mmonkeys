@@ -8,19 +8,16 @@ import java.time.Duration
 
 class StringSimulationRunner(
     val name: String,
-    private val numMonkeys: Int,
+    numMonkeys: Int,
     private val monkeyFactory: MonkeyFactory,
 ) {
     val results = mutableListOf<Long>()
     val durations = DurationList()
+    // I don't make monkeys; I just train them!
+    private val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(it) }
 
     fun run(sought: String): Pair<Long, Duration> {
-        val simulation = CoroutineStringSimulation(
-            numMonkeys,
-            monkeyFactory,
-            sought,
-            monkeyFactory.stringMatcher
-        )
+        val simulation = CoroutineStringSimulation(sought, monkeyFactory.stringMatcher, monkeys)
         Console.info("# monkeys", simulation.numMonkeys)
         val (result, duration) = simulation.run()
         results += result
