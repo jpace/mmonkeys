@@ -1,7 +1,8 @@
 package org.incava.mmonkeys.trials.string
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.exec.SimulationParamsFactory
+import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.number.NumberIntMatcher
 import org.incava.mmonkeys.match.number.NumberLongMatcher
 import org.incava.mmonkeys.match.string.EqStringMatcher
@@ -25,9 +26,10 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
             "num (long)" to ::NumberLongMatcher,
             "num (<*>)" to if (word.length > 6) ::NumberLongMatcher else ::NumberIntMatcher
         )
+        val typewriterFactory = TypewriterFactory()
         val trials = matchers.map { (type, ctor) ->
-            val params = SimulationParamsFactory.createStringParams(numMonkeys, word, ctor)
-            StringSimulationRunner(type, params)
+            val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMatcher = ctor)
+            StringSimulationRunner(type, numMonkeys, monkeyFactory)
         }
         val table = StringSimulationTable(word)
         repeat(numTrials) { num ->
@@ -40,7 +42,7 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
                 }
             }
             val byName = trials.shuffled().associate {
-                val (result, duration) = it.run()
+                val (result, duration) = it.run(word)
                 it.name to (result to duration)
             }
             table.addTrials(num, byName)

@@ -1,6 +1,5 @@
 package org.incava.mmonkeys
 
-import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
@@ -15,7 +14,6 @@ class MonkeyFactory(
     val typewriterSupplier: (chars: List<Char>) -> Typewriter = ::Typewriter,
     val corpusMatcher: (monkey: Monkey, corpus: Corpus) -> CorpusMatcher = ::EqCorpusMatcher,
     val stringMatcher: (monkey: Monkey, string: String) -> StringMatcher = ::EqStringMatcher,
-    val stringMatchingCtor: (sought: String, id: Int, typewriter: Typewriter) -> Matching = ::EqStringMonkey,
     val stringMonkeyCtor: (String, Int, Typewriter) -> StringMonkey = ::EqStringMonkey,
     val chars: List<Char> = Keys.fullList(),
 ) {

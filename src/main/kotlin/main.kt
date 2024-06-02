@@ -1,8 +1,9 @@
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.exec.SimulationParams
-import org.incava.mmonkeys.exec.SimulationParamsFactory
+import org.incava.mmonkeys.exec.CoroutineStringSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.corpus.Corpus
@@ -13,9 +14,8 @@ import org.incava.mmonkeys.match.string.EqStringMatcher
 import org.incava.mmonkeys.match.string.StringMatcher
 import java.lang.Thread.sleep
 
-fun <T> runSimulation(type: String, sought: T, params: SimulationParams<T>, matcher: (Monkey, T) -> Matching) {
+fun runSimulation(type: String, simulation: CoroutineSimulation) {
     Console.info("type", type)
-    val simulation = CoroutineSimulation(params.numMonkeys, params.monkeyFactory, sought, matcher)
     Console.info("# monkeys", simulation.numMonkeys)
     Console.info("main", "simulation")
     Console.info("type", type)
@@ -24,17 +24,26 @@ fun <T> runSimulation(type: String, sought: T, params: SimulationParams<T>, matc
     println()
 }
 
+fun runSimulation(type: String, sought: String, numMonkeys: Int, monkeyFactory: MonkeyFactory, matcher: (Monkey, String) -> Matching) {
+    val simulation = CoroutineStringSimulation(numMonkeys, monkeyFactory, sought, matcher)
+    runSimulation(type, simulation)
+}
+
+fun runSimulation(type: String, sought: Corpus, numMonkeys: Int, monkeyFactory: MonkeyFactory, matcher: (Monkey, Corpus) -> Matching) {
+    val simulation = CoroutineCorpusSimulation(numMonkeys, monkeyFactory, sought, matcher)
+    runSimulation(type, simulation)
+}
+
 fun runStringSimulation(toChar: Char, type: String, sought: String, matcher: (Monkey, String) -> StringMatcher) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val params = SimulationParamsFactory.createStringParams(10, sought, matcher, typewriterFactory)
-    runSimulation(type, sought, params, matcher)
+    val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMatcher = matcher)
+    runSimulation(type, sought, 10, monkeyFactory, matcher)
 }
 
 fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, matcher: (Monkey, Corpus) -> CorpusMatcher) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val params = SimulationParamsFactory.createCorpusParams(10, sought, matcher, typewriterFactory)
-    Console.info("sought", sought.words)
-    runSimulation(type, sought, params, matcher)
+    val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, corpusMatcher = matcher)
+    runSimulation(type, sought, 10, monkeyFactory, matcher)
 }
 
 fun runCorpusTest(toChar: Char) {

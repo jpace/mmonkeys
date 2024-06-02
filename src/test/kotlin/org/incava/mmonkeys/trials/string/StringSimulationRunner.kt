@@ -1,21 +1,25 @@
 package org.incava.mmonkeys.trials.string
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.exec.SimulationParams
+import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.exec.CoroutineStringSimulation
 import org.incava.time.DurationList
 import java.time.Duration
 
-class StringSimulationRunner(val name: String, private val params: SimulationParams<String>) {
+class StringSimulationRunner(
+    val name: String,
+    private val numMonkeys: Int,
+    private val monkeyFactory: MonkeyFactory,
+) {
     val results = mutableListOf<Long>()
     val durations = DurationList()
 
-    fun run(): Pair<Long, Duration> {
-        val simulation = CoroutineSimulation(
-            params.numMonkeys,
-            params.monkeyFactory,
-            params.sought,
-            params.monkeyFactory.stringMatcher
+    fun run(sought: String): Pair<Long, Duration> {
+        val simulation = CoroutineStringSimulation(
+            numMonkeys,
+            monkeyFactory,
+            sought,
+            monkeyFactory.stringMatcher
         )
         Console.info("# monkeys", simulation.numMonkeys)
         val (result, duration) = simulation.run()
