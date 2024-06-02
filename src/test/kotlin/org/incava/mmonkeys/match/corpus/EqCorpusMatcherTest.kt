@@ -1,10 +1,10 @@
 package org.incava.mmonkeys.match.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.testutil.MonkeyUtils
-import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.DynamicTest
@@ -22,10 +22,7 @@ internal class EqCorpusMatcherTest : MatcherTest() {
             (Keys.keyList('e') to listOf("abcde", "ghijk")) to 0L,
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
-                val typewriter = DeterministicTypewriter(inputs.first)
-                val monkeyFactory = MonkeyFactory({ typewriter })
-                val monkey = monkeyFactory.createMonkey()
-                val obj = EqCorpusMatcher(monkey, Corpus(inputs.second))
+                val (_, obj) = createMatcher(Corpus(inputs.second), inputs.first)
                 val result = runTest(obj)
                 assertEquals(expected, result)
             }
@@ -33,26 +30,26 @@ internal class EqCorpusMatcherTest : MatcherTest() {
 
     @Test
     fun testRunIterationNoMatch() {
-        val obj = createMatcher("123")
+        val (_, obj) = createMatcher(Corpus(listOf("123")))
         val result = obj.check()
         assertFalse(result.isMatch)
     }
 
     @Test
     fun testRunIterationMatch() {
-        val obj = createMatcher("abcde")
+        val (_, obj) = createMatcher(Corpus(listOf("abcde")))
         val result = obj.check()
         assertTrue(result.isMatch)
     }
 
-    private fun createMatcher(sought: String): EqCorpusMatcher {
-        val monkey = MonkeyUtils.createDeterministicMonkey(Keys.keyList('e'))
-        return EqCorpusMatcher(monkey, Corpus(listOf(sought)))
+    private fun createMatcher(corpus: Corpus, chars: List<Char> = Keys.keyList('e')): Pair<Monkey, CorpusMatcher> {
+        return MonkeyUtils.createMatcher(corpus, ::EqCorpusMatcher, chars)
     }
 
     @Test
     fun check() {
-        val monkey = MonkeyFactory({ Typewriter() }).createMonkey()
+        val chars = Keys.fullList()
+        val monkey = MonkeyFactory({ Typewriter() }, chars = chars).createMonkey()
         val sought = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = EqCorpusMatcher(monkey, Corpus(sought))
         var iterations = 0

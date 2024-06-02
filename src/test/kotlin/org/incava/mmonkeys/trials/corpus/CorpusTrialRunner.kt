@@ -26,10 +26,9 @@ class CorpusTrialRunner(
     var verbose = false
 
     init {
-        val monkey = monkeyFactory.createMonkey()
         val durations = mutableListOf<Long>()
         val totalDuration = Durations.measureDuration {
-            val matcher = monkeyFactory.corpusMatcher(monkey, sought)
+            val (monkey, matcher) = monkeyFactory.createCorpusMatcher(sought)
             durations += measureTimeMillis {
                 runMatch(matcher)
             }

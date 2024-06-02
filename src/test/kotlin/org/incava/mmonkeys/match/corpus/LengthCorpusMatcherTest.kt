@@ -9,15 +9,16 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class LengthCorpusMatcherTest : MatcherTest() {
-    private fun makeMonkey(): Monkey {
-        return MonkeyFactory({ Typewriter() }).createMonkey()
+    private fun makeMonkey(corpus: Corpus): Pair<Monkey, CorpusMatcher> {
+        val monkeyFactory = MonkeyFactory({ Typewriter() }, corpusMatcher = ::LengthCorpusMatcher)
+        return monkeyFactory.createCorpusMatcher(corpus)
     }
 
     @Test
     fun soughtByLens() {
-        val monkey = makeMonkey()
         val sought = listOf("ab", "cd", "def", "defg", "ghi", "lmnop")
-        val obj = LengthCorpusMatcher(monkey, Corpus(sought))
+        val (_, obj) = makeMonkey(Corpus(sought))
+        obj as LengthCorpusMatcher
         val expected = mapOf(
             2 to listOf("ab", "cd"),
             3 to listOf("def", "ghi"),
@@ -30,9 +31,9 @@ internal class LengthCorpusMatcherTest : MatcherTest() {
 
     @Test
     fun check() {
-        val monkey = makeMonkey()
         val sought = listOf("ab", "cd", "def", "defg", "ghi")
-        val obj = LengthCorpusMatcher(monkey, Corpus(sought))
+        val (_, obj) = makeMonkey(Corpus(sought))
+        obj as LengthCorpusMatcher
         var iterations = 0
         while (!obj.sought.isEmpty()) {
             val result = obj.check()

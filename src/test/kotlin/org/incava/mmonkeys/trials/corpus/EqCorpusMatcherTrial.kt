@@ -7,9 +7,9 @@ import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {
-    val monkey = MonkeyFactory().createMonkey()
+    val monkeyFactory = MonkeyFactory(corpusMatcher = ::EqCorpusMatcher)
     val sought = listOf("abc", "cde", "efg")
-    val obj = EqCorpusMatcher(monkey, Corpus(sought))
+    val (monkey, obj) = monkeyFactory.createCorpusMatcher(Corpus(sought))
     Console.info("obj", obj)
     Console.info("sought", obj.sought)
     Console.info("sought.present?", !obj.sought.isEmpty())
