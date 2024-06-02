@@ -15,6 +15,8 @@ class NumberLongsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey,
     val verbose = false
 
     init {
+        Console.info("monkey", monkey)
+        Console.info("sought", sought)
         val encoded = mutableMapOf<String, Long>()
         sought.words.withIndex().forEach { word ->
             val enc = encoded.computeIfAbsent(word.value, StringEncoder::encodeToLong)

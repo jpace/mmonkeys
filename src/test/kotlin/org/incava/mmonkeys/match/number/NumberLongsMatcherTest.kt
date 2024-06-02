@@ -83,4 +83,15 @@ internal class NumberLongsMatcherTest {
         val result = obj.check()
         Console.info("result", result)
     }
+
+    @Disabled("too expensive to run the encoding for each monkey instance")
+    @Test
+    fun checkMany() {
+        (0 until 100_000_000L).forEach {
+            val input = listOf("this", "is", "a", "test")
+            val (_, obj) = makeMonkey(Corpus(input))
+            obj as NumberLongsMatcher
+            val result = obj.check()
+        }
+    }
 }
