@@ -9,6 +9,7 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
 
     init {
         Console.info("creating corpus")
+        Console.info("sought.words.#", sought.words.size)
         sought.words.withIndex().forEach { word ->
             val length = word.value.length
             soughtByLength.computeIfAbsent(length) { mutableListOf() }.also { it.add(word.value) }

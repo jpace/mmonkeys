@@ -1,9 +1,8 @@
 package org.incava.mmonkeys.match.string
 
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
-import org.incava.mmonkeys.type.DeterministicTypewriter
+import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
@@ -41,8 +40,6 @@ internal class EqStringMatcherTest : MatcherTest() {
     }
 
     private fun createMatcher(sought: String, chars: List<Char> = Keys.keyList('e')): Pair<Monkey, StringMatcher> {
-        val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, stringMatcher = ::EqStringMatcher, chars = chars)
-        return monkeyFactory.createStringMatcher(sought)
+        return MonkeyUtils.createMatcher(sought, ::EqStringMatcher, chars)
     }
 }

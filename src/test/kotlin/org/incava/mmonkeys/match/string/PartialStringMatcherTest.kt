@@ -3,6 +3,7 @@ package org.incava.mmonkeys.match.string
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
+import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -20,7 +21,7 @@ internal class PartialStringMatcherTest : MatcherTest() {
             (Keys.keyList('e') to "abcde") to 0L,
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
-                val (monkey, obj) = createMatcher(inputs.second, inputs.first)
+                val (_, obj) = createMatcher(inputs.second, inputs.first)
                 val result = runTest(obj)
                 assertEquals(expected, result)
             }
@@ -41,8 +42,6 @@ internal class PartialStringMatcherTest : MatcherTest() {
     }
 
     private fun createMatcher(sought: String, chars: List<Char> = Keys.keyList('e')): Pair<Monkey, StringMatcher> {
-        val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, stringMatcher = ::PartialStringMatcher, chars = chars)
-        return monkeyFactory.createStringMatcher(sought)
+        return MonkeyUtils.createMatcher(sought, ::PartialStringMatcher, chars)
     }
 }

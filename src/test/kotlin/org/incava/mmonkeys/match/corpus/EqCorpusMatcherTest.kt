@@ -48,10 +48,12 @@ internal class EqCorpusMatcherTest : MatcherTest() {
 
     @Test
     fun check() {
+        // a random typewriter, not deterministic:
         val chars = Keys.fullList()
-        val monkey = MonkeyFactory({ Typewriter() }, chars = chars).createMonkey()
-        val sought = listOf("ab", "cd", "def", "defg", "ghi")
-        val obj = EqCorpusMatcher(monkey, Corpus(sought))
+        val corpus = Corpus(listOf("ab", "cd", "def", "defg", "ghi"))
+        val typewriter = Typewriter(chars)
+        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMatcher = ::EqCorpusMatcher, chars = chars)
+        val (_, obj) = monkeyFactory.createCorpusMatcher(corpus)
         var iterations = 0
         while (!obj.sought.isEmpty()) {
             val result = obj.check()

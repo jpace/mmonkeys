@@ -2,16 +2,16 @@ package org.incava.mmonkeys.match.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
+import org.incava.mmonkeys.testutil.MonkeyUtils
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class LengthCorpusMatcherTest : MatcherTest() {
-    private fun makeMonkey(corpus: Corpus): Pair<Monkey, CorpusMatcher> {
-        val monkeyFactory = MonkeyFactory({ Typewriter() }, corpusMatcher = ::LengthCorpusMatcher)
-        return monkeyFactory.createCorpusMatcher(corpus)
+    private fun makeMonkey(corpus: Corpus, chars: List<Char> = Keys.fullList()): Pair<Monkey, CorpusMatcher> {
+        return MonkeyUtils.createMatcher(corpus, ::LengthCorpusMatcher, typewriterCtor = { Typewriter(it) }, chars = chars)
     }
 
     @Test
@@ -31,12 +31,17 @@ internal class LengthCorpusMatcherTest : MatcherTest() {
 
     @Test
     fun check() {
-        val sought = listOf("ab", "cd", "def", "defg", "ghi")
-        val (_, obj) = makeMonkey(Corpus(sought))
+        val (_, obj) = makeMonkey(Corpus(listOf("ab", "cd", "def", "defg", "ghi")))
         obj as LengthCorpusMatcher
+        Console.info("obj.class", obj.javaClass)
+        Console.info("obj", obj)
         var iterations = 0
         while (!obj.sought.isEmpty()) {
             val result = obj.check()
+            if (result.isMatch) {
+                Console.info("obj.sought", obj.sought)
+                Console.info("obj.sought.matched", obj.sought.matched)
+            }
             iterations++
         }
         Console.info("iterations", iterations)
