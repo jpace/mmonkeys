@@ -1,13 +1,11 @@
 package org.incava.mmonkeys.match.string
 
-import org.incava.mmonkeys.match.MatcherTest
-import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
 
-internal class LengthStringMonkeyTest : MatcherTest() {
+internal class LengthStringMonkeyTest {
     @Test
     fun check() {
         val typewriter = DeterministicTypewriter(Keys.keyList('e'))

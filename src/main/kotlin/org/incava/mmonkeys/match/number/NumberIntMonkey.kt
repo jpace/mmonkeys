@@ -1,9 +1,7 @@
 package org.incava.mmonkeys.match.number
 
 import org.incava.ikdk.math.Maths
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.string.StringMatcher
 import org.incava.mmonkeys.match.string.StringMonkey
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.random.Random

@@ -3,34 +3,16 @@ package org.incava.mmonkeys.trials.string
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.match.number.NumberIntMatcher
-import org.incava.mmonkeys.match.number.NumberLongMatcher
-import org.incava.mmonkeys.match.string.EqStringMatcher
-import org.incava.mmonkeys.match.string.LengthStringMatcher
-import org.incava.mmonkeys.match.string.PartialStringMatcher
+import org.incava.mmonkeys.match.number.NumberIntMonkey
+import org.incava.mmonkeys.match.number.NumberLongMonkey
+import org.incava.mmonkeys.match.string.EqStringMonkey
+import org.incava.mmonkeys.match.string.LengthStringMonkey
+import org.incava.mmonkeys.match.string.PartialStringMonkey
 import org.incava.time.Durations.measureDuration
 import java.lang.Thread.sleep
 
 class StringSimulation(private val numMonkeys: Int = 1_000_000) {
-    fun run(numTrials: Int, word: String) {
-        if (numTrials <= 0) {
-            return
-        }
-        Console.info("word", word)
-        val matchers = listOf(
-            "equal str" to ::EqStringMatcher,
-            "partial str" to ::PartialStringMatcher,
-            "length str" to ::LengthStringMatcher,
-            "no op" to ::NoOpMatcher,
-            "num (int)" to ::NumberIntMatcher,
-            "num (long)" to ::NumberLongMatcher,
-            "num (<*>)" to if (word.length > 6) ::NumberLongMatcher else ::NumberIntMatcher
-        )
-        val typewriterFactory = TypewriterFactory()
-        val trials = matchers.map { (type, ctor) ->
-            val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMatcher = ctor)
-            StringSimulationRunner(type, numMonkeys, monkeyFactory)
-        }
+    fun runTrials(numTrials: Int, word: String, trials: List<StringSimulationRunner>) {
         val table = StringSimulationTable(word)
         repeat(numTrials) { num ->
             if (num > 0) {
@@ -50,22 +32,46 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
         table.summarize(trials)
         println()
     }
+
+    fun run(numTrials: Int, word: String) {
+        if (numTrials <= 0) {
+            return
+        }
+        Console.info("word", word)
+        val matchers = listOf(
+            "equal str" to ::EqStringMonkey,
+            "partial str" to ::PartialStringMonkey,
+            "length str" to ::LengthStringMonkey,
+            "no op" to ::NoOpMonkey,
+            "num (int)" to ::NumberIntMonkey,
+            "num (long)" to ::NumberLongMonkey,
+            "num (<*>)" to if (word.length > 6) ::NumberLongMonkey else ::NumberIntMonkey
+        )
+        val typewriterFactory = TypewriterFactory()
+        val trials = matchers.map { (type, ctor) ->
+            val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMonkeyCtor = ctor)
+            StringSimulationRunner(type, numMonkeys, monkeyFactory)
+        }
+        runTrials(numTrials, word, trials)
+    }
+
 }
 
 fun main() {
     // a partial trial, using only a single string, with coroutines
+    val factor = 1
     val duration = measureDuration {
         val word0 = "ab"
         val word1 = "abc"
         val word2 = "abcd"
         val word3 = "abcde"
         val word4 = "abcdef"
-        val obj = StringSimulation()
-        obj.run(20, word0)
-        obj.run(10, word1)
-        obj.run(5, word2)
-        obj.run(3, word3)
-        obj.run(0, word4)
+        val obj = StringSimulation(10)
+        obj.run(3 * factor, word0)
+        obj.run(2 * factor, word1)
+        obj.run(0 * factor, word2)
+        obj.run(0 * factor, word3)
+        obj.run(0 * factor, word4)
         // obj.run(4, word3)
         // obj.run(1, word4)
     }

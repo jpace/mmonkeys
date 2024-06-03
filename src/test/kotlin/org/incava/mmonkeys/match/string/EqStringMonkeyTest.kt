@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.match.string
 
+import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
@@ -10,19 +11,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class EqStringMonkeyTest {
-    fun runTest(monkey: EqStringMonkey, maxAttempts: Long = 100_000_000_000_000L): Long {
-        var iteration = 0L
-        while (iteration < maxAttempts) {
-            val result = monkey.check()
-            if (result.isMatch) {
-                return iteration
-            }
-            ++iteration
-        }
-        println("failing after $iteration iterations")
-        throw RuntimeException("failed after $iteration iterations")
-    }
-
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -31,7 +19,7 @@ internal class EqStringMonkeyTest {
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val obj = createMonkey(inputs.second, inputs.first)
-                val result = runTest(obj, 10L)
+                val result = MonkeyUtils.runTest(obj, 10L)
                 assertEquals(expected, result)
             }
         }

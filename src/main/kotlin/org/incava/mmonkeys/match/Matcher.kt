@@ -2,7 +2,7 @@ package org.incava.mmonkeys.match
 
 import org.incava.mmonkeys.Monkey
 
-abstract class Matcher(val monkey: Monkey) : Matching {
+abstract class Matcher(private val monkey: Monkey) : Matching {
     // @todo - integrate this into Monkey class
 
     override fun match(keystrokes: Int, index: Int): MatchData = monkey.match(keystrokes, index)
@@ -11,7 +11,11 @@ abstract class Matcher(val monkey: Monkey) : Matching {
 
     override fun randomLength() = monkey.randomLength()
 
-    override fun toString(): String {
-        return "monkey.id: ${monkey.id}"
-    }
+    override fun toString() = "monkey.id: ${monkey.id}"
+
+    fun nextString() = monkey.nextString()
+
+    fun nextChars(length: Int) = monkey.nextChars(length)
+
+    fun nextChar() = monkey.nextChar()
 }

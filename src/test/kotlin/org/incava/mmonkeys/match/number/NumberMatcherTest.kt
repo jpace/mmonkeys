@@ -11,9 +11,9 @@ internal class NumberMatcherTest {
     fun checkInt() {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, stringMatcher = ::NumberIntMatcher, chars = chars)
+        val monkeyFactory = MonkeyFactory({ typewriter }, chars = chars)
         val input = "ab"
-        val (_, obj) = monkeyFactory.createStringMatcher(input)
+        val obj = monkeyFactory.createStringMonkey(input)
         repeat(10_000) {
             val result = obj.check()
             if (result.isMatch) {
@@ -27,9 +27,9 @@ internal class NumberMatcherTest {
     fun checkLong() {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, stringMatcher = ::NumberLongMatcher, chars = chars)
+        val monkeyFactory = MonkeyFactory({ typewriter }, chars = chars)
         val input = "a"
-        val (_, obj) = monkeyFactory.createStringMatcher(input)
+        val obj= monkeyFactory.createStringMonkey(input)
         repeat(1_000) {
             val result = obj.check()
             if (result.isMatch) {

@@ -10,8 +10,9 @@ import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
 import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import org.incava.mmonkeys.match.corpus.LengthCorpusMatcher
-import org.incava.mmonkeys.match.string.EqStringMatcher
-import org.incava.mmonkeys.match.string.StringMatcher
+import org.incava.mmonkeys.match.string.EqStringMonkey
+import org.incava.mmonkeys.match.string.StringMonkey
+import org.incava.mmonkeys.type.Typewriter
 import java.lang.Thread.sleep
 
 fun runSimulation(type: String, simulation: CoroutineSimulation) {
@@ -24,10 +25,11 @@ fun runSimulation(type: String, simulation: CoroutineSimulation) {
     println()
 }
 
-fun runSimulation(type: String, sought: String, numMonkeys: Int, monkeyFactory: MonkeyFactory, matcher: (Monkey, String) -> Matching) {
+fun runSimulation(type: String, sought: String, numMonkeys: Int, monkeyFactory: MonkeyFactory) {
     // I don't make monkeys; I just train them!
-    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(it) }
-    val simulation = CoroutineStringSimulation(sought, matcher, monkeys)
+    val monkeys = (0 until numMonkeys).map { monkeyFactory.createStringMonkey(sought, it) }
+    Console.info("monkeys.#", monkeys.size)
+    val simulation = CoroutineStringSimulation(monkeys)
     runSimulation(type, simulation)
 }
 
@@ -37,10 +39,10 @@ fun runSimulation(type: String, sought: Corpus, numMonkeys: Int, monkeyFactory: 
     runSimulation(type, simulation)
 }
 
-fun runStringSimulation(toChar: Char, type: String, sought: String, matcher: (Monkey, String) -> StringMatcher) {
+fun runStringSimulation(toChar: Char, type: String, sought: String, monkeyCtor: (String, Int, Typewriter) -> StringMonkey) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMatcher = matcher)
-    runSimulation(type, sought, 10, monkeyFactory, matcher)
+    val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMonkeyCtor = monkeyCtor)
+    runSimulation(type, sought, 10, monkeyFactory)
 }
 
 fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, matcher: (Monkey, Corpus) -> CorpusMatcher) {
@@ -64,10 +66,9 @@ fun runStringTest(toChar: Char) {
     Console.info("string test")
     Console.info("toChar", toChar)
     val sought = "abc"
-    val x = "equal" to ::EqStringMatcher
+    val x = "equal" to ::EqStringMonkey
     val m = x
-    val matcher = { mky: Monkey, _: String -> m.second(mky, sought) }
-    runStringSimulation(toChar, m.first, sought, matcher)
+    runStringSimulation(toChar, m.first, sought, m.second)
 }
 
 fun main(args: Array<String>) {

@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.util.Memory
 import org.incava.time.DurationList
 import org.incava.time.Durations
@@ -22,7 +21,7 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
     private val monitorInterval = 10_000L
     private val showMemory = false
     val durations = DurationList()
-    val verbose = false
+    val verbose = true
 
     fun run(): Pair<Long, Duration> = Durations.measureDuration {
         process()
@@ -74,8 +73,4 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
             }
         }
     }
-
-    abstract suspend fun runMatcher(matcher: Matching)
-
-    abstract suspend fun checkMatcher(matcher: Matching, attempt: Long): Boolean
 }

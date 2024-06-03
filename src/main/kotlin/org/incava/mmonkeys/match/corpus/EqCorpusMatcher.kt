@@ -7,7 +7,7 @@ import org.incava.mmonkeys.match.corpus.CorpusMatcher
 
 class EqCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
     override fun check(): MatchData {
-        val word = monkey.nextString()
+        val word = nextString()
         val index = sought.match(word)
         return if (index >= 0) {
             sought.removeAt(index)

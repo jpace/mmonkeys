@@ -28,7 +28,7 @@ open class CoroutineCorpusSimulation(
         }
     }
 
-    override suspend fun runMatcher(matcher: Matching) {
+    private suspend fun runMatcher(matcher: Matching) {
         (0 until maxAttempts).forEach { attempt ->
             if (found.get() || checkMatcher(matcher, attempt)) {
                 return
@@ -37,7 +37,7 @@ open class CoroutineCorpusSimulation(
         Console.info("match failed", this)
     }
 
-    override suspend fun checkMatcher(matcher: Matching, attempt: Long): Boolean {
+    suspend fun checkMatcher(matcher: Matching, attempt: Long): Boolean {
         iterations.incrementAndGet()
         val md = matcher.check()
         if (md.isMatch) {

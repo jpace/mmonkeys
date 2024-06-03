@@ -26,7 +26,7 @@ class LengthCorpusMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey
         val length = toEndOfWord - 1
         val forLength = soughtByLength[length]
         if (forLength != null) {
-            val word = monkey.nextChars(length)
+            val word = nextChars(length)
             val index = forLength.indexOf(word)
             if (index >= 0) {
                 sought.remove(word)

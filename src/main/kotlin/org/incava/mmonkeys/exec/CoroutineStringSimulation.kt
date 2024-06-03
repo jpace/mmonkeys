@@ -6,31 +6,28 @@ import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.Matching
+import org.incava.mmonkeys.match.string.StringMonkey
 
-class CoroutineStringSimulation(
-    private val sought: String,
-    private val matchCtor: (Monkey, String) -> Matching,
-    monkeys: List<Monkey>,
-) : CoroutineSimulation(monkeys) {
+class CoroutineStringSimulation(monkeys: List<StringMonkey>) : CoroutineSimulation(monkeys) {
     private val maxAttempts = 100_000_000L
 
     override fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
         launch {
-            val matcher = matchCtor(monkey, sought)
-            runMatcher(matcher)
+            Console.info("monkey", monkey.javaClass)
+            runMonkey(monkey)
         }
     }
 
-    override suspend fun runMatcher(matcher: Matching) {
+    suspend fun runMonkey(monkey: Monkey) {
         (0 until maxAttempts).forEach { attempt ->
-            if (found.get() || checkMatcher(matcher, attempt)) {
+            if (found.get() || checkMonkey(monkey, attempt)) {
                 return
             }
         }
         Console.info("match failed", this)
     }
 
-    override suspend fun checkMatcher(matcher: Matching, attempt: Long): Boolean {
+    suspend fun checkMonkey(matcher: Monkey, attempt: Long): Boolean {
         iterations.incrementAndGet()
         val md = matcher.check()
         if (md.isMatch) {

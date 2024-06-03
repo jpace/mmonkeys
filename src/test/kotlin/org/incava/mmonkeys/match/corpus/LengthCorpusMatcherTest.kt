@@ -2,14 +2,13 @@ package org.incava.mmonkeys.match.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.MatcherTest
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class LengthCorpusMatcherTest : MatcherTest() {
+internal class LengthCorpusMatcherTest {
     private fun makeMonkey(corpus: Corpus, chars: List<Char> = Keys.fullList()): Pair<Monkey, CorpusMatcher> {
         return MonkeyUtils.createMatcher(corpus, ::LengthCorpusMatcher, typewriterCtor = { Typewriter(it) }, chars = chars)
     }

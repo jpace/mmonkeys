@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatcherTest
+import org.incava.mmonkeys.testutil.MatcherUtils
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -14,7 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class EqCorpusMatcherTest : MatcherTest() {
+internal class EqCorpusMatcherTest {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -23,7 +24,7 @@ internal class EqCorpusMatcherTest : MatcherTest() {
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
                 val (_, obj) = createMatcher(Corpus(inputs.second), inputs.first)
-                val result = runTest(obj)
+                val result = MatcherUtils.runTest(obj)
                 assertEquals(expected, result)
             }
         }
