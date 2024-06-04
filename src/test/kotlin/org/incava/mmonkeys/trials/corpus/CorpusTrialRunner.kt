@@ -1,10 +1,9 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.Matcher
-import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.time.Durations
@@ -28,27 +27,28 @@ class CorpusTrialRunner(
     init {
         val durations = mutableListOf<Long>()
         val totalDuration = Durations.measureDuration {
-            val (monkey, matcher) = monkeyFactory.createCorpusMatcher(sought)
+            val monkey = monkeyFactory.createCorpusMonkey(sought)
+            Console.info("monkey.class", monkey.javaClass)
             durations += measureTimeMillis {
-                runMatch(matcher)
+                runMonkey(monkey)
             }
         }
         results = PerfResults(totalDuration.second, durations, iterations, matches)
     }
 
-    private fun runMatch(matcher: Matching) {
-        Console.info("matcher", matcher.javaClass.name)
+    private fun runMonkey(monkey: Monkey) {
+        Console.info("matcher", monkey.javaClass.name)
         while (sought.hasUnmatched()) {
             var iteration = 0L
             var result: MatchData
             do {
                 ++iteration
-                result = matcher.check()
+                result = monkey.check()
             } while (!result.isMatch && iteration < maxAttempts)
             if (verbose) {
                 Console.info("result.match?", result.isMatch)
                 if (result.isMatch) {
-                    Console.info("matcher.class", matcher.javaClass)
+                    Console.info("monkey.class", monkey.javaClass)
                     Console.info("result.keystrokes", result.keystrokes)
                     Console.info("result.index", result.index)
                     Console.info("word", sought.words[result.index])

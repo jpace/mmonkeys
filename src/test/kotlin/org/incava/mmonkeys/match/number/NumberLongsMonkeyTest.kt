@@ -1,18 +1,17 @@
 package org.incava.mmonkeys.match.number
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMatcher
+import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class NumberLongsMatcherTest {
-    private fun makeMonkey(corpus: Corpus): Pair<Monkey, CorpusMatcher> {
-        return MonkeyUtils.createMatcher(corpus, ::NumberLongsMatcher)
+internal class NumberLongsMonkeyTest {
+    private fun makeMonkey(corpus: Corpus): CorpusMonkey {
+        return MonkeyUtils.createMonkey(corpus, ::NumberLongsMonkey)
     }
 
     @Test
@@ -26,8 +25,8 @@ internal class NumberLongsMatcherTest {
                 794_111L to listOf(3)
             )
         )
-        val (_, obj) = makeMonkey(Corpus(input))
-        obj as NumberLongsMatcher
+        val obj = makeMonkey(Corpus(input))
+        obj as NumberLongsMonkey
         val result = obj.numbers
         assertEquals(expected, result)
     }
@@ -50,8 +49,8 @@ internal class NumberLongsMatcherTest {
                 49L to mutableListOf(7)
             )
         )
-        val (_, obj) = makeMonkey(Corpus(input))
-        obj as NumberLongsMatcher
+        val obj = makeMonkey(Corpus(input))
+        obj as NumberLongsMonkey
         val result = obj.numbers
         result.forEach { (length, numbers) ->
             println(length)
@@ -68,8 +67,8 @@ internal class NumberLongsMatcherTest {
     @Test
     fun hasUnmatched() {
         val corpus = Corpus(listOf("this", "is", "a", "test"))
-        val (_, obj) = makeMonkey(corpus)
-        obj as NumberLongsMatcher
+        val obj = makeMonkey(corpus)
+        obj as NumberLongsMonkey
         repeat(1000000) { obj.check() }
         val result = corpus.hasUnmatched()
         assertFalse(result, "corpus.words: ${corpus.words}, matched: ${corpus.matched}")
@@ -78,8 +77,8 @@ internal class NumberLongsMatcherTest {
     @Test
     fun check() {
         val input = listOf("this", "is", "a", "test")
-        val (_, obj) = makeMonkey(Corpus(input))
-        obj as NumberLongsMatcher
+        val obj = makeMonkey(Corpus(input))
+        obj as NumberLongsMonkey
         val result = obj.check()
         Console.info("result", result)
     }
@@ -89,8 +88,8 @@ internal class NumberLongsMatcherTest {
     fun checkMany() {
         (0 until 100_000_000L).forEach {
             val input = listOf("this", "is", "a", "test")
-            val (_, obj) = makeMonkey(Corpus(input))
-            obj as NumberLongsMatcher
+            val obj = makeMonkey(Corpus(input))
+            obj as NumberLongsMonkey
             val result = obj.check()
         }
     }

@@ -6,42 +6,37 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.Matching
-import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.corpus.CorpusMonkey
 
-open class CoroutineCorpusSimulation(
-    private val sought: Corpus,
-    private val matchCtor: (Monkey, Corpus) -> Matching,
-    monkeys: List<Monkey>
-) : CoroutineSimulation(monkeys) {
+open class CoroutineCorpusSimulation(monkeys: List<CorpusMonkey>) : CoroutineSimulation(monkeys) {
     private val maxAttempts = 100_000_000L
 
     override fun CoroutineScope.launchMonkeys(): List<Job> {
         return monkeys.map { monkey ->
             launch {
-                val matcher = matchCtor(monkey, sought)
-                runMatcher(matcher)
+                Console.info("monkey.class", monkey.javaClass)
+                runMonkey(monkey)
             }
         }
     }
 
-    private suspend fun runMatcher(matcher: Matching) {
+    private suspend fun runMonkey(monkey: Monkey) {
         (0 until maxAttempts).forEach { attempt ->
-            if (found.get() || checkMatcher(matcher, attempt)) {
+            if (found.get() || checkMonkey(monkey, attempt)) {
                 return
             }
         }
         Console.info("match failed", this)
     }
 
-    suspend fun checkMatcher(matcher: Matching, attempt: Long): Boolean {
+    suspend fun checkMonkey(monkey: Monkey, attempt: Long): Boolean {
         iterations.incrementAndGet()
-        val md = matcher.check()
+        val md = monkey.check()
         if (md.isMatch) {
             //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
             if (verbose) {
                 Console.info("md.match", md)
-                Console.info("matcher.to_s", matcher)
+                Console.info("matcher.to_s", monkey)
                 Console.info("attempt", attempt)
                 Console.info("iterations", iterations.get())
             }

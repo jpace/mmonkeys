@@ -1,12 +1,14 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMatcher
-import org.incava.mmonkeys.match.corpus.LengthCorpusMatcher
+import org.incava.mmonkeys.match.corpus.CorpusMonkey
+import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.match.number.NumberLongsMonkey
 import org.incava.mmonkeys.trials.base.PerfResults
+import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
 import java.time.Duration.ofSeconds
@@ -28,10 +30,11 @@ class CorpusTrial(private val sought: Corpus, private val params: Params) {
         ) : this(wordSizeLimit, numLines, ofSeconds(timeLimit), tickSize)
     }
 
-    fun runTrial(name: String, matcher: (Monkey, Corpus) -> CorpusMatcher): PerfResults {
-        Console.info(name)
+    private fun runTrial(name: String, monkeyCtor: (sought: Corpus, id: Int, typewriter: Typewriter) -> CorpusMonkey): PerfResults {
+        Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
-        val monkeyFactory = MonkeyFactory(corpusMatcher = matcher)
+        val monkeyFactory = MonkeyFactory(corpusMonkeyCtor = monkeyCtor)
+        Console.info("monkeyFactory", monkeyFactory)
         val runner = CorpusTrialRunner(sought, monkeyFactory, params.timeLimit, params.tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
@@ -41,12 +44,12 @@ class CorpusTrial(private val sought: Corpus, private val params: Params) {
     fun run() {
         Console.info("sought.#", sought.words.size)
         val types = listOf(
-            "length" to ::LengthCorpusMatcher,
-            // "eq" to ::EqCorpusMatcher,
-            // "longs" to ::NumberLongsMatcher,
+            "length" to ::LengthCorpusMonkey,
+            "eq" to ::EqCorpusMonkey,
+            "longs" to ::NumberLongsMonkey,
         )
-        val results = types.shuffled().associate { (name, matcher) ->
-            val result = runTrial(name, matcher)
+        val results = types.shuffled().associate { (name, monkeyCtor) ->
+            val result = runTrial(name, monkeyCtor)
             name to result
         }.toSortedMap()
         results.forEach { (name, res) ->

@@ -1,9 +1,7 @@
 package org.incava.mmonkeys.match.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
-import org.incava.mmonkeys.testutil.MatcherUtils
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -23,7 +21,7 @@ internal class EqCorpusMonkeyTest {
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the monkey should return $expected") {
                 val obj = createMonkey(Corpus(inputs.second), inputs.first)
-                val result = MatcherUtils.runTest(obj)
+                val result = MonkeyUtils.runTest(obj)
                 assertEquals(expected, result)
             }
         }
@@ -52,7 +50,7 @@ internal class EqCorpusMonkeyTest {
         val chars = Keys.fullList()
         val corpus = Corpus(listOf("ab", "cd", "def", "defg", "ghi"))
         val typewriter = Typewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMonkeyCtor = ::EqCorpusMonkey, chars = chars)
+        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMonkeyCtor = ::EqCorpusMonkey, charsCtor = chars)
         val obj = monkeyFactory.createCorpusMonkey(corpus)
         var iterations = 0
         while (!obj.sought.isEmpty()) {

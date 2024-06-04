@@ -6,16 +6,17 @@ import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Test
 
-internal class NumberMatcherTest {
+internal class NumberMonkeyTest {
     @Test
     fun checkInt() {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, chars = chars)
+        val monkeyFactory = MonkeyFactory({ typewriter }, charsCtor = chars, stringMonkeyCtor = ::NumberIntMonkey)
         val input = "ab"
-        val obj = monkeyFactory.createStringMonkey(input)
+        val monkey = monkeyFactory.createStringMonkey(input)
+        Console.info("monkey.class", monkey.javaClass)
         repeat(10_000) {
-            val result = obj.check()
+            val result = monkey.check()
             if (result.isMatch) {
                 Console.info("it", it)
                 Console.info("result", result)
@@ -27,11 +28,12 @@ internal class NumberMatcherTest {
     fun checkLong() {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, chars = chars)
+        val monkeyFactory = MonkeyFactory({ typewriter }, charsCtor = chars, stringMonkeyCtor = ::NumberLongMonkey)
         val input = "a"
-        val obj= monkeyFactory.createStringMonkey(input)
+        val monkey= monkeyFactory.createStringMonkey(input)
+        Console.info("monkey.class", monkey.javaClass)
         repeat(1_000) {
-            val result = obj.check()
+            val result = monkey.check()
             if (result.isMatch) {
                 Console.info("it", it)
                 Console.info("result", result)

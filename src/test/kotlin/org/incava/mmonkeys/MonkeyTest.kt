@@ -1,6 +1,7 @@
 package org.incava.mmonkeys
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.match.string.EqStringMonkey
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -17,7 +18,7 @@ internal class MonkeyTest {
         Console.info("#expected", expected.length)
         Console.info("#characters", characters.size)
         val typewriter = Typewriter(characters)
-        val monkey = Monkey(1, typewriter)
+        val monkey = EqStringMonkey("", 1, typewriter)
         val results = mutableListOf<Long>()
         val targetMatches = 3
         val start = System.currentTimeMillis()
@@ -43,7 +44,7 @@ internal class MonkeyTest {
     @MethodSource("dataForNextString")
     fun nextString(expected: String, characters: List<Char>) {
         val typewriter = DeterministicTypewriter(characters)
-        val obj = Monkey(37, typewriter)
+        val obj = EqStringMonkey("", 37, typewriter)
         val result = obj.nextString()
         assertEquals(expected, result)
     }
@@ -85,7 +86,7 @@ internal class MonkeyTest {
     @Test
     fun nextChars() {
         val typewriter = DeterministicTypewriter(Keys.fullList())
-        val obj = Monkey(id = 37, typewriter = typewriter)
+        val obj = EqStringMonkey("", 37, typewriter)
         val result = obj.nextChars(6)
         assertEquals("abcdef", result)
     }

@@ -1,12 +1,11 @@
 package org.incava.mmonkeys
 
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
-open class Monkey(val id: Int, val typewriter: Typewriter): Matching {
+abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     val rand = RandomFactory.getCalculated(typewriter.numChars())
 
     fun nextChar(): Char {
@@ -37,15 +36,13 @@ open class Monkey(val id: Int, val typewriter: Typewriter): Matching {
         return "Monkey(id=$id, typewriter=$typewriter)"
     }
 
-    override fun check(): MatchData {
-        TODO("Not yet implemented")
-    }
+    abstract fun check(): MatchData
 
-    override fun match(keystrokes: Int, index: Int): MatchData {
+    open fun match(keystrokes: Int, index: Int): MatchData {
         return MatchData(true, keystrokes, index)
     }
 
-    override fun noMatch(keystrokes: Int): MatchData {
+    fun noMatch(keystrokes: Int): MatchData {
         return MatchData(false, keystrokes, -1)
     }
 
@@ -53,5 +50,5 @@ open class Monkey(val id: Int, val typewriter: Typewriter): Matching {
     // thus length == 1 means we'll hit at the first invocation, with
     // an empty string, 8 means we had 7 (hypothetical) characters,
     // and so on and so forth.
-    override fun randomLength() = rand.nextRand()
+    fun randomLength() = rand.nextRand()
 }

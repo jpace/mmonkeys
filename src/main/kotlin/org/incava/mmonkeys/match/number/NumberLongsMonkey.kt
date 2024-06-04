@@ -1,21 +1,21 @@
 package org.incava.mmonkeys.match.number
 
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.math.Maths
-import org.incava.mmonkeys.match.corpus.CorpusMatcher
+import org.incava.mmonkeys.match.MatchData
+import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.corpus.CorpusMonkey
+import org.incava.mmonkeys.type.Typewriter
 import kotlin.random.Random
 
-class NumberLongsMatcher(monkey: Monkey, sought: Corpus) : CorpusMatcher(monkey, sought) {
+class NumberLongsMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : CorpusMonkey(sought, id, typewriter) {
     // length to [ encoded to [ indices in sought ] ]
     val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
-    private val charCount = monkey.typewriter.numChars().toLong() - 1
+    private val charCount = typewriter.numChars().toLong() - 1
     val verbose = false
 
     init {
-        Console.info("monkey", monkey)
+        Console.info("this", this)
         Console.info("sought", sought)
         val encoded = mutableMapOf<String, Long>()
         sought.words.withIndex().forEach { word ->
