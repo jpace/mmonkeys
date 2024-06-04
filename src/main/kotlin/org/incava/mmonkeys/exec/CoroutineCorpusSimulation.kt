@@ -6,11 +6,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.corpus.Corpus
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicLong
 
 open class CoroutineCorpusSimulation(
     private val sought: Corpus,

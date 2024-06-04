@@ -2,7 +2,6 @@ package org.incava.mmonkeys.trials.string
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.MonkeyFactory
-import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.number.NumberIntMonkey
 import org.incava.mmonkeys.match.number.NumberLongMonkey
 import org.incava.mmonkeys.match.string.EqStringMonkey
@@ -47,9 +46,8 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
             "num (long)" to ::NumberLongMonkey,
             "num (<*>)" to if (word.length > 6) ::NumberLongMonkey else ::NumberIntMonkey
         )
-        val typewriterFactory = TypewriterFactory()
         val trials = matchers.map { (type, ctor) ->
-            val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMonkeyCtor = ctor)
+            val monkeyFactory = MonkeyFactory(stringMonkeyCtor = ctor)
             StringSimulationRunner(type, numMonkeys, monkeyFactory)
         }
         runTrials(numTrials, word, trials)

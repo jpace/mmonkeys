@@ -2,10 +2,9 @@ package org.incava.mmonkeys.match.string
 
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.type.Typewriter
 
-abstract class StringMonkey(val sought: String, id: Int, typewriter: Typewriter) : Monkey(id, typewriter), Matching {
+abstract class StringMonkey(val sought: String, id: Int, typewriter: Typewriter) : Monkey(id, typewriter) {
     private var complete = false
 
     override fun match(keystrokes: Int, index: Int): MatchData {

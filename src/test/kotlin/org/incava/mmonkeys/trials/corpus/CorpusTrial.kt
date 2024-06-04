@@ -5,13 +5,10 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMatcher
-import org.incava.mmonkeys.match.corpus.EqCorpusMatcher
 import org.incava.mmonkeys.match.corpus.LengthCorpusMatcher
-import org.incava.mmonkeys.match.number.NumberLongsMatcher
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
-import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 class CorpusTrial(private val sought: Corpus, private val params: Params) {

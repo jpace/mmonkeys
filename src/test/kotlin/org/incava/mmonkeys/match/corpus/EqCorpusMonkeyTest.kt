@@ -14,15 +14,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class EqCorpusMatcherTest {
+internal class EqCorpusMonkeyTest {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
             (Keys.keyList('c') to listOf("abc", "def")) to 0L,
             (Keys.keyList('e') to listOf("abcde", "ghijk")) to 0L,
         ).map { (inputs, expected) ->
-            DynamicTest.dynamicTest("given $inputs, the matcher should return $expected") {
-                val (_, obj) = createMatcher(Corpus(inputs.second), inputs.first)
+            DynamicTest.dynamicTest("given $inputs, the monkey should return $expected") {
+                val obj = createMonkey(Corpus(inputs.second), inputs.first)
                 val result = MatcherUtils.runTest(obj)
                 assertEquals(expected, result)
             }
@@ -30,20 +30,20 @@ internal class EqCorpusMatcherTest {
 
     @Test
     fun testRunIterationNoMatch() {
-        val (_, obj) = createMatcher(Corpus(listOf("123")))
+        val obj = createMonkey(Corpus(listOf("123")))
         val result = obj.check()
         assertFalse(result.isMatch)
     }
 
     @Test
     fun testRunIterationMatch() {
-        val (_, obj) = createMatcher(Corpus(listOf("abcde")))
+        val obj = createMonkey(Corpus(listOf("abcde")))
         val result = obj.check()
         assertTrue(result.isMatch)
     }
 
-    private fun createMatcher(corpus: Corpus, chars: List<Char> = Keys.keyList('e')): Pair<Monkey, CorpusMatcher> {
-        return MonkeyUtils.createMatcher(corpus, ::EqCorpusMatcher, chars)
+    private fun createMonkey(corpus: Corpus, chars: List<Char> = Keys.keyList('e')): CorpusMonkey {
+        return MonkeyUtils.createMonkey(corpus, ::EqCorpusMonkey, chars)
     }
 
     @Test
@@ -52,8 +52,8 @@ internal class EqCorpusMatcherTest {
         val chars = Keys.fullList()
         val corpus = Corpus(listOf("ab", "cd", "def", "defg", "ghi"))
         val typewriter = Typewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMatcher = ::EqCorpusMatcher, chars = chars)
-        val (_, obj) = monkeyFactory.createCorpusMatcher(corpus)
+        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMonkeyCtor = ::EqCorpusMonkey, chars = chars)
+        val obj = monkeyFactory.createCorpusMonkey(corpus)
         var iterations = 0
         while (!obj.sought.isEmpty()) {
             val result = obj.check()

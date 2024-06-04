@@ -5,7 +5,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.Matching
 import org.incava.mmonkeys.match.string.StringMonkey
 
 class CoroutineStringSimulation(monkeys: List<StringMonkey>) : CoroutineSimulation(monkeys) {
