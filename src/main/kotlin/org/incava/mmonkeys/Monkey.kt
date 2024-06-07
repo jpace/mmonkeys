@@ -7,6 +7,7 @@ import org.incava.mmonkeys.type.Typewriter
 
 abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     val rand = RandomFactory.getCalculated(typewriter.numChars())
+    val attempts = MonkeyAttempts()
 
     fun nextChar(): Char {
         return typewriter.nextCharacter()
@@ -43,6 +44,7 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     }
 
     fun noMatch(keystrokes: Int): MatchData {
+//        print(".")
         return MatchData(false, keystrokes, -1)
     }
 

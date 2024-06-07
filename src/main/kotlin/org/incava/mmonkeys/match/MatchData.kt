@@ -1,3 +1,5 @@
 package org.incava.mmonkeys.match
 
-data class MatchData(val isMatch: Boolean, val keystrokes: Int, val index: Int)
+open class Attempt(val keystrokes: Int)
+
+class MatchData(val isMatch: Boolean, keystrokes: Int, val index: Int) : Attempt(keystrokes)

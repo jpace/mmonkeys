@@ -19,7 +19,7 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
     val iterations = AtomicLong(0L)
     val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
-    private val showMemory = false
+    private val showMemory = true
     val durations = DurationList()
     val verbose = true
 

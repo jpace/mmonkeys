@@ -47,6 +47,7 @@ class CorpusTrialRunner(
             } while (!result.isMatch && iteration < maxAttempts)
             if (verbose) {
                 Console.info("result.match?", result.isMatch)
+                monkey.attempts.summarize()
                 if (result.isMatch) {
                     Console.info("monkey.class", monkey.javaClass)
                     Console.info("result.keystrokes", result.keystrokes)

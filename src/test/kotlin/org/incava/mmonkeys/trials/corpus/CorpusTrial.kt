@@ -11,6 +11,7 @@ import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
+import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 class CorpusTrial(private val sought: Corpus, private val params: Params) {
@@ -46,6 +47,7 @@ class CorpusTrial(private val sought: Corpus, private val params: Params) {
         val types = listOf(
             "length" to ::LengthCorpusMonkey,
             "eq" to ::EqCorpusMonkey,
+            // NumberLongsMatcher can only support up through words of length 13
             "longs" to ::NumberLongsMonkey,
         )
         val results = types.shuffled().associate { (name, monkeyCtor) ->
@@ -94,7 +96,7 @@ fun main() {
         listOf(
             // NumberLongsMatcher can only support up through words of length 13
 //           Params(4, 500, ofSeconds(3L), 1000),
-            Params(4, 10, ofSeconds(30L), 1),
+//            Params(4, 10, ofSeconds(30L), 1),
 
 //            Params(7, 5000, ofMinutes(1L), 1000),
 //            Params(7, 5000, ofMinutes(3L), 10000),
@@ -105,12 +107,12 @@ fun main() {
 //          Params(7, 10000, ofMinutes(7L), 10000),
 //
 //            Params(13, 5000, ofMinutes(1L), 10000),
-//            Params(13, 5000, ofMinutes(3L), 10000),
+            Params(13, 5000, ofMinutes(3L), 10000),
 //            Params(13, 5000, ofMinutes(7L), 10000),
 //
 //            Params(13, 10000, ofMinutes(1L), 10000),
 //            Params(13, 10000, ofMinutes(3L), 10000),
-//            Params(13, 10000, ofMinutes(7L), 10000),
+//          Params(13, 10000, ofMinutes(7L), 10000),
 //
 //            Params(13, 5000, ofMinutes(15L), 10000),
 //            Params(13, 5000, ofMinutes(30L), 10000),
