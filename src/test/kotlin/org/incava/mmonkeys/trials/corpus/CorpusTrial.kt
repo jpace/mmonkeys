@@ -35,7 +35,6 @@ class CorpusTrial(private val sought: Corpus, private val params: Params) {
         Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
         val monkeyFactory = MonkeyFactory(corpusMonkeyCtor = monkeyCtor)
-        Console.info("monkeyFactory", monkeyFactory)
         val runner = CorpusTrialRunner(sought, monkeyFactory, params.timeLimit, params.tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
@@ -45,10 +44,10 @@ class CorpusTrial(private val sought: Corpus, private val params: Params) {
     fun run() {
         Console.info("sought.#", sought.words.size)
         val types = listOf(
-            "length" to ::LengthCorpusMonkey,
+//            "length" to ::LengthCorpusMonkey,
             "eq" to ::EqCorpusMonkey,
-            // NumberLongsMatcher can only support up through words of length 13
-            "longs" to ::NumberLongsMonkey,
+//            // NumberLongsMatcher can only support up through words of length 13
+//            "longs" to ::NumberLongsMonkey,
         )
         val results = types.shuffled().associate { (name, monkeyCtor) ->
             val result = runTrial(name, monkeyCtor)
@@ -79,7 +78,7 @@ class CorpusTrials(val params: List<CorpusTrial.Params>) {
         println("trials duration: $trialsDuration")
     }
 
-    fun runTrial(params: CorpusTrial.Params) {
+    private fun runTrial(params: CorpusTrial.Params) {
         val corpus = CorpusUtil.readFile("pg100.txt", params.numLines, params.wordSizeLimit)
         val trialDuration = measureDuration {
             val trial = CorpusTrial(corpus, params)
@@ -107,7 +106,7 @@ fun main() {
 //          Params(7, 10000, ofMinutes(7L), 10000),
 //
 //            Params(13, 5000, ofMinutes(1L), 10000),
-            Params(13, 5000, ofMinutes(3L), 10000),
+            Params(13, 5000, ofMinutes(3L), 1000),
 //            Params(13, 5000, ofMinutes(7L), 10000),
 //
 //            Params(13, 10000, ofMinutes(1L), 10000),

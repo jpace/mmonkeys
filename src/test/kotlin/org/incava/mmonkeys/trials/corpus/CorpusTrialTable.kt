@@ -10,10 +10,10 @@ import org.incava.mmonkeys.trials.base.PerfResults
 class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int) : Table(
     listOf(
         StringColumn("type", 12, leftJustified = true),
-        IntColumn("# words", 8),
+        LongColumn("words.#", 8),
         IntColumn("max length", 10),
         DurationColumn("total time", 14),
-        LongColumn("#matches", 20),
+        LongColumn("matches.#", 20),
         LongColumn("iterations.avg", 20),
         LongColumn("duration.avg", 12),
         LongColumn("#matches/sec", 14),

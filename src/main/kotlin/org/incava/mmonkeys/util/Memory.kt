@@ -26,17 +26,9 @@ class Memory {
     }
 
     fun showCurrent(number: AtomicLong) {
-        val (total, free, used) = currentMemory()
+        val (total, free, used) = MemoryUtil.currentMemory()
         val displayed = Durations.millisToString(System.currentTimeMillis() - start, 6000L, 360L)
         table.writeRow(displayed, number.get(), free, used, total)
-    }
-
-    private fun currentMemory(): Triple<Long, Long, Long> {
-        val runtime = Runtime.getRuntime()
-        val total = runtime.totalMemory() / mb
-        val free = runtime.freeMemory() / mb
-        val used = total - free
-        return Triple(total, free, used)
     }
 
     suspend fun monitor(number: AtomicLong, interval: Long = 500L) {

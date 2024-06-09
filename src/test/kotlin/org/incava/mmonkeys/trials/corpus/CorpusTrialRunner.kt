@@ -22,15 +22,21 @@ class CorpusTrialRunner(
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
     private val matches = mutableListOf<MatchData>()
-    var verbose = false
+    private var verbose = false
 
     init {
+        sought.summarize()
+
         val durations = mutableListOf<Long>()
         val totalDuration = Durations.measureDuration {
             val monkey = monkeyFactory.createCorpusMonkey(sought)
             Console.info("monkey.class", monkey.javaClass)
             durations += measureTimeMillis {
                 runMonkey(monkey)
+                monkey.matchKeystrokes.toSortedMap().forEach { (strokes, count) ->
+                    Console.info("strokes", strokes)
+                    Console.info("count", count)
+                }
             }
         }
         results = PerfResults(totalDuration.second, durations, iterations, matches)

@@ -2,7 +2,7 @@ package org.incava.mmonkeys
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.match.MatchData
-import org.junit.jupiter.api.Assertions.*
+import org.incava.mmonkeys.util.MemoryUtil
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.math.pow
@@ -13,14 +13,14 @@ class MonkeyAttemptsTest {
     val random = Random.Default
 
     init {
-        val (total, _, _) = currentMemory()
+        val (total, _, _) = MemoryUtil.currentMemory()
         Console.info("total", total)
     }
 
     @Test
     fun addOriginal() {
         // runs out of heap space:
-        val obj = MonkeyAttempts()
+        val obj = MonkeyAttemptsList()
         var index = 0
         repeat(100_000_000) {
             tick(it)
@@ -33,7 +33,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addAlternate() {
-        val obj = MonkeyAttempts2()
+        val obj = MonkeyAttemptsMapAndList()
         var index = 0
         repeat(1_000_000_000) {
             tick(it, 1_000_000)
@@ -47,9 +47,9 @@ class MonkeyAttemptsTest {
     @Test
     fun addAlternate2() {
         var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttempts2>()
+        val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
         repeat(1_000) { outer ->
-            val obj = MonkeyAttempts2(100_000)
+            val obj = MonkeyAttemptsMapAndList(100_000)
             monkeyAttempts += obj
             Console.info("outer", outer)
             repeat(1_000_000_000) { inner ->
@@ -67,9 +67,9 @@ class MonkeyAttemptsTest {
     @Test
     fun addAlternate3() {
         var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttempts2>()
+        val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
         repeat(1_000) { outer ->
-            val obj = MonkeyAttempts2(100_000)
+            val obj = MonkeyAttemptsMapAndList(100_000)
             monkeyAttempts += obj
             Console.info("outer", outer)
             repeat(1_000_000_000) { inner ->
@@ -87,18 +87,9 @@ class MonkeyAttemptsTest {
     private fun tick(iterations: Int, every: Int = 500_000) {
         if (iterations % every == 0) {
             Console.info("it", iterations)
-            val (total, free, used) = currentMemory()
+            val (total, free, used) = MemoryUtil.currentMemory()
             Console.info("free", free)
             Console.info("used", used)
         }
-    }
-
-    private fun currentMemory(): Triple<Long, Long, Long> {
-        val mb = 2.0.pow(20).toLong()
-        val runtime = Runtime.getRuntime()
-        val total = runtime.totalMemory() / mb
-        val free = runtime.freeMemory() / mb
-        val used = total - free
-        return Triple(total, free, used)
     }
 }

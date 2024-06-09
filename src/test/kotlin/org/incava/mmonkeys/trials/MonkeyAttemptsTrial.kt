@@ -3,12 +3,12 @@ package org.incava.mmonkeys.trials
 import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
-import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.MonkeyAttempting
-import org.incava.mmonkeys.MonkeyAttempts
-import org.incava.mmonkeys.MonkeyAttempts2
+import org.incava.mmonkeys.MonkeyAttemptsList
+import org.incava.mmonkeys.MonkeyAttemptsMapAndList
 import org.incava.mmonkeys.match.MatchData
+import org.incava.mmonkeys.util.MemoryUtil
 import org.incava.time.Durations.measureDuration
 import kotlin.math.pow
 import kotlin.random.Random
@@ -25,23 +25,18 @@ class MonkeyTrial(
     private val results = mutableMapOf<Int, Triple<Long, Long, Long>>()
     private val table = Table(
         listOf(
-            IntColumn("monkey", 7),
-            IntColumn("monkeys.#", 7),
-            LongColumn("iterations", 7),
-            LongColumn("mem used", 7),
-            LongColumn("mem total", 7),
-            IntColumn("used %%", 6),
+            IntColumn("monkey", 10),
+            LongColumn("monkeys.#", 10),
+            LongColumn("iterations", 10),
+            LongColumn("mem used", 10),
+            LongColumn("mem total", 10),
+            IntColumn("used %", 10),
         )
     )
 
     init {
-        val (total, _, used) = currentMemory()
         table.writeHeader()
         table.writeBreak('=')
-    }
-
-    fun run() {
-        addAlternate2()
     }
 
     fun summarize() {
@@ -70,19 +65,19 @@ class MonkeyTrial(
         }
     }
 
-    fun addAlternate1() {
-        runTest(::MonkeyAttempts)
+    fun addAlternateList() {
+        runTest(::MonkeyAttemptsList)
     }
 
     fun addAlternate2() {
-        runTest(::MonkeyAttempts2)
+        runTest(::MonkeyAttemptsMapAndList)
     }
 
     fun addAlternate2Orig() {
         var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttempts2>()
+        val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
         repeat(1_000) { outer ->
-            val obj = MonkeyAttempts2(100_000)
+            val obj = MonkeyAttemptsMapAndList(100_000)
             monkeyAttempts += obj
             repeat(1_000_000_000) { inner ->
                 tick(outer, inner, 1_000_000_000)
@@ -98,22 +93,15 @@ class MonkeyTrial(
 
     private fun tick(monkeyIndex: Int, iterations: Int, every: Int) {
         if (iterations % every == 0) {
-            val memory = currentMemory()
+            val memory = MemoryUtil.currentMemory()
             val pct = (100 * memory.third.toDouble() / memory.first).toInt()
             if (monkeyIndex > 0 && monkeyIndex % 10 == 0) {
-                table.writeBreak('=')
+                table.writeHeader()
+                table.writeBreak('-')
             }
             table.writeRow(monkeyIndex, monkeyCount, iterations, memory.third, memory.first, pct)
             results[monkeyIndex] = memory
         }
-    }
-
-    private fun currentMemory(): Triple<Long, Long, Long> {
-        val runtime = Runtime.getRuntime()
-        val total = runtime.totalMemory() / mb
-        val free = runtime.freeMemory() / mb
-        val used = total - free
-        return Triple(total, free, used)
     }
 }
 
@@ -123,10 +111,10 @@ fun main() {
         monkeyTick = 1_000_000,
         numAttempts = 1_000_000_000,
         attemptTick = 1_000_000_000,
-        matchPercent = 0.01
+        matchPercent = 0.001
     )
     val duration = measureDuration {
-        obj.runTest(::MonkeyAttempts2)
+        obj.runTest(::MonkeyAttemptsMapAndList)
         obj.summarize()
     }
     Console.info("duration", duration.second)

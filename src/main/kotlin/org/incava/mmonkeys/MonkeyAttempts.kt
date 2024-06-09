@@ -11,7 +11,7 @@ interface MonkeyAttempting {
     fun showMatches(limit: Int)
 }
 
-class MonkeyAttempts(private val tick: Int = 50_000) : MonkeyAttempting {
+class MonkeyAttemptsList(private val tick: Int = 50_000) : MonkeyAttempting {
     private val attempts = mutableListOf<MatchData>()
 
     override fun add(matchData: MatchData) {
@@ -37,7 +37,7 @@ class MonkeyAttempts(private val tick: Int = 50_000) : MonkeyAttempting {
     }
 }
 
-class MonkeyAttempts2(private val tick: Int = 50_000) : MonkeyAttempting {
+class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttempting {
     val succeeded = mutableMapOf<Int, MatchData>()
     val failed = mutableListOf<Long>()
     var index = 0
@@ -80,38 +80,52 @@ class MonkeyAttempts2(private val tick: Int = 50_000) : MonkeyAttempting {
     }
 }
 
-class MonkeyAttempts3(private val tick: Int = 1000) {
-    val succeeded = mutableMapOf<Int, MutableList<Int>>()
-    val failed = mutableListOf<Long>()
-    var index = 0
+class MonkeyAttemptsNoOp(private val tick: Int = 50_000) : MonkeyAttempting {
+    private var invocations: Long = 0L
+
+    override fun add(matchData: MatchData) {
+        if (invocations % (tick * 100L) == 0L) {
+            Console.info("invocations", invocations)
+        }
+        invocations++
+    }
+
+    override fun showMatches(limit: Int) {
+    }
+
+    override fun summarize() {
+        Console.info("invocations", invocations)
+    }
+};
+
+class StrokesAndIndex(val keystrokes: Long, val index: Int)
+
+class MonkeyAttemptsMapListPair(private val tick: Int = 1000) : MonkeyAttempting {
+    // key: keystrokes, value: list of (first: previous errant keystrokes, second: index)
+    val results = mutableMapOf<Int, MutableList<StrokesAndIndex>>()
     var errantKeystrokes = 0L
 
-    fun add(matchData: MatchData) {
+    override fun add(matchData: MatchData) {
         if (matchData.isMatch) {
-            failed += errantKeystrokes
-            if (failed.size % tick == 0) {
-                Console.info(".failed.#", failed.size)
-            }
-            succeeded.computeIfAbsent(matchData.keystrokes) { mutableListOf() }.also { it += matchData.index }
+            results.computeIfAbsent(matchData.keystrokes) { mutableListOf() }.also { it += StrokesAndIndex(errantKeystrokes, matchData.index) }
             errantKeystrokes = 0L
         } else {
             errantKeystrokes += matchData.keystrokes
         }
-        index++
     }
 
-    fun summarize() {
-        Console.info("attempts.#", succeeded.size + failed.size)
-        Console.info("index", index)
-        Console.info(".success.#", succeeded.size)
-        Console.info(".failed.#", failed.size)
-        Console.info(".success.keys.#", succeeded.keys.size)
-//        Console.info(".succeeded", succeeded)
-//        Console.info(".failed", failed)
-        Console.info(".failed.sum", failed.sum())
-        val sum = succeeded.keys.fold(0) { acc, key ->
-            acc + succeeded[key]!!.sum()
+    override fun summarize() {
+        Console.info("result.#", results.size)
+        Console.info("result.keys", results.keys.toSortedSet())
+    }
+
+    override fun showMatches(limit: Int) {
+        Console.info("result.#", results.size)
+        results.keys.toSortedSet().forEach { key ->
+//            Console.info("key", key)
+//            val matches = results[key]!!
+//            Console.info("results[$key]", matches.subList(0, 10.coerceAtMost(matches.size)))
         }
-        Console.info(".success.sum", sum)
+        Console.info("errantKeystrokes", errantKeystrokes)
     }
 }

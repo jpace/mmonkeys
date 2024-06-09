@@ -1,16 +1,9 @@
 package org.incava.mmonkeys.match.corpus
+
+import org.incava.ikdk.io.Console
+
 class Corpus(val words: List<String>) {
     val matched = mutableSetOf<Int>()
-
-    fun hasWord(word: String): Pair<Boolean, Int> {
-        words.indices.forEach { index ->
-            // not sure which condition is faster:
-            if (words[index] == word && !matched.contains(index)) {
-                return Pair(true, index)
-            }
-        }
-        return Pair(false, -1)
-    }
 
     fun match(word: String): Int {
         words.indices.forEach { index ->
@@ -54,5 +47,31 @@ class Corpus(val words: List<String>) {
             print(str)
         }
         println()
+    }
+
+    fun summarize() {
+        val byLength = words.fold(mutableMapOf<Int, Int>()) { acc, word ->
+            acc.merge(word.length, 1) { prev, _ -> prev + 1 }
+            acc
+        }
+        byLength.toSortedMap().forEach { (length, count) ->
+            Console.info("length", length)
+            Console.info("count", count)
+        }
+
+        val unique = words.toSet()
+        unique.toSortedSet().forEach { word ->
+            Console.info("word", word)
+        }
+
+        val wordToCount = words.fold(mutableMapOf<String, Int>()) { acc, word ->
+            acc.merge(word, 1) { prev, _ -> prev + 1 }
+            acc
+        }
+        wordToCount.toSortedMap().forEach { (word, count) ->
+            Console.info("word", word)
+            Console.info("count", count)
+        }
+
     }
 }
