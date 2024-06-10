@@ -41,6 +41,7 @@ class NumberLongsMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : Corpu
                 val word = StringEncoder.decode(num)
 //                Console.info("word", word)
                 val index = forEncoded.removeAt(0)
+                sought.remove(word)
 //                Console.info("index", index)
 //                Console.info("sought.word[$index]", sought.words[index])
                 // this is the index into sought

@@ -15,13 +15,14 @@ class Corpus(val words: List<String>) {
         return -1
     }
 
-    fun remove(word: String) {
+    fun remove(word: String) : Int? {
         words.withIndex().forEach { (index, str) ->
             if (!matched.contains(index) && str == word) {
                 matched.add(index)
-                return
+                return@remove index
             }
         }
+        return null
     }
 
     fun removeAt(index: Int) {
@@ -49,7 +50,10 @@ class Corpus(val words: List<String>) {
         println()
     }
 
-    fun summarize() {
+    fun summarize(verbose: Boolean = false) {
+        Console.info("words.#", words.size)
+        Console.info("words.uniq.#", words.toSet().size)
+
         val byLength = words.fold(mutableMapOf<Int, Int>()) { acc, word ->
             acc.merge(word.length, 1) { prev, _ -> prev + 1 }
             acc
@@ -58,20 +62,20 @@ class Corpus(val words: List<String>) {
             Console.info("length", length)
             Console.info("count", count)
         }
+        if (verbose) {
+            val unique = words.toSet()
+            unique.toSortedSet().forEach { word ->
+                Console.info("word", word)
+            }
 
-        val unique = words.toSet()
-        unique.toSortedSet().forEach { word ->
-            Console.info("word", word)
+            val wordToCount = words.fold(mutableMapOf<String, Int>()) { acc, word ->
+                acc.merge(word, 1) { prev, _ -> prev + 1 }
+                acc
+            }
+            wordToCount.toSortedMap().forEach { (word, count) ->
+                Console.info("word", word)
+                Console.info("count", count)
+            }
         }
-
-        val wordToCount = words.fold(mutableMapOf<String, Int>()) { acc, word ->
-            acc.merge(word, 1) { prev, _ -> prev + 1 }
-            acc
-        }
-        wordToCount.toSortedMap().forEach { (word, count) ->
-            Console.info("word", word)
-            Console.info("count", count)
-        }
-
     }
 }

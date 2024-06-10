@@ -1,9 +1,10 @@
 package org.incava.mmonkeys.trials.base
 
 import org.incava.mmonkeys.match.MatchData
+import org.incava.mmonkeys.match.corpus.Corpus
 import java.time.Duration
 
-data class PerfResults(val duration: Duration, val durations: MutableList<Long>, val iterations: MutableList<Long>, val matches: List<MatchData>) {
+data class PerfResults(val corpus: Corpus, val duration: Duration, val durations: MutableList<Long>, val iterations: MutableList<Long>, val matches: List<MatchData>) {
     fun averageDurations(): Long {
         return durations.average().toLong()
     }

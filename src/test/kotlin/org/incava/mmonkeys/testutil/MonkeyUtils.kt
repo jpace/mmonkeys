@@ -1,9 +1,11 @@
 package org.incava.mmonkeys.testutil
 
+import org.incava.mmonkeys.CorpusMonkeyCtor
 import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMonkey
+import org.incava.mmonkeys.match.string.StringMonkey
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -11,7 +13,7 @@ import org.incava.mmonkeys.type.Typewriter
 object MonkeyUtils {
     fun createMonkey(
         corpus: Corpus,
-        corpusMonkeyCtor: (sought: Corpus, id: Int, typewriter: Typewriter) -> CorpusMonkey,
+        corpusMonkeyCtor: CorpusMonkeyCtor,
         chars: List<Char> = Keys.fullList(),
         typewriterCtor: (chars: List<Char>) -> Typewriter = ::DeterministicTypewriter,
     ): CorpusMonkey {

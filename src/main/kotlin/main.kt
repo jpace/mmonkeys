@@ -1,5 +1,7 @@
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.CorpusMonkeyCtor
 import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.StringMonkeyCtor
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CoroutineStringSimulation
@@ -39,13 +41,13 @@ fun runSimulation(type: String, sought: Corpus, numMonkeys: Int, monkeyFactory: 
     runSimulation(type, simulation)
 }
 
-fun runStringSimulation(toChar: Char, type: String, sought: String, monkeyCtor: (String, Int, Typewriter) -> StringMonkey) {
+fun runStringSimulation(toChar: Char, type: String, sought: String, monkeyCtor: StringMonkeyCtor) {
     val typewriterFactory = TypewriterFactory(toChar)
     val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMonkeyCtor = monkeyCtor)
     runSimulation(type, sought, 10, monkeyFactory)
 }
 
-fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, monkeyCtor: (Corpus, Int, Typewriter) -> CorpusMonkey) {
+fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, monkeyCtor: CorpusMonkeyCtor) {
     val typewriterFactory = TypewriterFactory(toChar)
     val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, corpusMonkeyCtor = monkeyCtor)
     runSimulation(type, sought, 10, monkeyFactory)

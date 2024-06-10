@@ -36,13 +36,13 @@ class LengthCorpusMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : Corp
             val word = nextChars(length)
             val index = forLength.indexOf(word)
             if (index >= 0) {
-                Console.info("length", length)
-                Console.info("index", index)
-                Console.info("word", word)
+//                Console.info("length", length)
+//                Console.info("index", index)
+//                Console.info("word", word)
                 sought.remove(word)
-                Console.info("forLength.#", forLength.size)
+//                Console.info("forLength.#", forLength.size)
                 forLength.removeAt(index)
-                Console.info("forLength.#", forLength.size)
+//                Console.info("forLength.#", forLength.size)
                 if (forLength.isEmpty()) {
                     soughtByLength.remove(length)
                 }

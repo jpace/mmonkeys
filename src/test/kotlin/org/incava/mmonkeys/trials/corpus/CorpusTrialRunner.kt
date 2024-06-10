@@ -26,7 +26,6 @@ class CorpusTrialRunner(
 
     init {
         sought.summarize()
-
         val durations = mutableListOf<Long>()
         val totalDuration = Durations.measureDuration {
             val monkey = monkeyFactory.createCorpusMonkey(sought)
@@ -39,7 +38,7 @@ class CorpusTrialRunner(
                 }
             }
         }
-        results = PerfResults(totalDuration.second, durations, iterations, matches)
+        results = PerfResults(sought, totalDuration.second, durations, iterations, matches)
     }
 
     private fun runMonkey(monkey: Monkey) {

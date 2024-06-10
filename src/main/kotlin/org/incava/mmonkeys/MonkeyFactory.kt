@@ -8,10 +8,13 @@ import org.incava.mmonkeys.match.string.StringMonkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
+typealias CorpusMonkeyCtor = (sought: Corpus, id: Int, typewriter: Typewriter) -> CorpusMonkey
+typealias StringMonkeyCtor = (sought: String, id: Int, typewriter: Typewriter) -> StringMonkey
+
 class MonkeyFactory(
     val typewriterSupplier: (chars: List<Char>) -> Typewriter = ::Typewriter,
-    val corpusMonkeyCtor: (sought: Corpus, id: Int, typewriter: Typewriter) -> CorpusMonkey = ::EqCorpusMonkey,
-    val stringMonkeyCtor: (sought: String, id: Int, typewriter: Typewriter) -> StringMonkey = ::EqStringMonkey,
+    val corpusMonkeyCtor: CorpusMonkeyCtor = ::EqCorpusMonkey,
+    val stringMonkeyCtor: StringMonkeyCtor = ::EqStringMonkey,
     val charsCtor: List<Char> = Keys.fullList(),
 ) {
     private var id: Int = 1
