@@ -25,4 +25,20 @@ object CorpusUtil {
         Console.info("words.#", words.size)
         return Corpus(words)
     }
+
+    fun readFileWords(name: String, numLines: Int, wordSizeLimit: Int): List<String> {
+        val file = getResource(name)
+        // Console.info("file", file)
+        val lines = file.readText().split("\r\n")
+        val sonnet = lines.subList(0, min(numLines, lines.size))
+
+        // I forgot numbers.
+        val words = sonnet.joinToString()
+            .split(Regex(" +"))
+            .map(String::toLowerCase)
+            .map { it.replace(Regex("[^a-z+]"), "") }
+            .filter { it.length in 1..wordSizeLimit }
+        Console.info("words.#", words.size)
+        return words
+    }
 }

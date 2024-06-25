@@ -1,18 +1,16 @@
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.CorpusMonkeyCtor
-import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.StringMonkeyCtor
+import org.incava.mmonkeys.StringMonkeyFactory
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CoroutineStringSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
 import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
 import org.incava.mmonkeys.match.string.EqStringMonkey
-import org.incava.mmonkeys.match.string.StringMonkey
-import org.incava.mmonkeys.type.Typewriter
 import java.lang.Thread.sleep
 
 fun runSimulation(type: String, simulation: CoroutineSimulation) {
@@ -25,17 +23,17 @@ fun runSimulation(type: String, simulation: CoroutineSimulation) {
     println()
 }
 
-fun runSimulation(type: String, sought: String, numMonkeys: Int, monkeyFactory: MonkeyFactory) {
+fun runSimulation(type: String, sought: String, numMonkeys: Int, monkeyFactory: StringMonkeyFactory) {
     // I don't make monkeys; I just train them!
-    val monkeys = (0 until numMonkeys).map { monkeyFactory.createStringMonkey(sought, it) }
+    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
     Console.info("monkeys.#", monkeys.size)
     val simulation = CoroutineStringSimulation(monkeys)
     runSimulation(type, simulation)
 }
 
-fun runSimulation(type: String, sought: Corpus, numMonkeys: Int, monkeyFactory: MonkeyFactory) {
+fun <T : Corpus> runSimulation(type: String, sought: T, numMonkeys: Int, monkeyFactory: CorpusMonkeyFactory<T>) {
     // I don't make monkeys; I just train them!
-    val monkeys = (0 until numMonkeys).map { monkeyFactory.createCorpusMonkey(sought, it) }
+    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
     Console.info("monkeys.#", monkeys.size)
     val simulation = CoroutineCorpusSimulation(monkeys)
     runSimulation(type, simulation)
@@ -43,13 +41,13 @@ fun runSimulation(type: String, sought: Corpus, numMonkeys: Int, monkeyFactory: 
 
 fun runStringSimulation(toChar: Char, type: String, sought: String, monkeyCtor: StringMonkeyCtor) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, stringMonkeyCtor = monkeyCtor)
+    val monkeyFactory = StringMonkeyFactory({ typewriterFactory.create() }, ctor = monkeyCtor)
     runSimulation(type, sought, 10, monkeyFactory)
 }
 
-fun runCorpusSimulation(toChar: Char, type: String, sought: Corpus, monkeyCtor: CorpusMonkeyCtor) {
+fun <T : Corpus> runCorpusSimulation(toChar: Char, type: String, sought: T, monkeyCtor: CorpusMonkeyCtor<T>) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val monkeyFactory = MonkeyFactory({ typewriterFactory.create() }, corpusMonkeyCtor = monkeyCtor)
+    val monkeyFactory = CorpusMonkeyFactory<T>({ typewriterFactory.create() }, ctor = monkeyCtor)
     runSimulation(type, sought, 10, monkeyFactory)
 }
 

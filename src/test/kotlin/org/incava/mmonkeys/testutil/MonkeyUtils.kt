@@ -1,25 +1,24 @@
 package org.incava.mmonkeys.testutil
 
 import org.incava.mmonkeys.CorpusMonkeyCtor
+import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMonkey
-import org.incava.mmonkeys.match.string.StringMonkey
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
 object MonkeyUtils {
-    fun createMonkey(
-        corpus: Corpus,
-        corpusMonkeyCtor: CorpusMonkeyCtor,
+    fun <T : Corpus> createMonkey(
+        corpus: T,
+        corpusMonkeyCtor: CorpusMonkeyCtor<T>,
         chars: List<Char> = Keys.fullList(),
         typewriterCtor: (chars: List<Char>) -> Typewriter = ::DeterministicTypewriter,
     ): CorpusMonkey {
         val typewriter = typewriterCtor(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMonkeyCtor = corpusMonkeyCtor, charsCtor = chars)
-        return monkeyFactory.createCorpusMonkey(corpus)
+        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, ctor = corpusMonkeyCtor, charsCtor = chars)
+        return monkeyFactory.createMonkey(corpus)
     }
 
     fun runTest(monkey: Monkey, maxAttempts: Long = 100_000_000_000_000L): Long {

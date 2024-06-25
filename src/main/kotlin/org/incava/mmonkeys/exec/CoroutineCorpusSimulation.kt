@@ -9,8 +9,6 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.corpus.CorpusMonkey
 
 open class CoroutineCorpusSimulation(monkeys: List<CorpusMonkey>) : CoroutineSimulation(monkeys) {
-    private val maxAttempts = 100_000_000L
-
     override fun CoroutineScope.launchMonkeys(): List<Job> {
         return monkeys.map { monkey ->
             launch {

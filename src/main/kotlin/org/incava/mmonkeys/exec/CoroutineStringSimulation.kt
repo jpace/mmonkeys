@@ -8,8 +8,6 @@ import org.incava.mmonkeys.Monkey
 import org.incava.mmonkeys.match.string.StringMonkey
 
 class CoroutineStringSimulation(monkeys: List<StringMonkey>) : CoroutineSimulation(monkeys) {
-    private val maxAttempts = 100_000_000L
-
     override fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
         launch {
             Console.info("monkey", monkey.javaClass)

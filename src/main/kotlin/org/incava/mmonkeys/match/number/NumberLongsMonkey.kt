@@ -3,29 +3,19 @@ package org.incava.mmonkeys.match.number
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.math.Maths
 import org.incava.mmonkeys.match.MatchData
-import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.random.Random
 
-class NumberLongsMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : CorpusMonkey(sought, id, typewriter) {
-    // length to [ encoded to [ indices in sought ] ]
-    val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
+class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewriter) : CorpusMonkey(corpus, id, typewriter) {
     private val charCount = typewriter.numChars().toLong() - 1
     val verbose = false
 
     init {
         Console.info("this", this)
         Console.info("sought", sought)
-        val encoded = mutableMapOf<String, Long>()
-        sought.words.withIndex().forEach { word ->
-            val enc = encoded.computeIfAbsent(word.value, StringEncoder::encodeToLong)
-            numbers
-                .computeIfAbsent(word.value.length) { mutableMapOf() }
-                .computeIfAbsent(enc) { mutableListOf() }.also { it.add(word.index) }
-        }
         if (verbose) {
-            Console.info("numbers", numbers)
+            Console.info("corpus.numbers", corpus.numbers)
             showUnmatched()
         }
     }
@@ -33,24 +23,14 @@ class NumberLongsMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : Corpu
     override fun check(): MatchData {
         val length = randomLength()
         val soughtLen = length - 1
-        val forLength = numbers[soughtLen]
+        val forLength = corpus.numbers[soughtLen]
         if (forLength != null) {
             val num = randomLong(soughtLen)
             val forEncoded = forLength[num]
             if (!forEncoded.isNullOrEmpty()) {
                 val word = StringEncoder.decode(num)
 //                Console.info("word", word)
-                val index = forEncoded.removeAt(0)
-                sought.remove(word)
-//                Console.info("index", index)
-//                Console.info("sought.word[$index]", sought.words[index])
-                // this is the index into sought
-                if (forEncoded.isEmpty()) {
-                    forLength.remove(num)
-                }
-                if (forLength.isEmpty()) {
-                    numbers.remove(soughtLen)
-                }
+                val index = corpus.matched(word, num, soughtLen)
                 showUnmatched()
                 // showNumbers()
                 return match(soughtLen, index)
@@ -85,14 +65,14 @@ class NumberLongsMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : Corpu
     }
 
     fun lengthToCount(): Map<Int, Int> {
-        return numbers.toSortedMap()
+        return corpus.numbers.toSortedMap()
             .entries
             .map { entry -> entry.key to entry.value.map { it.value.size }.sum() }
             .toMap()
     }
 
     fun showNumbers() {
-        numbers.forEach { (length, numbers) ->
+        corpus.numbers.forEach { (length, numbers) ->
             println(length)
             numbers.forEach { (number, indices) ->
                 val str = StringEncoder.decode(number)

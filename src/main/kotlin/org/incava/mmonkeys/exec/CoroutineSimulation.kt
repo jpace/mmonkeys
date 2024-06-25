@@ -22,6 +22,7 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
     private val showMemory = true
     val durations = DurationList()
     val verbose = true
+    val maxAttempts = 100_000_000L
 
     fun run(): Pair<Long, Duration> = Durations.measureDuration {
         process()

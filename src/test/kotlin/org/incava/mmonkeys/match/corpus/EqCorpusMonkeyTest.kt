@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.match.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -50,8 +50,8 @@ internal class EqCorpusMonkeyTest {
         val chars = Keys.fullList()
         val corpus = Corpus(listOf("ab", "cd", "def", "defg", "ghi"))
         val typewriter = Typewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, corpusMonkeyCtor = ::EqCorpusMonkey, charsCtor = chars)
-        val obj = monkeyFactory.createCorpusMonkey(corpus)
+        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, ctor = ::EqCorpusMonkey, charsCtor = chars)
+        val obj = monkeyFactory.createMonkey(corpus)
         var iterations = 0
         while (!obj.sought.isEmpty()) {
             val result = obj.check()

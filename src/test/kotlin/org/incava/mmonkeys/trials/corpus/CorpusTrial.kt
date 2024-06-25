@@ -2,14 +2,13 @@ package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.CorpusMonkeyCtor
-import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
 import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
 import org.incava.mmonkeys.match.number.NumberLongsMonkey
+import org.incava.mmonkeys.match.number.NumberedCorpus
 import org.incava.mmonkeys.trials.base.PerfResults
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
 import java.time.Duration.ofMinutes
@@ -32,11 +31,23 @@ class CorpusTrial(private val params: Params) {
         ) : this(wordSizeLimit, numLines, ofSeconds(timeLimit), tickSize)
     }
 
-    private fun runTrial(name: String, monkeyCtor: CorpusMonkeyCtor): PerfResults {
+    private fun runCorpusTrial(name: String, monkeyCtor: CorpusMonkeyCtor<Corpus>): PerfResults {
         Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
-        val monkeyFactory = MonkeyFactory(corpusMonkeyCtor = monkeyCtor)
+        val monkeyFactory = CorpusMonkeyFactory(ctor = monkeyCtor)
         val corpus = CorpusUtil.readFile("pg100.txt", params.numLines, params.wordSizeLimit)
+        val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
+        Thread.sleep(100L)
+        Console.info(name, runner.results.durations.average())
+        return runner.results
+    }
+
+    private fun runNumberedCorpusTrial(name: String, monkeyCtor: CorpusMonkeyCtor<NumberedCorpus>): PerfResults {
+        Console.info("name", name)
+        // kotlin infers lambda from KFunction ... hey now!
+        val monkeyFactory = CorpusMonkeyFactory<NumberedCorpus>(ctor = monkeyCtor)
+        val words = CorpusUtil.readFileWords("pg100.txt", params.numLines, params.wordSizeLimit)
+        val corpus = NumberedCorpus(words)
         val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
@@ -45,16 +56,30 @@ class CorpusTrial(private val params: Params) {
 
     fun run() {
         Console.info("sought.#", corpus.words.size)
-        val types = listOf(
+
+        val results = mutableMapOf<String, PerfResults>()
+
+        val types1: List<Pair<String, CorpusMonkeyCtor<Corpus>>> = listOf(
             "length" to ::LengthCorpusMonkey,
-            "eq" to ::EqCorpusMonkey,
+            "eq" to ::EqCorpusMonkey
+        )
+        if (true) {
+            results += types1.shuffled().associate { (name, monkeyCtor) ->
+                val result = runCorpusTrial(name, monkeyCtor)
+                name to result
+            }.toSortedMap()
+        }
+        val types2: List<Pair<String, CorpusMonkeyCtor<NumberedCorpus>>> = listOf(
 //            // NumberLongsMatcher can only support up through words of length 13
             "longs" to ::NumberLongsMonkey,
         )
-        val results = types.shuffled().associate { (name, monkeyCtor) ->
-            val result = runTrial(name, monkeyCtor)
-            name to result
-        }.toSortedMap()
+        if (true) {
+            results += types2.shuffled().associate { (name, monkeyCtor) ->
+                val result = runNumberedCorpusTrial(name, monkeyCtor)
+                name to result
+            }.toSortedMap()
+        }
+
         val table = CorpusTrialTable(corpus.words.size, params.wordSizeLimit)
         table.summarize(results)
         println()
@@ -106,7 +131,7 @@ fun main() {
 //            Params(13, 10000, ofMinutes(3L), 10000),
 //          Params(13, 10000, ofMinutes(7L), 10000),
 //
-//            Params(13, 5000, ofMinutes(15L), 10000),
+            Params(13, 5000, ofMinutes(15L), 10000),
 //            Params(13, 5000, ofMinutes(30L), 10000),
 //
 //            Params(13, 10000, ofMinutes(15L), 10000),
@@ -118,7 +143,7 @@ fun main() {
 //            Params(13, 100000, ofMinutes(15L), 10000),
 //            Params(13, 100000, ofMinutes(30L), 10000),
 //
-            Params(13, 150000, ofMinutes(120L), 100_000),
+//            Params(13, 150000, ofMinutes(120L), 100_000),
 //            Params(13, 150000, ofMinutes(240L), 10000),
         )
     )

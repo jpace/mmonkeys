@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.match.number
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.MonkeyFactory
+import org.incava.mmonkeys.StringMonkeyFactory
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Test
@@ -11,9 +11,9 @@ internal class NumberMonkeyTest {
     fun checkInt() {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, charsCtor = chars, stringMonkeyCtor = ::NumberIntMonkey)
+        val monkeyFactory = StringMonkeyFactory({ typewriter }, charsCtor = chars, ctor = ::NumberIntMonkey)
         val input = "ab"
-        val monkey = monkeyFactory.createStringMonkey(input)
+        val monkey = monkeyFactory.createMonkey(input)
         Console.info("monkey.class", monkey.javaClass)
         repeat(10_000) {
             val result = monkey.check()
@@ -28,9 +28,9 @@ internal class NumberMonkeyTest {
     fun checkLong() {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
-        val monkeyFactory = MonkeyFactory({ typewriter }, charsCtor = chars, stringMonkeyCtor = ::NumberLongMonkey)
+        val monkeyFactory = StringMonkeyFactory({ typewriter }, charsCtor = chars, ctor = ::NumberLongMonkey)
         val input = "a"
-        val monkey= monkeyFactory.createStringMonkey(input)
+        val monkey= monkeyFactory.createMonkey(input)
         Console.info("monkey.class", monkey.javaClass)
         repeat(1_000) {
             val result = monkey.check()

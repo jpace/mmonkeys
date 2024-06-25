@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import kotlin.test.Test
 
 internal class StringEncoderTest {
     private val intValues = listOf(
@@ -37,9 +38,11 @@ internal class StringEncoderTest {
     @TestFactory
     fun `given a string, the encoded long value should be`() =
         longValues.map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input of size ${input.length}, " +
-                    "when encoding the value to a long, " +
-                    "then the result should be $expected") {
+            DynamicTest.dynamicTest(
+                "given $input of size ${input.length}, " +
+                        "when encoding the value to a long, " +
+                        "then the result should be $expected"
+            ) {
                 val result = StringEncoder.encodeToLong(input)
                 assertEquals(expected, result)
             }
@@ -52,9 +55,11 @@ internal class StringEncoderTest {
             "zzzzzz" to 617831551,
             "aaaaaaa" to 8031810176L,
         ).map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input of size ${input.length}, " +
-                    "when encoding the value to a long, " +
-                    "then the result should be $expected") {
+            DynamicTest.dynamicTest(
+                "given $input of size ${input.length}, " +
+                        "when encoding the value to a long, " +
+                        "then the result should be $expected"
+            ) {
                 val result = StringEncoder.encode(input)
                 assertEquals(expected, result)
             }
@@ -63,9 +68,11 @@ internal class StringEncoderTest {
     @TestFactory
     fun `given an integer, the decoded value should be`() =
         intValues.map { (expected, input) ->
-            DynamicTest.dynamicTest("given $input, " +
-                    "when decoding the value from an integer, " +
-                    "then the result should be $expected") {
+            DynamicTest.dynamicTest(
+                "given $input, " +
+                        "when decoding the value from an integer, " +
+                        "then the result should be $expected"
+            ) {
                 val result = StringEncoder.decode(input)
                 assertEquals(expected, result)
             }
@@ -74,9 +81,11 @@ internal class StringEncoderTest {
     @TestFactory
     fun `given a long, the decoded value should be`() =
         longValues.map { (input, expected) ->
-            DynamicTest.dynamicTest("given $input of size ${input.length}, " +
-                    "when decoding the value from a long, " +
-                    "then the result should be $expected") {
+            DynamicTest.dynamicTest(
+                "given $input of size ${input.length}, " +
+                        "when decoding the value from a long, " +
+                        "then the result should be $expected"
+            ) {
                 val result = StringEncoder.encodeToLong(input)
                 assertEquals(expected, result)
             }
@@ -85,9 +94,11 @@ internal class StringEncoderTest {
     @TestFactory
     fun `given a long string, it should encode and decode into its original`() =
         longValues.map { (str, _) ->
-            DynamicTest.dynamicTest("given $str of size ${str.length}, " +
-                    "when encoding then decoding, " +
-                    "then the result should be the original") {
+            DynamicTest.dynamicTest(
+                "given $str of size ${str.length}, " +
+                        "when encoding then decoding, " +
+                        "then the result should be the original"
+            ) {
                 val encoded = StringEncoder.encodeToLong(str)
                 Console.info("str", str)
                 Console.info("encoded", encoded)
@@ -100,9 +111,11 @@ internal class StringEncoderTest {
     @TestFactory
     fun `given a short string, it should encode and decode into its original`() =
         intValues.map { (str, _) ->
-            DynamicTest.dynamicTest("given $str of size ${str.length}, " +
-                    "when encoding then decoding, " +
-                    "then the result should be the original") {
+            DynamicTest.dynamicTest(
+                "given $str of size ${str.length}, " +
+                        "when encoding then decoding, " +
+                        "then the result should be the original"
+            ) {
                 val encoded = StringEncoder.encodeToInt(str)
                 Console.info("str", str)
                 Console.info("encoded", encoded)
@@ -122,10 +135,7 @@ internal class StringEncoderTest {
             903L to "it"
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
-                Console.info("number", number)
                 val result = StringEncoder.decode(number)
-                Console.info("result", result)
-                Console.info("")
                 assertEquals(str, result)
             }
         }
@@ -143,10 +153,7 @@ internal class StringEncoderTest {
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
                 val encoded = StringEncoder.encodeToInt(str)
-                Console.info("number", number)
-                Console.info("encoded", encoded)
                 val result = StringEncoder.decode(encoded)
-                Console.info("result", result)
                 assertEquals(str, result)
             }
         }
@@ -160,10 +167,7 @@ internal class StringEncoderTest {
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
                 val encoded = StringEncoder.encodeToLong(str)
-                Console.info("number", number)
-                Console.info("encoded", encoded)
                 val result = StringEncoder.decode(encoded)
-                Console.info("result", result)
                 assertEquals(str, result)
             }
         }
@@ -175,11 +179,159 @@ internal class StringEncoderTest {
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
                 val encoded = StringEncoder.encodeToLong(str)
-                Console.info("number", number)
-                Console.info("encoded", encoded)
                 val result = StringEncoder.decode(encoded)
-                Console.info("result", result)
                 assertEquals(str, result)
             }
         }
+
+    @Test
+    fun emptyString() {
+        val encoded = StringEncoder.encodeToInt("")
+        val result = StringEncoder.decode(encoded)
+        assertEquals("", result)
+    }
+
+    @TestFactory
+    fun base27Int() =
+        listOf(
+            "a",
+            "b",
+            "c",
+            "d",
+            "x",
+            "y",
+            "z",
+            "aa",
+            "ab",
+            "ac",
+            "yz",
+            "za",
+            "zx",
+            "zy",
+            "zz",
+            "aaa",
+            "aab",
+            "zzy",
+            "zzz",
+            "aaaa"
+        ).map { str ->
+            DynamicTest.dynamicTest("ch: $str") {
+                val encoded = StringEncoder.encodeToBase27(str)
+                val decoded = StringEncoder.decodeFromBase27(encoded)
+                System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
+                assertEquals(str, decoded)
+            }
+        }
+
+    @TestFactory
+    fun base27Long() =
+        listOf(
+            "a",
+            "aaaaaaa",
+            "zzzzzzz",
+            "aaaaaaaa",
+            "zzzzzzzz",
+            "aaaaaaaaa",
+            "zzzzzzzzz",
+            "bgldhuekcgxjxy"
+        ).map { str ->
+            DynamicTest.dynamicTest(str) {
+                val encoded = StringEncoder.encodeToBase27Long(str)
+                val decoded = StringEncoder.decodeFromBase27(encoded)
+                assertEquals(str, decoded)
+            }
+        }
+
+    private fun succ(str: String): String {
+        val chars = str.toByteArray().reversed().toMutableList()
+        chars[0]++
+        (0..chars.lastIndex).forEach { index ->
+            if (chars[index] > 'z'.toByte()) {
+                chars[index] = 'a'.toByte()
+                if (index == chars.lastIndex) {
+                    chars.add('a'.toByte())
+                } else {
+                    chars[index + 1]++
+                }
+            }
+        }
+        return String(chars.reversed().toByteArray())
+    }
+
+    private fun findMaxInt(from: String, encoder: (String) -> Int) {
+        var str = from
+        var encoded: Int
+        var count = 0
+        var prev = str
+        while (true) {
+            encoded = encoder(str)
+            if (encoded < 0) {
+                break
+            }
+            if (count % 100000 == 0) {
+                Console.info("str", str)
+                Console.info("encoded", encoded)
+            }
+            prev = str
+            str = succ(str)
+            count++
+        }
+        Console.info("str", str)
+        Console.info("encoded", encoded)
+        Console.info("prev", prev)
+        Console.info("encoded(prev)", encoder(prev))
+    }
+
+    @Test
+    fun encodeToIntMax() {
+        findMaxInt("zzzzzz", StringEncoder::encodeToInt)
+    }
+
+    @Test
+    fun encodeToBase27Max() {
+        findMaxInt("zzzzzzz", StringEncoder::encodeToBase27)
+    }
+
+    @Test
+    fun encodeToLongMax() {
+        findMaxLong("aaopxlgfbitsgd", StringEncoder::encodeToLong)
+    }
+
+    @Test
+    fun encodeToBase27LongMax() {
+        findMaxLong("bgldhuekcgxjxy", StringEncoder::encodeToBase27Long)
+    }
+
+    fun findMaxLong(from: String, encoder: (String) -> Long) {
+        Console.info("Long.MAX_VALUE", Long.MAX_VALUE)
+        var str = from
+        var encoded: Long
+        var count = 0
+        var prev = str
+        while (true) {
+            encoded = encoder(str)
+            if (encoded < 0) {
+                break
+            }
+            if (count % 1000000 == 0) {
+                Console.info("count", count)
+                Console.info("str", str)
+                Console.info("encoded", encoded)
+            }
+            prev = str
+            str = succ(str)
+            count++
+        }
+        Console.info("str", str)
+        Console.info("encoded", encoded)
+        Console.info("prev", prev)
+        Console.info("encoded(prev)", encoder(prev))
+    }
+
+    @Test
+    fun succ() {
+        val str = "zzz"
+        val result = succ(str)
+        assertEquals("aaaa", result)
+    }
 }

@@ -2,7 +2,7 @@ package org.incava.mmonkeys.match.corpus
 
 import org.incava.ikdk.io.Console
 
-class Corpus(val words: List<String>) {
+open class Corpus(val words: List<String>) {
     val matched = mutableSetOf<Int>()
 
     fun match(word: String): Int {

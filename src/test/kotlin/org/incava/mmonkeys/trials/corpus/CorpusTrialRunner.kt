@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.MonkeyFactory
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.trials.base.PerfResults
@@ -11,9 +11,9 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import kotlin.system.measureTimeMillis
 
-class CorpusTrialRunner(
-    val sought: Corpus,
-    monkeyFactory: MonkeyFactory,
+class CorpusTrialRunner<T : Corpus>(
+    val sought: T,
+    monkeyFactory: CorpusMonkeyFactory<T>,
     private val timeLimit: Duration,
     private val tickSize: Int = 20000,
 ) {
@@ -28,7 +28,7 @@ class CorpusTrialRunner(
         sought.summarize()
         val durations = mutableListOf<Long>()
         val totalDuration = Durations.measureDuration {
-            val monkey = monkeyFactory.createCorpusMonkey(sought)
+            val monkey = monkeyFactory.createMonkey(sought)
             Console.info("monkey.class", monkey.javaClass)
             durations += measureTimeMillis {
                 runMonkey(monkey)
@@ -49,9 +49,13 @@ class CorpusTrialRunner(
             do {
                 ++iteration
                 result = monkey.check()
-            } while (!result.isMatch && iteration < maxAttempts)
+
+            } while (!result.isMatch && iteration < maxAttempts && !sought.isEmpty())
             if (verbose) {
                 Console.info("result.match?", result.isMatch)
+                Console.info("sought.matched.#", sought.matched.size)
+                Console.info("sought.words.#", sought.words.size)
+                Console.info("sought.empty?", sought.isEmpty())
                 monkey.attempts.summarize()
                 if (result.isMatch) {
                     Console.info("monkey.class", monkey.javaClass)
