@@ -3,6 +3,7 @@ package org.incava.mmonkeys.match.number
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.trials.corpus.CorpusUtil
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -41,11 +42,11 @@ internal class NumberLongsMonkeyTest {
     fun numbers() {
         val input = listOf("this", "is", "a", "test")
         val expected = mapOf(
-            1 to mapOf(26L to listOf(2)),
-            2 to mapOf(902L to listOf(1)),
+            1 to mapOf(0L to listOf(2)),
+            2 to mapOf(252L to listOf(1)),
             4 to mapOf(
-                795_878L to listOf(0),
-                794_111L to listOf(3)
+                357_180L to listOf(0),
+                355_413L to listOf(3)
             )
         )
         val obj = makeMonkey(input)
@@ -59,17 +60,17 @@ internal class NumberLongsMonkeyTest {
         val input = listOf("this", "is", "a", "test", "as", "well", "as", "x", "this", "test", "a", "well")
         val expected = mutableMapOf(
             4 to mutableMapOf(
-                795878L to mutableListOf(0, 8),
-                794111L to mutableListOf(3, 9),
-                846649L to mutableListOf(5, 11)
+                357_180L to mutableListOf(0, 8),
+                355_413L to mutableListOf(3, 9),
+                407_951L to mutableListOf(5, 11)
             ),
             2 to mutableMapOf(
-                902L to mutableListOf(1),
-                694L to mutableListOf(4, 6)
+                252L to mutableListOf(1),
+                44L to mutableListOf(4, 6)
             ),
             1 to mutableMapOf(
-                26L to mutableListOf(2, 10),
-                49L to mutableListOf(7)
+                0L to mutableListOf(2, 10),
+                23L to mutableListOf(7)
             )
         )
         val obj = makeMonkey(input)
@@ -99,10 +100,12 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun check() {
-        val input = listOf("this", "is", "a", "test")
-        val obj = makeMonkey(NumberedCorpus(input))
-        val result = obj.check()
-        Console.info("result", result)
+        val words = CorpusUtil.readFileWords("pg100.txt", 100, 12)
+        val obj = makeMonkey(NumberedCorpus(words))
+        repeat(10) {
+            val result = obj.check()
+            Console.info("result", result)
+        }
     }
 
     @Test

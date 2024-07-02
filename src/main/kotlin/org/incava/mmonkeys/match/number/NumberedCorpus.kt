@@ -12,7 +12,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
         Console.info("words", words)
         val encoded = mutableMapOf<String, Long>()
         words.withIndex().forEach { word ->
-            val enc = encoded.computeIfAbsent(word.value, StringEncoder::encodeToLong)
+            val enc = encoded.computeIfAbsent(word.value, StringEncoderNew::encodeToLong)
             numbers
                 .computeIfAbsent(word.value.length) { mutableMapOf() }
                 .computeIfAbsent(enc) { mutableListOf() }.also { it.add(word.index) }
@@ -24,8 +24,8 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
         val forLength = numbers[length] ?: return -1
         val forEncoded = forLength[number] ?: return -1
         val index = forEncoded.removeAt(0)
-        Console.info("index", index)
-        Console.info("word[$index]", words[index])
+//        Console.info("index", index)
+//        Console.info("word[$index]", words[index])
         // this is the index into sought
         if (forEncoded.isEmpty()) {
             forLength.remove(number)

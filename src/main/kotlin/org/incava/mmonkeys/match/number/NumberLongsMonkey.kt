@@ -22,14 +22,19 @@ class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewri
 
     override fun check(): MatchData {
         val length = randomLength()
+        Console.info("length", length)
         val soughtLen = length - 1
+        Console.info("soughtLen", soughtLen)
         val forLength = corpus.numbers[soughtLen]
+        Console.info("forLength.#", forLength?.size)
         if (forLength != null) {
+            // this is wrong; a length of 4 characters should be "aaaa" through "zzzz"
+            // 3 characters: "aaa" through "zzz"
             val num = randomLong(soughtLen)
             val forEncoded = forLength[num]
             if (!forEncoded.isNullOrEmpty()) {
-                val word = StringEncoder.decode(num)
-//                Console.info("word", word)
+                val word = StringEncoderNew.decode(num)
+                // Console.info("word", word)
                 val index = corpus.matched(word, num, soughtLen)
                 showUnmatched()
                 // showNumbers()
@@ -75,7 +80,7 @@ class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewri
         corpus.numbers.forEach { (length, numbers) ->
             println(length)
             numbers.forEach { (number, indices) ->
-                val str = StringEncoder.decode(number)
+                val str = StringEncoderNew.decode(number)
                 println("  $str")
                 println("    " + indices.joinToString(", "))
             }

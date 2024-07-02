@@ -110,7 +110,7 @@ private typealias Params = CorpusTrial.Params
 fun main() {
     val trials = CorpusTrials(
         listOf(
-            // NumberLongsMatcher can only support up through words of length 13
+            // NumberLongsMatcher can only support up through word crpxnlskvljfhh
 //           Params(4, 500, ofSeconds(3L), 1000),
 //            Params(4, 10, ofSeconds(30L), 1),
 
@@ -125,13 +125,13 @@ fun main() {
 //
 //            Params(13, 5000, ofMinutes(1L), 10000),
 //            Params(13, 5000, ofMinutes(3L), 1000),
-//            Params(13, 5000, ofMinutes(7L), 10000),
+            Params(13, 5000, ofMinutes(7L), 10000),
 //
 //            Params(13, 10000, ofMinutes(1L), 10000),
 //            Params(13, 10000, ofMinutes(3L), 10000),
 //          Params(13, 10000, ofMinutes(7L), 10000),
 //
-            Params(13, 5000, ofMinutes(15L), 10000),
+//            Params(13, 5000, ofMinutes(15L), 10000),
 //            Params(13, 5000, ofMinutes(30L), 10000),
 //
 //            Params(13, 10000, ofMinutes(15L), 10000),
