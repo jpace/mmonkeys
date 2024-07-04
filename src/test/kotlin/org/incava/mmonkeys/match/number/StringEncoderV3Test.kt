@@ -5,11 +5,11 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.Test
 
-internal class StringEncoderNewTest {
+internal class StringEncoderV3Test {
     @Test
     fun emptyString() {
-        val encoded = StringEncoderNew.encodeToInt("")
-        val result = StringEncoder.decode(encoded)
+        val encoded = StringEncoderV3.encodeToInt("")
+        val result = StringEncoderV1.decode(encoded)
         assertEquals("", result)
     }
 
@@ -52,8 +52,8 @@ internal class StringEncoderNewTest {
             "fxshrxx"
         ).map { str ->
             DynamicTest.dynamicTest("ch: $str") {
-                val encoded = StringEncoderNew.encodeToInt(str)
-                val decoded = StringEncoderNew.decode(encoded)
+                val encoded = StringEncoderV3.encodeToInt(str)
+                val decoded = StringEncoderV3.decode(encoded)
                 System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
                 assertEquals(str, decoded)
                 println()
@@ -74,8 +74,8 @@ internal class StringEncoderNewTest {
             "crpxnlskvljfhh"
         ).map { str ->
             DynamicTest.dynamicTest(str) {
-                val encoded = StringEncoderNew.encodeToLong(str)
-                val decoded = StringEncoderNew.decode(encoded)
+                val encoded = StringEncoderV3.encodeToLong(str)
+                val decoded = StringEncoderV3.decode(encoded)
                 System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
                 assertEquals(str, decoded)
             }

@@ -20,4 +20,8 @@ open class Typewriter(private val chars: List<Char> = Keys.fullList()) {
         val idx = Random.nextInt(size)
         return chars[idx]
     }
+
+    override fun toString(): String {
+        return "Typewriter(chars=$chars, numChars=$numChars, numWordChars=$numWordChars)"
+    }
 }

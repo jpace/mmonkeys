@@ -1,58 +1,40 @@
 package org.incava.mmonkeys.match.number
 
-import org.incava.ikdk.io.Console
-import org.incava.ikdk.math.Maths
 import org.incava.mmonkeys.match.MatchData
 import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.random.Random
 
-class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewriter) : CorpusMonkey(corpus, id, typewriter) {
+class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewriter) :
+    CorpusMonkey(corpus, id, typewriter) {
     private val charCount = typewriter.numChars().toLong() - 1
     val verbose = false
 
-    init {
-        Console.info("this", this)
-        Console.info("sought", sought)
-        if (verbose) {
-            Console.info("corpus.numbers", corpus.numbers)
-            showUnmatched()
+    fun findMatch(soughtLen: Int, forLength: Map<Long, List<Int>>): MatchData {
+        val rangeEncoded = corpus.rangeEncoded[soughtLen] ?: return noMatch(soughtLen)
+
+        // range = (x + 1) * 26 - x
+        //  step 1: 26x + 26 - x
+        //  step 2: 25x + 26
+        //  step 3: profit!
+        val range = rangeEncoded.first * 25 + 26
+        val randInRange = Random.nextLong(range)
+        val encoded = rangeEncoded.first + randInRange
+        val matchEncoded = forLength[encoded] ?: return noMatch(soughtLen)
+        return if (matchEncoded.isNotEmpty()) {
+            val word = StringEncoderV3.decode(encoded)
+            val index = corpus.matched(word, encoded, soughtLen)
+            match(soughtLen, index)
+        } else {
+            noMatch(soughtLen)
         }
     }
 
     override fun check(): MatchData {
         val length = randomLength()
-        Console.info("length", length)
         val soughtLen = length - 1
-        Console.info("soughtLen", soughtLen)
         val forLength = corpus.numbers[soughtLen]
-        Console.info("forLength.#", forLength?.size)
-        if (forLength != null) {
-            // this is wrong; a length of 4 characters should be "aaaa" through "zzzz"
-            // 3 characters: "aaa" through "zzz"
-            val num = randomLong(soughtLen)
-            val forEncoded = forLength[num]
-            if (!forEncoded.isNullOrEmpty()) {
-                val word = StringEncoderNew.decode(num)
-                // Console.info("word", word)
-                val index = corpus.matched(word, num, soughtLen)
-                showUnmatched()
-                // showNumbers()
-                return match(soughtLen, index)
-            }
-        }
-        return noMatch(length)
-    }
-
-    private fun randomLong(digits: Int): Long {
-        val max = Maths.powerLongCached(charCount, digits) * 2
-        if (max <= 0) {
-            Console.info("max", max);
-            Console.info("charCount", charCount);
-            Console.info("digits", digits);
-            throw IllegalArgumentException("bound must be positive, not: $max")
-        }
-        return Random.nextLong(max)
+        return if (forLength == null) noMatch(soughtLen) else findMatch(soughtLen, forLength)
     }
 
     private fun showUnmatched() {
@@ -80,7 +62,7 @@ class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewri
         corpus.numbers.forEach { (length, numbers) ->
             println(length)
             numbers.forEach { (number, indices) ->
-                val str = StringEncoderNew.decode(number)
+                val str = StringEncoderV3.decode(number)
                 println("  $str")
                 println("    " + indices.joinToString(", "))
             }

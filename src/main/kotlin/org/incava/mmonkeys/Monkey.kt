@@ -45,6 +45,7 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter) {
         return MatchData(true, keystrokes, index)
     }
 
+    // @todo - fix for consistency: match/noMatch(x) == keystrokes through end of word, or the blank?
     fun noMatch(keystrokes: Int): MatchData {
 //        print(".")
         return MatchData(false, keystrokes, -1)

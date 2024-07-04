@@ -7,7 +7,7 @@ import org.incava.mmonkeys.type.Typewriter
 import kotlin.random.Random
 
 class NumberLongMonkey(sought: String, id: Int, typewriter: Typewriter) : StringMonkey(sought, id, typewriter) {
-    private val number = StringEncoder.encodeToLong(sought)
+    private val number = StringEncoderV1.encodeToLong(sought)
     private val soughtLen = sought.length
     private val max = Maths.powerLongRepeat(typewriter.numChars().toLong(), soughtLen) * 2
 

@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.match.number
 
-object StringEncoderNew {
+object StringEncoderV3 {
     // a .. z (no numbers yet)
     private const val NUM_CHARS = 26
 

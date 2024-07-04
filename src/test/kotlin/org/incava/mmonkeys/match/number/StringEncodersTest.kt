@@ -33,32 +33,32 @@ internal class StringEncodersTest {
 
     @Test
     fun encodeToIntMax() {
-        findMaxInt("zzzzzz", StringEncoder::encodeToInt)
+        findMaxInt("zzzzzz", StringEncoderV1::encodeToInt)
     }
 
     @Test
     fun encodeToBase27Max() {
-        findMaxInt("zzzzzzz", StringEncoder::encodeToBase27)
+        findMaxInt("zzzzzzz", StringEncoderV2::encodeToInt)
     }
 
     @Test
     fun encodeToIntNewMax() {
-        findMaxInt("fxshrxx", StringEncoderNew::encodeToInt)
+        findMaxInt("fxshrxx", StringEncoderV3::encodeToInt)
     }
 
     @Test
     fun encodeToLongMax() {
-        findMaxLong("aaopxlgfbitsgd", StringEncoder::encodeToLong)
+        findMaxLong("aaopxlgfbitsgd", StringEncoderV1::encodeToLong)
     }
 
     @Test
     fun encodeToLongNewMax() {
-        findMaxLong("crpxnlskvljfhh", StringEncoderNew::encodeToLong)
+        findMaxLong("crpxnlskvljfhh", StringEncoderV3::encodeToLong)
     }
 
     @Test
     fun encodeToBase27LongMax() {
-        findMaxLong("bgldhuekcgxjxy", StringEncoder::encodeToBase27Long)
+        findMaxLong("bgldhuekcgxjxy", StringEncoderV2::encodeToLong)
     }
 
     private fun findMaxLong(from: String, encoder: (String) -> Long) {

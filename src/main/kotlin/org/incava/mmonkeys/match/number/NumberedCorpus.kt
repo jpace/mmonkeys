@@ -6,20 +6,30 @@ import org.incava.mmonkeys.match.corpus.Corpus
 class NumberedCorpus(words: List<String>) : Corpus(words) {
     // length to [ encoded to [ indices in sought ] ]
     val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
+    val rangeEncoded = (1..13).associateWith { length ->
+        val encoded= StringEncoderV3.encodeToLong("a".repeat(length))
+        encoded to (encoded + 1) * 26
+    }
 
     init {
         Console.info("this", this)
         Console.info("words", words)
         val encoded = mutableMapOf<String, Long>()
         words.withIndex().forEach { word ->
-            val enc = encoded.computeIfAbsent(word.value, StringEncoderNew::encodeToLong)
+            // trouble with words of size 14; see StringEncodersTest
+            val enc = encoded.computeIfAbsent(word.value, StringEncoderV3::encodeToLong)
+            if (enc < 0) {
+                Console.info("overflow")
+                Console.info("word", word)
+                Console.info("enc", enc)
+            }
             numbers
                 .computeIfAbsent(word.value.length) { mutableMapOf() }
                 .computeIfAbsent(enc) { mutableListOf() }.also { it.add(word.index) }
         }
     }
 
-    fun matched(word: String, number: Long, length: Int) : Int {
+    fun matched(word: String, number: Long, length: Int): Int {
         remove(word)
         val forLength = numbers[length] ?: return -1
         val forEncoded = forLength[number] ?: return -1
@@ -34,5 +44,9 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
             numbers.remove(length)
         }
         return index
+    }
+
+    override fun toString(): String {
+        return "NumberedCorpus(numbers=$numbers, rangeEncoded=$rangeEncoded)"
     }
 }

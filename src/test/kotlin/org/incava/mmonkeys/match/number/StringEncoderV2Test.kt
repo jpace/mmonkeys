@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.Test
 
-internal class StringEncoderTest {
+internal class StringEncoderV2Test {
     private val intValues = listOf(
         "a" to 26,
         "z" to 51,
@@ -30,7 +30,7 @@ internal class StringEncoderTest {
     fun `given a string, the encoded int value should be`() =
         intValues.map { (input, expected) ->
             DynamicTest.dynamicTest("given $input, when encoding to an integer, the result should be $expected") {
-                val result = StringEncoder.encodeToInt(input)
+                val result = StringEncoderV1.encodeToInt(input)
                 assertEquals(expected, result)
             }
         }
@@ -43,7 +43,7 @@ internal class StringEncoderTest {
                         "when encoding the value to a long, " +
                         "then the result should be $expected"
             ) {
-                val result = StringEncoder.encodeToLong(input)
+                val result = StringEncoderV1.encodeToLong(input)
                 assertEquals(expected, result)
             }
         }
@@ -60,7 +60,7 @@ internal class StringEncoderTest {
                         "when encoding the value to a long, " +
                         "then the result should be $expected"
             ) {
-                val result = StringEncoder.encode(input)
+                val result = StringEncoderV1.encode(input)
                 assertEquals(expected, result)
             }
         }
@@ -73,7 +73,7 @@ internal class StringEncoderTest {
                         "when decoding the value from an integer, " +
                         "then the result should be $expected"
             ) {
-                val result = StringEncoder.decode(input)
+                val result = StringEncoderV1.decode(input)
                 assertEquals(expected, result)
             }
         }
@@ -86,7 +86,7 @@ internal class StringEncoderTest {
                         "when decoding the value from a long, " +
                         "then the result should be $expected"
             ) {
-                val result = StringEncoder.encodeToLong(input)
+                val result = StringEncoderV1.encodeToLong(input)
                 assertEquals(expected, result)
             }
         }
@@ -99,10 +99,10 @@ internal class StringEncoderTest {
                         "when encoding then decoding, " +
                         "then the result should be the original"
             ) {
-                val encoded = StringEncoder.encodeToLong(str)
+                val encoded = StringEncoderV1.encodeToLong(str)
                 Console.info("str", str)
                 Console.info("encoded", encoded)
-                val result = StringEncoder.decode(encoded)
+                val result = StringEncoderV1.decode(encoded)
                 Console.info("result", result)
                 assertEquals(str, result)
             }
@@ -116,10 +116,10 @@ internal class StringEncoderTest {
                         "when encoding then decoding, " +
                         "then the result should be the original"
             ) {
-                val encoded = StringEncoder.encodeToInt(str)
+                val encoded = StringEncoderV1.encodeToInt(str)
                 Console.info("str", str)
                 Console.info("encoded", encoded)
-                val result = StringEncoder.decode(encoded)
+                val result = StringEncoderV1.decode(encoded)
                 Console.info("result", result)
                 assertEquals(str, result)
             }
@@ -135,7 +135,7 @@ internal class StringEncoderTest {
             903L to "it"
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
-                val result = StringEncoder.decode(number)
+                val result = StringEncoderV1.decode(number)
                 assertEquals(str, result)
             }
         }
@@ -152,8 +152,8 @@ internal class StringEncoderTest {
             903L to "it"
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
-                val encoded = StringEncoder.encodeToInt(str)
-                val result = StringEncoder.decode(encoded)
+                val encoded = StringEncoderV1.encodeToInt(str)
+                val result = StringEncoderV1.decode(encoded)
                 assertEquals(str, result)
             }
         }
@@ -166,8 +166,8 @@ internal class StringEncoderTest {
             903L to "it"
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
-                val encoded = StringEncoder.encodeToLong(str)
-                val result = StringEncoder.decode(encoded)
+                val encoded = StringEncoderV1.encodeToLong(str)
+                val result = StringEncoderV1.decode(encoded)
                 assertEquals(str, result)
             }
         }
@@ -178,16 +178,16 @@ internal class StringEncoderTest {
             903L to "it"
         ).map { (number, str) ->
             DynamicTest.dynamicTest("number: $number, str: $str") {
-                val encoded = StringEncoder.encodeToLong(str)
-                val result = StringEncoder.decode(encoded)
+                val encoded = StringEncoderV1.encodeToLong(str)
+                val result = StringEncoderV1.decode(encoded)
                 assertEquals(str, result)
             }
         }
 
     @Test
     fun emptyString() {
-        val encoded = StringEncoder.encodeToInt("")
-        val result = StringEncoder.decode(encoded)
+        val encoded = StringEncoderV1.encodeToInt("")
+        val result = StringEncoderV1.decode(encoded)
         assertEquals("", result)
     }
 
@@ -216,8 +216,8 @@ internal class StringEncoderTest {
             "aaaa"
         ).map { str ->
             DynamicTest.dynamicTest("ch: $str") {
-                val encoded = StringEncoder.encodeToBase27(str)
-                val decoded = StringEncoder.decodeFromBase27(encoded)
+                val encoded = StringEncoderV2.encodeToInt(str)
+                val decoded = StringEncoderV2.decode(encoded)
                 System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
                 assertEquals(str, decoded)
             }
@@ -236,8 +236,8 @@ internal class StringEncoderTest {
             "bgldhuekcgxjxy"
         ).map { str ->
             DynamicTest.dynamicTest(str) {
-                val encoded = StringEncoder.encodeToBase27Long(str)
-                val decoded = StringEncoder.decodeFromBase27(encoded)
+                val encoded = StringEncoderV2.encodeToLong(str)
+                val decoded = StringEncoderV2.decode(encoded)
                 assertEquals(str, decoded)
             }
         }
