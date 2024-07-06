@@ -5,6 +5,7 @@ import org.incava.mmonkeys.CorpusMonkeyCtor
 import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
 import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.match.corpus.LengthCorpus
 import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
 import org.incava.mmonkeys.match.number.NumberLongsMonkey
 import org.incava.mmonkeys.match.number.NumberedCorpus
@@ -54,13 +55,24 @@ class CorpusTrial(private val params: Params) {
         return runner.results
     }
 
+    private fun runLengthCorpusTrial(name: String, monkeyCtor: CorpusMonkeyCtor<LengthCorpus>): PerfResults {
+        Console.info("name", name)
+        // kotlin infers lambda from KFunction ... hey now!
+        val monkeyFactory = CorpusMonkeyFactory<LengthCorpus>(ctor = monkeyCtor)
+        val words = CorpusUtil.readFileWords("pg100.txt", params.numLines, params.wordSizeLimit)
+        val corpus = LengthCorpus(words)
+        val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
+        Thread.sleep(100L)
+        Console.info(name, runner.results.durations.average())
+        return runner.results
+    }
+
     fun run() {
         Console.info("sought.#", corpus.words.size)
 
         val results = mutableMapOf<String, PerfResults>()
 
         val types1: List<Pair<String, CorpusMonkeyCtor<Corpus>>> = listOf(
-            "length" to ::LengthCorpusMonkey,
             "eq" to ::EqCorpusMonkey
         )
         if (true) {
@@ -76,6 +88,17 @@ class CorpusTrial(private val params: Params) {
         if (true) {
             results += types2.shuffled().associate { (name, monkeyCtor) ->
                 val result = runNumberedCorpusTrial(name, monkeyCtor)
+                name to result
+            }.toSortedMap()
+        }
+
+        val types3: List<Pair<String, CorpusMonkeyCtor<LengthCorpus>>> = listOf(
+//            // NumberLongsMatcher can only support up through words of length 13
+            "length" to ::LengthCorpusMonkey,
+        )
+        if (true) {
+            results += types3.shuffled().associate { (name, monkeyCtor) ->
+                val result = runLengthCorpusTrial(name, monkeyCtor)
                 name to result
             }.toSortedMap()
         }

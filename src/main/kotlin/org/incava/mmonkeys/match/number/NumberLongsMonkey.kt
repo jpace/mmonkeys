@@ -5,10 +5,9 @@ import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.random.Random
 
-class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewriter) :
+class NumberLongsMonkey(override val corpus: NumberedCorpus, id: Int, typewriter: Typewriter) :
     CorpusMonkey(corpus, id, typewriter) {
-    private val charCount = typewriter.numChars().toLong() - 1
-    val verbose = false
+    private val verbose = false
 
     fun findMatch(soughtLen: Int, forLength: Map<Long, List<Int>>): MatchData {
         val rangeEncoded = corpus.rangeEncoded[soughtLen] ?: return noMatch(soughtLen)
@@ -51,11 +50,9 @@ class NumberLongsMonkey(val corpus: NumberedCorpus, id: Int, typewriter: Typewri
         println("total: $total, $str")
     }
 
-    fun lengthToCount(): Map<Int, Int> {
+    private fun lengthToCount(): Map<Int, Int> {
         return corpus.numbers.toSortedMap()
-            .entries
-            .map { entry -> entry.key to entry.value.map { it.value.size }.sum() }
-            .toMap()
+            .entries.associate { entry -> entry.key to entry.value.map { it.value.size }.sum() }
     }
 
     fun showNumbers() {

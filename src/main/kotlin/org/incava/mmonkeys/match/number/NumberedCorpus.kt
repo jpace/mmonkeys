@@ -7,7 +7,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
     // length to [ encoded to [ indices in sought ] ]
     val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
     val rangeEncoded = (1..13).associateWith { length ->
-        val encoded= StringEncoderV3.encodeToLong("a".repeat(length))
+        val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
         encoded to (encoded + 1) * 26
     }
 
@@ -34,8 +34,6 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
         val forLength = numbers[length] ?: return -1
         val forEncoded = forLength[number] ?: return -1
         val index = forEncoded.removeAt(0)
-//        Console.info("index", index)
-//        Console.info("word[$index]", words[index])
         // this is the index into sought
         if (forEncoded.isEmpty()) {
             forLength.remove(number)
@@ -47,6 +45,6 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
     }
 
     override fun toString(): String {
-        return "NumberedCorpus(numbers=$numbers, rangeEncoded=$rangeEncoded)"
+        return "NumberedCorpus(numbers.keys.#=${numbers.keys.size}, rangeEncoded=$rangeEncoded)"
     }
 }

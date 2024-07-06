@@ -6,9 +6,9 @@ import org.incava.mmonkeys.type.Typewriter
 class EqCorpusMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : CorpusMonkey(sought, id, typewriter) {
     override fun check(): MatchData {
         val word = nextString()
-        val index = sought.match(word)
+        val index = corpus.match(word)
         return if (index >= 0) {
-            sought.removeAt(index)
+            corpus.removeAt(index)
             match(word.length, index)
         } else
             noMatch(word.length)
