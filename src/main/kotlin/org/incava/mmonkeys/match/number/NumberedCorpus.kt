@@ -12,8 +12,6 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
     }
 
     init {
-        Console.info("this", this)
-        Console.info("words", words)
         val encoded = mutableMapOf<String, Long>()
         words.withIndex().forEach { word ->
             // trouble with words of size 14; see StringEncodersTest

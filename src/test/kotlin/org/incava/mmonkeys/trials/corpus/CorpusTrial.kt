@@ -4,16 +4,18 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.CorpusMonkeyCtor
 import org.incava.mmonkeys.CorpusMonkeyFactory
 import org.incava.mmonkeys.match.corpus.Corpus
+import org.incava.mmonkeys.match.corpus.CorpusMonkey
 import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
 import org.incava.mmonkeys.match.corpus.LengthCorpus
 import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
 import org.incava.mmonkeys.match.number.NumberLongsMonkey
 import org.incava.mmonkeys.match.number.NumberedCorpus
 import org.incava.mmonkeys.trials.base.PerfResults
+import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
-import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
+import kotlin.reflect.KFunction3
 
 class CorpusTrial(private val params: Params) {
     val corpus = CorpusUtil.readFile("pg100.txt", params.numLines, params.wordSizeLimit)
@@ -32,75 +34,46 @@ class CorpusTrial(private val params: Params) {
         ) : this(wordSizeLimit, numLines, ofSeconds(timeLimit), tickSize)
     }
 
-    private fun runCorpusTrial(name: String, monkeyCtor: CorpusMonkeyCtor<Corpus>): PerfResults {
+    private fun <T : Corpus> runCorpusTrial(
+        name: String,
+        corpusCtor: (List<String>) -> T,
+        monkeyCtor: CorpusMonkeyCtor<T>,
+    ): PerfResults {
         Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
         val monkeyFactory = CorpusMonkeyFactory(ctor = monkeyCtor)
-        val corpus = CorpusUtil.readFile("pg100.txt", params.numLines, params.wordSizeLimit)
+        val words = CorpusUtil.readFileWords("pg100.txt", params.numLines, params.wordSizeLimit)
+        val corpus = corpusCtor(words)
         val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
         return runner.results
     }
 
-    private fun runNumberedCorpusTrial(name: String, monkeyCtor: CorpusMonkeyCtor<NumberedCorpus>): PerfResults {
-        Console.info("name", name)
-        // kotlin infers lambda from KFunction ... hey now!
-        val monkeyFactory = CorpusMonkeyFactory<NumberedCorpus>(ctor = monkeyCtor)
-        val words = CorpusUtil.readFileWords("pg100.txt", params.numLines, params.wordSizeLimit)
-        val corpus = NumberedCorpus(words)
-        val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
-        Thread.sleep(100L)
-        Console.info(name, runner.results.durations.average())
-        return runner.results
-    }
-
-    private fun runLengthCorpusTrial(name: String, monkeyCtor: CorpusMonkeyCtor<LengthCorpus>): PerfResults {
-        Console.info("name", name)
-        // kotlin infers lambda from KFunction ... hey now!
-        val monkeyFactory = CorpusMonkeyFactory<LengthCorpus>(ctor = monkeyCtor)
-        val words = CorpusUtil.readFileWords("pg100.txt", params.numLines, params.wordSizeLimit)
-        val corpus = LengthCorpus(words)
-        val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
-        Thread.sleep(100L)
-        Console.info(name, runner.results.durations.average())
-        return runner.results
+    private fun <T : Corpus> runTrial(
+        results: MutableMap<String, PerfResults>,
+        trials: List<Triple<String, (List<String>) -> T, CorpusMonkeyCtor<T>>>) {
+        results += trials.shuffled().associate { entry ->
+            val result = runCorpusTrial(entry.first, entry.second, entry.third)
+            entry.first to result
+        }.toSortedMap()
     }
 
     fun run() {
         Console.info("sought.#", corpus.words.size)
-
         val results = mutableMapOf<String, PerfResults>()
 
-        val types1: List<Pair<String, CorpusMonkeyCtor<Corpus>>> = listOf(
-            "eq" to ::EqCorpusMonkey
-        )
         if (true) {
-            results += types1.shuffled().associate { (name, monkeyCtor) ->
-                val result = runCorpusTrial(name, monkeyCtor)
-                name to result
-            }.toSortedMap()
-        }
-        val types2: List<Pair<String, CorpusMonkeyCtor<NumberedCorpus>>> = listOf(
-//            // NumberLongsMatcher can only support up through words of length 13
-            "longs" to ::NumberLongsMonkey,
-        )
-        if (true) {
-            results += types2.shuffled().associate { (name, monkeyCtor) ->
-                val result = runNumberedCorpusTrial(name, monkeyCtor)
-                name to result
-            }.toSortedMap()
+            runTrial(results, listOf(Triple("eq", ::Corpus, ::EqCorpusMonkey)))
         }
 
-        val types3: List<Pair<String, CorpusMonkeyCtor<LengthCorpus>>> = listOf(
-//            // NumberLongsMatcher can only support up through words of length 13
-            "length" to ::LengthCorpusMonkey,
-        )
         if (true) {
-            results += types3.shuffled().associate { (name, monkeyCtor) ->
-                val result = runLengthCorpusTrial(name, monkeyCtor)
-                name to result
-            }.toSortedMap()
+            runTrial(results, listOf(Triple("length", ::LengthCorpus, ::LengthCorpusMonkey)))
+        }
+
+        if (true) {
+            // NumberLongsMatcher can only support up through words of length 13
+            runTrial(results, listOf(Triple("longs", ::NumberedCorpus, ::NumberLongsMonkey)))
         }
 
         val table = CorpusTrialTable(corpus.words.size, params.wordSizeLimit)
@@ -134,12 +107,12 @@ fun main() {
     val trials = CorpusTrials(
         listOf(
             // NumberLongsMatcher can only support up through word crpxnlskvljfhh
-//           Params(4, 500, ofSeconds(3L), 1000),
+           Params(4, 500, ofSeconds(3L), 1000),
 //            Params(4, 10, ofSeconds(30L), 1),
 
 //            Params(7, 5000, ofSeconds(5L), 1000),
 //            Params(7, 5000, ofMinutes(1L), 1000),
-            Params(7, 5000, ofMinutes(3L), 10000),
+//            Params(7, 5000, ofMinutes(3L), 10000),
 //            Params(7, 5000, ofMinutes(7L), 10000),
 
 //            Params(7, 10000, ofMinutes(1L), 10000),
