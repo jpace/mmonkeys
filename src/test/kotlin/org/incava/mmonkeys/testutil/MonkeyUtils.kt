@@ -1,10 +1,10 @@
 package org.incava.mmonkeys.testutil
 
-import org.incava.mmonkeys.CorpusMonkeyCtor
-import org.incava.mmonkeys.CorpusMonkeyFactory
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMonkey
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.CorpusMonkey
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter

@@ -1,12 +1,12 @@
 package org.incava.mmonkeys.trials.string
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.StringMonkeyFactory
-import org.incava.mmonkeys.match.number.NumberIntMonkey
-import org.incava.mmonkeys.match.number.NumberLongMonkey
-import org.incava.mmonkeys.match.string.EqStringMonkey
-import org.incava.mmonkeys.match.string.LengthStringMonkey
-import org.incava.mmonkeys.match.string.PartialStringMonkey
+import org.incava.mmonkeys.mky.string.StringMonkeyFactory
+import org.incava.mmonkeys.mky.number.NumberIntMonkey
+import org.incava.mmonkeys.mky.number.NumberLongMonkey
+import org.incava.mmonkeys.mky.string.EqStringMonkey
+import org.incava.mmonkeys.mky.string.LengthStringMonkey
+import org.incava.mmonkeys.mky.string.PartialStringMonkey
 import org.incava.time.Durations.measureDuration
 import java.lang.Thread.sleep
 
@@ -37,7 +37,7 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
             return
         }
         Console.info("word", word)
-        val matchers = listOf(
+        val monkeys = listOf(
             "equal str" to ::EqStringMonkey,
             "partial str" to ::PartialStringMonkey,
             "length str" to ::LengthStringMonkey,
@@ -46,7 +46,7 @@ class StringSimulation(private val numMonkeys: Int = 1_000_000) {
             "num (long)" to ::NumberLongMonkey,
             "num (<*>)" to if (word.length > 6) ::NumberLongMonkey else ::NumberIntMonkey
         )
-        val trials = matchers.map { (type, ctor) ->
+        val trials = monkeys.map { (type, ctor) ->
             val monkeyFactory = StringMonkeyFactory(ctor = ctor)
             StringSimulationRunner(type, numMonkeys, monkeyFactory)
         }

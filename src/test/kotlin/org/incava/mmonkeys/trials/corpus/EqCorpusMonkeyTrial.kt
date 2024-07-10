@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.CorpusMonkeyFactory
-import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.util.Memory
 import org.incava.time.DurationList
 import org.incava.time.Durations

@@ -1,16 +1,16 @@
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.CorpusMonkeyCtor
-import org.incava.mmonkeys.CorpusMonkeyFactory
-import org.incava.mmonkeys.StringMonkeyCtor
-import org.incava.mmonkeys.StringMonkeyFactory
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CoroutineStringSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
-import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
-import org.incava.mmonkeys.match.string.EqStringMonkey
+import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.mky.string.EqStringMonkey
+import org.incava.mmonkeys.mky.string.StringMonkeyCtor
+import org.incava.mmonkeys.mky.string.StringMonkeyFactory
 import java.lang.Thread.sleep
 
 fun runSimulation(type: String, simulation: CoroutineSimulation) {

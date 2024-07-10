@@ -1,24 +1,22 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.CorpusMonkeyCtor
-import org.incava.mmonkeys.CorpusMonkeyFactory
-import org.incava.mmonkeys.match.corpus.Corpus
-import org.incava.mmonkeys.match.corpus.CorpusMonkey
-import org.incava.mmonkeys.match.corpus.EqCorpusMonkey
-import org.incava.mmonkeys.match.corpus.LengthCorpus
-import org.incava.mmonkeys.match.corpus.LengthCorpusMonkey
-import org.incava.mmonkeys.match.number.NumberLongsMonkey
-import org.incava.mmonkeys.match.number.NumberedCorpus
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
+import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.LengthCorpus
+import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.mky.number.NumberLongsMonkey
+import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.trials.base.PerfResults
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
+import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
-import kotlin.reflect.KFunction3
 
 class CorpusTrial(private val params: Params) {
-    val corpus = CorpusUtil.readFile("pg100.txt", params.numLines, params.wordSizeLimit)
+    val corpus = CorpusUtil.readFileCorpus("pg100.txt", params.numLines, params.wordSizeLimit)
 
     data class Params(
         val wordSizeLimit: Int,
@@ -52,7 +50,8 @@ class CorpusTrial(private val params: Params) {
 
     private fun <T : Corpus> runTrial(
         results: MutableMap<String, PerfResults>,
-        trials: List<Triple<String, (List<String>) -> T, CorpusMonkeyCtor<T>>>) {
+        trials: List<Triple<String, (List<String>) -> T, CorpusMonkeyCtor<T>>>,
+    ) {
         results += trials.shuffled().associate { entry ->
             val result = runCorpusTrial(entry.first, entry.second, entry.third)
             entry.first to result
@@ -63,18 +62,10 @@ class CorpusTrial(private val params: Params) {
         Console.info("sought.#", corpus.words.size)
         val results = mutableMapOf<String, PerfResults>()
 
-        if (true) {
-            runTrial(results, listOf(Triple("eq", ::Corpus, ::EqCorpusMonkey)))
-        }
-
-        if (true) {
-            runTrial(results, listOf(Triple("length", ::LengthCorpus, ::LengthCorpusMonkey)))
-        }
-
-        if (true) {
-            // NumberLongsMatcher can only support up through words of length 13
-            runTrial(results, listOf(Triple("longs", ::NumberedCorpus, ::NumberLongsMonkey)))
-        }
+        runTrial(results, listOf(Triple("eq", ::Corpus, ::EqCorpusMonkey)))
+        runTrial(results, listOf(Triple("length", ::LengthCorpus, ::LengthCorpusMonkey)))
+        // NumberLongsMonkey can only support up through words of length 13
+        runTrial(results, listOf(Triple("longs", ::NumberedCorpus, ::NumberLongsMonkey)))
 
         val table = CorpusTrialTable(corpus.words.size, params.wordSizeLimit)
         table.summarize(results)
@@ -106,8 +97,8 @@ private typealias Params = CorpusTrial.Params
 fun main() {
     val trials = CorpusTrials(
         listOf(
-            // NumberLongsMatcher can only support up through word crpxnlskvljfhh
-           Params(4, 500, ofSeconds(3L), 1000),
+            // NumberLongsMonkey can only support up through word crpxnlskvljfhh
+//            Params(4, 500, ofSeconds(3L), 1000),
 //            Params(4, 10, ofSeconds(30L), 1),
 
 //            Params(7, 5000, ofSeconds(5L), 1000),
@@ -120,7 +111,7 @@ fun main() {
 //          Params(7, 10000, ofMinutes(7L), 10000),
 //
 //            Params(13, 5000, ofMinutes(1L), 10000),
-//            Params(13, 5000, ofMinutes(3L), 1000),
+            Params(13, 5000, ofMinutes(3L), 1000),
 //            Params(13, 5000, ofMinutes(7L), 10000),
 //
 //            Params(13, 10000, ofMinutes(1L), 10000),

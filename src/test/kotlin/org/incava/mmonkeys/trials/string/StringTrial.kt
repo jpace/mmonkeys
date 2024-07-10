@@ -1,16 +1,14 @@
 package org.incava.mmonkeys.trials.string
 
 import org.incava.ikdk.io.Console
-import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.match.number.NumberIntMonkey
-import org.incava.mmonkeys.match.number.NumberLongMonkey
-import org.incava.mmonkeys.match.string.EqStringMonkey
-import org.incava.mmonkeys.match.string.LengthStringMonkey
-import org.incava.mmonkeys.match.string.PartialStringMonkey
-import org.incava.mmonkeys.match.string.StringMonkey
+import org.incava.mmonkeys.mky.number.NumberIntMonkey
+import org.incava.mmonkeys.mky.number.NumberLongMonkey
+import org.incava.mmonkeys.mky.string.LengthStringMonkey
+import org.incava.mmonkeys.mky.string.PartialStringMonkey
+import org.incava.mmonkeys.mky.string.StringMonkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import kotlin.system.measureTimeMillis

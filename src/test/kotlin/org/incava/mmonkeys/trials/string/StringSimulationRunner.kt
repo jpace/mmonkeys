@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.trials.string
 
-import org.incava.mmonkeys.StringMonkeyFactory
+import org.incava.mmonkeys.mky.string.StringMonkeyFactory
 import org.incava.mmonkeys.exec.CoroutineStringSimulation
 import org.incava.time.DurationList
 import java.time.Duration

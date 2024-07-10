@@ -118,7 +118,7 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
             { `int numChars List StringBuffer`() },
             { `int numChars List toString`() },
             { `int numChars Array toString`() },
-            { `nextBytes`() },
+            { nextBytes() },
             { `nextBytes toString`() },
         )
         // val shuffled = methods.shuffled()

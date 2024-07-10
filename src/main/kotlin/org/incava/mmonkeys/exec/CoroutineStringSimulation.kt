@@ -4,8 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.string.StringMonkey
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.string.StringMonkey
 
 class CoroutineStringSimulation(monkeys: List<StringMonkey>) : CoroutineSimulation(monkeys) {
     override fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
@@ -24,13 +24,13 @@ class CoroutineStringSimulation(monkeys: List<StringMonkey>) : CoroutineSimulati
         Console.info("match failed", this)
     }
 
-    suspend fun checkMonkey(matcher: Monkey, attempt: Long): Boolean {
+    suspend fun checkMonkey(monkey: Monkey, attempt: Long): Boolean {
         iterations.incrementAndGet()
-        val md = matcher.check()
+        val md = monkey.check()
         if (md.isMatch) {
             if (verbose) {
                 Console.info("md.match", md)
-                Console.info("matcher.to_s", matcher)
+                Console.info("monkey.to_s", monkey)
                 Console.info("attempt", attempt)
                 Console.info("iterations", iterations.get())
             }

@@ -5,8 +5,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.Monkey
-import org.incava.mmonkeys.match.corpus.CorpusMonkey
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.CorpusMonkey
 
 open class CoroutineCorpusSimulation(monkeys: List<CorpusMonkey>) : CoroutineSimulation(monkeys) {
     override fun CoroutineScope.launchMonkeys(): List<Job> {
@@ -34,7 +34,7 @@ open class CoroutineCorpusSimulation(monkeys: List<CorpusMonkey>) : CoroutineSim
             //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
             if (verbose) {
                 Console.info("md.match", md)
-                Console.info("matcher.to_s", monkey)
+                Console.info("monkey", monkey)
                 Console.info("attempt", attempt)
                 Console.info("iterations", iterations.get())
             }
