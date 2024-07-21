@@ -4,24 +4,26 @@ import org.incava.time.Durations.measureDuration
 import java.time.Duration
 import java.time.Duration.ofSeconds
 
-class CorpusTrials(val params: List<CorpusTrial.Params>) {
+data class Params(val wordSizeLimit: Int, val numLines: Int, val timeLimit: Duration, val tickSize: Int)
+
+class CorpusTrials(val params: List<Params>) {
     fun run() {
         val trialsDuration = measureDuration {
-            params.forEach(::runTrial)
+            params.forEach {
+                runTrial(it.numLines, it.wordSizeLimit, it.timeLimit, it.tickSize)
+            }
         }
         println("trials duration: $trialsDuration")
     }
 
-    private fun runTrial(params: CorpusTrial.Params) {
+    private fun runTrial(numLines: Int, wordSizeLimit: Int, timeLimit: Duration, tickSize: Int) {
         val trialDuration = measureDuration {
-            val trial = CorpusTrial(params)
+            val trial = CorpusTrial(numLines, wordSizeLimit, timeLimit, tickSize)
             trial.run()
         }
         println("trial duration: $trialDuration")
     }
 }
-
-private typealias Params = CorpusTrial.Params
 
 fun main() {
     val trials = CorpusTrials(

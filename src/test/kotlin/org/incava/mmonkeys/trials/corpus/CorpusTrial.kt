@@ -11,28 +11,14 @@ import org.incava.mmonkeys.mky.number.NumberLongsMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.trials.base.PerfResults
 import java.time.Duration
-import java.time.Duration.ofMinutes
-import java.time.Duration.ofSeconds
-import java.util.*
 
-class CorpusTrial(private val params: Params) {
-    val corpus = CorpusUtil.toCorpus("pg100.txt", params.numLines, params.wordSizeLimit, ::Corpus)
+class CorpusTrial(
+    private val numLines: Int,
+    private val wordSizeLimit: Int,
+    private val timeLimit: Duration,
+    private val tickSize: Int) {
 
-    data class Params(
-        val wordSizeLimit: Int,
-        val numLines: Int,
-        val timeLimit: Duration,
-        val tickSize: Int,
-    ) {
-        constructor(
-            wordSizeLimit: Int,
-            numLines: Int,
-            timeLimit: Long,
-            tickSize: Int,
-        ) : this(wordSizeLimit, numLines, ofSeconds(timeLimit), tickSize)
-    }
-
-    private fun <T : Corpus> runCorpusTrial(
+    private fun <T : Corpus> runMonkey(
         name: String,
         corpusCtor: (List<String>) -> T,
         monkeyCtor: CorpusMonkeyCtor<T>,
@@ -40,8 +26,8 @@ class CorpusTrial(private val params: Params) {
         Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
         val monkeyFactory = CorpusMonkeyFactory(ctor = monkeyCtor)
-        val corpus = CorpusUtil.toCorpus("pg100.txt", params.numLines, params.wordSizeLimit, corpusCtor)
-        val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
+        val corpus = CorpusUtil.toCorpus("pg100.txt", numLines, wordSizeLimit, corpusCtor)
+        val runner = CorpusTrialRunner(corpus, monkeyFactory, timeLimit, tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
         return runner.results
@@ -49,24 +35,25 @@ class CorpusTrial(private val params: Params) {
 
     private fun <T : Corpus> runTrials(trials: List<Triple<String, (List<String>) -> T, CorpusMonkeyCtor<T>>>): Map<String, PerfResults> {
         return trials.shuffled().associate { entry ->
-            val result = runCorpusTrial(entry.first, entry.second, entry.third)
+            val result = runMonkey(entry.first, entry.second, entry.third)
             entry.first to result
         }.toSortedMap()
     }
 
     fun run() {
+        val corpus = CorpusUtil.toCorpus("pg100.txt", numLines, wordSizeLimit, ::Corpus)
         Console.info("sought.#", corpus.words.size)
         val results = mutableMapOf<String, PerfResults>()
 
-        results += runTrials(listOf(Triple("eq", ::Corpus, ::EqCorpusMonkey)))
-        results += runTrials(listOf(Triple("length", ::LengthCorpus, ::LengthCorpusMonkey)))
+        results += "eq" to runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
+        results += "length" to runMonkey("length", ::LengthCorpus, ::LengthCorpusMonkey)
         // NumberLongsMonkey can only support up through words of length 13
-        results += runTrials(listOf(Triple("longs", ::NumberedCorpus, ::NumberLongsMonkey)))
+        results += "longs" to runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
 
-        val table = CorpusTrialTable(corpus.words.size, params.wordSizeLimit)
+        val table = CorpusTrialTable(corpus.words.size, wordSizeLimit)
         table.summarize(results)
         println()
-        val matchTable = CorpusMatchTable(params.wordSizeLimit, results)
+        val matchTable = CorpusMatchTable(wordSizeLimit, results)
         matchTable.summarize()
     }
 }
