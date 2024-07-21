@@ -16,7 +16,7 @@ import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 class CorpusTrial(private val params: Params) {
-    val corpus = CorpusUtil.readFileCorpus("pg100.txt", params.numLines, params.wordSizeLimit)
+    val corpus = CorpusUtil.toCorpus("pg100.txt", params.numLines, params.wordSizeLimit, ::Corpus)
 
     data class Params(
         val wordSizeLimit: Int,
@@ -40,8 +40,7 @@ class CorpusTrial(private val params: Params) {
         Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
         val monkeyFactory = CorpusMonkeyFactory(ctor = monkeyCtor)
-        val words = CorpusUtil.readFileWords("pg100.txt", params.numLines, params.wordSizeLimit)
-        val corpus = corpusCtor(words)
+        val corpus = CorpusUtil.toCorpus("pg100.txt", params.numLines, params.wordSizeLimit, corpusCtor)
         val runner = CorpusTrialRunner(corpus, monkeyFactory, params.timeLimit, params.tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())

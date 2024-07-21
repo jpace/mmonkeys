@@ -9,12 +9,7 @@ object CorpusUtil {
         return CorpusUtil::class.java.classLoader.getResource(name) ?: throw RuntimeException("no such file: $name")
     }
 
-    fun readFileCorpus(name: String, numLines: Int, wordSizeLimit: Int): Corpus {
-        val words = readFileWords(name, numLines, wordSizeLimit)
-        return Corpus(words)
-    }
-
-    fun readFileWords(name: String, numLines: Int, wordSizeLimit: Int): List<String> {
+    private fun readFileWords(name: String, numLines: Int, wordSizeLimit: Int): List<String> {
         val file = getResource(name)
         val lines = file.readText().split("\r\n")
         val sonnet = lines.subList(0, min(numLines, lines.size))
@@ -25,5 +20,10 @@ object CorpusUtil {
             .map(String::toLowerCase)
             .map { it.replace(Regex("[^a-z+]"), "") }
             .filter { it.length in 1..wordSizeLimit }
+    }
+
+    fun <T: Corpus> toCorpus(fileName: String, numLines: Int, wordSizeLimit: Int, ctor: (List<String>) -> T) : T {
+        val words = readFileWords(fileName, numLines, wordSizeLimit)
+        return ctor(words)
     }
 }

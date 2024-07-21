@@ -99,8 +99,8 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun check() {
-        val words = CorpusUtil.readFileWords("pg100.txt", 100, 12)
-        val obj = makeMonkey(NumberedCorpus(words))
+        val corpus = CorpusUtil.toCorpus("pg100.txt", 100, 12, ::NumberedCorpus)
+        val obj = makeMonkey(corpus)
         repeat(10) {
             val result = obj.check()
             Console.info("result", result)
@@ -109,9 +109,8 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun findMatch() {
-        val words = CorpusUtil.readFileWords("pg100.txt", 100, 5)
+        val corpus = CorpusUtil.toCorpus("pg100.txt", 100, 5, ::NumberedCorpus)
         val length = 4
-        val corpus = NumberedCorpus(words)
         val forLength = corpus.numbers[length] ?: return
         val obj = makeMonkey(corpus)
         repeat(10_000) {
