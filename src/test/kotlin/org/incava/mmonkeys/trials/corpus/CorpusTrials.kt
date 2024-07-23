@@ -10,18 +10,14 @@ class CorpusTrials(val params: List<Params>) {
     fun run() {
         val trialsDuration = measureDuration {
             params.forEach {
-                runTrial(it.numLines, it.wordSizeLimit, it.timeLimit, it.tickSize)
+                val trialDuration = measureDuration {
+                    val trial = CorpusTrial(it.numLines, it.wordSizeLimit, it.timeLimit, it.tickSize)
+                    trial.run()
+                }
+                println("trial duration: $trialDuration")
             }
         }
         println("trials duration: $trialsDuration")
-    }
-
-    private fun runTrial(numLines: Int, wordSizeLimit: Int, timeLimit: Duration, tickSize: Int) {
-        val trialDuration = measureDuration {
-            val trial = CorpusTrial(numLines, wordSizeLimit, timeLimit, tickSize)
-            trial.run()
-        }
-        println("trial duration: $trialDuration")
     }
 }
 

@@ -13,7 +13,7 @@ class MonkeyFactoryTest {
     @Test
     fun createMonkey() {
         val monkeyCtor = ::LengthCorpusMonkey
-        val obj = CorpusMonkeyFactory({ Typewriter() }, ctor = monkeyCtor, charsCtor = Keys.fullList())
+        val obj = CorpusMonkeyFactory({ Typewriter() }, monkeyCtor = monkeyCtor, charsCtor = Keys.fullList())
         val monkey = obj.createMonkey(LengthCorpus(listOf("abc")))
         Console.info("monkey", monkey)
         assertEquals(Typewriter::class.java, monkey.typewriter.javaClass)

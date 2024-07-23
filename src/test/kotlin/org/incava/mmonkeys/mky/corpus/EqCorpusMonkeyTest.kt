@@ -49,11 +49,11 @@ internal class EqCorpusMonkeyTest {
         val chars = Keys.fullList()
         val corpus = Corpus(listOf("ab", "cd", "def", "defg", "ghi"))
         val typewriter = Typewriter(chars)
-        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, ctor = ::EqCorpusMonkey, charsCtor = chars)
+        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, monkeyCtor = ::EqCorpusMonkey, charsCtor = chars)
         val obj = monkeyFactory.createMonkey(corpus)
         var iterations = 0
         while (!obj.corpus.isEmpty()) {
-            val result = obj.check()
+            obj.check()
             iterations++
         }
         Console.info("iterations", iterations)

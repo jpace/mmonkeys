@@ -17,7 +17,7 @@ object MonkeyUtils {
         typewriterCtor: (chars: List<Char>) -> Typewriter = ::DeterministicTypewriter,
     ): CorpusMonkey {
         val typewriter = typewriterCtor(chars)
-        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, ctor = corpusMonkeyCtor, charsCtor = chars)
+        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, monkeyCtor = corpusMonkeyCtor, charsCtor = chars)
         return monkeyFactory.createMonkey(corpus)
     }
 

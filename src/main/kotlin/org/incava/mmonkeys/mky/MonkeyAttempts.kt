@@ -80,7 +80,7 @@ class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttemptin
 }
 
 class MonkeyAttemptsNoOp(private val tick: Int = 50_000) : MonkeyAttempting {
-    private var invocations: Long = 0L
+    var invocations: Long = 0L
 
     override fun add(matchData: MatchData) {
         if (invocations % (tick * 100L) == 0L) {
@@ -121,9 +121,9 @@ class MonkeyAttemptsMapListPair(private val tick: Int = 1000) : MonkeyAttempting
     override fun showMatches(limit: Int) {
         Console.info("result.#", results.size)
         results.keys.toSortedSet().forEach { key ->
-//            Console.info("key", key)
-//            val matches = results[key]!!
-//            Console.info("results[$key]", matches.subList(0, 10.coerceAtMost(matches.size)))
+            Console.info("key", key)
+            val matches = results[key]!!
+            Console.info("results[$key]", matches.subList(0, 10.coerceAtMost(matches.size)))
         }
         Console.info("errantKeystrokes", errantKeystrokes)
     }

@@ -7,7 +7,7 @@ import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {
-    val monkeyFactory = CorpusMonkeyFactory(ctor = ::EqCorpusMonkey)
+    val monkeyFactory = CorpusMonkeyFactory(monkeyCtor = ::EqCorpusMonkey)
     val sought = listOf("abc", "cde", "efg")
     val obj = monkeyFactory.createMonkey(Corpus(sought))
     Console.info("obj", obj)

@@ -2,7 +2,8 @@ package org.incava.mmonkeys.mky.number
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.MatchData
-import org.incava.mmonkeys.trials.corpus.CorpusUtil
+import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -99,7 +100,8 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun check() {
-        val corpus = CorpusUtil.toCorpus("pg100.txt", 100, 12, ::NumberedCorpus)
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val corpus = CorpusFactory.createCorpus(file, 100, 5, ::NumberedCorpus)
         val obj = makeMonkey(corpus)
         repeat(10) {
             val result = obj.check()
@@ -109,7 +111,8 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun findMatch() {
-        val corpus = CorpusUtil.toCorpus("pg100.txt", 100, 5, ::NumberedCorpus)
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val corpus = CorpusFactory.createCorpus(file, 100, 5, ::NumberedCorpus)
         val length = 4
         val forLength = corpus.numbers[length] ?: return
         val obj = makeMonkey(corpus)

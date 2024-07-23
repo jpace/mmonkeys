@@ -3,20 +3,24 @@ package org.incava.mmonkeys.trials.corpus
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
+import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.LengthCorpus
 import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
 import org.incava.mmonkeys.mky.number.NumberLongsMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
+import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.trials.base.PerfResults
+import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
 import java.time.Duration
 
 class CorpusTrial(
     private val numLines: Int,
     private val wordSizeLimit: Int,
     private val timeLimit: Duration,
-    private val tickSize: Int) {
+    private val tickSize: Int,
+) {
 
     private fun <T : Corpus> runMonkey(
         name: String,
@@ -25,9 +29,10 @@ class CorpusTrial(
     ): PerfResults {
         Console.info("name", name)
         // kotlin infers lambda from KFunction ... hey now!
-        val monkeyFactory = CorpusMonkeyFactory(ctor = monkeyCtor)
-        val corpus = CorpusUtil.toCorpus("pg100.txt", numLines, wordSizeLimit, corpusCtor)
-        val runner = CorpusTrialRunner(corpus, monkeyFactory, timeLimit, tickSize)
+        val monkeyFactory = CorpusMonkeyFactory(monkeyCtor = monkeyCtor)
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val corpus = CorpusFactory.createCorpus(file, numLines, wordSizeLimit, corpusCtor)
+        val runner = CorpusMonkeyRunner(corpus, monkeyFactory, timeLimit, tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
         return runner.results
@@ -41,7 +46,7 @@ class CorpusTrial(
     }
 
     fun run() {
-        val corpus = CorpusUtil.toCorpus("pg100.txt", numLines, wordSizeLimit, ::Corpus)
+        val corpus = CorpusFactory.createCorpus("pg100.txt", numLines, wordSizeLimit, ::Corpus)
         Console.info("sought.#", corpus.words.size)
         val results = mutableMapOf<String, PerfResults>()
 
@@ -50,10 +55,7 @@ class CorpusTrial(
         // NumberLongsMonkey can only support up through words of length 13
         results += "longs" to runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
 
-        val table = CorpusTrialTable(corpus.words.size, wordSizeLimit)
-        table.summarize(results)
-        println()
-        val matchTable = CorpusMatchTable(wordSizeLimit, results)
-        matchTable.summarize()
+        val view = CorpusTrialView(corpus, wordSizeLimit)
+        view.show(results)
     }
 }

@@ -47,7 +47,7 @@ fun runStringSimulation(toChar: Char, type: String, sought: String, monkeyCtor: 
 
 fun <T : Corpus> runCorpusSimulation(toChar: Char, type: String, sought: T, monkeyCtor: CorpusMonkeyCtor<T>) {
     val typewriterFactory = TypewriterFactory(toChar)
-    val monkeyFactory = CorpusMonkeyFactory<T>({ typewriterFactory.create() }, ctor = monkeyCtor)
+    val monkeyFactory = CorpusMonkeyFactory<T>({ typewriterFactory.create() }, monkeyCtor = monkeyCtor)
     runSimulation(type, sought, 10, monkeyFactory)
 }
 

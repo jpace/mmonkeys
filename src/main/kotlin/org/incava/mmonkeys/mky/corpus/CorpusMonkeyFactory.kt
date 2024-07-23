@@ -7,13 +7,13 @@ typealias CorpusMonkeyCtor<T> = (sought: T, id: Int, typewriter: Typewriter) -> 
 
 class CorpusMonkeyFactory<T : Corpus>(
     val typewriterSupplier: (chars: List<Char>) -> Typewriter = ::Typewriter,
-    val ctor: CorpusMonkeyCtor<T> = ::EqCorpusMonkey,
+    val monkeyCtor: CorpusMonkeyCtor<T> = ::EqCorpusMonkey,
     val charsCtor: List<Char> = Keys.fullList(),
 ) {
     private var id: Int = 1
 
-    fun createMonkey(sought: T, id: Int = this.id++): CorpusMonkey {
+    fun createMonkey(corpus: T, id: Int = this.id++): CorpusMonkey {
         val typewriter = typewriterSupplier(charsCtor)
-        return ctor(sought, id, typewriter)
+        return monkeyCtor(corpus, id, typewriter)
     }
 }

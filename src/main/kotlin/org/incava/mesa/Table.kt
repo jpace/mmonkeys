@@ -9,7 +9,6 @@ open class Table(private val columns: List<Column>, private val out: PrintStream
     }
 
     fun writeBreak(char: Char) {
-        val sb = StringBuilder(char.toString())
         val breaks = columns.map { it.formatBreak(char) }
         writeStrings(breaks)
     }

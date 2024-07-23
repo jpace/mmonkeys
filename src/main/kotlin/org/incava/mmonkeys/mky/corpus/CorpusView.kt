@@ -6,24 +6,22 @@ import org.incava.mesa.LongColumn
 import org.incava.mesa.Table
 
 class CorpusView(val corpus: Corpus) {
-    fun show() {
-        val words = corpus.words
-        val byLength = words.fold(mutableMapOf<Int, Int>()) { acc, word ->
+    private val columns: List<Column>
+    private val values: List<Any>
+
+    init {
+        val byLength = corpus.words.fold(mutableMapOf<Int, Int>()) { acc, word ->
             acc.merge(word.length, 1) { prev, _ -> prev + 1 }
             acc
         }
+        values = listOf(corpus.words.size, corpus.words.toSet().size) + byLength.toSortedMap().values
+        columns = listOf(LongColumn("words.#", 12), LongColumn("uniq.#", 12)) +
+                byLength.toSortedMap().keys.map { length ->
+                    IntColumn("$length", 8)
+                }
+    }
 
-        val columns = mutableListOf<Column>()
-        val values = mutableListOf<Any>()
-        columns += LongColumn("words.#", 12)
-        values += words.size
-        columns += LongColumn("uniq.#", 12)
-        values += words.toSet().size
-        byLength.toSortedMap().forEach { (length, count) ->
-            columns += IntColumn("$length", 8)
-            values += count
-        }
-
+    fun show() {
         val table = Table(columns)
         table.writeHeader()
         table.writeBreak('=')

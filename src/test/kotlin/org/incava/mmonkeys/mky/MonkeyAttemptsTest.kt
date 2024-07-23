@@ -85,7 +85,7 @@ class MonkeyAttemptsTest {
     private fun tick(iterations: Int, every: Int = 500_000) {
         if (iterations % every == 0) {
             Console.info("it", iterations)
-            val (total, free, used) = MemoryUtil.currentMemory()
+            val (_, free, used) = MemoryUtil.currentMemory()
             Console.info("free", free)
             Console.info("used", used)
         }
