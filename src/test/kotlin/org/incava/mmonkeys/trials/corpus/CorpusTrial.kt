@@ -46,7 +46,8 @@ class CorpusTrial(
     }
 
     fun run() {
-        val corpus = CorpusFactory.createCorpus("pg100.txt", numLines, wordSizeLimit, ::Corpus)
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val corpus = CorpusFactory.createCorpus(file, numLines, wordSizeLimit, ::Corpus)
         Console.info("sought.#", corpus.words.size)
         val results = mutableMapOf<String, PerfResults>()
 

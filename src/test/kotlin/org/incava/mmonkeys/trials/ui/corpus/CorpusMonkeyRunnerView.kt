@@ -5,7 +5,8 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 
 abstract class CorpusMonkeyRunnerView<T : Corpus>(val corpus: T, private val verbose: Boolean) {
-    abstract fun showStart()
+    open fun showStart() {}
+
     abstract fun showResult(monkey: Monkey, result: MatchData)
 
     fun init() {

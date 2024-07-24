@@ -27,7 +27,7 @@ class CorpusMonkeyRunner<T : Corpus>(
     private val start = ZonedDateTime.now()
     private val matches = mutableListOf<MatchData>()
     private val verbose = true
-    private val view = CorpusMonkeyRunnerViewFactory<T>().create(ViewType.CONSOLE, corpus, true)
+    private val view = CorpusMonkeyRunnerViewFactory.create(ViewType.CONSOLE, corpus, false)
 
     init {
         val corpusView = CorpusView(corpus)
@@ -36,7 +36,6 @@ class CorpusMonkeyRunner<T : Corpus>(
         val totalDuration = measureDuration {
             val monkey = monkeyFactory.createMonkey(corpus)
             view.init()
-            Console.info("monkey.class", monkey.javaClass)
             durations += measureTimeMillis {
                 runMonkey(monkey)
             }
@@ -57,7 +56,7 @@ class CorpusMonkeyRunner<T : Corpus>(
 
             } while (!result.isMatch && iteration < maxAttempts && !corpus.isEmpty())
             if (verbose) {
-                view.showResult(monkey, result)
+                view.show(monkey, result)
             }
             if (result.isMatch) {
                 matches += result

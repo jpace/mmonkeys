@@ -2,6 +2,7 @@ package org.incava.mmonkeys.trials.corpus
 
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
+import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 data class Params(val wordSizeLimit: Int, val numLines: Int, val timeLimit: Duration, val tickSize: Int)
@@ -25,8 +26,8 @@ fun main() {
     val trials = CorpusTrials(
         listOf(
             // NumberLongsMonkey can only support up through word crpxnlskvljfhh
-//            Params(4, 500, ofSeconds(3L), 1000),
-            Params(4, 10, ofSeconds(30L), 1),
+            Params(4, 500, ofSeconds(3L), 1000),
+//            Params(4, 10, ofSeconds(30L), 1),
 
 //            Params(7, 5000, ofSeconds(5L), 1000),
 //            Params(7, 5000, ofMinutes(1L), 1000),
