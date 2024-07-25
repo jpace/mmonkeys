@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.trials.corpus
+package org.incava.mmonkeys.trials.ui.corpus
 
 import org.incava.mesa.Column
 import org.incava.mesa.IntColumn

@@ -9,7 +9,7 @@ import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 
-class CorpusMonkeyRunnerTableView<T : Corpus>(corpus: T, verbose: Boolean) : CorpusMonkeyRunnerView<T>(corpus, verbose) {
+class CorpusMatchDataTableView<T : Corpus>(corpus: T, verbose: Boolean) : CorpusMatchDataView<T>(corpus, verbose) {
     private val columns: List<Column> = listOf(
         StringColumn("match?", 8),
         IntColumn("sought.matched.#", 16),
@@ -21,9 +21,10 @@ class CorpusMonkeyRunnerTableView<T : Corpus>(corpus: T, verbose: Boolean) : Cor
         IntColumn("result.index", 16),
         StringColumn("word", 16)
     )
-    val table = Table(columns)
+    lateinit var table: Table
 
     override fun showStart() {
+        table = Table(columns)
         table.writeHeader()
         table.writeBreak('=')
     }

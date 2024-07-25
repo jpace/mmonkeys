@@ -8,7 +8,7 @@ import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.CorpusView
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.ViewType
-import org.incava.mmonkeys.trials.ui.corpus.CorpusMonkeyRunnerViewFactory
+import org.incava.mmonkeys.trials.ui.corpus.CorpusMatchDataView
 import org.incava.mmonkeys.trials.ui.corpus.CorpusMonkeyTable
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
@@ -27,7 +27,7 @@ class CorpusMonkeyRunner<T : Corpus>(
     private val start = ZonedDateTime.now()
     private val matches = mutableListOf<MatchData>()
     private val verbose = true
-    private val view = CorpusMonkeyRunnerViewFactory.create(ViewType.CONSOLE, corpus, false)
+    private val view = CorpusMatchDataView.createView(ViewType.CONSOLE, corpus, false)
 
     init {
         val corpusView = CorpusView(corpus)

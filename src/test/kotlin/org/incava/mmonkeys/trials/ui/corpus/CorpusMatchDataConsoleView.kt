@@ -5,7 +5,7 @@ import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 
-class CorpusMonkeyRunnerConsoleView<T : Corpus>(corpus: T, verbose: Boolean) : CorpusMonkeyRunnerView<T>(corpus, verbose) {
+class CorpusMatchDataConsoleView<T : Corpus>(corpus: T, verbose: Boolean) : CorpusMatchDataView<T>(corpus, verbose) {
     override fun showResult(monkey: Monkey, result: MatchData) {
         Console.info("result.match?", result.isMatch)
         Console.info("sought.matched.#", corpus.matched.size)
