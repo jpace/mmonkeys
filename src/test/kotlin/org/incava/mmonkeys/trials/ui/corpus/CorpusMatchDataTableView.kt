@@ -35,7 +35,7 @@ class CorpusMatchDataTableView<T : Corpus>(corpus: T, verbose: Boolean) : Corpus
             corpus.matched.size,
             corpus.words.size,
             corpus.isEmpty(),
-            monkey.attempts.invocations
+            monkey.attempts.count
         ) + if (result.isMatch) {
             listOf("n/a", -1, -1, "")
         } else {

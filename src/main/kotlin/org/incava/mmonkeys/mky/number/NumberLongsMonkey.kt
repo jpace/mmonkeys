@@ -11,7 +11,6 @@ class NumberLongsMonkey(override val corpus: NumberedCorpus, id: Int, typewriter
 
     fun findMatch(soughtLen: Int, forLength: Map<Long, List<Int>>): MatchData {
         val rangeEncoded = corpus.rangeEncoded[soughtLen] ?: return noMatch(soughtLen)
-
         // range = (x + 1) * 26 - x
         //  step 1: 26x + 26 - x
         //  step 2: 25x + 26

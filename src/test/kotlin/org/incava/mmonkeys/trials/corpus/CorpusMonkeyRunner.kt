@@ -39,7 +39,7 @@ class CorpusMonkeyRunner<T : Corpus>(
             durations += measureTimeMillis {
                 runMonkey(monkey)
             }
-            val monkeyTable = CorpusMonkeyTable()
+            val monkeyTable = CorpusMonkeyTable(7)
             monkeyTable.write(monkey)
         }
         results = PerfResults(corpus, totalDuration.second, durations, iterations, matches)

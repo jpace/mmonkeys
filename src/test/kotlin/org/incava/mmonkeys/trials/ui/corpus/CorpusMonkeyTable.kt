@@ -6,14 +6,14 @@ import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
 
-class CorpusMonkeyTable : Table(
+class CorpusMonkeyTable(private val maxWordLength: Int) : Table(
     listOf(
         IntColumn("id", 8),
         StringColumn("type", 20, leftJustified = true),
         LongColumn("attempts", 16),
         LongColumn("keystrokes", 16),
         LongColumn("keys/attempt", 12),
-    ) + (1 until 8).map { IntColumn("match $it", 8) }
+    ) + (1 .. maxWordLength).map { IntColumn("match $it", 8) }
 ) {
     fun write(monkey: Monkey) {
         writeHeader()
@@ -21,10 +21,10 @@ class CorpusMonkeyTable : Table(
         val values = listOf(
             monkey.id,
             monkey.javaClass.simpleName,
-            monkey.numAttempts,
+            monkey.attempts.count,
             monkey.totalKeystrokes,
             monkey.totalKeystrokes / monkey.numAttempts
-        ) + (1 until 8).map { monkey.matchKeystrokes[it] ?: 0 }
+        ) + (1 .. maxWordLength).map { monkey.matchKeystrokes[it] ?: 0 }
         writeRow(values)
         writeBreak('-')
     }

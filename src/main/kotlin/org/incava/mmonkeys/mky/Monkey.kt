@@ -6,8 +6,7 @@ import org.incava.mmonkeys.type.Typewriter
 
 abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     val rand = RandomFactory.getCalculated(typewriter.numChars())
-    val attempts = MonkeyAttemptsNoOp()
-    var numAttempts = 0L
+    val attempts : MonkeyAttempting = MonkeyAttemptsCounting()
     var totalKeystrokes = 0L
     val matchKeystrokes = mutableMapOf<Int, Int>()
 
@@ -36,22 +35,19 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     }
 
     override fun toString(): String {
-        return "Monkey(id=$id, typewriter=$typewriter)"
+        return "Monkey(id=$id)"
     }
 
     abstract fun check(): MatchData
 
     open fun match(keystrokes: Int, index: Int): MatchData {
-        matchKeystrokes.merge(keystrokes, 1) { prev, _ -> prev + 1 }
-        addAttempt(keystrokes)
-        return MatchData(true, keystrokes, index)
+        return MatchData(true, keystrokes, index).also { addAttempt(it) }
     }
 
     // keystroke value is the number of character *before* the space, i.e.,
     // the length of the non-matching word.
     fun noMatch(keystrokes: Int): MatchData {
-        addAttempt(keystrokes)
-        return MatchData(false, keystrokes, -1)
+        return MatchData(false, keystrokes, -1).also { addAttempt(it) }
     }
 
     // number of keystrokes at which we'll hit the end-of-word character
@@ -60,8 +56,11 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     // and so on and so forth.
     fun randomLength() = rand.nextRand()
 
-    private fun addAttempt(keystrokes: Int) {
-        numAttempts++
-        totalKeystrokes += (keystrokes + 1)
+    private fun addAttempt(matchData: MatchData) {
+        totalKeystrokes += (matchData.keystrokes + 1)
+        if (matchData.isMatch) {
+            matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
+        }
+        attempts += matchData
     }
 }
