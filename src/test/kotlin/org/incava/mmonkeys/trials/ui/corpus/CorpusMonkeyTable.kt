@@ -22,8 +22,8 @@ class CorpusMonkeyTable(private val maxWordLength: Int) : Table(
             monkey.id,
             monkey.javaClass.simpleName,
             monkey.attempts.count,
-            monkey.totalKeystrokes,
-            monkey.totalKeystrokes / monkey.numAttempts
+            monkey.attempts.totalKeystrokes,
+            monkey.attempts.totalKeystrokes / monkey.attempts.count
         ) + (1 .. maxWordLength).map { monkey.matchKeystrokes[it] ?: 0 }
         writeRow(values)
         writeBreak('-')

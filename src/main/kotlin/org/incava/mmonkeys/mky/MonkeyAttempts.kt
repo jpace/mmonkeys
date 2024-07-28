@@ -2,33 +2,29 @@ package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
 
-interface MonkeyAttempting {
-    var totalKeystrokes: Long
-    var count: Long
+abstract class MonkeyAttempts {
+    var totalKeystrokes: Long = 0L
+    var count: Long = 0L
+    private val matchKeystrokes = mutableMapOf<Int, Int>()
 
-    fun add(matchData: MatchData)
+    open fun add(matchData: MatchData) {
+        // add 1 to account for the space after the match/mismatch
+        totalKeystrokes += (matchData.keystrokes + 1)
+        count++
+        if (matchData.isMatch) {
+            matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
+        }
+    }
+    abstract fun summarize()
 
-    fun summarize()
+    abstract fun showMatches(limit: Int)
 
-    fun showMatches(limit: Int)
-    operator fun plusAssign(matchData: MatchData)
-}
-
-abstract class MonkeyAttemptBase : MonkeyAttempting {
-    override var totalKeystrokes = 0L
-    override var count = 0L
-
-    override operator fun plusAssign(matchData: MatchData) {
+    operator fun plusAssign(matchData: MatchData) {
         add(matchData)
     }
-
-    override fun add(matchData: MatchData) {
-        totalKeystrokes += matchData.keystrokes
-        count++
-    }
 }
 
-class MonkeyAttemptsList(private val tick: Int = 50_000) : MonkeyAttemptBase() {
+class MonkeyAttemptsList(private val tick: Int = 50_000) : MonkeyAttempts() {
     private val attempts = mutableListOf<MatchData>()
 
     override fun add(matchData: MatchData) {
@@ -55,7 +51,7 @@ class MonkeyAttemptsList(private val tick: Int = 50_000) : MonkeyAttemptBase() {
     }
 }
 
-class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttemptBase() {
+class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttempts() {
     val succeeded = mutableMapOf<Int, MatchData>()
     val failed = mutableListOf<Long>()
     var index = 0
@@ -99,7 +95,7 @@ class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttemptBa
     }
 }
 
-class MonkeyAttemptsCounting(private val tick: Int = 50_000) : MonkeyAttemptBase() {
+class MonkeyAttemptsCounting(private val tick: Int = 50_000) : MonkeyAttempts() {
     override fun add(matchData: MatchData) {
         super.add(matchData)
         if (count % (tick * 100L) == 0L) {
@@ -118,7 +114,7 @@ class MonkeyAttemptsCounting(private val tick: Int = 50_000) : MonkeyAttemptBase
 
 class StrokesAndIndex(val keystrokes: Long, val index: Int)
 
-class MonkeyAttemptsMapListPair(private val tick: Int = 1000) : MonkeyAttemptBase() {
+class MonkeyAttemptsMapListPair(private val tick: Int = 1000) : MonkeyAttempts() {
     // key: keystrokes, value: list of (first: previous errant keystrokes, second: index)
     val results = mutableMapOf<Int, MutableList<StrokesAndIndex>>()
     var errantKeystrokes = 0L

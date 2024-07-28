@@ -4,7 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.mky.MonkeyAttempting
+import org.incava.mmonkeys.mky.MonkeyAttempts
 import org.incava.mmonkeys.mky.MonkeyAttemptsList
 import org.incava.mmonkeys.mky.MonkeyAttemptsMapAndList
 import org.incava.mmonkeys.mky.MatchData
@@ -46,9 +46,9 @@ class MonkeyTrial(
         }
     }
 
-    fun runTest(supplier: (Int) -> MonkeyAttempting) {
+    fun runTest(supplier: (Int) -> MonkeyAttempts) {
         var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttempting>()
+        val monkeyAttempts = mutableListOf<MonkeyAttempts>()
         repeat(monkeyCount) { monkeyIndex ->
             val obj = supplier(monkeyTick)
             monkeyAttempts += obj

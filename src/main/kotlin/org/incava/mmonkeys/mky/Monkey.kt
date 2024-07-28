@@ -6,7 +6,7 @@ import org.incava.mmonkeys.type.Typewriter
 
 abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     val rand = RandomFactory.getCalculated(typewriter.numChars())
-    val attempts : MonkeyAttempting = MonkeyAttemptsCounting()
+    val attempts : MonkeyAttempts = MonkeyAttemptsCounting()
     var totalKeystrokes = 0L
     val matchKeystrokes = mutableMapOf<Int, Int>()
 
@@ -57,7 +57,6 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     fun randomLength() = rand.nextRand()
 
     private fun addAttempt(matchData: MatchData) {
-        totalKeystrokes += (matchData.keystrokes + 1)
         if (matchData.isMatch) {
             matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
         }
