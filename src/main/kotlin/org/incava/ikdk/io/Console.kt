@@ -6,7 +6,7 @@ import java.time.Duration
 import java.util.concurrent.atomic.AtomicLong
 
 object Console {
-    private var out: PrintStream = System.out
+    var out: PrintStream = System.out
 
     fun info(msg: String, obj: Any?) = println(whence(), format(msg, obj))
 
@@ -32,8 +32,11 @@ object Console {
         }
     }
 
-    fun println(whence: String, msg: String) {
-        val str = String.format("%-35.35s | %s", whence, msg)
+    fun println(frame: StackTraceElement?, msg: String) {
+        val className = frame?.className?.split(".")?.last() ?: "<?>"
+        val methodName = frame?.methodName ?: "<?>"
+        val lineNumber = frame?.lineNumber ?: -1
+        val str = String.format("%-25.25s . %-15.15s # %4d | %s", className, methodName, lineNumber, msg)
         out.println(str)
     }
 
@@ -42,12 +45,7 @@ object Console {
         out.println(str)
     }
 
-    private fun whence(): String {
-        val frame = whenceFrame()
-        return frame?.className?.split(".")?.last() ?: "<?>"
-    }
-
-    private fun whenceFrame(): StackTraceElement? {
+    private fun whence(): StackTraceElement? {
         var found = false
         Thread.currentThread().stackTrace.forEach {
             if (it.className == "org.incava.ikdk.io.Console") {
