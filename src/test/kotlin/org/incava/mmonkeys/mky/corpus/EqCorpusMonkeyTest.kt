@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.string.CorpusMonkeyTestBase
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -11,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class EqCorpusMonkeyTest {
+internal class EqCorpusMonkeyTest : CorpusMonkeyTestBase() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -19,9 +20,7 @@ internal class EqCorpusMonkeyTest {
             (Keys.keyList('e') to listOf("abcde", "ghijk")) to 0L,
         ).map { (inputs, expected) ->
             DynamicTest.dynamicTest("given $inputs, the monkey should return $expected") {
-                val obj = createMonkey(Corpus(inputs.second), inputs.first)
-                val result = MonkeyUtils.runTest(obj)
-                assertEquals(expected, result)
+                runCheckTest(expected, Corpus(inputs.second), inputs.first, ::EqCorpusMonkey)
             }
         }
 

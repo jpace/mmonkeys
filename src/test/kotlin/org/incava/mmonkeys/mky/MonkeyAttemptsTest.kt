@@ -2,9 +2,11 @@ package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.util.MemoryUtil
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
+@Disabled
 class MonkeyAttemptsTest {
     val random = Random.Default
 

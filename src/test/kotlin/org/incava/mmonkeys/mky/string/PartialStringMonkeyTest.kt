@@ -10,7 +10,7 @@ import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class PartialStringMonkeyTest {
+internal class PartialStringMonkeyTest : CorpusMonkeyTestBase() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(

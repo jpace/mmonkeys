@@ -12,16 +12,13 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class NumberLongsMonkeyTest {
-    private fun makeMonkeys(corpus: NumberedCorpus, count: Int): List<NumberLongsMonkey> {
-        val chars = Keys.fullList()
-        val typewriter = DeterministicTypewriter(chars)
-        return (0 until count).map {
-            NumberLongsMonkey(corpus, it, typewriter)
-        }
+    private fun getTestCorpus(numLines: Int, wordSizeLimit: Int): NumberedCorpus {
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val words = CorpusFactory.readFileWords(file, numLines, wordSizeLimit)
+        return NumberedCorpus(words)
     }
 
-    private fun makeMonkeys(words: List<String>, count: Int): List<NumberLongsMonkey> {
-        val corpus = NumberedCorpus(words)
+    private fun makeMonkeys(corpus: NumberedCorpus, count: Int): List<NumberLongsMonkey> {
         val chars = Keys.fullList()
         val typewriter = DeterministicTypewriter(chars)
         return (0 until count).map {
@@ -100,8 +97,7 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun check() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val corpus = CorpusFactory.createCorpus(file, 100, 5, ::NumberedCorpus)
+        val corpus = getTestCorpus(100, 5)
         val obj = makeMonkey(corpus)
         repeat(10) {
             val result = obj.check()
@@ -111,8 +107,7 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun findMatch() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val corpus = CorpusFactory.createCorpus(file, 100, 5, ::NumberedCorpus)
+        val corpus = getTestCorpus(100, 5)
         val length = 4
         val forLength = corpus.numbers[length] ?: return
         val obj = makeMonkey(corpus)
@@ -127,8 +122,9 @@ internal class NumberLongsMonkeyTest {
 
     @Test
     fun sharedCorpus() {
-        val input = listOf("this", "test", "is", "no", "test")
-        val (monkey1, monkey2) = makeMonkeys(input, 2)
+        val words = listOf("this", "test", "is", "no", "test")
+        val corpus = NumberedCorpus(words)
+        val (monkey1, monkey2) = makeMonkeys(corpus, 2)
         var result: MatchData
         do {
             result = monkey1.check()
