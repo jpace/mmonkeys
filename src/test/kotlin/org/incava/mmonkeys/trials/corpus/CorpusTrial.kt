@@ -13,6 +13,7 @@ import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
+import org.incava.time.Durations
 import java.time.Duration
 
 class CorpusTrial(
@@ -22,13 +23,15 @@ class CorpusTrial(
     private val tickSize: Int,
 ) {
     private val words: List<String>
+    val results = mutableMapOf<String, PerfResults>()
 
     init {
         val file = ResourceUtil.getResourceFile("pg100.txt")
         words = CorpusFactory.readFileWords(file, numLines, wordSizeLimit)
+        Console.info("sought.#", words.size)
     }
 
-    private fun <T : Corpus> runMonkey(
+    fun <T : Corpus> runMonkey(
         name: String,
         corpusCtor: (List<String>) -> T,
         monkeyCtor: CorpusMonkeyCtor<T>,
@@ -40,19 +43,30 @@ class CorpusTrial(
         val runner = CorpusMonkeyRunner(corpus, monkeyFactory, timeLimit, tickSize)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
+        results += name to runner.results
         return runner.results
     }
 
     fun run() {
-        Console.info("sought.#", words.size)
-        val results = mutableMapOf<String, PerfResults>()
-
         results += "eq" to runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
         results += "length" to runMonkey("length", ::LengthCorpus, ::LengthCorpusMonkey)
-        // NumberLongsMonkey can only support up through words of length 13
         results += "longs" to runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
+        showResults()
+    }
 
+    fun showResults() {
         val view = CorpusTrialView(words.size, wordSizeLimit)
         view.show(results)
     }
+}
+
+fun main() {
+    // NumberLongsMonkey can only support up through words of length 13
+    val obj = CorpusTrial(13, 10000, Duration.ofMinutes(30L), 10000)
+    val trialDuration = Durations.measureDuration {
+        // obj.runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
+        obj.runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
+        obj.showResults()
+    }
+    println("trial duration: $trialDuration")
 }

@@ -20,7 +20,7 @@ class MonkeyAttemptsTest {
         // runs out of heap space at 100,000,000:
         val obj = MonkeyAttemptsList()
         var index = 0
-        repeat(1_000_000) {
+        repeat(100_000_000) {
             tick(it)
             val (matchData, newIndex) = createMatchData(index)
             index = newIndex
@@ -44,26 +44,6 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsMapAndList1() {
-        var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
-        repeat(1_000) { outer ->
-            val obj = MonkeyAttemptsMapAndList(100_000)
-            monkeyAttempts += obj
-            Console.info("outer", outer)
-            repeat(1_000_000_000) { inner ->
-                tick(inner, 500_000_000)
-                val (matchData, newIndex) = createMatchData(index)
-                index = newIndex
-                obj += matchData
-            }
-            if (outer % 100 == 0) {
-                obj.summarize()
-            }
-        }
-    }
-
-    @Test
-    fun addMonkeyAttemptsMapAndList2() {
         var index = 0
         val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
         repeat(1_000) { outer ->

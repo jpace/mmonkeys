@@ -22,4 +22,14 @@ object StringUtil {
         }
         return String(chars.reversed().toByteArray())
     }
+
+    fun camelCaseToWords(string: String): String {
+        val regex = Regex("([a-z])([A-Z])")
+        return string
+            .replace("Monkey", "")
+            .replace(regex) {
+                (it.groups[1]?.value ?: "") + " " + (it.groups[2]?.value ?: "")
+            }
+            .toLowerCase()
+    }
 }

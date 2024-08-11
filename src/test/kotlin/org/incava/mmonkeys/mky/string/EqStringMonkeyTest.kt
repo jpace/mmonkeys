@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class EqStringMonkeyTest {
+internal class EqStringMonkeyTest : CorpusMonkeyTestBase() {
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(

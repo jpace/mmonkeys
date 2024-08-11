@@ -1,20 +1,24 @@
 package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.util.SimClock2
 
 abstract class MonkeyAttempts {
     var totalKeystrokes: Long = 0L
     var count: Long = 0L
-    private val matchKeystrokes = mutableMapOf<Int, Int>()
+    val matchKeystrokes = mutableMapOf<Int, Int>()
+    val simClock = SimClock2()
 
     open fun add(matchData: MatchData) {
         // add 1 to account for the space after the match/mismatch
         totalKeystrokes += (matchData.keystrokes + 1)
         count++
         if (matchData.isMatch) {
+            simClock.writeLine(totalKeystrokes, "${matchData.keystrokes} - ${matchData.index}")
             matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
         }
     }
+
     abstract fun summarize()
 
     abstract fun showMatches(limit: Int)
@@ -122,7 +126,8 @@ class MonkeyAttemptsMapListPair(private val tick: Int = 1000) : MonkeyAttempts()
     override fun add(matchData: MatchData) {
         super.add(matchData)
         if (matchData.isMatch) {
-            results.computeIfAbsent(matchData.keystrokes) { mutableListOf() }.also { it += StrokesAndIndex(errantKeystrokes, matchData.index) }
+            results.computeIfAbsent(matchData.keystrokes) { mutableListOf() }
+                .also { it += StrokesAndIndex(errantKeystrokes, matchData.index) }
             errantKeystrokes = 0L
         } else {
             errantKeystrokes += matchData.keystrokes

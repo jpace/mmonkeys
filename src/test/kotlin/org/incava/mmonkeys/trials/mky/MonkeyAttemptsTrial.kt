@@ -4,13 +4,12 @@ import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.Table
+import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.MonkeyAttempts
 import org.incava.mmonkeys.mky.MonkeyAttemptsList
 import org.incava.mmonkeys.mky.MonkeyAttemptsMapAndList
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.util.MemoryUtil
 import org.incava.time.Durations.measureDuration
-import kotlin.math.pow
 import kotlin.random.Random
 
 class MonkeyTrial(
@@ -21,7 +20,6 @@ class MonkeyTrial(
     val matchPercent: Double = 0.001,
 ) {
     val random = Random.Default
-    private val mb = 2.0.pow(20).toLong()
     private val results = mutableMapOf<Int, Triple<Long, Long, Long>>()
     private val table = Table(
         listOf(
@@ -95,7 +93,7 @@ class MonkeyTrial(
         if (iterations % every == 0) {
             val memory = MemoryUtil.currentMemory()
             val pct = (100 * memory.third.toDouble() / memory.first).toInt()
-            if (monkeyIndex > 0 && monkeyIndex % 10 == 0) {
+            if (monkeyIndex > 0 && monkeyIndex % 2 == 0) {
                 table.writeHeader()
                 table.writeBreak('-')
             }
