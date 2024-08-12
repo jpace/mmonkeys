@@ -17,7 +17,7 @@ class CorpusSimulation(private val wordSizeLimit: Int, numLines: Int, duration: 
 
     init {
         val file = ResourceUtil.getResourceFile("pg100.txt")
-        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in 1 .. 13 }
+        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in 1 .. 7 }
         Console.info("sought.#", words.size)
         corpus = NumberedCorpus(words)
     }

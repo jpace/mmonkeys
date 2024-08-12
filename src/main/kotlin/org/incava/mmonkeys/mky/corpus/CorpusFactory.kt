@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.mky.corpus
 
 import java.io.File
-import java.util.*
 import kotlin.math.min
 
 object CorpusFactory {
@@ -14,14 +13,10 @@ object CorpusFactory {
         val sonnet = lines.subList(0, min(numLines, lines.size))
 
         // I forgot numbers.
-        return sonnet.joinToString()
-            .split(Regex(" +"))
-            .map(String::lowercase)
+        return sonnet
+            .map { it.trim() }
             .map { it.replace(Regex("[^a-z+]"), "") }
-    }
-
-    fun <T : Corpus> createCorpus(file: File, numLines: Int, wordSizeLimit: Int, ctor: (List<String>) -> T): T {
-        val words = readFileWords(file, numLines, wordSizeLimit)
-        return ctor(words)
+            .filterNot { it.isBlank() }
+            .map(String::lowercase)
     }
 }

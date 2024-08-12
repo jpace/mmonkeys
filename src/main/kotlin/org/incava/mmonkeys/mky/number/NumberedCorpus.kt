@@ -20,7 +20,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
             val enc = encoded.computeIfAbsent(word.value, StringEncoderV3::encodeToLong)
             if (enc < 0) {
                 Console.info("overflow")
-                Console.info("word", word)
+                Console.info("word", word.value)
                 Console.info("enc", enc)
             }
             numbers
