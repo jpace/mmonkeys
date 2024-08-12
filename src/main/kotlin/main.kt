@@ -35,7 +35,7 @@ fun <T : Corpus> runSimulation(type: String, sought: T, numMonkeys: Int, monkeyF
     // I don't make monkeys; I just train them!
     val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
     Console.info("monkeys.#", monkeys.size)
-    val simulation = CoroutineCorpusSimulation(monkeys)
+    val simulation = CoroutineCorpusSimulation(monkeys, 10)
     runSimulation(type, simulation)
 }
 

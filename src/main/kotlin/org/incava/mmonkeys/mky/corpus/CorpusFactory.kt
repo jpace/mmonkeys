@@ -6,6 +6,10 @@ import kotlin.math.min
 
 object CorpusFactory {
     fun readFileWords(file: File, numLines: Int, wordSizeLimit: Int): List<String> {
+        return readFileWords(file, numLines).filter { it.length <= wordSizeLimit }
+    }
+
+    fun readFileWords(file: File, numLines: Int): List<String> {
         val lines = file.readText().split("\r\n")
         val sonnet = lines.subList(0, min(numLines, lines.size))
 
@@ -14,7 +18,6 @@ object CorpusFactory {
             .split(Regex(" +"))
             .map(String::lowercase)
             .map { it.replace(Regex("[^a-z+]"), "") }
-            .filter { it.length in 1..wordSizeLimit }
     }
 
     fun <T : Corpus> createCorpus(file: File, numLines: Int, wordSizeLimit: Int, ctor: (List<String>) -> T): T {

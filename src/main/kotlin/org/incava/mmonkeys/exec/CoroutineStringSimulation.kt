@@ -6,14 +6,19 @@ import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.string.StringMonkey
+import java.util.concurrent.atomic.AtomicBoolean
 
-class CoroutineStringSimulation(monkeys: List<StringMonkey>) : CoroutineSimulation(monkeys) {
+class CoroutineStringSimulation(private val monkeys: List<StringMonkey>) : CoroutineSimulation(monkeys.size) {
+    private val found = AtomicBoolean(false)
+
     override fun CoroutineScope.launchMonkeys() = monkeys.map { monkey ->
         launch {
             Console.info("monkey", monkey.javaClass)
             runMonkey(monkey)
         }
     }
+
+    override fun isComplete() = found.get()
 
     suspend fun runMonkey(monkey: Monkey) {
         (0 until maxAttempts).forEach { attempt ->

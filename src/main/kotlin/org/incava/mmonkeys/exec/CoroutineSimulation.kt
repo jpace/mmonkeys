@@ -14,14 +14,12 @@ import java.time.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
-    val numMonkeys = monkeys.size
+abstract class CoroutineSimulation(val numMonkeys: Int) {
     val iterations = AtomicLong(0L)
-    val found = AtomicBoolean(false)
     private val monitorInterval = 10_000L
     private val showMemory = true
     val durations = DurationList()
-    val verbose = true
+    var verbose = true
     val maxAttempts = 100_000_000L
 
     fun run(): Pair<Long, Duration> = Durations.measureDuration {
@@ -35,6 +33,7 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
 
     private fun process(): Long {
         val memory = Memory()
+        Console.info("memory", memory)
         runBlocking {
             val timer = launchTimer(memory)
             val jobs = launchMonkeys()
@@ -47,11 +46,11 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
             }
         }
         if (verbose) {
-            Console.info("found?", found.get())
+            Console.info("complete?", isComplete())
             // this is how many iterations it took to complete:
             Console.info("iterations", iterations.get())
         }
-        return if (found.get()) iterations.get() else -1
+        return if (isComplete()) iterations.get() else -1
     }
 
     abstract fun CoroutineScope.launchMonkeys(): List<Job>
@@ -66,7 +65,7 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
 
     private fun CoroutineScope.launchWatcher(jobs: List<Job>): Job {
         return launch {
-            while (!found.get()) {
+            while (!isComplete()) {
                 delay(1000L)
             }
             jobs.forEach {
@@ -74,4 +73,6 @@ abstract class CoroutineSimulation(val monkeys: List<Monkey>) {
             }
         }
     }
+
+    abstract fun isComplete() : Boolean
 }

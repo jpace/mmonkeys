@@ -3,7 +3,7 @@ package org.incava.mmonkeys.mky
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.util.SimClock2
 
-abstract class MonkeyAttempts {
+abstract class MonkeyAttempts(val id: Int) {
     var totalKeystrokes: Long = 0L
     var count: Long = 0L
     val matchKeystrokes = mutableMapOf<Int, Int>()
@@ -14,7 +14,7 @@ abstract class MonkeyAttempts {
         totalKeystrokes += (matchData.keystrokes + 1)
         count++
         if (matchData.isMatch) {
-            simClock.writeLine(totalKeystrokes, "${matchData.keystrokes} - ${matchData.index}")
+            simClock.writeLine(id, totalKeystrokes, "${matchData.keystrokes} - ${matchData.index}")
             matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
         }
     }
@@ -28,7 +28,7 @@ abstract class MonkeyAttempts {
     }
 }
 
-class MonkeyAttemptsList(private val tick: Int = 50_000) : MonkeyAttempts() {
+class MonkeyAttemptsList(id: Int, private val tick: Int = 50_000) : MonkeyAttempts(id) {
     private val attempts = mutableListOf<MatchData>()
 
     override fun add(matchData: MatchData) {
@@ -55,7 +55,7 @@ class MonkeyAttemptsList(private val tick: Int = 50_000) : MonkeyAttempts() {
     }
 }
 
-class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttempts() {
+class MonkeyAttemptsMapAndList(id: Int, private val tick: Int = 50_000) : MonkeyAttempts(id) {
     val succeeded = mutableMapOf<Int, MatchData>()
     val failed = mutableListOf<Long>()
     var index = 0
@@ -99,7 +99,7 @@ class MonkeyAttemptsMapAndList(private val tick: Int = 50_000) : MonkeyAttempts(
     }
 }
 
-class MonkeyAttemptsCounting(private val tick: Int = 50_000) : MonkeyAttempts() {
+class MonkeyAttemptsCounting(id: Int, private val tick: Int = 50_000) : MonkeyAttempts(id) {
     override fun add(matchData: MatchData) {
         super.add(matchData)
         if (count % (tick * 100L) == 0L) {
@@ -118,7 +118,7 @@ class MonkeyAttemptsCounting(private val tick: Int = 50_000) : MonkeyAttempts() 
 
 class StrokesAndIndex(val keystrokes: Long, val index: Int)
 
-class MonkeyAttemptsMapListPair(private val tick: Int = 1000) : MonkeyAttempts() {
+class MonkeyAttemptsMapListPair(id: Int, private val tick: Int = 1000) : MonkeyAttempts(id) {
     // key: keystrokes, value: list of (first: previous errant keystrokes, second: index)
     val results = mutableMapOf<Int, MutableList<StrokesAndIndex>>()
     var errantKeystrokes = 0L

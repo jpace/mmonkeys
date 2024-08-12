@@ -5,40 +5,48 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.CorpusMonkey
+import java.util.concurrent.atomic.AtomicBoolean
 
-open class CoroutineCorpusSimulation(monkeys: List<CorpusMonkey>) : CoroutineSimulation(monkeys) {
+open class CoroutineCorpusSimulation(private val monkeys: List<CorpusMonkey>, private val toFind: Int) : CoroutineSimulation(monkeys.size) {
+    private var numFound = 0L
+    val matches = mutableListOf<MatchData>()
+
     override fun CoroutineScope.launchMonkeys(): List<Job> {
         return monkeys.map { monkey ->
             launch {
-                Console.info("monkey.class", monkey.javaClass)
                 runMonkey(monkey)
             }
         }
     }
 
-    private suspend fun runMonkey(monkey: Monkey) {
+    override fun isComplete() : Boolean {
+        return numFound >= toFind || monkeys.first().corpus.isEmpty()
+    }
+
+    private suspend fun runMonkey(monkey: CorpusMonkey) {
         (0 until maxAttempts).forEach { attempt ->
-            if (found.get() || checkMonkey(monkey, attempt)) {
+            checkMonkey(monkey, attempt)
+            if (isComplete()) {
                 return
             }
         }
         Console.info("match failed", this)
     }
 
-    suspend fun checkMonkey(monkey: Monkey, attempt: Long): Boolean {
+    private suspend fun checkMonkey(monkey: CorpusMonkey, attempt: Long): Boolean {
         iterations.incrementAndGet()
         val md = monkey.check()
         if (md.isMatch) {
-            //$$$ todo - fix this so it doesn't stop at the *first* match (which assumed string, not corpus)
             if (verbose) {
-                Console.info("md.match", md)
                 Console.info("monkey", monkey)
-                Console.info("attempt", attempt)
-                Console.info("iterations", iterations.get())
+                Console.info("md", md)
+                Console.info("numFound", numFound)
+                matches += md
             }
-            found.set(true)
+            numFound++
             return true
         } else {
             delay(5L)

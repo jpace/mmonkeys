@@ -18,7 +18,7 @@ class MonkeyAttemptsTest {
     @Test
     fun addMonkeyAttemptsList() {
         // runs out of heap space at 100,000,000:
-        val obj = MonkeyAttemptsList()
+        val obj = MonkeyAttemptsList(1)
         var index = 0
         repeat(100_000_000) {
             tick(it)
@@ -31,7 +31,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsMapAndList() {
-        val obj = MonkeyAttemptsMapAndList()
+        val obj = MonkeyAttemptsMapAndList(1)
         var index = 0
         repeat(1_000_000_000) {
             tick(it, 1_000_000)
