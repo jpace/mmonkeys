@@ -1,6 +1,14 @@
 package org.incava.mesa
 
+import java.util.IllegalFormatException
+
 open class Column(private val header: String, val width: Int) {
+    init {
+        if (header.length > width) {
+            throw IllegalArgumentException("header: \"$header\" is longer (${header.length}) than $width")
+        }
+    }
+
     open fun headerFormat(): String {
         return "%-${width}s"
     }
@@ -19,6 +27,10 @@ open class Column(private val header: String, val width: Int) {
     }
 
     open fun formatCell(value: Any): String {
-        return cellFormat().format(value)
+        try {
+            return cellFormat().format(value)
+        } catch (exception: IllegalFormatException) {
+            throw RuntimeException("header: $header; format: ${cellFormat()}; value: $value (${value.javaClass}")
+        }
     }
 }
