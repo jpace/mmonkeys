@@ -112,7 +112,7 @@ class MonkeyAttemptsMapAndList(id: Int, monkey: Monkey, private val tick: Int = 
     }
 }
 
-class MonkeyManager(val corpus: Corpus) : MonkeyMonitor {
+class MonkeyManager(val corpus: Corpus, val outputInterval: Int = 1) : MonkeyMonitor {
     private var totalKeystrokes: Long = 0L
     private var count: Long = 0L
     private val matchKeystrokes = mutableMapOf<Int, Int>()
@@ -124,7 +124,9 @@ class MonkeyManager(val corpus: Corpus) : MonkeyMonitor {
         count++
         if (matchData.isMatch) {
             // totalKeystrokes == virtual seconds:
-            simClock.writeMatch(monkey, matchData, totalKeystrokes, matchCount())
+            if (matchCount() % outputInterval == 0) {
+                simClock.writeMatch(monkey, matchData, totalKeystrokes, matchCount())
+            }
             matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
         }
     }

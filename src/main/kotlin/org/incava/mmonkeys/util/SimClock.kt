@@ -21,6 +21,7 @@ open class SimClockBase {
 class SimClock4(val corpus: Corpus) : SimClockBase() {
     private val numWords = corpus.words.size
     private val table: Table
+    private var linesUntilHeader: Int = 0
 
     init {
         table = Table(
@@ -47,12 +48,14 @@ class SimClock4(val corpus: Corpus) : SimClockBase() {
         val numWordMatches = wordCount.filter {
             corpus.matched.contains(it)
         }.size
-        if (matchCount % 10 == 0) {
+        if (linesUntilHeader == 0) {
             println()
             table.writeHeader()
             table.writeBreak('-')
+            linesUntilHeader = 9
+        } else {
+            --linesUntilHeader
         }
-
         table.writeRow(
             listOf(
                 formatTime(ZonedDateTime.now()),
