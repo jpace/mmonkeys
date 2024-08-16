@@ -3,6 +3,7 @@ package org.incava.mmonkeys.trials.corpus
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.MonkeyManager
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.CorpusView
@@ -20,13 +21,14 @@ class CorpusMonkeyRunner<T : Corpus>(
     monkeyFactory: CorpusMonkeyFactory<T>,
     private val timeLimit: Duration,
     private val tickSize: Int = 20000,
+    private val verbose: Boolean = true,
+    private val outputInterval: Int = 1
 ) {
     val results: PerfResults
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
     private val matches = mutableListOf<MatchData>()
-    private val verbose = true
     private val view = CorpusMatchDataView.createView(ViewType.CONSOLE, corpus, false)
 
     init {
@@ -34,7 +36,8 @@ class CorpusMonkeyRunner<T : Corpus>(
         corpusView.show()
         val durations = mutableListOf<Long>()
         val totalDuration = measureDuration {
-            val monkey = monkeyFactory.createMonkey(corpus)
+            val manager = MonkeyManager(corpus, outputInterval = outputInterval)
+            val monkey = monkeyFactory.createMonkey(corpus).also { it.monitors += manager }
             view.init()
             durations += measureTimeMillis {
                 runMonkey(monkey)

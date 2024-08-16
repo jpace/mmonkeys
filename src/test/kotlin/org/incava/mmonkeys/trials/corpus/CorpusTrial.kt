@@ -8,6 +8,8 @@ import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.LengthCorpus
 import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.MapCorpus
+import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
 import org.incava.mmonkeys.mky.number.NumberLongsMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -21,13 +23,14 @@ class CorpusTrial(
     numLines: Int,
     private val timeLimit: Duration,
     private val tickSize: Int,
+    private val outputInterval: Int = 1
 ) {
     private val words: List<String>
     val results = mutableMapOf<String, PerfResults>()
 
     init {
         val file = ResourceUtil.getResourceFile("pg100.txt")
-        words = CorpusFactory.readFileWords(file, numLines, wordSizeLimit)
+        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in (1 .. wordSizeLimit) }
         Console.info("sought.#", words.size)
     }
 
@@ -40,7 +43,7 @@ class CorpusTrial(
         // kotlin infers lambda from KFunction ... hey now!
         val monkeyFactory = CorpusMonkeyFactory(monkeyCtor = monkeyCtor)
         val corpus = corpusCtor(words)
-        val runner = CorpusMonkeyRunner(corpus, monkeyFactory, timeLimit, tickSize)
+        val runner = CorpusMonkeyRunner(corpus, monkeyFactory, timeLimit, tickSize, verbose = false, outputInterval = outputInterval)
         Thread.sleep(100L)
         Console.info(name, runner.results.durations.average())
         results += name to runner.results
@@ -51,6 +54,7 @@ class CorpusTrial(
         results += "eq" to runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
         results += "length" to runMonkey("length", ::LengthCorpus, ::LengthCorpusMonkey)
         results += "longs" to runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
+        results += "map" to runMonkey("map", ::MapCorpus, ::MapCorpusMonkey)
         showResults()
     }
 
