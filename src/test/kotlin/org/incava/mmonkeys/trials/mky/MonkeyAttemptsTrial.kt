@@ -5,16 +5,18 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.MatchData
-import org.incava.mmonkeys.mky.MonkeyAttempts
-import org.incava.mmonkeys.mky.MonkeyAttemptsList
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyAttemptsMapAndList
+import org.incava.mmonkeys.mky.MonkeyMonitor
+import org.incava.mmonkeys.mky.corpus.LengthCorpus
+import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.MemoryUtil
 import org.incava.time.Durations.measureDuration
 import kotlin.random.Random
 
 class MonkeyTrial(
     val monkeyCount: Int = 1000,
-    val monkeyTick: Int = 10_000,
     val numAttempts: Int = 100_000_000,
     val attemptTick: Int = 1_000_000,
     val matchPercent: Double = 0.001,
@@ -44,48 +46,21 @@ class MonkeyTrial(
         }
     }
 
-    fun runTest(supplier: (Int) -> MonkeyAttempts) {
+    fun runTest(supplier: (Int, Monkey) -> MonkeyMonitor) {
         var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttempts>()
         repeat(monkeyCount) { monkeyIndex ->
-            val obj = supplier(monkeyTick)
-            monkeyAttempts += obj
+            val monkey = LengthCorpusMonkey(LengthCorpus(listOf("abc")), 1, Typewriter())
+            val obj = supplier(monkeyIndex, monkey)
             repeat(numAttempts) { inner ->
                 tick(monkeyIndex, inner, attemptTick)
                 val isMatch = random.nextDouble(1.0) < matchPercent
                 val matchData = MatchData(isMatch, random.nextInt(40), if (isMatch) index++ else 0)
-                obj.add(matchData)
+                obj.add(monkey, matchData)
             }
             if (monkeyIndex % 10 == 0) {
                 obj.summarize()
             }
-            obj.showMatches(10)
-        }
-    }
-
-    fun addAlternateList() {
-        runTest(::MonkeyAttemptsList)
-    }
-
-    fun addAlternate2() {
-        runTest(::MonkeyAttemptsMapAndList)
-    }
-
-    fun addAlternate2Orig() {
-        var index = 0
-        val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
-        repeat(1_000) { outer ->
-            val obj = MonkeyAttemptsMapAndList(100_000)
-            monkeyAttempts += obj
-            repeat(1_000_000_000) { inner ->
-                tick(outer, inner, 1_000_000_000)
-                val isMatch = random.nextInt(10_000) == 3
-                val matchData = MatchData(isMatch, random.nextInt(40), if (isMatch) index++ else 0)
-                obj.add(matchData)
-            }
-            if (outer % 10 == 0) {
-                obj.summarize()
-            }
+            // obj.showMatches(10)
         }
     }
 
@@ -106,7 +81,6 @@ class MonkeyTrial(
 fun main() {
     val obj = MonkeyTrial(
         monkeyCount = 1000,
-        monkeyTick = 1_000_000,
         numAttempts = 1_000_000_000,
         attemptTick = 1_000_000_000,
         matchPercent = 0.001

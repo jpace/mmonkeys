@@ -9,14 +9,15 @@ object CorpusFactory {
     }
 
     fun readFileWords(file: File, numLines: Int): List<String> {
-        val lines = file.readText().split("\r\n")
+        val lines = file.readLines()
         val sonnet = lines.subList(0, min(numLines, lines.size))
 
         // I forgot numbers.
         return sonnet
             .map { it.trim() }
+            .map(String::lowercase)
+            .flatMap { it.split(Regex("\\s+")) }
             .map { it.replace(Regex("[^a-z+]"), "") }
             .filterNot { it.isBlank() }
-            .map(String::lowercase)
     }
 }

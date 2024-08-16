@@ -1,38 +1,51 @@
 package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.util.SimClock2
+import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.util.SimClock4
 
-abstract class MonkeyAttempts(val id: Int) {
+interface MonkeyMonitor {
+    fun add(monkey: Monkey, matchData: MatchData)
+
+    fun summarize()
+
+    fun attemptCount(): Long
+
+    fun matchCount(): Int
+
+    fun keystrokesCount(): Long
+}
+
+abstract class MonkeyAttempts(val id: Int, val monkey: Monkey) : MonkeyMonitor {
     var totalKeystrokes: Long = 0L
     var count: Long = 0L
     val matchKeystrokes = mutableMapOf<Int, Int>()
-    val simClock = SimClock2()
 
-    open fun add(matchData: MatchData) {
+    override fun add(monkey: Monkey, matchData: MatchData) {
         // add 1 to account for the space after the match/mismatch
         totalKeystrokes += (matchData.keystrokes + 1)
         count++
         if (matchData.isMatch) {
-            simClock.writeLine(id, totalKeystrokes, "${matchData.keystrokes} - ${matchData.index}")
+            // totalKeystrokes == virtual seconds:
+            // simClock.writeMatch(monkey, totalKeystrokes, matchData, "wtf?")
             matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
         }
     }
 
-    abstract fun summarize()
+    override fun keystrokesCount(): Long = totalKeystrokes
+
+    override fun attemptCount(): Long = count
+
+    override fun matchCount(): Int = matchKeystrokes.values.sum()
 
     abstract fun showMatches(limit: Int)
-
-    operator fun plusAssign(matchData: MatchData) {
-        add(matchData)
-    }
 }
 
-class MonkeyAttemptsList(id: Int, private val tick: Int = 50_000) : MonkeyAttempts(id) {
+class MonkeyAttemptsList(id: Int, monkey: Monkey, private val tick: Int = 50_000) : MonkeyAttempts(id, monkey) {
     private val attempts = mutableListOf<MatchData>()
 
-    override fun add(matchData: MatchData) {
-        super.add(matchData)
+    override fun add(monkey: Monkey, matchData: MatchData) {
+        super.add(monkey, matchData)
         if (matchData.isMatch && attempts.size % tick == 0) {
             Console.info("attempts.#", attempts.size)
         }
@@ -55,14 +68,14 @@ class MonkeyAttemptsList(id: Int, private val tick: Int = 50_000) : MonkeyAttemp
     }
 }
 
-class MonkeyAttemptsMapAndList(id: Int, private val tick: Int = 50_000) : MonkeyAttempts(id) {
+class MonkeyAttemptsMapAndList(id: Int, monkey: Monkey, private val tick: Int = 50_000) : MonkeyAttempts(id, monkey) {
     val succeeded = mutableMapOf<Int, MatchData>()
     val failed = mutableListOf<Long>()
     var index = 0
     var errantKeystrokes = 0L
 
-    override fun add(matchData: MatchData) {
-        super.add(matchData)
+    override fun add(monkey: Monkey, matchData: MatchData) {
+        super.add(monkey, matchData)
         if (matchData.isMatch) {
             failed += errantKeystrokes
             if (failed.size % tick == 0) {
@@ -99,53 +112,31 @@ class MonkeyAttemptsMapAndList(id: Int, private val tick: Int = 50_000) : Monkey
     }
 }
 
-class MonkeyAttemptsCounting(id: Int, private val tick: Int = 50_000) : MonkeyAttempts(id) {
-    override fun add(matchData: MatchData) {
-        super.add(matchData)
-        if (count % (tick * 100L) == 0L) {
-            Console.info("count", count)
-        }
-    }
+class MonkeyManager(val corpus: Corpus) : MonkeyMonitor {
+    private var totalKeystrokes: Long = 0L
+    private var count: Long = 0L
+    private val matchKeystrokes = mutableMapOf<Int, Int>()
+    private val simClock = SimClock4(corpus)
 
-    override fun showMatches(limit: Int) {
+    override fun add(monkey: Monkey, matchData: MatchData) {
+        // add 1 to account for the space after the match/mismatch
+        totalKeystrokes += (matchData.keystrokes + 1)
+        count++
+        if (matchData.isMatch) {
+            // totalKeystrokes == virtual seconds:
+            simClock.writeMatch(monkey, matchData, totalKeystrokes, matchCount())
+            matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
+        }
     }
 
     override fun summarize() {
         Console.info("#keystrokes", totalKeystrokes)
         Console.info("count", count)
     }
-};
 
-class StrokesAndIndex(val keystrokes: Long, val index: Int)
+    override fun attemptCount(): Long = count
 
-class MonkeyAttemptsMapListPair(id: Int, private val tick: Int = 1000) : MonkeyAttempts(id) {
-    // key: keystrokes, value: list of (first: previous errant keystrokes, second: index)
-    val results = mutableMapOf<Int, MutableList<StrokesAndIndex>>()
-    var errantKeystrokes = 0L
+    override fun matchCount(): Int = matchKeystrokes.values.sum()
 
-    override fun add(matchData: MatchData) {
-        super.add(matchData)
-        if (matchData.isMatch) {
-            results.computeIfAbsent(matchData.keystrokes) { mutableListOf() }
-                .also { it += StrokesAndIndex(errantKeystrokes, matchData.index) }
-            errantKeystrokes = 0L
-        } else {
-            errantKeystrokes += matchData.keystrokes
-        }
-    }
-
-    override fun summarize() {
-        Console.info("result.#", results.size)
-        Console.info("result.keys", results.keys.toSortedSet())
-    }
-
-    override fun showMatches(limit: Int) {
-        Console.info("result.#", results.size)
-        results.keys.toSortedSet().forEach { key ->
-            Console.info("key", key)
-            val matches = results[key]!!
-            Console.info("results[$key]", matches.subList(0, 10.coerceAtMost(matches.size)))
-        }
-        Console.info("errantKeystrokes", errantKeystrokes)
-    }
+    override fun keystrokesCount() = totalKeystrokes
 }

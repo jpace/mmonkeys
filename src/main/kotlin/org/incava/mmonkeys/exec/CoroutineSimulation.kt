@@ -6,20 +6,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.util.Memory
-import org.incava.time.DurationList
 import org.incava.time.Durations
 import java.time.Duration
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 abstract class CoroutineSimulation(val numMonkeys: Int) {
     val iterations = AtomicLong(0L)
     private val monitorInterval = 10_000L
     private val showMemory = true
-    val durations = DurationList()
     var verbose = true
+
+    // @todo = tweak this to get better coroutining
     val maxAttempts = 100_000_000L
 
     fun run(): Pair<Long, Duration> = Durations.measureDuration {
@@ -27,8 +25,6 @@ abstract class CoroutineSimulation(val numMonkeys: Int) {
     }
 
     fun summarize() {
-        durations.forEach { Console.info("duration", it) }
-        Console.info("average sec", durations.average().toMillis() / 1000)
     }
 
     private fun process(): Long {
@@ -74,5 +70,5 @@ abstract class CoroutineSimulation(val numMonkeys: Int) {
         }
     }
 
-    abstract fun isComplete() : Boolean
+    abstract fun isComplete(): Boolean
 }

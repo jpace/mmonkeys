@@ -11,7 +11,7 @@ class CorpusMatchDataConsoleView<T : Corpus>(corpus: T, verbose: Boolean) : Corp
         Console.info("sought.matched.#", corpus.matched.size)
         Console.info("sought.words.#", corpus.words.size)
         Console.info("sought.empty?", corpus.isEmpty())
-        monkey.attempts.summarize()
+        monkey.monitors.forEach { it.summarize() }
         if (result.isMatch) {
             Console.info("monkey.class", monkey.javaClass)
             Console.info("result.keystrokes", result.keystrokes)

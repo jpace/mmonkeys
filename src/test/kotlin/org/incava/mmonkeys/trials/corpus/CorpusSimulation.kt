@@ -1,36 +1,37 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mesa.IntColumn
+import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
+import org.incava.mmonkeys.mky.MonkeyManager
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.number.NumberLongsMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.time.Durations
-import java.time.Duration
 
-class CorpusSimulation(private val wordSizeLimit: Int, numLines: Int, duration: Duration, tickSize: Int) {
+class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int, val toMatch: Int) {
     private val words: List<String>
     private val corpus: NumberedCorpus
 
     init {
         val file = ResourceUtil.getResourceFile("pg100.txt")
-        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in 1 .. 7 }
+        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in wordLength }
         Console.info("sought.#", words.size)
         corpus = NumberedCorpus(words)
     }
 
     fun run() {
-        val numMonkeys = 100_000
-        val wordsToMatch = 100_000
         val typewriterFactory = TypewriterFactory()
         val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, ::NumberLongsMonkey)
-        val monkeys = (0 until numMonkeys).map {
-            monkeyFactory.createMonkey(corpus, it)
+        val manager = MonkeyManager(corpus)
+        val monkeys = (0 until numMonkeys).map { id ->
+            monkeyFactory.createMonkey(corpus, id).also { monkey -> monkey.monitors += manager }
         }
-        val simulation = CoroutineCorpusSimulation(monkeys, wordsToMatch)
+        val simulation = CoroutineCorpusSimulation(corpus, monkeys, toMatch)
         simulation.verbose = false
         simulation.run()
         simulation.summarize()
@@ -46,15 +47,30 @@ class CorpusSimulation(private val wordSizeLimit: Int, numLines: Int, duration: 
     }
 
     fun showResults() {
+        val lengthToCount = corpus.words
+            .groupBy { it.length }
+            .map { it.key to it.value.size }
+            .toMap()
+            .toSortedMap()
+        val lengthToMatches = lengthToCount.keys
+            .associateWith { length -> corpus.matched.count { corpus.words[it].length == length } }
+            .toSortedMap()
+        Console.info("lengthToMatches", lengthToMatches)
+        val columns = lengthToCount.keys.map { IntColumn("length: $it", 10) }
+        val table = Table(columns)
+        table.writeHeader()
+        table.writeBreak('-')
+        table.writeRow(lengthToCount.values.toList())
+        table.writeRow(lengthToMatches.values.toList())
     }
 }
 
 fun main() {
-    val obj = CorpusSimulation(13, 200000, Duration.ofMinutes(30L), 10000)
+    val obj = CorpusSimulation(1..7, 171_000, 1_000_000, 1_000_000)
     println("obj: $obj")
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()
     }
-    println("trial duration: $trialDuration")
+    Console.info("trialDuration", trialDuration)
 }
