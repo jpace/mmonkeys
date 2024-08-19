@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.time.Durations.measureDuration
-import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
 fun main() {
@@ -11,7 +10,7 @@ fun main() {
 //           CorpusTrial(4, 10, ofSeconds(30L), 1),
 
 //            CorpusTrial(7, 5000, ofSeconds(5L), 1000),
-            CorpusTrial(50, 50000, ofSeconds(20L), 1000, outputInterval = 10),
+            CorpusTrial(1 .. 7, 50000, ofSeconds(20L), outputInterval = 10),
             //CorpusTrial(50, 5000, ofMinutes(1L), 1000),
 //            CorpusTrial(7, 5000, ofMinutes(3L), 10000),
 //            CorpusTrial(7, 5000, ofMinutes(7L), 10000),

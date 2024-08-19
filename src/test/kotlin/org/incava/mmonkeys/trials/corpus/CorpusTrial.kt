@@ -18,23 +18,27 @@ import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
 import org.incava.time.Durations
 import java.time.Duration
 
+data class TrialParams(
+    val wordRange: IntRange,
+    val timeLimit: Duration,
+)
+
 class CorpusTrial(
-    private val wordSizeLimit: Int,
+    private val lengthRange: IntRange,
     numLines: Int,
     private val timeLimit: Duration,
-    private val tickSize: Int,
-    private val outputInterval: Int = 1
+    private val outputInterval: Int = 1,
 ) {
     private val words: List<String>
     val results = mutableMapOf<String, PerfResults>()
 
     init {
         val file = ResourceUtil.getResourceFile("pg100.txt")
-        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in (1 .. wordSizeLimit) }
+        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in lengthRange }
         Console.info("sought.#", words.size)
     }
 
-    fun <T : Corpus> runMonkey(
+    private fun <T : Corpus> runMonkey(
         name: String,
         corpusCtor: (List<String>) -> T,
         monkeyCtor: CorpusMonkeyCtor<T>,
@@ -43,33 +47,33 @@ class CorpusTrial(
         // kotlin infers lambda from KFunction ... hey now!
         val monkeyFactory = CorpusMonkeyFactory(monkeyCtor = monkeyCtor)
         val corpus = corpusCtor(words)
-        val runner = CorpusMonkeyRunner(corpus, monkeyFactory, timeLimit, tickSize, verbose = false, outputInterval = outputInterval)
+        val monkey = monkeyFactory.createMonkey(corpus)
+        val runner = CorpusMonkeyRunner(corpus, monkey, timeLimit, outputInterval)
+        val results = runner.run()
         Thread.sleep(100L)
-        Console.info(name, runner.results.durations.average())
-        results += name to runner.results
-        return runner.results
+        Console.info(name, results.durations.average())
+        this.results += name to results
+        return results
     }
 
     fun run() {
-        results += "eq" to runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
-        results += "length" to runMonkey("length", ::LengthCorpus, ::LengthCorpusMonkey)
-        results += "longs" to runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
-        results += "map" to runMonkey("map", ::MapCorpus, ::MapCorpusMonkey)
-        showResults()
+        runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
+        runMonkey("length", ::LengthCorpus, ::LengthCorpusMonkey)
+        runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
+        runMonkey("map", ::MapCorpus, ::MapCorpusMonkey)
     }
 
     fun showResults() {
-        val view = CorpusTrialView(words.size, wordSizeLimit)
+        val view = CorpusTrialView(words.size, lengthRange.last)
         view.show(results)
     }
 }
 
 fun main() {
     // NumberLongsMonkey can only support up through words of length 13
-    val obj = CorpusTrial(13, 10000, Duration.ofMinutes(30L), 10000)
+    val obj = CorpusTrial(3 .. 17, 10000, Duration.ofSeconds(120L))
     val trialDuration = Durations.measureDuration {
-        // obj.runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
-        obj.runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
+        obj.run()
         obj.showResults()
     }
     println("trial duration: $trialDuration")

@@ -5,7 +5,7 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.mky.MonkeyManager
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.number.NumberLongsMonkey
@@ -27,7 +27,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int,
     fun run() {
         val typewriterFactory = TypewriterFactory()
         val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, ::NumberLongsMonkey)
-        val manager = MonkeyManager(corpus)
+        val manager = Manager(corpus)
         val monkeys = (0 until numMonkeys).map { id ->
             monkeyFactory.createMonkey(corpus, id).also { monkey -> monkey.monitors += manager }
         }
@@ -66,6 +66,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int,
 }
 
 fun main() {
+    // @todo - change the memory settings here, and the word length, with the Map implementation ...
     val obj = CorpusSimulation(1..7, 171_000, 1_000_000, 1_000_000)
     println("obj: $obj")
     val trialDuration = Durations.measureDuration {

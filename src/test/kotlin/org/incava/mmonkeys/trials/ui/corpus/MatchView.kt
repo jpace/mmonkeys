@@ -5,12 +5,12 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.trials.ui.ViewType
 
-abstract class CorpusMatchDataView<T : Corpus>(val corpus: T, private val verbose: Boolean) {
+abstract class MatchView<T : Corpus>(val corpus: T, private val verbose: Boolean) {
     companion object {
-        fun <U : Corpus> createView(type: ViewType, corpus: U, verbose: Boolean): CorpusMatchDataView<U> {
+        fun <U : Corpus> createView(type: ViewType, corpus: U, verbose: Boolean): MatchView<U> {
             return when (type) {
-                ViewType.CONSOLE -> CorpusMatchDataConsoleView(corpus, verbose)
-                ViewType.TABLE -> CorpusMatchDataTableView(corpus, verbose)
+                ViewType.CONSOLE -> MatchConsoleView(corpus, verbose)
+                ViewType.TABLE -> MatchTableView(corpus, verbose)
             }
         }
     }

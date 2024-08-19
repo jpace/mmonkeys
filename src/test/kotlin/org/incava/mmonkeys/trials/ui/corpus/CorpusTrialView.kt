@@ -10,7 +10,7 @@ class CorpusTrialView(
         val table = CorpusTrialTable(numWords, wordSizeLimit)
         table.summarize(results)
         println()
-        val matchTable = CorpusMatchTable(wordSizeLimit, results)
-        matchTable.summarize()
+        val matchView = CorpusMatchView(wordSizeLimit, results)
+        matchView.summarize()
     }
 }

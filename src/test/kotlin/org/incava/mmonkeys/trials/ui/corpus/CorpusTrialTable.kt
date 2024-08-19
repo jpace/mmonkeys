@@ -33,12 +33,16 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
                 res.duration,
                 res.matches.size,
                 res.iterations.size,
-                if (durSecs == 0L) 0.0 else res.matches.size.toDouble() / durSecs,
-                if (durSecs == 0L) 0.0 else res.iterations.size.toDouble() / durSecs,
+                velocity(res.matches.size, durSecs),
+                velocity(res.iterations.size, durSecs),
                 100 * res.corpus.matched.size.toDouble() / res.corpus.words.size
             )
             writeRow(cells)
         }
         writeBreak('-')
+    }
+
+    private fun velocity(iterations: Int, duration: Long) : Double {
+        return if (duration == 0L) 0.0 else iterations.toDouble() / duration
     }
 }
