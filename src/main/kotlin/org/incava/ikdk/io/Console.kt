@@ -8,35 +8,25 @@ import java.util.concurrent.atomic.AtomicLong
 object Console {
     var out: PrintStream = System.out
 
-    fun info(msg: String, obj: Any?) = println(whence(), format(msg, obj))
+    fun info(msg: String, obj: Any?) = println(ConsoleFormat.format(msg, obj))
 
-    fun info(msg: String, value: Long) = println(whence(), format(msg, value))
+    fun info(msg: String, value: Long) = println(ConsoleFormat.format(msg, value))
 
-    fun info(msg: String, value: AtomicLong) = println(whence(), format(msg, value.get()))
+    fun info(msg: String, value: AtomicLong) = println(ConsoleFormat.format(msg, value.get()))
 
-    fun info(msg: String, value: Int) = println(whence(), format(msg, value))
+    fun info(msg: String, value: Int) = println(ConsoleFormat.format(msg, value))
 
-    fun info(msg: String, value: Duration) = println(whence(), format(msg, Durations.formatted(value)))
+    fun info(msg: String, value: Duration) = println(ConsoleFormat.format(msg, Durations.formatted(value)))
 
     fun info(msg: String) = println(whence(), msg)
 
-    private fun format(msg: String, obj: Any?) : String = String.format("%-24s: %s", msg, obj)
-
-    private fun format(msg: String, value: Long) : String = String.format("%-24s: %,d", msg, value)
-
-    private fun format(msg: String, value: Int) : String {
-        return if (value >= 10_000) {
-            format(msg, value.toLong())
-        } else {
-            String.format("%-24s: %d", msg, value)
-        }
+    fun println(msg: String) {
+        val frame = whence()
+        println(frame, msg)
     }
 
     fun println(frame: StackTraceElement?, msg: String) {
-        val className = frame?.className?.split(".")?.last() ?: "<?>"
-        val methodName = frame?.methodName ?: "<?>"
-        val lineNumber = frame?.lineNumber ?: -1
-        val str = String.format("%-25.25s . %-15.15s # %4d | %s", className, methodName, lineNumber, msg)
+        val str = ConsoleFormat.format(frame, msg)
         out.println(str)
     }
 

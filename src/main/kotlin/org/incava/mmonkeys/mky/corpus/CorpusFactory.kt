@@ -6,7 +6,7 @@ import kotlin.math.min
 object CorpusFactory {
     fun readFileWords(file: File, numLines: Int): List<String> {
         val lines = file.readLines()
-        val sonnet = lines.subList(0, min(numLines, lines.size))
+        val sonnet = if (numLines >= 0) lines.subList(0, min(numLines, lines.size)) else lines
 
         // I forgot numbers.
         return sonnet

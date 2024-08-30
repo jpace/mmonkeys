@@ -19,7 +19,7 @@ class RandoTrial {
             Record("random")
         )
 
-        (0 until 10_000).forEach {
+        (0 until 10_000).forEach { _ ->
             val a = x.nextRand()
             addToRecord(records[0], a)
             val b = y.nextRand()

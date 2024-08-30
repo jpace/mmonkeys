@@ -5,9 +5,12 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.MapCorpus
+import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
 import org.incava.mmonkeys.mky.number.NumberLongsMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -15,18 +18,19 @@ import org.incava.time.Durations
 
 class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int, val toMatch: Int) {
     private val words: List<String>
-    private val corpus: NumberedCorpus
+    private val corpus: MapCorpus
 
     init {
         val file = ResourceUtil.getResourceFile("pg100.txt")
         words = CorpusFactory.readFileWords(file, numLines).filter { it.length in wordLength }
         Console.info("sought.#", words.size)
-        corpus = NumberedCorpus(words)
+        corpus = MapCorpus(words)
     }
 
     fun run() {
+        val monkeyCtor = ::MapCorpusMonkey
         val typewriterFactory = TypewriterFactory()
-        val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, ::NumberLongsMonkey)
+        val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, monkeyCtor)
         val manager = Manager(corpus)
         val monkeys = (0 until numMonkeys).map { id ->
             monkeyFactory.createMonkey(corpus, id).also { monkey -> monkey.monitors += manager }
@@ -67,7 +71,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int,
 
 fun main() {
     // @todo - change the memory settings here, and the word length, with the Map implementation ...
-    val obj = CorpusSimulation(1..7, 171_000, 1_000_000, 1_000_000)
+    val obj = CorpusSimulation(3..13, -1, 1_000_000, 25_000)
     println("obj: $obj")
     val trialDuration = Durations.measureDuration {
         obj.run()

@@ -49,11 +49,11 @@ object Slots {
         }.sorted()
         val numSlots = 100
         val pctSize = numTrials / numSlots
-        return (0 until 100).map { index ->
+        return (0 until 100).associateWith { index ->
             val fromIndex = index * pctSize
             val toIndex = (index + 1) * pctSize
             val values = result.subList(fromIndex, toIndex)
-            Pair(index, values.average())
-        }.toMap()
+            values.average()
+        }
     }
 }
