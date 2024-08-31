@@ -1,11 +1,5 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mesa.DoubleColumn
-import org.incava.mesa.DurationColumn
-import org.incava.mesa.IntColumn
-import org.incava.mesa.LongColumn
-import org.incava.mesa.StringColumn
-import org.incava.mesa.Table
 import org.incava.mmonkeys.trials.base.InvokeTrial
 import org.incava.mmonkeys.trials.base.Trial
 import org.incava.rando.RandCalculated
@@ -14,11 +8,11 @@ import org.incava.rando.RandIntCalculated
 import kotlin.random.Random
 
 class RandCalcVsCalcIntTrial {
-    val numInvokes = 100_000_000L
-    val trialInvokes = 10
+    private val numInvokes = 1_000_000_000L
+    private val trialInvokes = 20
 
-    fun createTrial(name: String, block: () -> Any) : InvokeTrial {
-        return InvokeTrial(name, numInvokes, false, block)
+    private fun createTrial(name: String, block: () -> Any) : InvokeTrial {
+        return InvokeTrial(name, numInvokes, block)
     }
 
     fun nextRand() {
@@ -46,33 +40,9 @@ class RandCalcVsCalcIntTrial {
         trial.run()
         trial.tableSummarize()
 
-        val table = Table(
-            listOf(
-                StringColumn("name", 32, true),
-                LongColumn("iterations", 16),
-                LongColumn("iters/ms", 10),
-                DurationColumn("duration", 10),
-                DoubleColumn("dur off %", 10, 0),
-                LongColumn("variance", 10),
-                DoubleColumn("variance %", 10, 1),
-                IntColumn("dur low", 10),
-                IntColumn("dur high", 10),
-                )
-        )
-        val avg = trial.options.map { it.average().toMillis() }.average()
-        println("avg: $avg")
-        println("trialInvokes: $trialInvokes")
-        table.writeHeader()
-        trial.options.forEach { type ->
-            val rate = numInvokes / type.average().toMillis()
-            val durs = type.durations.map { it.toMillis() }
-            val durPct = -100.0 * (durs.average() - avg) / avg
-            val max = durs.maxOf { it }
-            val min = durs.minOf { it }
-            val variance = max - min
-            val varPct = 100.0 * (variance / durs.average())
-            table.writeRow(type.name, numInvokes, rate, type.average(), durPct, variance, varPct, min, max)
-        }
+        val table = TrialTable()
+        val nameToDuration = trial.options.associate { it.name to it.durations }
+        table.show(nameToDuration, trialInvokes, numInvokes)
     }
 }
 

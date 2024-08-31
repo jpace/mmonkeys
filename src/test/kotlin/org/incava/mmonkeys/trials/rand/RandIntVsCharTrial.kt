@@ -106,8 +106,8 @@ class RandIntVsCharTrial {
             "intValue" to intValue,
             "longValue" to longValue,
         )
-        val toTest = trials3.map { (name, block) -> InvokeTrial(name, numInvokes, false, block) }
-        val trial = Trial(*toTest.toTypedArray())
+        val toTest = trials3.map { (name, block) -> InvokeTrial(name, numInvokes, block) }
+        val trial = Trial(10, *toTest.toTypedArray())
         trial.run()
         println()
         val table = Table(

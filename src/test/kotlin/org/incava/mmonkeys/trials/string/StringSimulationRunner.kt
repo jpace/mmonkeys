@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.trials.string
 
-import org.incava.mmonkeys.mky.string.StringMonkeyFactory
 import org.incava.mmonkeys.exec.CoroutineStringSimulation
-import org.incava.time.DurationList
+import org.incava.mmonkeys.mky.string.StringMonkeyFactory
 import java.time.Duration
 
 class StringSimulationRunner(
@@ -11,7 +10,7 @@ class StringSimulationRunner(
     private val monkeyFactory: StringMonkeyFactory,
 ) {
     val results = mutableListOf<Long>()
-    val durations = DurationList()
+    val durations = mutableListOf<Duration>()
 
     fun run(sought: String): Pair<Long, Duration> {
         // I don't make monkeys; I just train them!

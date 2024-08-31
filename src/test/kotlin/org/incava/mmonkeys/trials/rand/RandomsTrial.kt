@@ -1,11 +1,11 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.trials.base.InvokeTrial
 import org.incava.mmonkeys.type.Keys
-import org.incava.ikdk.io.Console
+import org.incava.time.Durations.measureDuration
 import java.lang.Thread.sleep
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
 
 class RandomsTrial(private val numChars: Int, private val strLength: Int, private val iterations: Int) {
     private val random = Random.Default
@@ -18,9 +18,14 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
     private fun runTest(block: () -> Unit) {
         val numInvokes = iterations.toLong() * strLength
-        val trial = InvokeTrial("anonymous", numInvokes, false, block)
+        val trial = InvokeTrial("anonymous", numInvokes, block)
         val duration = trial.run()
-        Console.info("duration", duration)
+        Console.info("trial.duration", duration)
+    }
+
+    private fun runTest2(name: String, block: () -> Unit) {
+        Console.info("name", name)
+        block()
     }
 
     private fun `int numChars`() {
@@ -57,7 +62,7 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
     private fun `int numChars List toString`() {
         val list = Keys.fullList()
-        val duration = measureTimeMillis {
+        val duration = measureDuration {
             repeat(iterations) {
                 val sb = StringBuilder()
                 repeat(strLength) {
@@ -73,7 +78,7 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
     private fun `int numChars Array toString`() {
         val ary = Keys.fullList().toTypedArray()
-        val duration = measureTimeMillis {
+        val duration = measureDuration {
             repeat(iterations) {
                 val sb = StringBuilder()
                 repeat(strLength) {
@@ -97,7 +102,7 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
     private fun `nextBytes toString`() {
         val bytes = ByteArray(strLength)
         val list = Keys.fullList()
-        val duration = measureTimeMillis {
+        val duration = measureDuration {
             repeat(iterations) {
                 val str = (bytes.indices).map { idx ->
                     val b = bytes[idx]
@@ -112,18 +117,19 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
     fun runTest() {
         val methods = listOf(
-            { `int numChars`() },
-            { `int numChars List`() },
-            { `int numChars Array`() },
-            { `int numChars List StringBuffer`() },
-            { `int numChars List toString`() },
-            { `int numChars Array toString`() },
-            { nextBytes() },
-            { `nextBytes toString`() },
+            ::`int numChars`,
+            ::`int numChars List`,
+            ::`int numChars Array`,
+            ::`int numChars List StringBuffer`,
+            ::`int numChars List toString`,
+            ::`int numChars Array toString`,
+            ::nextBytes,
+            ::`nextBytes toString`,
         )
+        val methods2 = methods.map { it.name to it }
         // val shuffled = methods.shuffled()
-        methods.forEach {
-            it()
+        methods2.forEach { (name, function) ->
+            runTest2(name, function)
             sleep(500L)
         }
         println()
@@ -132,15 +138,15 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
 fun main() {
     val params = listOf(
-        4 to 10_000_000,
-        5 to 7_000_000,
-        6 to 4_000_000,
-        7 to 2_000_000,
-        8 to 2_000_000,
-        9 to 1_000_000,
+        4 to 100_000_000,
+        5 to 70_000_000,
+        6 to 40_000_000,
+        7 to 20_000_000,
+        8 to 20_000_000,
+        9 to 10_000_000,
     )
     params.forEach {
-        val obj = RandomsTrial(27, it.first, it.second * 10)
+        val obj = RandomsTrial(27, it.first, it.second)
         obj.runTest()
     }
 }

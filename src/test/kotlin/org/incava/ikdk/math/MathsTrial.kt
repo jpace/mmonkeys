@@ -13,7 +13,7 @@ class MathsTrial {
         Maths.clear()
         try {
             val result = powerFunction()
-            val invokeTrial = InvokeTrial(name, iterations, false, powerFunction)
+            val invokeTrial = InvokeTrial(name, iterations, powerFunction)
             val duration = invokeTrial.run()
             val durStr = Durations.formatted(duration)
             printf("%-24.24s | %-,16d | %-10s", name, result, durStr)

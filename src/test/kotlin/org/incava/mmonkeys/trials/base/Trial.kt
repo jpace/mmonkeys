@@ -7,10 +7,6 @@ import org.incava.mesa.Table
 import org.incava.time.Durations
 
 class Trial(private val trialInvokes: Int, vararg val options: InvokeTrial) {
-    constructor(vararg options: InvokeTrial) : this(10, *options)
-    constructor(options: List<InvokeTrial>) : this(10, *options.toTypedArray())
-    constructor(trialInvokes: Int, options: List<InvokeTrial>) : this(trialInvokes, *options.toTypedArray())
-
     val verbose = true
 
     fun run() {
@@ -24,14 +20,14 @@ class Trial(private val trialInvokes: Int, vararg val options: InvokeTrial) {
 
     fun logSummarize() {
         options.forEach {
-            Console.info("${it.name} - average", it.durations.average())
+            Console.info("${it.name} - average", it.average())
             Console.info("${it.name} - durations", it.durations.map { duration -> Durations.formatted(duration) })
         }
     }
 
     private fun showProgress(invoke: Int) {
         if (verbose) {
-            Console.info("invoke", invoke)
+            println("$invoke / $trialInvokes")
         }
     }
 

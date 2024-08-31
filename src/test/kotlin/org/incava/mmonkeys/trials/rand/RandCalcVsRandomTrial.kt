@@ -13,8 +13,9 @@ class RandCalcVsRandomTrial {
         val numInvokes = 500_000_000L
         val random = Random.Default
         val trial = Trial(
-            InvokeTrial("random", numInvokes, false) { random.nextInt() },
-            InvokeTrial("calc", numInvokes, false) { calc.nextRand() }
+            10,
+            InvokeTrial("random", numInvokes) { random.nextInt() },
+            InvokeTrial("calc", numInvokes) { calc.nextRand() }
         )
         trial.run()
         trial.logSummarize()

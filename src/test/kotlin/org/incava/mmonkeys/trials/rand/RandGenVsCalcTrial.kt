@@ -11,9 +11,9 @@ class RandGenVsCalcTrial {
     fun ctor() {
         println("ctor")
         val numInvokes = 1000L
-        val calcBlock = InvokeTrial("calc", numInvokes, false) { RandCalculated(size, 10000) }
-        val genBlock = InvokeTrial("gen", numInvokes, false) { RandGenerated(size, 10000) }
-        val trial = Trial(calcBlock, genBlock)
+        val calcBlock = InvokeTrial("calc", numInvokes) { RandCalculated(size, 10000) }
+        val genBlock = InvokeTrial("gen", numInvokes) { RandGenerated(size, 10000) }
+        val trial = Trial(10, calcBlock, genBlock)
         trial.run()
         trial.logSummarize()
     }
@@ -23,9 +23,9 @@ class RandGenVsCalcTrial {
         val calc = RandCalculated(size, 10000)
         val gen = RandGenerated(size, 10000)
         val numInvokes = 1_000_000L
-        val calcBlock = InvokeTrial("calc", numInvokes, false) { calc.nextRand() }
-        val genBlock = InvokeTrial("gen", numInvokes, false) { gen.nextRand() }
-        val trial = Trial(calcBlock, genBlock)
+        val calcBlock = InvokeTrial("calc", numInvokes) { calc.nextRand() }
+        val genBlock = InvokeTrial("gen", numInvokes) { gen.nextRand() }
+        val trial = Trial(10, calcBlock, genBlock)
         trial.run()
         trial.logSummarize()
     }

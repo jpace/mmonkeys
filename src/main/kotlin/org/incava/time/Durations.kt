@@ -3,6 +3,11 @@ package org.incava.time
 import java.time.Duration
 
 object Durations {
+    fun average(durations: List<Duration>): Duration {
+        val avg = durations.map { it.toMillis() }.average().toLong()
+        return Duration.ofMillis(avg)
+    }
+
     fun millisToString(millis: Long, minSeconds: Long = 30L, minMinutes: Long = 3L): String {
         val duration = Duration.ofMillis(millis)
         return formatted(duration, minSeconds, minMinutes)

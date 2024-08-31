@@ -21,7 +21,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int,
     private val corpus: MapCorpus
 
     init {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
         words = CorpusFactory.readFileWords(file, numLines).filter { it.length in wordLength }
         Console.info("sought.#", words.size)
         corpus = MapCorpus(words)
@@ -71,7 +71,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int,
 
 fun main() {
     // @todo - change the memory settings here, and the word length, with the Map implementation ...
-    val obj = CorpusSimulation(3..13, -1, 1_000_000, 25_000)
+    val obj = CorpusSimulation(1..50, -1, 1_000_000, 25_000)
     println("obj: $obj")
     val trialDuration = Durations.measureDuration {
         obj.run()

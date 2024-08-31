@@ -4,6 +4,7 @@ import org.incava.mesa.IntStringColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
+import org.incava.time.Durations
 import java.time.Duration
 import kotlin.math.max
 
@@ -24,7 +25,7 @@ class StringSimulationTable(private val word: String) : Table(
 
     private fun writeTrialAverage(trial: StringSimulationRunner) {
         val iterations = trial.results.average().toLong()
-        val durations = trial.durations.average().toMillis()
+        val durations = Durations.average(trial.durations).toMillis()
         val throughput = 1000L * iterations / max(1, durations)
         writeRow(word, "avg", trial.name, iterations, durations, throughput)
     }

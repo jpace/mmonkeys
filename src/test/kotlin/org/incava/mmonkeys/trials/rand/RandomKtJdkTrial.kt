@@ -1,75 +1,98 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.trials.base.InvokeTrial
-import org.incava.ikdk.io.Console
+import org.incava.time.Durations
 import java.lang.Thread.sleep
+import java.time.Duration
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
 
-class RandomKtJdkTrial(private val numChars: Int, private val strLength: Int, val iterations: Int) {
+class RandomKtJdkTrial(private val numChars: Int, private val strLength: Int, val iterations: Long) {
     private val ktRandom = Random.Default
     private val jdkRandom = java.util.Random()
 
-    init {
-        Console.info("strLength", strLength)
-        Console.info("iterations", iterations)
+    private fun runTest(block: () -> Unit): Duration {
+        val numInvokes = iterations * strLength
+        return Durations.measureDuration {
+            (0 until numInvokes).forEach { _ ->
+                block()
+            }
+        }.second
     }
 
-    private fun runTest(name: String, block: () -> Unit) {
-        val numInvokes = iterations.toLong() * strLength
-        val trial = InvokeTrial(name, numInvokes, false, block)
-        val duration = trial.run()
-        Console.info(name, duration)
+    private fun `kt rand next(ch)`(): Duration = runTest {
+        val x = ktRandom.nextInt(numChars)
     }
 
-    private fun nextIntNumKt() {
-        runTest("nextIntNumKt") {
-            val x = ktRandom.nextInt(numChars)
-        }
+    private fun `jdk rand next(ch)`(): Duration = runTest {
+        val x = jdkRandom.nextInt(numChars)
     }
 
-    private fun nextIntNumJdk() {
-        runTest("nextIntNumJdk") {
-            val x = jdkRandom.nextInt(numChars)
-        }
+    private fun `kt rand next`(): Duration = runTest {
+        val x = ktRandom.nextInt()
     }
 
-    private fun nextIntKt() {
-        runTest("nextIntKt") {
-            val x = ktRandom.nextInt()
-        }
+    private fun `jdk rand next`(): Duration = runTest {
+        val x = jdkRandom.nextInt()
     }
 
-    private fun nextIntJdk() {
-        runTest("nextIntJdk") {
-            val x = jdkRandom.nextInt()
-        }
+    private fun `thr local next`(): Duration {
+        val t = ThreadLocalRandom.current()
+        val numInvokes = iterations * strLength
+        return Durations.measureDuration {
+            (0 until numInvokes).forEach { _ ->
+                val x = t.nextInt()
+            }
+        }.second
     }
 
-    private fun noop() {
+    private fun `thr local next(ch)`(): Duration {
+        val t = ThreadLocalRandom.current()
+        val numInvokes = iterations * strLength
+        return Durations.measureDuration {
+            (0 until numInvokes).forEach { _ ->
+                val x = t.nextInt(numChars)
+            }
+        }.second
+    }
+
+    private fun `no op`(): Duration {
         val x = 3
-        runTest("noop") {
+        return runTest {
             val y = x * 3
         }
     }
 
-    fun runTest() {
-        val methods = listOf(
-            { nextIntNumKt() },
-            { nextIntNumJdk() },
-            { nextIntKt() },
-            { nextIntJdk() },
-            { noop() },
-        )
-        // val shuffled = methods.shuffled()
-        methods.forEach {
-            it()
-            sleep(250L)
+    fun run() {
+        val runs = listOf(
+            ::`kt rand next(ch)`,
+            ::`jdk rand next(ch)`,
+            ::`kt rand next`,
+            ::`jdk rand next`,
+            ::`thr local next`,
+            ::`thr local next(ch)`,
+            ::`no op`,
+        ).map { it.name to it }
+        val durations = mutableMapOf<String, MutableList<Duration>>()
+        val trialInvokes = 5
+
+        repeat(trialInvokes) { inv ->
+            print("$trialInvokes - $inv")
+            runs.shuffled().forEach { (name, function) ->
+                print(" ... $name")
+                val duration = function()
+                durations.computeIfAbsent(name) { mutableListOf() }.also { it.add(duration) }
+                sleep(250L)
+            }
+            println()
         }
+        val table = TrialTable()
+        table.show(durations.toSortedMap(), trialInvokes, iterations)
         println()
     }
 }
 
 fun main() {
+    val factor = 10_000L
     val params = listOf(
         4 to 300,
         5 to 200,
@@ -79,7 +102,7 @@ fun main() {
         9 to 100,
     )
     params.forEach {
-        val obj = RandomKtJdkTrial(27, it.first, it.second * 1_000_000)
-        obj.runTest()
+        val obj = RandomKtJdkTrial(27, it.first, it.second * factor)
+        obj.run()
     }
 }
