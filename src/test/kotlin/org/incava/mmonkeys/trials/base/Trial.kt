@@ -11,8 +11,11 @@ class Trial(private val trialInvokes: Int, vararg val options: InvokeTrial) {
     constructor(options: List<InvokeTrial>) : this(10, *options.toTypedArray())
     constructor(trialInvokes: Int, options: List<InvokeTrial>) : this(trialInvokes, *options.toTypedArray())
 
+    val verbose = true
+
     fun run() {
         val trialsList = options.toList()
+        Console.info("trialInvokes", trialInvokes)
         repeat(trialInvokes) { invoke ->
             showProgress(invoke)
             trialsList.shuffled().forEach { it.run() }
@@ -26,9 +29,10 @@ class Trial(private val trialInvokes: Int, vararg val options: InvokeTrial) {
         }
     }
 
-    fun showProgress(invoke: Int) {
-        Console.info("invoke", invoke)
-        Console.info("#invokes", trialInvokes)
+    private fun showProgress(invoke: Int) {
+        if (verbose) {
+            Console.info("invoke", invoke)
+        }
     }
 
     fun tableSummarize() {

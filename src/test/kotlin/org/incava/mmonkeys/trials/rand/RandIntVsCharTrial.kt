@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 class RandIntVsCharTrial {
     fun nextInt() {
-        val numInvokes = 10_000_000L
+        val numInvokes = 100_000_000L
         val random = Random.Default
         val nextInt = { random.nextInt(); Unit }
         val nextLong = { random.nextLong(); Unit }
@@ -106,14 +106,14 @@ class RandIntVsCharTrial {
             "intValue" to intValue,
             "longValue" to longValue,
         )
-        val toTest = trials3.map { (name, block) -> InvokeTrial(name, numInvokes, block) }
+        val toTest = trials3.map { (name, block) -> InvokeTrial(name, numInvokes, false, block) }
         val trial = Trial(*toTest.toTypedArray())
         trial.run()
         println()
         val table = Table(
             listOf(
                 StringColumn("name", 32, true),
-                DurationColumn("avg duration", 8)
+                DurationColumn("avg duration", 12),
             )
         )
         table.writeHeader()

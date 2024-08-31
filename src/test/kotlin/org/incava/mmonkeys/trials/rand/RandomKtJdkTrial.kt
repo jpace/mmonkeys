@@ -16,7 +16,7 @@ class RandomKtJdkTrial(private val numChars: Int, private val strLength: Int, va
 
     private fun runTest(name: String, block: () -> Unit) {
         val numInvokes = iterations.toLong() * strLength
-        val trial = InvokeTrial(name, numInvokes, block)
+        val trial = InvokeTrial(name, numInvokes, false, block)
         val duration = trial.run()
         Console.info(name, duration)
     }

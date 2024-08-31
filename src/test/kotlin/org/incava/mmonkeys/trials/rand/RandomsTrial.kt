@@ -18,7 +18,7 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
     private fun runTest(block: () -> Unit) {
         val numInvokes = iterations.toLong() * strLength
-        val trial = InvokeTrial("anonymous", numInvokes, block)
+        val trial = InvokeTrial("anonymous", numInvokes, false, block)
         val duration = trial.run()
         Console.info("duration", duration)
     }
