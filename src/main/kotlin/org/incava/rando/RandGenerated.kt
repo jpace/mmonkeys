@@ -2,7 +2,7 @@ package org.incava.rando
 
 import kotlin.random.Random
 
-class RandGenerated(val size: Int, val numTrials: Int) {
+class RandGenerated(val size: Int, numTrials: Int) {
     private val random = Random.Default
     private val slots: Map<Int, Double> = Slots.generate(size, numTrials)
 
