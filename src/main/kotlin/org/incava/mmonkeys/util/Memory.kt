@@ -17,7 +17,7 @@ class Memory {
             LongColumn("number", 14),
             LongColumn("free", 6),
             LongColumn("used", 6),
-            StringColumn("total", 6),
+            LongColumn("total", 6),
         )
     )
 
