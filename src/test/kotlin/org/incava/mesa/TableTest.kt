@@ -11,7 +11,7 @@ internal class TableTest {
     private fun runTest(columns: List<Column>, block: (Table) -> Unit): String {
         val stream = ByteArrayOutputStream()
         val ps = PrintStream(stream)
-        val obj = Table(columns, ps)
+        val obj = Table(columns, out = ps)
         block(obj)
         return stream.toString()
     }
@@ -26,7 +26,8 @@ internal class TableTest {
             LongColumn("total", 6),
         )
         val result = runTest(columns) { table: Table -> table.writeHeader() }
-        val expected = "elapsed | number         | free   | used   | total \n"
+        val expected = "elapsed | number         | free   | used   | total \n" +
+                "------- | -------------- | ------ | ------ | ------\n"
         assertEquals(expected, result)
     }
 
