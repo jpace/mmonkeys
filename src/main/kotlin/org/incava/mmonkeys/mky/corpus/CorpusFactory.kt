@@ -12,8 +12,8 @@ object CorpusFactory {
         return sonnet
             .map { it.trim() }
             .map(String::lowercase)
+            .map { it.replace(Regex("[^a-z+]"), " ") }
             .flatMap { it.split(Regex("\\s+")) }
-            .map { it.replace(Regex("[^a-z+]"), "") }
             .filterNot { it.isBlank() }
     }
 }

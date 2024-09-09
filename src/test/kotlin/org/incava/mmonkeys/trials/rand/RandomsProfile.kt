@@ -1,52 +1,63 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.trials.base.Profiler
+import org.incava.mmonkeys.trials.base.SortType
 import org.incava.rando.RandCalculated
+import org.incava.rando.RandGenList
 import org.incava.rando.RandGenerated
 import org.incava.rando.RandIntCalculated
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
 
-class RandomsProfile {
-    private val numInvokes = 100_000_000L
-    private val trialInvokes = 5
+class RandomsProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
+    private val numChars = 27
 
     fun profile() {
-        val size = 27
-        val xc = RandCalculated(size, 10000)
-        val xd = RandCalculated(size, 100)
-        val yc = RandIntCalculated(size, 10000)
-        val yd = RandIntCalculated(size, 100)
-        val g1 = RandGenerated(size, 10000)
-        val g2 = RandGenerated(size, 100)
-        val ktRandom = Random.Default
-        val jdkRandom = java.util.Random()
-        val numChars = 27
-
         val profiler = Profiler(numInvokes, trialInvokes)
-        profiler.add("calc " + xc.numSlots) { xc.nextRand() }
-        profiler.add("calc " + xc.numSlots) { xc.nextRand() }
-        profiler.add("calc " + xd.numSlots) { xd.nextRand() }
-        profiler.add("int " + yc.numSlots + " - rand") { yc.nextRand() }
-        profiler.add("int " + yc.numSlots + " - int") { yc.nextInt() }
-        profiler.add("int " + yd.numSlots + " - rand") { yd.nextRand() }
-        profiler.add("int " + yd.numSlots + " - int") { yd.nextInt() }
-        profiler.add("gen " + g1.size) { g1.nextRand() }
-        profiler.add("gen " + g2.size) { g2.nextRand() }
-        profiler.add("kt rand()") { ktRandom.nextInt() }
-        profiler.add("jdk rand()") { jdkRandom.nextInt() }
+        val calc1 = RandCalculated(numChars, 10000)
+        profiler.add("calc map " + calc1.numSlots) { calc1.nextRand() }
+
+        val calc2 = RandCalculated(numChars, 100)
+        profiler.add("calc map " + calc2.numSlots) { calc2.nextRand() }
+
+        val listCalc1 = RandIntCalculated(numChars, 10000)
+        profiler.add("calc list " + listCalc1.numSlots) { listCalc1.nextInt() }
+
+        val listCalc2 = RandIntCalculated(numChars, 100)
+        profiler.add("calc list " + listCalc2.numSlots) { listCalc2.nextInt() }
+
+        val gen1 = RandGenerated(numChars, 10000)
+        profiler.add("gen map 10000") { gen1.nextRand() }
+
+        val gen2 = RandGenerated(numChars, 100)
+        profiler.add("gen map 100") { gen2.nextRand() }
+
+        val listGen1 = RandGenList(numChars, 10000)
+        profiler.add("gen list 10000") { listGen1.nextInt() }
+
+        val listGen2 = RandGenList(numChars, 100)
+        profiler.add("gen list 100") { listGen2.nextInt() }
+
+        val kt = Random
+        profiler.add("kt") { kt.nextInt() }
+        profiler.add("kt ch") { kt.nextInt(numChars) }
+
+        val jdk = java.util.Random()
+        profiler.add("jdk") { jdk.nextInt() }
+        profiler.add("jdk rand ch") { jdk.nextInt(numChars) }
+
         val t1 = ThreadLocalRandom.current()
-        profiler.add("thr rand()") { t1.nextInt() }
-        profiler.add("kt rand(ch)") { ktRandom.nextInt(numChars) }
-        profiler.add("jdk rand(ch)") { jdkRandom.nextInt(numChars) }
+        profiler.add("thr") { t1.nextInt() }
+
         val t2 = ThreadLocalRandom.current()
-        profiler.add("thr rand(ch)") { t2.nextInt(numChars) }
+        profiler.add("thr ch") { t2.nextInt(numChars) }
+
         profiler.runAll()
-        profiler.showResults()
+        profiler.showResults(SortType.BY_INSERTION)
     }
 }
 
 fun main() {
-    val obj = RandomsProfile()
+    val obj = RandomsProfile(1_000_000_000L, 5)
     obj.profile()
 }

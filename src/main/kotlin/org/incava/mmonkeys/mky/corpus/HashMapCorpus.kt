@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.mky.corpus
 
-class MapCorpus(words: List<String>) : Corpus(words) {
+class HashMapCorpus(words: List<String>) : Corpus(words) {
     // HashMap<Int, HashMap<String, List<Int>>>
 
     // a LinkedHashMap -- we might want to optimize further as just HashMap
@@ -9,7 +9,7 @@ class MapCorpus(words: List<String>) : Corpus(words) {
     init {
         words.withIndex().forEach { word ->
             lengthToStringsToIndices
-                .computeIfAbsent(word.value.length) { mutableMapOf() }
+                .computeIfAbsent(word.value.length) { HashMap() }
                 .computeIfAbsent(word.value) { mutableListOf() }.also { it.add(word.index) }
         }
     }

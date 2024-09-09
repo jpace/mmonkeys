@@ -11,7 +11,7 @@ class CorpusFactoryTest {
         val file = ResourceUtil.getResourceFile("pg100.txt")
         val words = CorpusFactory.readFileWords(file, 100000)
         println(words.filter { it.length == 1}.toSortedSet())
-        assertEquals(584_922, words.size);
+        assertEquals(602_945, words.size);
         assertFalse(words.contains(""))
     }
 }

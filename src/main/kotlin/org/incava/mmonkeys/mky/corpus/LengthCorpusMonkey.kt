@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.corpus
 
-import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.type.Typewriter
 

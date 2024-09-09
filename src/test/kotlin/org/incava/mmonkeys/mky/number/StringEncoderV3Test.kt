@@ -3,6 +3,7 @@ package org.incava.mmonkeys.mky.number
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import java.math.BigInteger
 import kotlin.test.Test
 
 internal class StringEncoderV3Test {
@@ -77,6 +78,28 @@ internal class StringEncoderV3Test {
                 val encoded = StringEncoderV3.encodeToLong(str)
                 val decoded = StringEncoderV3.decode(encoded)
                 System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
+                assertEquals(str, decoded)
+            }
+        }
+
+    @TestFactory
+    fun encodeToBigInteger() =
+        listOf(
+            "a",
+            "aaaaaaa",
+            "zzzzzzz",
+            "aaaaaaaa",
+            "zzzzzzzz",
+            "aaaaaaaaa",
+            "zzzzzzzzz",
+            "aaaazzzzzzzzz",
+            "crpxnlskvljfhh"
+        ).map { str ->
+            DynamicTest.dynamicTest(str) {
+                val encoded = StringEncoderV3.encodeToLong(str)
+                val bigInt = BigInteger.valueOf(encoded)
+                val decoded = StringEncoderV3.decode(bigInt)
+                System.out.printf("%-8s | %8d | %s\n", str, bigInt, decoded)
                 assertEquals(str, decoded)
             }
         }
