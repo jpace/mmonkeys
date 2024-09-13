@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.trials.base
 
+import org.incava.ikdk.io.Console
 import org.incava.time.Durations
 import java.time.Duration
 import kotlin.reflect.KFunction
@@ -38,6 +39,7 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
 
     fun showResults(sortType: SortType = SortType.BY_NAME) {
         val table = ProfileTable()
+        Console.info("durations", durations)
         table.show(durations.toSortedMap(), trialInvokes, numInvokes, sortType)
         println()
     }

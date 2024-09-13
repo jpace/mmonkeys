@@ -2,11 +2,11 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.number.StringEncoderV3
 import org.incava.mmonkeys.rand.RandBigInt
-import org.incava.rando.RandIntCalculated
+import org.incava.rando.RandCalcList
 import java.math.BigInteger
 
 class StrCalcBigIntToggle : StrRand() {
-    private val lengthRand = RandIntCalculated(Constants.NUM_CHARS + 1, 10000)
+    private val lengthRand = RandCalcList(Constants.NUM_CHARS + 1, 10000)
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
     val longDecoder = StrCalcLongDecode()

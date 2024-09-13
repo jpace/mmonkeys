@@ -1,11 +1,11 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.rando.RandCalculated
+import org.incava.rando.RandCalcMap
 
 object RandomFactory {
-    private val randoms = mutableMapOf<Int, RandCalculated>()
+    private val randoms = mutableMapOf<Int, RandCalcMap>()
 
-    fun getCalculated(numChars: Int): RandCalculated {
-        return randoms.computeIfAbsent(numChars) { RandCalculated(numChars, 10000) }
+    fun getCalculated(numChars: Int): RandCalcMap {
+        return randoms.computeIfAbsent(numChars) { RandCalcMap(numChars, 10000) }
     }
 }

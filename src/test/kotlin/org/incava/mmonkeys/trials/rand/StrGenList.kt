@@ -19,12 +19,12 @@ class StrGenList : StrRand() {
     }
 
     override fun get(): String {
-        val len = lengthRand.nextRand().toInt()
+        val len = lengthRand.nextInt()
         return getString(len)
     }
 
     override fun get(filter: Int): String {
-        val len = lengthRand.nextRand().toInt()
+        val len = lengthRand.nextInt()
         return if (len > filter) "" else getString(len)
     }
 }

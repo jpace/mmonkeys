@@ -8,7 +8,7 @@ import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.trials.base.Profiler
 import org.incava.mmonkeys.type.Typewriter
-import org.incava.rando.RandCalculated
+import org.incava.rando.RandCalcMap
 
 class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
     private val numChars = 27
@@ -22,10 +22,10 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
         val lengthCorpus1 = LengthCorpus(words.toList())
         val lengthCorpus2 = LengthCorpus(words.toList())
         val profiler = Profiler(numInvokes, trialInvokes)
-        val calc1 = RandCalculated(numChars, 10000)
+        val calc1 = RandCalcMap(numChars, 10000)
         var mapMatches = 0
         profiler.add("map") {
-            val length = calc1.nextRand()
+            val length = calc1.nextInt()
             val forLength = mapCorpus.lengthToStringsToIndices[length]
             if (forLength != null) {
                 val word = getWord(length)
@@ -38,7 +38,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
         }
         var hashMapMatches = 0
         profiler.add("hash map") {
-            val length = calc1.nextRand()
+            val length = calc1.nextInt()
             val forLength = hashMapCorpus.lengthToStringsToIndices[length]
             if (forLength != null) {
                 val word = getWord(length)
@@ -52,7 +52,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
         var listMatches = 0
         if (true) {
             profiler.add("list - indexOf") {
-                val length = calc1.nextRand()
+                val length = calc1.nextInt()
                 val forLength = lengthCorpus1.soughtByLength[length]
                 if (forLength != null) {
                     val word = getWord(length)
@@ -67,7 +67,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
         var listContainsMatches = 0
         if (true) {
             profiler.add("list - contains") {
-                val length = calc1.nextRand()
+                val length = calc1.nextInt()
                 val forLength = lengthCorpus2.soughtByLength[length]
                 if (forLength != null) {
                     val word = getWord(length)

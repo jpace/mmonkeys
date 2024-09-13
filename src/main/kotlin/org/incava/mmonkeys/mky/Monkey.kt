@@ -54,7 +54,7 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     // thus length == 1 means we'll hit at the first invocation, with
     // an empty string, 8 means we had 7 (hypothetical) characters,
     // and so on and so forth.
-    fun randomLength() = rand.nextRand()
+    fun randomLength() = rand.nextInt()
 
     private fun addAttempt(matchData: MatchData) {
         if (matchData.isMatch) {

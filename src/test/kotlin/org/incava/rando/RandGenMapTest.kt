@@ -3,14 +3,14 @@ package org.incava.rando
 import org.incava.mmonkeys.test.assertWithin
 import org.junit.jupiter.api.Test
 
-internal class RandGeneratedTest {
+internal class RandGenMapTest {
     @Test
     fun nextRand() {
-        val obj = RandGenerated(27, 1000)
+        val obj = RandGenMap(27, 1000)
         var sum = 0.0
         val iterations = 100_000
         repeat(iterations) {
-            val result = obj.nextRand()
+            val result = obj.nextInt()
             sum += result
         }
         // with enough iterations the overall average should be ~= 27

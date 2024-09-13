@@ -9,7 +9,7 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
 
     fun addFilters(name: String, generator: StrRand) {
         // val filters = listOf(5, 10, 20)
-        val filters = listOf(10)
+        val filters = listOf(5, 10, 25)
         profiler.add(name) { generator.get() }
         filters.forEach { num -> profiler.add("$name $num") { generator.get(num) } }
     }
@@ -24,19 +24,23 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
         val calcLongDecode = StrCalcLongDecode()
         val calcBigIntOnly = StrCalcBigIntOnly()
         val bigIntToggle = StrCalcBigIntToggle()
-        args.forEach {
-            when (it) {
-                "kt - append" -> addFilters(it, kt)
-                "jdk - append" -> addFilters(it, jdk)
-                "gen - list - append" -> addFilters(it, genList)
-                "gen - map - append" -> addFilters(it, genMap)
-                "calc - list - append" -> addFilters(it, calcList)
-                "calc - map - append" -> addFilters(it, calcMap)
-                "calc - int - decode" -> addFilters(it, calcLongDecode)
-                "calc - big - decode (only)" -> addFilters(it, calcBigIntOnly)
-                "calc - big - decode (toggle)" -> addFilters(it, bigIntToggle)
-
-                else -> println("it?: $it")
+        val mapping = mapOf(
+            "kt - append" to kt,
+            "jdk - append" to jdk,
+            "gen - list - append" to genList,
+            "gen - map - append" to genMap,
+            "calc - list - append" to calcList,
+            "calc - map - append" to calcMap,
+            "calc - int - decode" to calcLongDecode,
+            "calc - big - decode (only)," to calcBigIntOnly,
+            "calc - big - decode (toggle)," to bigIntToggle,
+        )
+        if (args.isEmpty()) {
+            mapping.forEach { addFilters(it.key, it.value) }
+        } else {
+            args.forEach {
+                val generator = mapping[it] ?: throw IllegalArgumentException("invalid option: $it")
+                addFilters(it, generator)
             }
         }
         profiler.runAll()
@@ -48,7 +52,6 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
 
 fun main(args: Array<String>) {
     println("args: ${args.toList()}")
-    val toRun = args.ifEmpty { arrayOf("kt", "jdk", "calc map", "cal list", "gen") }
-    val obj = StrFactoryProfile(1_000_000L, 3)
-    obj.profile()
+    val obj = RandomStringProfile(100_000_000L, 5)
+    obj.profile(args.toList())
 }

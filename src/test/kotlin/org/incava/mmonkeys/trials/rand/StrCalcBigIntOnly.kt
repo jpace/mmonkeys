@@ -3,11 +3,11 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.mmonkeys.mky.number.StringEncoderV3
 import org.incava.mmonkeys.rand.RandBigInt
 import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
-import org.incava.rando.RandIntCalculated
+import org.incava.rando.RandCalcList
 import java.math.BigInteger
 
 class StrCalcBigIntOnly : StrRand() {
-    private val lengthRand = RandIntCalculated(NUM_CHARS + 1, 10000)
+    private val lengthRand = RandCalcList(NUM_CHARS + 1, 10000)
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
 

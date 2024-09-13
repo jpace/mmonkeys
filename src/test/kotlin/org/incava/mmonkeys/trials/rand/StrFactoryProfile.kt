@@ -78,6 +78,6 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
 }
 
 fun main() {
-    val obj = StrFactoryProfile(50_000_000L, 3)
+    val obj = StrFactoryProfile(100_000_000L, 3)
     obj.profile()
 }

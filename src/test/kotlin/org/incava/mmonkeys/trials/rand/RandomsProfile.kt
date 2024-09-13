@@ -2,10 +2,10 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.trials.base.Profiler
 import org.incava.mmonkeys.trials.base.SortType
-import org.incava.rando.RandCalculated
+import org.incava.rando.RandCalcMap
 import org.incava.rando.RandGenList
-import org.incava.rando.RandGenerated
-import org.incava.rando.RandIntCalculated
+import org.incava.rando.RandGenMap
+import org.incava.rando.RandCalcList
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
 
@@ -14,23 +14,23 @@ class RandomsProfile(private val numInvokes: Long, private val trialInvokes: Int
 
     fun profile() {
         val profiler = Profiler(numInvokes, trialInvokes)
-        val calc1 = RandCalculated(numChars, 10000)
-        profiler.add("calc map " + calc1.numSlots) { calc1.nextRand() }
+        val calc1 = RandCalcMap(numChars, 10000)
+        profiler.add("calc map " + calc1.numSlots) { calc1.nextInt() }
 
-        val calc2 = RandCalculated(numChars, 100)
-        profiler.add("calc map " + calc2.numSlots) { calc2.nextRand() }
+        val calc2 = RandCalcMap(numChars, 100)
+        profiler.add("calc map " + calc2.numSlots) { calc2.nextInt() }
 
-        val listCalc1 = RandIntCalculated(numChars, 10000)
-        profiler.add("calc list " + listCalc1.numSlots) { listCalc1.nextInt() }
+        val listCalc1 = RandCalcList(numChars, 10000)
+        profiler.add("calc list " + listCalc1.numIterations) { listCalc1.nextInt() }
 
-        val listCalc2 = RandIntCalculated(numChars, 100)
-        profiler.add("calc list " + listCalc2.numSlots) { listCalc2.nextInt() }
+        val listCalc2 = RandCalcList(numChars, 100)
+        profiler.add("calc list " + listCalc2.numIterations) { listCalc2.nextInt() }
 
-        val gen1 = RandGenerated(numChars, 10000)
-        profiler.add("gen map 10000") { gen1.nextRand() }
+        val gen1 = RandGenMap(numChars, 10000)
+        profiler.add("gen map 10000") { gen1.nextInt() }
 
-        val gen2 = RandGenerated(numChars, 100)
-        profiler.add("gen map 100") { gen2.nextRand() }
+        val gen2 = RandGenMap(numChars, 100)
+        profiler.add("gen map 100") { gen2.nextInt() }
 
         val listGen1 = RandGenList(numChars, 10000)
         profiler.add("gen list 10000") { listGen1.nextInt() }

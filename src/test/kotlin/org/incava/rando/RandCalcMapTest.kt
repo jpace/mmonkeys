@@ -4,15 +4,15 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.test.assertWithin
 import org.junit.jupiter.api.Test
 
-internal class RandCalculatedTest {
+internal class RandCalcMapTest {
     @Test
     fun nextRand() {
-        val obj = RandCalculated(27, 1000)
+        val obj = RandCalcMap(27, 1000)
         var sum = 0.0
         val iterations = 100_000
         val found = mutableSetOf<Int>()
         repeat(iterations) {
-            val result = obj.nextRand()
+            val result = obj.nextInt()
             found += result
             sum += result
         }
