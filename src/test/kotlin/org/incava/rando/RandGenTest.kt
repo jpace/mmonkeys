@@ -50,6 +50,7 @@ internal class RandGenTest {
             ) {
                 val obj = RandGenList(27, numTrials)
                 val result = obj.slots
+                Console.info("result", result)
                 // slot 98
                 val result98 = result.getOrDefault(98, 0.0)
                 // slot 99

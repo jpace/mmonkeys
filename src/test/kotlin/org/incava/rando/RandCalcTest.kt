@@ -1,8 +1,7 @@
 package org.incava.rando
 
 import org.incava.ikdk.io.Console
-import org.incava.ikdk.io.Console.printf
-import org.incava.mmonkeys.test.assertWithin
+import org.incava.mmonkeys.testutil.assertWithin
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -117,11 +116,13 @@ internal class RandCalcTest {
     fun showComparison(num: Int, calculated: Map<Int, Int>, generated: Map<Int, Int>) {
         val calc = calculated[num]
         val gen = generated[num]
-        if (calc != null && gen != null) {
+        if (calc == null) {
+            System.out.printf("%5d | %8s | %,d\n", num, "", gen)
+        } else if (gen == null) {
+            System.out.printf("%5d | %,8d | %s\n", num, calc, "")
+        } else {
             val diff = 100 * (abs(calc - gen).toDouble() / (calc + gen))
             System.out.printf("%5d | %,8d | %,8d | %.1f\n", num, calc, gen, diff)
-        } else {
-            System.out.printf("%5d | %,8d | %,d\n", num, calc ?: -1, gen ?: -1)
         }
     }
 

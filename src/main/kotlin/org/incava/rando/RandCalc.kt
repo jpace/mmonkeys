@@ -39,7 +39,7 @@ abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : 
         while (slots.getOrDefault(numIterations - 1, 0) == 0) {
             val prob = factor.pow(count)
             while (numIterations.toDouble() * (1.0 - prob) >= currentSlot) {
-                Console.info("currentSlot", currentSlot)
+                // Console.info("currentSlot", currentSlot)
                 slots[currentSlot] = count
                 currentSlot += 1
             }

@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.test
+package org.incava.mmonkeys.testutil
 
 import kotlin.math.abs
 import kotlin.test.assertTrue

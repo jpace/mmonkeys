@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.mmonkeys.test.assertWithin
+import org.incava.mmonkeys.testutil.assertWithin
 import org.incava.rando.RandGenMap
 import org.junit.jupiter.api.Test
 

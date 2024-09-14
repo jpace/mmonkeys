@@ -5,7 +5,7 @@ import org.incava.rando.RandCalcMap
 import org.incava.rando.RandGenMap
 import kotlin.math.abs
 
-class GenVsCalcProfile(private val numInvokes: Long = 100_000_000L, private val trialInvokes: Int = 10) {
+class GenVsCalcProfile(private val numInvokes: Long, private val trialInvokes: Int) {
     private fun saveNumber(numbers: MutableMap<Int, Int>, number: Int) {
         numbers[number] = (numbers[number] ?: 0) + 1
     }
@@ -16,7 +16,7 @@ class GenVsCalcProfile(private val numInvokes: Long = 100_000_000L, private val 
         val gen = RandGenMap(size, 10000)
 
         calc.slots.forEach { (key, value) -> println("calc[$key] = $value") }
-        gen.slots.forEach { (key, value) -> println("calc[$key] = $value") }
+        gen.slots.forEach { (key, value) -> println("gen[$key] = $value") }
 
         val profiler = Profiler(numInvokes, trialInvokes)
         val calcNumbers = mutableMapOf<Int, Int>()
@@ -42,6 +42,6 @@ class GenVsCalcProfile(private val numInvokes: Long = 100_000_000L, private val 
 }
 
 fun main() {
-    val obj = GenVsCalcProfile()
+    val obj = GenVsCalcProfile(10_000_000L, 5)
     obj.profile()
 }
