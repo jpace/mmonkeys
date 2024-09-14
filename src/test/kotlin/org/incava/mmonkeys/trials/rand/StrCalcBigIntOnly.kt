@@ -7,7 +7,7 @@ import org.incava.rando.RandCalcList
 import java.math.BigInteger
 
 class StrCalcBigIntOnly : StrRand() {
-    private val lengthRand = RandCalcList(NUM_CHARS + 1, 10000)
+    private val lengthRand = RandCalcList(NUM_CHARS + 1, 100, 10000)
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
 

@@ -10,16 +10,16 @@ class RandGenVsCalcTrial {
     fun ctor() {
         println("----- ctor -----")
         val profiler = Profiler(5_000L, 5)
-        profiler.add("calc") { RandCalcMap(size, 10000) }
-        profiler.add("gen") { RandGenMap(size, 10000) }
+        profiler.add("calc") { RandCalcMap(size, 100, 10000) }
+        profiler.add("gen") { RandGenMap(size, 100, 10000) }
         profiler.runAll()
         profiler.showResults()
     }
 
     fun nextRand() {
         println("----- nextRand -----")
-        val randCalcMap = RandCalcMap(size, 10000)
-        val randGenMap = RandGenMap(size, 10000)
+        val randCalcMap = RandCalcMap(size, 100, 10000)
+        val randGenMap = RandGenMap(size, 100, 10000)
         val profiler = Profiler(100_000_000L, 5)
         profiler.add("calc") { randCalcMap.nextInt() }
         profiler.add("gen") { randGenMap.nextInt() }

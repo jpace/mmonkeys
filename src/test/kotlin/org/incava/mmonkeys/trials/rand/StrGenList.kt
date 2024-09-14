@@ -5,7 +5,7 @@ import org.incava.rando.RandGenList
 import kotlin.random.Random
 
 class StrGenList : StrRand() {
-    private val lengthRand = RandGenList(NUM_CHARS + 1, 10000)
+    private val lengthRand = RandGenList(NUM_CHARS + 1, 100, 10000)
 
     override fun randInt(limit: Int) = Random.nextInt(limit)
 

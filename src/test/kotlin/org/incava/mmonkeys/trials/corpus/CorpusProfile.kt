@@ -22,7 +22,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
         val lengthCorpus1 = LengthCorpus(words.toList())
         val lengthCorpus2 = LengthCorpus(words.toList())
         val profiler = Profiler(numInvokes, trialInvokes)
-        val calc1 = RandCalcMap(numChars, 10000)
+        val calc1 = RandCalcMap(numChars, 100, 10000)
         var mapMatches = 0
         profiler.add("map") {
             val length = calc1.nextInt()

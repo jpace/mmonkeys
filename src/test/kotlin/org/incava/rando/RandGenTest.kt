@@ -18,7 +18,8 @@ internal class RandGenTest {
     fun slots() {
         // at 10M or so, we get out of heap space errors
         val numTrials = 1_000_000
-        val obj = RandGenList(27, numTrials)
+        val numSlots = 100
+        val obj = RandGenList(27, numSlots, numTrials)
         val result = obj.slots
         val maxDistance = 1.0
         Console.info("result", result)
@@ -48,7 +49,8 @@ internal class RandGenTest {
                         "when running the generate method, " +
                         "then the result should be within distance $expected"
             ) {
-                val obj = RandGenList(27, numTrials)
+                val numSlots = 100
+                val obj = RandGenList(27, numSlots, numTrials)
                 val result = obj.slots
                 Console.info("result", result)
                 // slot 98

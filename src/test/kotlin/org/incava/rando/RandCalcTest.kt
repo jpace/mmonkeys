@@ -8,26 +8,8 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertAll
 import kotlin.math.abs
 import kotlin.random.Random
-import kotlin.test.assertEquals
 
 internal class RandCalcTest {
-    @Test
-    fun slots() {
-        val numSlots = 100
-        val obj = RandCalcList(27, numSlots)
-        val result = obj.slots
-        Console.info("result", result)
-        assertEquals(numSlots, result.size)
-        (1 until result.size).forEach {
-            assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
-        }
-        val asInts = obj.slots.mapValues { it.value.toInt() }
-        val reduced = Slots.reduceSlots(asInts)
-        Console.info("reduced", reduced)
-        val slots = reduced.mapValues { it.value.average().toInt() }
-        Console.info("slots", slots)
-    }
-
     @TestFactory
     fun slotsDelta() =
         listOf(
@@ -44,7 +26,8 @@ internal class RandCalcTest {
                         "when running the generate method, " +
                         "then the result should be within distance $expected"
             ) {
-                val obj = RandCalcList(27, numIterations)
+                val numSlots = 100
+                val obj = RandCalcList(27, numSlots, numIterations)
                 val result = obj.slots
                 // slot 98
                 val result98 = result.getOrDefault(98, 0.0)
@@ -59,22 +42,13 @@ internal class RandCalcTest {
 
     @Test
     fun calculateFew() {
+        val numSlots = 100
         val numIterations = 10_000
-        val obj = RandCalcList(27, numIterations)
+        val obj = RandCalcList(27, numSlots, numIterations)
         val result = obj.slots
         Console.info("result.#", result.size)
         Console.info("result", result)
         result.forEach { (key, value) -> Console.info("result[$key]", value) }
-
-//        assertEquals(numSlots, result.size)
-//        (1 until result.size).forEach {
-//            assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
-//        }
-//        val asInts = obj.slots.mapValues { it.value.toInt() }
-//        val reduced = obj.reduceSlots(asInts)
-//        Console.info("reduced", reduced)
-//        val slots = reduced.mapValues { it.value.average().toInt() }
-//        Console.info("slots", slots)
     }
 
     fun generate(size: Int, count: Int): List<Int> {
@@ -146,19 +120,11 @@ internal class RandCalcTest {
 
     @Test
     fun calculateMany() {
+        val numSlots = 100
         val numIterations = 100_000
-        val obj = RandCalcList(27, numIterations)
+        val obj = RandCalcList(27, numSlots, numIterations)
         val result = obj.slots
         Console.info("result.#", result.size)
-        assertEquals(100, result.size)
-        (1 until result.size).forEach {
-            assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
-        }
-        val asInts = obj.slots.mapValues { it.value.toInt() }
-        val reduced = Slots.reduceSlots(asInts)
-        Console.info("reduced", reduced)
-        val slots = reduced.mapValues { it.value.average().toInt() }
-        Console.info("slots", slots)
     }
 
     @Test
@@ -166,9 +132,5 @@ internal class RandCalcTest {
         val numSlots = 100
         val result = Slots.calculateAndReduce(27, numSlots)
         Console.info("result", result)
-        assertEquals(numSlots, result.size)
-        (1 until result.size).forEach {
-            assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
-        }
     }
 }

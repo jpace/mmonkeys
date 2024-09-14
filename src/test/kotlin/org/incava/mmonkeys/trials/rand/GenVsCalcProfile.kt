@@ -12,8 +12,9 @@ class GenVsCalcProfile(private val numInvokes: Long, private val trialInvokes: I
 
     fun profile() {
         val size = 27
-        val calc = RandCalcMap(size, 10000)
-        val gen = RandGenMap(size, 10000)
+        val numSlots = 100
+        val calc = RandCalcMap(size, numSlots, 10000)
+        val gen = RandGenMap(size, numSlots, 10000)
 
         calc.slots.forEach { (key, value) -> println("calc[$key] = $value") }
         gen.slots.forEach { (key, value) -> println("gen[$key] = $value") }

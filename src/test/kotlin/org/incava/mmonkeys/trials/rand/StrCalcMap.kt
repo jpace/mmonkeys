@@ -5,7 +5,7 @@ import org.incava.rando.RandCalcMap
 import kotlin.random.Random
 
 class StrCalcMap : StrRand() {
-    private val lengthRand = RandCalcMap(NUM_CHARS + 1, 10000)
+    private val lengthRand = RandCalcMap(NUM_CHARS + 1, 100, 10000)
 
     override fun randInt(limit: Int) = Random.nextInt(limit)
 

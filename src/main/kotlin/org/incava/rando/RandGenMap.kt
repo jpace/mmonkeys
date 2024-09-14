@@ -1,6 +1,6 @@
 package org.incava.rando
 
-class RandGenMap(size: Int, numTrials: Int) : RandGen(size, numTrials) {
+class RandGenMap(size: Int, numSlots: Int, numTrials: Int) : RandGen(size, numSlots, numTrials) {
     val map = slots.mapValues { it.value.toInt() }
 
     override fun nextInt(): Int {

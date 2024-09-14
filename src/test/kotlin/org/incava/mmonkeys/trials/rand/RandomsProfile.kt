@@ -13,29 +13,31 @@ class RandomsProfile(private val numInvokes: Long, private val trialInvokes: Int
     private val numChars = 27
 
     fun profile() {
+        val numSlots = 100
+        val numTrials = 10_000
         val profiler = Profiler(numInvokes, trialInvokes)
-        val calc1 = RandCalcMap(numChars, 10000)
+        val calc1 = RandCalcMap(numChars, numSlots, numTrials)
         profiler.add("calc map " + calc1.numSlots) { calc1.nextInt() }
 
-        val calc2 = RandCalcMap(numChars, 100)
+        val calc2 = RandCalcMap(numChars, numSlots, numTrials)
         profiler.add("calc map " + calc2.numSlots) { calc2.nextInt() }
 
-        val listCalc1 = RandCalcList(numChars, 10000)
+        val listCalc1 = RandCalcList(numChars, numSlots, numTrials)
         profiler.add("calc list " + listCalc1.numIterations) { listCalc1.nextInt() }
 
-        val listCalc2 = RandCalcList(numChars, 100)
+        val listCalc2 = RandCalcList(numChars, numSlots, numSlots)
         profiler.add("calc list " + listCalc2.numIterations) { listCalc2.nextInt() }
 
-        val gen1 = RandGenMap(numChars, 10000)
+        val gen1 = RandGenMap(numChars, numSlots, numSlots)
         profiler.add("gen map 10000") { gen1.nextInt() }
 
-        val gen2 = RandGenMap(numChars, 100)
+        val gen2 = RandGenMap(numChars, numSlots, numSlots)
         profiler.add("gen map 100") { gen2.nextInt() }
 
-        val listGen1 = RandGenList(numChars, 10000)
+        val listGen1 = RandGenList(numChars, numSlots, numSlots)
         profiler.add("gen list 10000") { listGen1.nextInt() }
 
-        val listGen2 = RandGenList(numChars, 100)
+        val listGen2 = RandGenList(numChars, numSlots, numSlots)
         profiler.add("gen list 100") { listGen2.nextInt() }
 
         val kt = Random

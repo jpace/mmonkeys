@@ -6,7 +6,7 @@ import org.incava.rando.RandCalcList
 import java.math.BigInteger
 
 class StrCalcBigIntToggle : StrRand() {
-    private val lengthRand = RandCalcList(Constants.NUM_CHARS + 1, 10000)
+    private val lengthRand = RandCalcList(Constants.NUM_CHARS + 1, 100, 10000)
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
     val longDecoder = StrCalcLongDecode()

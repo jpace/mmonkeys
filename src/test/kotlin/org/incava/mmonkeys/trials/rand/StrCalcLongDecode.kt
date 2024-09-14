@@ -7,7 +7,7 @@ import kotlin.random.Random
 
 class StrCalcLongDecode : StrRand() {
     var overruns = 0L
-    private val lengthRand = RandCalcList(NUM_CHARS + 1, 10000)
+    private val lengthRand = RandCalcList(NUM_CHARS + 1, 100, 10000)
     private val rangesEncoded = (1..13).associateWith { length ->
         val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
         encoded to (encoded + 1) * 26

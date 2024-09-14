@@ -6,6 +6,7 @@ object RandomFactory {
     private val randoms = mutableMapOf<Int, RandCalcMap>()
 
     fun getCalculated(numChars: Int): RandCalcMap {
-        return randoms.computeIfAbsent(numChars) { RandCalcMap(numChars, 10000) }
+        val numSlots = 100
+        return randoms.computeIfAbsent(numChars) { RandCalcMap(numChars, numSlots, 10000) }
     }
 }

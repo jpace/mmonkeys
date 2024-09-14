@@ -21,7 +21,6 @@ abstract class MonkeyAttempts(val id: Int, val monkey: Monkey) : MonkeyMonitor {
         count++
         if (matchData.isMatch) {
             // totalKeystrokes == virtual seconds:
-            // simClock.writeMatch(monkey, totalKeystrokes, matchData, "wtf?")
             matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
         }
     }
