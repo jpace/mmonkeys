@@ -19,7 +19,7 @@ internal class RandCalcVsGenTest {
             }
         }
         val genResult = gen.slots
-        val maxDistance = 0.9
+        val maxDistance = 1.1
         Console.info("genResult", genResult)
 
         val calc = object : RandCalc(27, numSlots, numTrials) {
@@ -33,10 +33,10 @@ internal class RandCalcVsGenTest {
         keys.forEach { key ->
             val g = gen.slots[key]
             val c = calc.slots[key]
-            showComparison(key, c, g)
+            //showComparison(key, c, g)
             assertNotNull(g, "key: $key")
             assertNotNull(c, "key: $key")
-            assertWithin(c, g, maxDistance, "key: $key")
+            assertWithin(c.toDouble(), g.toDouble(), maxDistance, "key: $key")
         }
     }
 
@@ -64,8 +64,8 @@ internal class RandCalcVsGenTest {
         println("gen.slots : ${gen.slots}")
         println("calc.slots: ${calc.slots}")
 
-        val genNums = gen.slots.values.map { it.roundToInt() }.toSortedSet().toList()
-        val calcNums = calc.slots.values.map { it.roundToInt() }.toSortedSet().toList()
+        val genNums = gen.slots.values.toSortedSet().toList()
+        val calcNums = calc.slots.values.toSortedSet().toList()
 
         println("genNums : $genNums")
         println("calcNums: $calcNums")

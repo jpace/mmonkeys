@@ -17,13 +17,12 @@ internal class RandGenTest {
             }
         }
         val result = obj.slots
-        val maxDistance = 1.0
         Console.info("result", result)
         val result98 = result[98] ?: throw RuntimeException("no value for slot 98")
         val result99 = result[99] ?: throw RuntimeException("no value for slot 98")
         assertAll(
-            { assertWithin(112.271, result98, maxDistance) },
-            { assertWithin(148.909, result99, maxDistance) }
+            { assertWithin(112.0, result98.toDouble(), 1.1) },
+            { assertWithin(149.0, result99.toDouble(), 1.1) }
         )
     }
 }

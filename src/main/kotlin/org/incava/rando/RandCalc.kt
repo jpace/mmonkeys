@@ -1,9 +1,10 @@
 package org.incava.rando
 
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : RandInt(size) {
-    val slots: Map<Int, Double>
+    val slots: Map<Int, Int>
 
     init {
         var iteration = 0
@@ -23,5 +24,6 @@ abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : 
             count += 1
         }
         slots = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
+            .mapValues { it.value.roundToInt() }
     }
 }
