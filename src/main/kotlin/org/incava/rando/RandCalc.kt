@@ -6,19 +6,19 @@ abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : 
     val slots: Map<Int, Double>
 
     init {
-        var currentSlot = 0
+        var iteration = 0
         var count = 1
         val factor = (size - 1).toDouble() / size
         val perSlot = numIterations / numSlots
         val bySlot = mutableMapOf<Int, Pair<Int, Int>>()
-        while (currentSlot < numIterations) {
+        while (iteration < numIterations) {
             val prob = factor.pow(count)
-            while (numIterations.toDouble() * (1.0 - prob) >= currentSlot) {
-                val slotIdx = currentSlot / perSlot
+            while (numIterations.toDouble() * (1.0 - prob) >= iteration) {
+                val slotIdx = iteration / perSlot
                 bySlot.merge(slotIdx, Pair(1, count)) { prev, _ ->
                     Pair(prev.first + 1, prev.second + count)
                 }
-                currentSlot += 1
+                iteration += 1
             }
             count += 1
         }
