@@ -4,7 +4,7 @@ class HashMapCorpus(words: List<String>) : Corpus(words) {
     // HashMap<Int, HashMap<String, List<Int>>>
 
     // a LinkedHashMap -- we might want to optimize further as just HashMap
-    val lengthToStringsToIndices: MutableMap<Int, MutableMap<String, MutableList<Int>>> = mutableMapOf()
+    val lengthToStringsToIndices: MutableMap<Int, MutableMap<String, MutableList<Int>>> = HashMap()
 
     init {
         words.withIndex().forEach { word ->
