@@ -4,7 +4,6 @@ import org.incava.mmonkeys.trials.base.Profiler
 import org.incava.mmonkeys.trials.base.SortType
 import kotlin.random.Random
 
-
 class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
     private val profiler = Profiler(numInvokes, trialInvokes)
     private val range = 100
@@ -52,7 +51,17 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         return sb.toString()
     }
 
-    fun viaByteArray() : String {
+    fun viaByteArrayUnsized() : String {
+        val length = randInt(range)
+        val bytes = mutableListOf<Byte>()
+        repeat(length) { index ->
+            val n = randCharAz()
+            bytes += ('a' + n).toByte()
+        }
+        return String(bytes.toByteArray())
+    }
+
+    fun viaByteArraySized() : String {
         val length = randInt(range)
         val bytes = ByteArray(length)
         repeat(length) { index ->
@@ -71,13 +80,14 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         addFilters("builder unsized", ::viaStringBuilderUnsized)
         addFilters("buffer sized", ::viaStringBufferSized)
         addFilters("buffer unsized", ::viaStringBufferUnsized)
-        addFilters("byte array", ::viaByteArray)
+        addFilters("byte array sized", ::viaByteArraySized)
+        addFilters("byte array unsized", ::viaByteArrayUnsized)
         profiler.runAll()
         profiler.showResults(SortType.BY_INSERTION)
     }
 }
 
 fun main() {
-    val obj = StrFactoryProfile(100_000_000L, 3)
+    val obj = StrFactoryProfile(10_000_000L, 3)
     obj.profile()
 }
