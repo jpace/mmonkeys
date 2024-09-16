@@ -4,7 +4,7 @@ import kotlin.math.roundToInt
 
 abstract class RandGen(size: Int, numSlots: Int, numTrials: Int) : RandInt(size) {
     val slots: Map<Int, Int>
-    // val slots2: List<Int>
+    val list: List<Int>
 
     init {
         // @todo - reimplement this to use a map of number -> count
@@ -18,5 +18,8 @@ abstract class RandGen(size: Int, numSlots: Int, numTrials: Int) : RandInt(size)
             .withIndex()
             .associate { it.index to it.value }
             .mapValues { it.value.roundToInt() }
+        list = result
+            .chunked(perSlot) { it.average() }
+            .map { it.roundToInt() }
     }
 }

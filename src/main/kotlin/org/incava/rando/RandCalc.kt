@@ -1,10 +1,12 @@
 package org.incava.rando
 
+import org.incava.ikdk.io.Console
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
 abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : RandInt(size) {
     val slots: Map<Int, Int>
+    val list: List<Int>
 
     init {
         var iteration = 0
@@ -25,5 +27,9 @@ abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : 
         }
         slots = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
             .mapValues { it.value.roundToInt() }
+        Console.info("slots", slots)
+        list = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
+            .map { it.value.roundToInt() }
+        Console.info("list", list)
     }
 }

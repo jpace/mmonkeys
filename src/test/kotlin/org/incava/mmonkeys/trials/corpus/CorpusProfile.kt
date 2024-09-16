@@ -17,22 +17,22 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
     fun profile() {
         val file = ResourceUtil.getResourceFile("pg100.txt")
         val words = CorpusFactory.readFileWords(file, -1).filter { it.length > 2 }
-        val mapCorpus = MapCorpus(words.toList())
+        val linkedHashMapCorpus = MapCorpus(words.toList())
         val hashMapCorpus = HashMapCorpus(words.toList())
         val lengthCorpus1 = LengthCorpus(words.toList())
         val lengthCorpus2 = LengthCorpus(words.toList())
         val profiler = Profiler(numInvokes, trialInvokes)
         val calc1 = RandCalcMap(numChars, 100, 10000)
         var mapMatches = 0
-        profiler.add("map") {
+        profiler.add("linked hash map") {
             val length = calc1.nextInt()
-            val forLength = mapCorpus.lengthToStringsToIndices[length]
+            val forLength = linkedHashMapCorpus.lengthToStringsToIndices[length]
             if (forLength != null) {
                 val word = getWord(length)
                 val x = forLength[word]
                 if (x != null) {
                     ++mapMatches
-                    mapCorpus.matched(word, length)
+                    linkedHashMapCorpus.matched(word, length)
                 }
             }
         }
@@ -50,7 +50,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
             }
         }
         var listMatches = 0
-        if (true) {
+        if (false) {
             profiler.add("list - indexOf") {
                 val length = calc1.nextInt()
                 val forLength = lengthCorpus1.soughtByLength[length]
@@ -65,7 +65,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
             }
         }
         var listContainsMatches = 0
-        if (true) {
+        if (false) {
             profiler.add("list - contains") {
                 val length = calc1.nextInt()
                 val forLength = lengthCorpus2.soughtByLength[length]
@@ -81,10 +81,10 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
 
         profiler.runAll()
 
-        Console.info("map #", mapMatches)
-        Console.info("map %", 100.0 * mapMatches / (numInvokes * trialInvokes))
-        Console.info("hashmap #", hashMapMatches)
-        Console.info("hashmap %", 100.0 * hashMapMatches / (numInvokes * trialInvokes))
+        Console.info("linked hash map #", mapMatches)
+        Console.info("linked hash map %", 100.0 * mapMatches / (numInvokes * trialInvokes))
+        Console.info("hash map #", hashMapMatches)
+        Console.info("hash map %", 100.0 * hashMapMatches / (numInvokes * trialInvokes))
         Console.info("list - index #", listMatches)
         Console.info("list - index %", 100.0 * listMatches / (numInvokes * trialInvokes))
         Console.info("list - has #", listContainsMatches)

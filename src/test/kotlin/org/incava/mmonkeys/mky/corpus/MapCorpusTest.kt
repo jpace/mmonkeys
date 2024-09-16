@@ -6,7 +6,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 internal class MapCorpusTest {
-
     @Test
     fun soughtByLength() {
         val input = listOf("ab", "cd", "def", "defg", "ghi", "lmnop")
@@ -28,12 +27,12 @@ internal class MapCorpusTest {
         val obj = MapCorpus(input)
         Console.info("obj.class", obj.javaClass)
         Console.info("obj", obj)
-        obj.matched("ab")
+        obj.matched("ab", 2)
         assertEquals(setOf(0), obj.matched)
         val result = obj.lengthToStringsToIndices[2]
         Console.info("result", result)
         assertEquals(mapOf("cd" to listOf(1)), obj.lengthToStringsToIndices[2])
-        obj.matched("cd")
+        obj.matched("cd", 2)
         assertEquals(setOf(0, 1), obj.matched)
         assertNull(obj.lengthToStringsToIndices[2])
     }

@@ -14,7 +14,7 @@ class MapCorpusMonkey(override val corpus: MapCorpus, id: Int, typewriter: Typew
             if (indices != null) {
                 // we're always removing/matching the *first* index
                 val index = indices.first()
-                corpus.matched(word)
+                corpus.matched(word, length)
                 return match(length, index)
             }
         }
