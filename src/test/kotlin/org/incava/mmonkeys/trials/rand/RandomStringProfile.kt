@@ -31,7 +31,7 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
             "gen - map - append" to genMap,
             "calc - list - append" to calcList,
             "calc - map - append" to calcMap,
-            "calc - int - decode" to calcLongDecode,
+            "calc - long - decode" to calcLongDecode,
             "calc - big - decode (only)," to calcBigIntOnly,
             "calc - big - decode (toggle)," to bigIntToggle,
         )
@@ -52,6 +52,6 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
 
 fun main(args: Array<String>) {
     println("args: ${args.toList()}")
-    val obj = RandomStringProfile(100_000_000L, 5)
+    val obj = RandomStringProfile(1_000_000L, 5)
     obj.profile(args.toList())
 }
