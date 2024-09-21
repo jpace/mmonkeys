@@ -25,19 +25,19 @@ class RandomsProfile(private val numInvokes: Long, private val trialInvokes: Int
         val listCalc1 = RandCalcList(numChars, numSlots, numTrials)
         profiler.add("calc list " + listCalc1.numIterations) { listCalc1.nextInt() }
 
-        val listCalc2 = RandCalcList(numChars, numSlots, numSlots)
+        val listCalc2 = RandCalcList(numChars, numSlots, numTrials)
         profiler.add("calc list " + listCalc2.numIterations) { listCalc2.nextInt() }
 
-        val gen1 = RandGenMap(numChars, numSlots, numSlots)
+        val gen1 = RandGenMap(numChars, 10_000, 10_000)
         profiler.add("gen map 10000") { gen1.nextInt() }
 
-        val gen2 = RandGenMap(numChars, numSlots, numSlots)
+        val gen2 = RandGenMap(numChars, 100, numSlots)
         profiler.add("gen map 100") { gen2.nextInt() }
 
-        val listGen1 = RandGenList(numChars, numSlots, numSlots)
+        val listGen1 = RandGenList(numChars, 10_000, numTrials)
         profiler.add("gen list 10000") { listGen1.nextInt() }
 
-        val listGen2 = RandGenList(numChars, numSlots, numSlots)
+        val listGen2 = RandGenList(numChars, numSlots, numTrials)
         profiler.add("gen list 100") { listGen2.nextInt() }
 
         val kt = Random
@@ -60,6 +60,6 @@ class RandomsProfile(private val numInvokes: Long, private val trialInvokes: Int
 }
 
 fun main() {
-    val obj = RandomsProfile(1_000_000_000L, 5)
+    val obj = RandomsProfile(100_000_000L, 5)
     obj.profile()
 }

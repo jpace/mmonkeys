@@ -1,7 +1,5 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
-
 class StrJdk : StrRand() {
     private val random = java.util.Random()
 
@@ -11,7 +9,7 @@ class StrJdk : StrRand() {
         val sb = StringBuilder()
         while (true) {
             val n = randCharAzSpace()
-            if (n == NUM_CHARS) {
+            if (n == Constants.NUM_CHARS) {
                 return sb.toString()
             } else {
                 sb.append('a' + n)
@@ -23,7 +21,7 @@ class StrJdk : StrRand() {
         val sb = StringBuilder()
         while (true) {
             val n = randCharAzSpace()
-            if (n == NUM_CHARS) {
+            if (n == Constants.NUM_CHARS) {
                 return sb.toString()
             } else {
                 sb.append('a' + n)

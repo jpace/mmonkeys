@@ -3,8 +3,6 @@ package org.incava.rando
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.testutil.assertWithin
 import org.junit.jupiter.api.Test
-import kotlin.math.abs
-import kotlin.math.roundToInt
 import kotlin.test.assertNotNull
 
 internal class RandCalcVsGenTest {
@@ -77,16 +75,5 @@ internal class RandCalcVsGenTest {
         println("firstCalcGap : ${calcNums[firstCalcGap]}")
 
         assertWithin(firstGenGap.toDouble(), firstCalcGap.toDouble(), 1.1, "gap")
-    }
-
-    fun showComparison(num: Int, calculated: Double?, generated: Double?) {
-        if (calculated == null) {
-            System.out.printf("%5d | %8s | %.1f\n", num, "", generated)
-        } else if (generated == null) {
-            System.out.printf("%5d | %.1f | %s\n", num, calculated, "")
-        } else {
-            val diff = abs(calculated - generated)
-            System.out.printf("%5d | %.1f | %.1f | %.1f\n", num, calculated, generated, diff)
-        }
     }
 }

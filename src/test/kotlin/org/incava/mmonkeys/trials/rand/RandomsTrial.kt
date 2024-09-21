@@ -52,7 +52,7 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
 
     private fun `int numChars List StringBuffer`() {
         val list = Keys.fullList()
-        val sb = StringBuilder()
+        val sb = StringBuffer()
         runTest {
             val x = random.nextInt(numChars)
             val y = list[x]

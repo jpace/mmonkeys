@@ -5,7 +5,7 @@ import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import org.incava.rando.RandCalcList
 import kotlin.random.Random
 
-class StrCalcLongDecode : StrRand() {
+class StrCalcLongDecode : StrLenRand() {
     var overruns = 0L
     private val lengthRand = RandCalcList(NUM_CHARS + 1, 100, 10000)
     private val rangesEncoded = (1..13).associateWith { length ->
@@ -13,11 +13,13 @@ class StrCalcLongDecode : StrRand() {
         encoded to (encoded + 1) * 26
     }
 
+    override fun randomLength() = lengthRand.nextInt()
+
     override fun randInt(limit: Int) = Random.nextInt(limit)
 
     fun randLong(limit: Long) = Random.nextLong(limit)
 
-    fun getString(length: Int): String {
+    override fun getString(length: Int): String {
         val rangeEncoded = rangesEncoded[length] ?: return "??!"
         val range = rangeEncoded.first * 25 + 26
         val randInRange = randLong(range)
@@ -38,6 +40,6 @@ class StrCalcLongDecode : StrRand() {
         if (len > 13) {
             ++overruns
         }
-        return if (len > filter) "" else getString(len)
+        return if (len > filter) { ++filtered; ""}  else getString(len)
     }
 }

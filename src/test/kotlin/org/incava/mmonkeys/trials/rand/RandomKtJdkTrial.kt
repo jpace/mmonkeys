@@ -3,10 +3,12 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.mmonkeys.trials.base.Profiler
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
+import kotlin.random.asJavaRandom
 
 class RandomKtJdkTrial(private val numChars: Int, numInvokes: Long, trialInvokes: Int) :
     Profiler(numInvokes, trialInvokes) {
     private val ktRandom = Random.Default
+    private val ktRandom2 = Random.nextInt()
     private val jdkRandom = java.util.Random()
 
     fun run() {

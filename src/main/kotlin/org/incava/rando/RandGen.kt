@@ -2,7 +2,7 @@ package org.incava.rando
 
 import kotlin.math.roundToInt
 
-abstract class RandGen(size: Int, numSlots: Int, numTrials: Int) : RandInt(size) {
+abstract class RandGen(size: Int, val numSlots: Int, numTrials: Int) : RandInt(size) {
     val slots: Map<Int, Int>
     val list: List<Int>
 

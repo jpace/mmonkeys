@@ -27,9 +27,9 @@ abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : 
         }
         slots = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
             .mapValues { it.value.roundToInt() }
-        Console.info("slots", slots)
+//        Console.info("slots", slots)
         list = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
             .map { it.value.roundToInt() }
-        Console.info("list", list)
+ //       Console.info("list", list)
     }
 }

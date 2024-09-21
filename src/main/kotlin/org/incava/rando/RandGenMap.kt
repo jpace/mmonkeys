@@ -4,7 +4,7 @@ class RandGenMap(size: Int, numSlots: Int, numTrials: Int) : RandGen(size, numSl
     val map = slots
 
     override fun nextInt(): Int {
-        val rnd = random.nextInt(100)
+        val rnd = random.nextInt(numSlots)
         return map.getOrElse(rnd) { 0 }
     }
 }

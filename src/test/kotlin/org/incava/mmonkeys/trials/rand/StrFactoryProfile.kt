@@ -11,7 +11,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
     fun randInt(limit: Int) = Random.nextInt(limit)
     fun randCharAz() = randInt(StrRand.Constants.NUM_CHARS)
 
-    fun viaStringBuilderUnsized() : String {
+    fun `string builder unsized`() : String {
         val length = randInt(range)
         val sb = StringBuilder()
         repeat(length) {
@@ -21,7 +21,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         return sb.toString()
     }
 
-    fun viaStringBuilderSized() : String {
+    fun `string builder sized`() : String {
         val length = randInt(range)
         val sb = StringBuilder(length)
         repeat(length) {
@@ -31,7 +31,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         return sb.toString()
     }
 
-    fun viaStringBufferUnsized() : String {
+    fun `string buffer unsized`() : String {
         val length = randInt(range)
         val sb = StringBuffer()
         repeat(length) {
@@ -41,7 +41,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         return sb.toString()
     }
 
-    fun viaStringBufferSized() : String {
+    fun `string buffer sized`() : String {
         val length = randInt(range)
         val sb = StringBuffer(length)
         repeat(length) {
@@ -51,17 +51,17 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         return sb.toString()
     }
 
-    fun viaByteArrayUnsized() : String {
+    fun `byte list`() : String {
         val length = randInt(range)
         val bytes = mutableListOf<Byte>()
-        repeat(length) { index ->
+        repeat(length) {
             val n = randCharAz()
             bytes += ('a' + n).toByte()
         }
         return String(bytes.toByteArray())
     }
 
-    fun viaByteArraySized() : String {
+    fun `byte array`() : String {
         val length = randInt(range)
         val bytes = ByteArray(length)
         repeat(length) { index ->
@@ -71,23 +71,45 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         return String(bytes)
     }
 
+    fun `char list`() : String {
+        val length = randInt(range)
+        val chars = mutableListOf<Char>()
+        repeat(length) {
+            val n = randCharAz()
+            chars += 'a' + n
+        }
+        return chars.joinToString()
+    }
+
+    fun `char array`() : String {
+        val length = randInt(range)
+        val chars = CharArray(length)
+        repeat(length) { index ->
+            val n = randCharAz()
+            chars[index] = 'a' + n
+        }
+        return chars.joinToString()
+    }
+
     private fun addFilters(name: String, generator: () -> String) {
         profiler.add(name) { generator() }
     }
 
     fun profile() {
-        addFilters("builder sized", ::viaStringBuilderSized)
-        addFilters("builder unsized", ::viaStringBuilderUnsized)
-        addFilters("buffer sized", ::viaStringBufferSized)
-        addFilters("buffer unsized", ::viaStringBufferUnsized)
-        addFilters("byte array sized", ::viaByteArraySized)
-        addFilters("byte array unsized", ::viaByteArrayUnsized)
+        addFilters("buffer sized", ::`string buffer sized`)
+        addFilters("buffer unsized", ::`string buffer unsized`)
+        addFilters("builder sized", ::`string builder sized`)
+        addFilters("builder unsized", ::`string builder unsized`)
+        addFilters("byte array", ::`byte array`)
+        addFilters("byte list", ::`byte list`)
+        // addFilters("char array", ::`char array`)
+        // addFilters("char list", ::`char list`)
         profiler.runAll()
         profiler.showResults(SortType.BY_INSERTION)
     }
 }
 
 fun main() {
-    val obj = StrFactoryProfile(10_000_000L, 3)
+    val obj = StrFactoryProfile(25_000_000L, 3)
     obj.profile()
 }

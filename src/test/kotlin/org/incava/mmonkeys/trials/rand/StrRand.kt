@@ -6,6 +6,7 @@ abstract class StrRand {
     }
 
     fun randCharAzSpace() = randInt(Constants.NUM_CHARS + 1)
+
     fun randCharAz() = randInt(Constants.NUM_CHARS)
 
     abstract fun randInt(limit: Int) : Int

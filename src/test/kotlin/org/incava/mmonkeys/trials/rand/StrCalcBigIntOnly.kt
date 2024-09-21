@@ -9,6 +9,7 @@ import java.math.BigInteger
 class StrCalcBigIntOnly : StrRand() {
     private val lengthRand = RandCalcList(NUM_CHARS + 1, 100, 10000)
     private val maxNumChars = 500
+    var filtered = 0L
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
 
     init {
@@ -37,6 +38,6 @@ class StrCalcBigIntOnly : StrRand() {
 
     override fun get(filter: Int): String {
         val len = lengthRand.nextInt()
-        return if (len > filter) "" else getString(len)
+        return if (len > filter) { ++filtered; ""} else getString(len)
     }
 }

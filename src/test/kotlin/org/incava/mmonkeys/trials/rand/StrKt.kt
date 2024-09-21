@@ -1,18 +1,15 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import kotlin.random.Random
 
 class StrKt : StrRand() {
-    private val random = Random.Default
-
-    override fun randInt(limit: Int) = random.nextInt(limit)
+    override fun randInt(limit: Int) = Random.nextInt(limit)
 
     override fun get(): String {
         val sb = StringBuilder()
         while (true) {
             val n = randCharAzSpace()
-            if (n == NUM_CHARS) {
+            if (n == Constants.NUM_CHARS) {
                 return sb.toString()
             } else {
                 sb.append('a' + n)
@@ -24,7 +21,7 @@ class StrKt : StrRand() {
         val sb = StringBuilder()
         while (true) {
             val n = randCharAzSpace()
-            if (n == NUM_CHARS) {
+            if (n == Constants.NUM_CHARS) {
                 return sb.toString()
             } else {
                 sb.append('a' + n)

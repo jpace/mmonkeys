@@ -10,6 +10,7 @@ class StrCalcBigIntToggle : StrRand() {
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
     val longDecoder = StrCalcLongDecode()
+    var filtered = 0L
 
     init {
         val nChars = BigInteger.valueOf(Constants.NUM_CHARS.toLong())
@@ -41,6 +42,6 @@ class StrCalcBigIntToggle : StrRand() {
 
     override fun get(filter: Int): String {
         val len = lengthRand.nextInt()
-        return if (len > filter) "" else getString(len)
+        return if (len > filter) { ++filtered; ""} else getString(len)
     }
 }
