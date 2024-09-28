@@ -1,6 +1,7 @@
 package org.incava.rando
 
 import org.incava.ikdk.io.Console
+import org.incava.rando.DistributionAssert.assertVariance
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import kotlin.math.abs
@@ -31,19 +32,6 @@ class RandIntGeneratorTest {
 
     fun rotateRight(number: Int, places: Int) : Int {
         return number shr places or (number shl Int.SIZE_BITS - places)
-    }
-
-    private fun checkDistributions(numbers: Map<Int, Int>, until: Int, maxVariance: Double) {
-        val expected = numbers.values.sum() / until
-        Console.info("numbers.#", numbers.size)
-        Console.info("expected", expected)
-        (0 until until).forEach { number ->
-            val count = numbers[number] ?: 0
-            val diff = abs(count - expected)
-            val pct = 100 * diff.toDouble() / expected
-            val str = String.format("%3d - %,7d - %.1f", number, count, pct)
-            assertTrue(pct < maxVariance, str)
-        }
     }
 
     fun showNumberAndBits(n: Int) {
@@ -139,7 +127,7 @@ class RandIntGeneratorTest {
                 Console.info("$num", count)
             }
         }
-        checkDistributions(generated, 100, 1.1)
+        assertVariance(generated, 100, 1.1)
     }
 
     fun multiRandDist2(verbose: Boolean = false, blk: (RandIntGenerator) -> IntArray) {
@@ -156,7 +144,7 @@ class RandIntGeneratorTest {
                 Console.info("$num", count)
             }
         }
-        checkDistributions(generated, 100, 1.1)
+        assertVariance(generated, 100, 1.1)
     }
 
     @Test

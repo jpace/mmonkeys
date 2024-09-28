@@ -1,7 +1,5 @@
 package org.incava.rando
 
-import org.incava.ikdk.io.Console
-
 object BitsString {
     fun toBits(number: Int): String {
         val str = Integer.toBinaryString(number).padStart(Int.SIZE_BITS, '0')
@@ -9,10 +7,7 @@ object BitsString {
     }
 
     fun toBits(number: Long): String {
-        val x = (number shr Int.SIZE_BITS).toInt()
-        val y = (number and Int.MAX_VALUE.toLong()).toInt()
-        Console.info("x", x)
-        Console.info("y", y)
+        val (x, y) = longToInts(number)
         return toBits(x) + '_' + toBits(y)
     }
 
@@ -31,5 +26,16 @@ object BitsString {
         val hexStr = Integer.toHexString(number)
         val hexPadded = hexStr.padStart(8, '0')
         return splitify(hexPadded, '_')
+    }
+
+    fun toHex(number: Long): String {
+        val (x, y) = longToInts(number)
+        return toHex(x) + '_' + toHex(y)
+    }
+
+    fun longToInts(number: Long) : Pair<Int, Int> {
+        val x = (number shr Int.SIZE_BITS).toInt()
+        val y = (number and Int.MAX_VALUE.toLong()).toInt()
+        return x to y
     }
 }

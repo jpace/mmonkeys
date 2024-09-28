@@ -18,4 +18,12 @@ class BitsStringTest {
         val result2 = BitsString.splitify(str2, '_')
         assertEquals("wxyz", result2)
     }
+
+    @Test
+    fun longToInts() {
+        val number =  8_590_897_405_908_228_619L
+        val (x, y) = BitsString.longToInts(number)
+        assertEquals(2_000_224_172, x)
+        assertEquals(352_066_059, y)
+    }
 }
