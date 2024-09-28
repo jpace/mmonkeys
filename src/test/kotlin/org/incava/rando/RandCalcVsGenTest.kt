@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 internal class RandCalcVsGenTest {
     @Test
     fun slots() {
-        // at 10M or so, we get out of heap space errors
+        // @todo - fix this; at 10M or so, we get out of heap space errors
         val numTrials = 1_000_000
         val numSlots = 100
         val gen = object : RandGen(27, numSlots, numTrials) {
@@ -38,41 +38,66 @@ internal class RandCalcVsGenTest {
         }
     }
 
-    private fun findGap(list: List<Int>): Int? {
-        val unique = list.sorted().distinct()
-        return (0 until unique.size - 1).find { unique[it] + 1 != unique[it + 1] }
+    private fun findGap(collection: Collection<Int>): Int? {
+        val unique = collection.sorted().distinct()
+        val index = (0 until unique.size - 1).find { unique[it] + 1 != unique[it + 1] }
+        return if (index == null) -1 else unique[index]
     }
 
     @Test
-    fun findGap() {
+    fun findGap1() {
         // calculated and generated should have the same gap (slot N without N + 1)
         val numTrials = 1_000_000
+        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
         val numSlots = 100
-        val gen = object : RandGen(27, numSlots, numTrials) {
-            override fun nextInt(): Int {
-                TODO("Not yet implemented")
-            }
-        }
-        val calc = object : RandCalc(27, numSlots, numTrials) {
-            override fun nextInt(): Int {
-                TODO("Not yet implemented")
-            }
-        }
+        val numChars = 27
+        findGap(numTrials, numSlots, numChars)
+    }
 
-        println("gen.slots : ${gen.slots}")
-        println("calc.slots: ${calc.slots}")
+    @Test
+    fun findGap2() {
+        // calculated and generated should have the same gap (slot N without N + 1)
+        val numTrials = 1_000_000
+        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
+        val numSlots = 64
+        val numChars = 27
+        findGap(numTrials, numSlots, numChars)
+    }
+
+    @Test
+    fun findGap3() {
+        // calculated and generated should have the same gap (slot N without N + 1)
+        val numTrials = 1_000_000
+        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
+        val numSlots = 64
+        val numChars = 30
+        findGap(numTrials, numSlots, numChars)
+    }
+
+    private fun findGap(numTrials: Int, numSlots: Int, numChars: Int) {
+        // calculated and generated should have the same gap (slot N without N + 1)
+        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
+        val gen = object : RandGen(numChars, numSlots, numTrials) {
+            override fun nextInt(): Int = TODO("Not yet implemented")
+        }
+        val calc = object : RandCalc(numChars, numSlots, numTrials) {
+            override fun nextInt(): Int = TODO("Not yet implemented")
+        }
 
         val genNums = gen.slots.values.toSortedSet().toList()
         val calcNums = calc.slots.values.toSortedSet().toList()
 
         println("genNums : $genNums")
-        println("calcNums: $calcNums")
+        println("calcNums : $calcNums")
 
-        val firstGenGap = findGap(genNums) ?: -1
-        val firstCalcGap = findGap(calcNums) ?: -1
+        println("gen.slots.values : ${gen.slots.values}")
+        println("calc.slots.values : ${calc.slots.values}")
 
-        println("firstGenGap : ${genNums[firstGenGap]}")
-        println("firstCalcGap : ${calcNums[firstCalcGap]}")
+        val firstGenGap = findGap(gen.slots.values) ?: -1
+        val firstCalcGap = findGap(calc.slots.values) ?: -1
+
+        println("firstGenGap : $firstGenGap")
+        println("firstCalcGap : $firstCalcGap")
 
         assertWithin(firstGenGap.toDouble(), firstCalcGap.toDouble(), 1.1, "gap")
     }

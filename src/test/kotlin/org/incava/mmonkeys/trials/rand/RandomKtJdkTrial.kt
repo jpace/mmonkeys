@@ -1,42 +1,58 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.trials.base.Profiler
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.pow
 import kotlin.random.Random
-import kotlin.random.asJavaRandom
 
-class RandomKtJdkTrial(private val numChars: Int, numInvokes: Long, trialInvokes: Int) :
+class RandomKtJdkTrial(val intMax: Int, val longMax: Long, numInvokes: Long, trialInvokes: Int) :
     Profiler(numInvokes, trialInvokes) {
     private val ktRandom = Random.Default
-    private val ktRandom2 = Random.nextInt()
     private val jdkRandom = java.util.Random()
 
+
     fun run() {
+        val xorRand = Random(System.currentTimeMillis())
+        Console.info("xorRand.class", xorRand.javaClass)
+
+        Console.info("intMax", intMax)
+        Console.info("longMax", longMax)
+        Console.info("Int.MAX_VALUE", Int.MAX_VALUE)
+        Console.info("Long.MAX_VALUE", Long.MAX_VALUE)
+
         val profiler = Profiler(numInvokes, trialInvokes)
-        if (numChars == 0) {
-            profiler.add("kt rand next") { ktRandom.nextInt() }
-            profiler.add("jdk rand next") { jdkRandom.nextInt() }
-            val t = ThreadLocalRandom.current()
-            profiler.add("thr local next") { t.nextInt() }
-        } else {
-            profiler.add("kt rand next(ch)") { ktRandom.nextInt(numChars) }
-            profiler.add("jdk rand next(ch)") { jdkRandom.nextInt(numChars) }
-            val t = ThreadLocalRandom.current()
-            profiler.add("thr local next(ch)") { t.nextInt(numChars) }
-        }
+        val t = ThreadLocalRandom.current()
+        profiler.add("kt int") { ktRandom.nextInt() }
+        profiler.add("jdk int") { jdkRandom.nextInt() }
+        profiler.add("thr int") { t.nextInt() }
+        profiler.add("xor int") { xorRand.nextInt() }
+
+        profiler.add("kt long") { ktRandom.nextLong() }
+        profiler.add("jdk long") { jdkRandom.nextLong() }
+        profiler.add("thr long") { t.nextLong() }
+        profiler.add("xor long") { xorRand.nextLong() }
+
+        profiler.add("kt < int") { ktRandom.nextInt(intMax) }
+        profiler.add("jdk < int") { jdkRandom.nextInt(intMax) }
+        profiler.add("thr < int") { t.nextInt(intMax) }
+        profiler.add("xor < int") { xorRand.nextInt(intMax) }
+
+        profiler.add("kt < long") { ktRandom.nextLong(longMax) }
+        // does not exist:
+        // profiler.add("jdk < long") { jdkRandom.nextLong(maxLong) }
+        profiler.add("thr < long") { t.nextLong(longMax) }
+        profiler.add("xor < long") { xorRand.nextLong(longMax) }
         profiler.runAll()
         profiler.showResults()
     }
 }
 
 fun main() {
-    val factor = 500_000L
-    val numInvokes = listOf(1000)
+    val numInvokes = 1_000_000_000L
     val trialInvokes = 5
-    numInvokes.forEach { invs ->
-        listOf(0, 27).forEach { numChars ->
-            val obj = RandomKtJdkTrial(numChars, invs * factor, trialInvokes)
-            obj.run()
-        }
-    }
+    val maxInt = 27
+    val maxLong = 2.0.pow(53).toLong()
+    val obj = RandomKtJdkTrial(maxInt, maxLong, numInvokes, trialInvokes)
+    obj.run()
 }
