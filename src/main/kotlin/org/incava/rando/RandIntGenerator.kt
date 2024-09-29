@@ -1,6 +1,5 @@
 package org.incava.rando
 
-import org.incava.ikdk.io.Console
 import kotlin.math.abs
 import kotlin.random.Random
 

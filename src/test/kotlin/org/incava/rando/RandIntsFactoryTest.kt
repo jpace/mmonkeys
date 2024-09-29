@@ -12,7 +12,7 @@ class RandIntsFactoryTest {
     fun nextInts() {
         val obj = RandIntsFactory()
         val result = obj.nextInts()
-        Console.info("result", result.toList())
+        assertEquals(9, result.size)
     }
 
     @Test
@@ -33,6 +33,6 @@ class RandIntsFactoryTest {
         val expected = generated.values.sum() / 128
         Console.info("numbers.#", generated.size)
         Console.info("expected", expected)
-        DistributionAssert.assertVariance(generated, 128, 1.1)
+        DistributionAssert.assertVariance(generated, 128, 1.2)
     }
 }

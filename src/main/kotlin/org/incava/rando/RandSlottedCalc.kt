@@ -1,14 +1,9 @@
 package org.incava.rando
 
-import org.incava.ikdk.io.Console
 import kotlin.math.pow
-import kotlin.math.roundToInt
 
-abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : RandInt(size) {
-    val slots: Map<Int, Int>
-    val list: List<Int>
-
-    init {
+object RandCalculator {
+    fun calculate(size: Int, numSlots: Int, numIterations: Int) : Map<Int, Pair<Int, Int>> {
         var iteration = 0
         var count = 1
         val factor = (size - 1).toDouble() / size
@@ -25,11 +20,6 @@ abstract class RandCalc(size: Int, val numSlots: Int, val numIterations: Int) : 
             }
             count += 1
         }
-        slots = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
-            .mapValues { it.value.roundToInt() }
-//        Console.info("slots", slots)
-        list = bySlot.mapValues { it.value.second.toDouble() / it.value.first }
-            .map { it.value.roundToInt() }
- //       Console.info("list", list)
+        return bySlot
     }
 }

@@ -6,7 +6,7 @@ import org.incava.rando.RandIntGenerator
 import org.incava.rando.RandIntsFactory
 import kotlin.random.Random
 
-private class RandomMultiProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
+private class RandIntsProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
     val random = Random.Default
 
     fun ktNextInts() {
@@ -45,6 +45,6 @@ private class RandomMultiProfile(private val numInvokes: Long, private val trial
 }
 
 fun main() {
-    val obj = RandomMultiProfile(10_000_000L, 5)
+    val obj = RandIntsProfile(10_000_000L, 5)
     obj.profile()
 }

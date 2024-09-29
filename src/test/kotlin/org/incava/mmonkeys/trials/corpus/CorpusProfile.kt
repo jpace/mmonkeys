@@ -8,7 +8,7 @@ import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.trials.base.Profiler
 import org.incava.mmonkeys.type.Typewriter
-import org.incava.rando.RandCalcMap
+import org.incava.rando.RandSlottedCalcMap
 
 class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
     private val numChars = 27
@@ -22,7 +22,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
         val lengthCorpus1 = LengthCorpus(words.toList())
         val lengthCorpus2 = LengthCorpus(words.toList())
         val profiler = Profiler(numInvokes, trialInvokes)
-        val calc1 = RandCalcMap(numChars, 100, 10000)
+        val calc1 = RandSlottedCalcMap(numChars, 100, 10000)
         var mapMatches = 0
         profiler.add("linked hash map") {
             val length = calc1.nextInt()

@@ -36,7 +36,6 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
         filters.forEach { num -> profiler.add("$name $num") { generator.get(num) } }
     }
 
-    ;
     fun profile(args: List<String>) {
         val calcList = StrCalcList()
         val calcListBytes = StrCalcListBytes()
@@ -56,9 +55,9 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
             "calc - list - builder" to calcList,
             "calc - map - builder" to calcMap,
             "calc - list - bytes" to calcListBytes,
-//            "calc - long - decode" to calcLongDecode,
-//            "calc - big - decode (only)," to calcBigIntOnly,
-//            "calc - big - decode (toggle)," to bigIntToggle,
+            "calc - long - decode" to calcLongDecode,
+            "calc - big - decode (only)," to calcBigIntOnly,
+            "calc - big - decode (toggle)," to bigIntToggle,
         )
         val map2 = mapOf(
             "kt" to ::StrKt,
@@ -101,11 +100,19 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) {
         filtered.forEach { (name, gen) ->
             Console.info("$name filtered", gen.filtered)
         }
+
+        val showdown = profiler.spawn(profiler.functions.size / 3, 5)
+        showdown.runAll()
+        showdown.showResults(SortType.BY_INSERTION)
+
+        val showdown2 = profiler.spawn(showdown.functions.size / 3, 5)
+        showdown2.runAll()
+        showdown2.showResults(SortType.BY_INSERTION)
     }
 }
 
 fun main(args: Array<String>) {
     println("args: ${args.toList()}")
-    val obj = RandomStringProfile(20_000_000L, 5)
+    val obj = RandomStringProfile(1_000_000L, 5)
     obj.profile(args.toList())
 }

@@ -2,7 +2,7 @@ package org.incava.rando
 
 import kotlin.random.Random
 
-abstract class RandInt(val size: Int) {
+abstract class RandInt {
     val random = Random.Default
 
     /**

@@ -2,12 +2,12 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.number.StringEncoderV3
 import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
-import org.incava.rando.RandCalcList
+import org.incava.rando.RandSlottedCalcList
 import kotlin.random.Random
 
 class StrCalcLongDecode : StrLenRand() {
     var overruns = 0L
-    private val lengthRand = RandCalcList(NUM_CHARS + 1, 100, 10000)
+    private val lengthRand = RandSlottedCalcList(NUM_CHARS + 1, 100, 10000)
     private val rangesEncoded = (1..13).associateWith { length ->
         val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
         encoded to (encoded + 1) * 26

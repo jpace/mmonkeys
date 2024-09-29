@@ -6,7 +6,7 @@ import java.time.Duration
 
 open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
     val durations = LinkedHashMap<String, MutableList<Duration>>()
-    private val functions = mutableMapOf<String, () -> Unit>()
+    val functions = mutableMapOf<String, () -> Unit>()
 
     fun <K, V> addToList(map: MutableMap<K, MutableList<V>>, key: K, value: V) {
         map.computeIfAbsent(key) { mutableListOf() }.also { it.add(value) }

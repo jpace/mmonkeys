@@ -8,7 +8,8 @@ class BitsMathTest {
     fun testIntOutput() {
         val number =  352_066_059
         val bits = Integer.toBinaryString(number).padStart(Int.SIZE_BITS, '0')
-        println("$bits ($number)")
+        val num = String.format("%,d", number)
+        println("$bits ($num)")
         repeat(4) {
             val chars = bits.substring(bits.length - 7 * (it + 1), bits.length - 7 * it)
             val indent = " ".repeat(bits.length - 7 * (it + 1))
@@ -26,10 +27,9 @@ class BitsMathTest {
         Console.info("y", y)
         val xbits = Integer.toBinaryString(x).padStart(Int.SIZE_BITS, '0')
         val ybits = Integer.toBinaryString(y).padStart(Int.SIZE_BITS, '0')
-        Console.info("xbits", xbits)
-        Console.info("ybits", ybits)
         val bits = xbits + ybits
-        println("$bits ($number)")
+        val num = String.format("%,d", number)
+        println("$bits ($num)")
         repeat(9) {
             val chars = bits.substring(bits.length - 7 * (it + 1), bits.length - 7 * it)
             val indent = " ".repeat(bits.length - 7 * (it + 1))
