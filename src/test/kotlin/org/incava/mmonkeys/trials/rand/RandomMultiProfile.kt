@@ -37,10 +37,14 @@ private class RandomMultiProfile(private val numInvokes: Long, private val trial
 
         profiler.runAll()
         profiler.showResults(SortType.BY_INSERTION)
+
+        val showdown = profiler.spawn(4, 10)
+        showdown.runAll()
+        showdown.showResults(SortType.BY_INSERTION)
     }
 }
 
 fun main() {
-    val obj = RandomMultiProfile(4 * 25_000_000L, 5)
+    val obj = RandomMultiProfile(10_000_000L, 5)
     obj.profile()
 }

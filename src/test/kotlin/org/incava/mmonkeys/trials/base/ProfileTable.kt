@@ -18,10 +18,15 @@ data class RunStats(
     val overallAvg: Double,
 ) {
     fun average() = Durations.average(durations)
-    fun totalDuration() = durations.sumOf { it.toMillis() }
-    fun minimumDuration() = durations.minOf { it.toMillis() }
-    fun maximumDuration() = durations.maxOf { it.toMillis() }
-    fun variance() = maximumDuration() - minimumDuration()
+    fun totalDuration(): Duration = ofMillis(durations.sumOf { it.toMillis() })
+    fun minimumDuration(): Duration = ofMillis(durations.minOf { it.toMillis() })
+    fun maximumDuration(): Duration = ofMillis(durations.maxOf { it.toMillis() })
+    fun variance(): Duration {
+        return ofMillis(maximumDuration().toMillis() - minimumDuration().toMillis())
+    }
+    fun variancePct(): Double {
+        return 100.0 * variance().toMillis() / average().toMillis()
+    }
 }
 
 enum class SortType {
@@ -58,7 +63,7 @@ class ProfileTable : Table(
         return byAverage.associateWith { runs.getOrElse(it) { listOf() } }
     }
 
-    fun typeToFunction(type: SortType) : MapSorter {
+    fun typeToFunction(type: SortType): MapSorter {
         return when (type) {
             SortType.BY_DURATION -> ::byDuration
             SortType.BY_NAME -> ::byName
@@ -74,26 +79,27 @@ class ProfileTable : Table(
         val sorter = typeToFunction(sortType)
         val ordered = sorter(runs)
         ordered.forEach { (name, durations) ->
-            showRun(name, durations, numInvokes, overallAvg)
+            val stats = RunStats(durations, numInvokes, overallAvg)
+            showRun(name, stats, numInvokes, overallAvg)
         }
         writeBreak('=')
-        showRun("average", runs.values.map { Durations.average(it) }, numInvokes, overallAvg)
+        val stats = RunStats(runs.values.map { Durations.average(it) }, numInvokes, overallAvg)
+        showRun("average", stats, numInvokes, overallAvg)
     }
 
-    fun showRun(name: String, durations: List<Duration>, numInvokes: Long, overallAvg: Double) {
-        val stats = RunStats(durations, numInvokes, overallAvg)
+    fun showRun(name: String, stats: RunStats, numInvokes: Long, overallAvg: Double) {
         val avg = stats.average().toMillis()
         writeRow(
             name,
             numInvokes,
             if (avg > 0) numInvokes / avg else -1,
             stats.average(),
-            ofMillis(stats.totalDuration()),
+            stats.totalDuration(),
             100.0 * stats.average().toMillis() / overallAvg,
-            ofMillis(stats.variance()),
-            (100.0 * stats.variance()) / stats.average().toMillis(),
-            ofMillis(stats.minimumDuration()),
-            ofMillis(stats.maximumDuration())
+            stats.variance(),
+            stats.variancePct(),
+            stats.minimumDuration(),
+            stats.maximumDuration()
         )
     }
 }

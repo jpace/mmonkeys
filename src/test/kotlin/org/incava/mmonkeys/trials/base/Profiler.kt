@@ -1,38 +1,37 @@
 package org.incava.mmonkeys.trials.base
 
-import org.incava.ikdk.io.Console
 import org.incava.time.Durations
+import org.incava.time.Durations.measureDuration
 import java.time.Duration
-
-typealias DurationFunction = () -> Duration
 
 open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
     val durations = LinkedHashMap<String, MutableList<Duration>>()
-    private val functions = mutableMapOf<String, DurationFunction>()
+    private val functions = mutableMapOf<String, () -> Unit>()
 
-    fun add(name: String, block: () -> Unit) {
-        functions[name] = { timedFunction(block) }
+    fun <K, V> addToList(map: MutableMap<K, MutableList<V>>, key: K, value: V) {
+        map.computeIfAbsent(key) { mutableListOf() }.also { it.add(value) }
     }
 
-    fun add2(name: String, block: () -> Duration) {
+    fun add(name: String, block: () -> Unit) {
         functions[name] = block
     }
 
-    private fun timedFunction(block: () -> Unit) = Durations.measureDuration {
-        (0 until numInvokes).forEach { _ -> block() }
-    }.second
-
     fun runAll(): Map<String, List<Duration>> {
-        val indexed = functions.entries.withIndex().associate { it.index to it.value }
+        return run(functions, trialInvokes)
+    }
+
+    fun run(funcs: Map<String, () -> Unit>, numTrials: Int): Map<String, List<Duration>> {
+        val indexed = funcs.entries.withIndex().associate { it.index to it.value }
         indexed.forEach { (index, entry) ->
             println("$index - ${entry.key}")
         }
-        repeat(trialInvokes) { trialInvoke ->
-            print("$trialInvoke / $trialInvokes")
+        repeat(numTrials) { trial ->
+            print("$trial / $numTrials")
             indexed.entries.shuffled().forEach { (index, entry) ->
                 print(" . $index")
-                val duration = entry.value()
-                durations.computeIfAbsent(entry.key) { mutableListOf() }.also { it.add(duration) }
+                val block = entry.value
+                val duration = measureDuration { (0 until numInvokes).forEach { _ -> block() } }
+                addToList(durations, entry.key, duration.second)
                 Thread.sleep(100L)
             }
             println(".")
@@ -40,9 +39,19 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
         return durations
     }
 
+    fun spawn(narrowTo: Int, multiple: Int): Profiler {
+        val showdown = Profiler(numInvokes * multiple, trialInvokes)
+        val maxDuration = durations.values.map { Durations.average(it) }.sorted()[narrowTo - 1]
+        functions.forEach { (name, func) ->
+            if (Durations.average(durations[name]!!) <= maxDuration) {
+                showdown.add(name, func)
+            }
+        }
+        return showdown
+    }
+
     fun showResults(sortType: SortType = SortType.BY_NAME) {
         val table = ProfileTable()
-        Console.info("durations", durations)
         table.show(durations.toSortedMap(), trialInvokes, numInvokes, sortType)
         println()
     }
