@@ -7,7 +7,7 @@ internal class RandSlottedCalcMapTest {
     fun nextInt() {
         val numSlots = 100
         val numIterations = 10_000_000
-        val obj = RandSlottedCalcMap(27, numSlots, numIterations)
+        val obj = RandSlotsFactory.calcMap(27, numSlots, numIterations)
         RndSlotsAssertions.assertNextInt(obj)
     }
 
@@ -15,7 +15,7 @@ internal class RandSlottedCalcMapTest {
     fun slotValue() {
         val numSlots = 100
         val numIterations = 10_000_000
-        val obj = RandSlottedCalcMap(27, numSlots, numIterations)
+        val obj = RandSlotsFactory.calcMap(27, numSlots, numIterations)
         RndSlotsAssertions.assertSlotValues(obj)
     }
 }

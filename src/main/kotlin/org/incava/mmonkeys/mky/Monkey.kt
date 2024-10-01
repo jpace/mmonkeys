@@ -3,10 +3,11 @@ package org.incava.mmonkeys.mky
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.rando.RandInt
 
 abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     val monitors = mutableListOf<MonkeyMonitor>()
-    val rand = RandomFactory.getCalculated(typewriter.numChars())
+    val rand : RandInt = RandomFactory.getCalculated(typewriter.numChars())
     var totalKeystrokes = 0L
     val matchKeystrokes = mutableMapOf<Int, Int>()
 

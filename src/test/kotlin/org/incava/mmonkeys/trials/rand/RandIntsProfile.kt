@@ -30,7 +30,6 @@ private class RandIntsProfile(private val numInvokes: Long, private val trialInv
         profiler.add("generator v2") { generator.nextInts2() }
         profiler.add("generator v3") { generator.nextInts3() }
         profiler.add("generator v4") { generator.nextInts4() }
-        profiler.add("generator v5") { generator.nextInts5() }
         profiler.add("factory ints") { factory.nextInts() }
         profiler.add("random nextInt(num)", ::ktNextInts)
         profiler.add("random nextLong(num)", ::ktNextLong)

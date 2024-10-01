@@ -2,10 +2,7 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.trials.base.Profiler
 import org.incava.mmonkeys.trials.base.SortType
-import org.incava.rando.RandSlottedCalcMap
-import org.incava.rando.RandSlottedGenList
-import org.incava.rando.RandSlottedGenMap
-import org.incava.rando.RandSlottedCalcList
+import org.incava.rando.RandSlotsFactory
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
 
@@ -16,28 +13,28 @@ class RandomsProfile(private val numInvokes: Long, private val trialInvokes: Int
         val numSlots = 100
         val numTrials = 10_000
         val profiler = Profiler(numInvokes, trialInvokes)
-        val calc1 = RandSlottedCalcMap(numChars, numSlots, numTrials)
+        val calc1 = RandSlotsFactory.calcMap(numChars, numSlots, numTrials)
         profiler.add("calc map " + calc1.numSlots) { calc1.nextInt() }
 
-        val calc2 = RandSlottedCalcMap(numChars, numSlots, numTrials)
+        val calc2 = RandSlotsFactory.calcMap(numChars, numSlots, numTrials)
         profiler.add("calc map " + calc2.numSlots) { calc2.nextInt() }
 
-        val listCalc1 = RandSlottedCalcList(numChars, numSlots, numTrials)
+        val listCalc1 = RandSlotsFactory.calcList(numChars, numSlots, numTrials)
         profiler.add("calc list $numTrials") { listCalc1.nextInt() }
 
-        val listCalc2 = RandSlottedCalcList(numChars, numSlots, numTrials)
+        val listCalc2 = RandSlotsFactory.calcList(numChars, numSlots, numTrials)
         profiler.add("calc list $numTrials") { listCalc2.nextInt() }
 
-        val gen1 = RandSlottedGenMap(numChars, 10_000, 10_000)
+        val gen1 = RandSlotsFactory.genMap(numChars, 10_000, 10_000)
         profiler.add("gen map 10000") { gen1.nextInt() }
 
-        val gen2 = RandSlottedGenMap(numChars, 100, numSlots)
+        val gen2 = RandSlotsFactory.genMap(numChars, 100, numSlots)
         profiler.add("gen map 100") { gen2.nextInt() }
 
-        val listGen1 = RandSlottedGenList(numChars, 10_000, numTrials)
+        val listGen1 = RandSlotsFactory.genList(numChars, 10_000, numTrials)
         profiler.add("gen list 10000") { listGen1.nextInt() }
 
-        val listGen2 = RandSlottedGenList(numChars, numSlots, numTrials)
+        val listGen2 = RandSlotsFactory.genList(numChars, numSlots, numTrials)
         profiler.add("gen list 100") { listGen2.nextInt() }
 
         val kt = Random

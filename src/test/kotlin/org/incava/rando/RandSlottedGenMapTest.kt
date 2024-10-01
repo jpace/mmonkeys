@@ -7,7 +7,7 @@ internal class RandSlottedGenMapTest {
     fun nextInt() {
         val numSlots = 100
         val numTrials = 1_000_000
-        val obj = RandSlottedGenMap(27, numSlots, numTrials)
+        val obj = RandSlotsFactory.genMap(27, numSlots, numTrials)
         RndSlotsAssertions.assertNextInt(obj)}
 
     @Test
@@ -15,7 +15,7 @@ internal class RandSlottedGenMapTest {
         val numSlots = 100
         // at 10M or so, we get out of heap space errors
         val numTrials = 1_000_000
-        val obj = RandSlottedGenMap(27, numSlots, numTrials)
+        val obj = RandSlotsFactory.genMap(27, numSlots, numTrials)
         RndSlotsAssertions.assertSlotValues(obj)
     }
 }

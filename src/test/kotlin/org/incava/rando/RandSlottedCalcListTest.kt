@@ -7,7 +7,7 @@ class RandSlottedCalcListTest {
     fun nextInt() {
         val numSlots = 100
         val numIterations = 10_000_000
-        val obj = RandSlottedCalcList(27, numSlots, numIterations)
+        val obj = RandSlotsFactory.calcList(27, numSlots, numIterations)
         RndSlotsAssertions.assertNextInt(obj)
     }
 
@@ -15,7 +15,7 @@ class RandSlottedCalcListTest {
     fun slotValue() {
         val numSlots = 100
         val numIterations = 10_000_000
-        val obj = RandSlottedCalcList(27, numSlots, numIterations)
+        val obj = RandSlotsFactory.calcList(27, numSlots, numIterations)
         RndSlotsAssertions.assertSlotValues(obj)
     }
 }

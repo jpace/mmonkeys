@@ -11,22 +11,18 @@ internal class RandSlottedCalcVsGenTest {
         // @todo - fix this; at 10M or so, we get out of heap space errors
         val numTrials = 1_000_000
         val numSlots = 100
-        val gen = RandSlottedGenMap(27, numSlots, numTrials)
-        val genResult = gen.map
+        val gen = RandSlotsFactory.genMap(27, numSlots, numTrials)
         val maxDistance = 1.1
-        Console.info("genResult", genResult)
 
-        val calc = RandSlottedCalcMap(27, numSlots, numTrials)
-        val calcResult = calc.map
+        val calc = RandSlotsFactory.calcMap(27, numSlots, numTrials)
 
-        val keys = genResult.keys + calcResult.keys
-        keys.forEach { key ->
-            val g = gen.map[key]
-            val c = calc.map[key]
-            //showComparison(key, c, g)
-            assertNotNull(g, "key: $key")
-            assertNotNull(c, "key: $key")
-            assertWithin(c.toDouble(), g.toDouble(), maxDistance, "key: $key")
+        (0 until numSlots).forEach { slot ->
+            val g = gen.slotValue(slot)
+            val c = calc.slotValue(slot)
+            //showComparison(slot, c, g)
+            assertNotNull(g, "slot: $slot")
+            assertNotNull(c, "slot: $slot")
+            assertWithin(c.toDouble(), g.toDouble(), maxDistance, "slot: $slot")
         }
     }
 
@@ -66,23 +62,27 @@ internal class RandSlottedCalcVsGenTest {
         findGap(numTrials, numSlots, numChars)
     }
 
+    private fun slotValues(obj: RndSlots, numSlots: Int) : List<Int> {
+        return (0 until numSlots)
+            .map { obj.slotValue(it) }
+            .toSortedSet()
+            .toList()
+    }
+
     private fun findGap(numTrials: Int, numSlots: Int, numChars: Int) {
         // calculated and generated should have the same gap (slot N without N + 1)
         // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
-        val gen = RandSlottedGenMap(numChars, numSlots, numTrials)
-        val calc = RandSlottedCalcMap(numChars, numSlots, numTrials)
+        val gen = RandSlotsFactory.genMap(numChars, numSlots, numTrials)
+        val calc = RandSlotsFactory.calcMap(numChars, numSlots, numTrials)
 
-        val genNums = gen.map.values.toSortedSet().toList()
-        val calcNums = calc.map.values.toSortedSet().toList()
+        val genNums = slotValues(gen, numSlots)
+        val calcNums = slotValues(calc, numSlots)
 
         println("genNums : $genNums")
         println("calcNums : $calcNums")
 
-        println("gen.slots.values : ${gen.map.values}")
-        println("calc.map.values : ${calc.map.values}")
-
-        val firstGenGap = findGap(gen.map.values) ?: -1
-        val firstCalcGap = findGap(calc.map.values) ?: -1
+        val firstGenGap = findGap(genNums) ?: -1
+        val firstCalcGap = findGap(calcNums) ?: -1
 
         println("firstGenGap : $firstGenGap")
         println("firstCalcGap : $firstCalcGap")

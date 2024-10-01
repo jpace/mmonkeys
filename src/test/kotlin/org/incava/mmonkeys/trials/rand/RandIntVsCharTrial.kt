@@ -100,12 +100,6 @@ class RandIntVsCharTrial {
             "longValue" to longValue,
             "longValue2" to longValue
         )
-        val trials2 = listOf(
-            "intAppend * $numCharsInt" to intAppend,
-            "longAppend * $numCharsLong" to longAppend,
-            "intValue" to intValue,
-            "longValue" to longValue,
-        )
         val toTest = trials3.map { (name, block) -> InvokeTrial(name, numInvokes, block) }
         val trial = Trial(10, *toTest.toTypedArray())
         trial.run()

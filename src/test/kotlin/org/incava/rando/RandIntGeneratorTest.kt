@@ -29,11 +29,6 @@ class RandIntGeneratorTest {
         multiRandDist { it.nextInts4().toList() }
     }
 
-    @Test
-    fun nextInts5Dist() {
-        multiRandDist { it.nextInts5().toList() }
-    }
-
     private fun multiRandDist(verbose: Boolean = false, blk: (RandIntGenerator) -> List<Int>) {
         val generated = mutableMapOf<Int, Int>()
         val gen = RandIntGenerator()

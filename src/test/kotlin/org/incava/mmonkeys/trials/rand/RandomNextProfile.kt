@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.random.Random
 
-class RandomKtJdkTrial(val intMax: Int, val longMax: Long, numInvokes: Long, trialInvokes: Int) :
+class RandomNextProfile(private val intMax: Int, private val longMax: Long, numInvokes: Long, trialInvokes: Int) :
     Profiler(numInvokes, trialInvokes) {
     private val ktRandom = Random.Default
     private val jdkRandom = java.util.Random()
@@ -49,10 +49,10 @@ class RandomKtJdkTrial(val intMax: Int, val longMax: Long, numInvokes: Long, tri
 }
 
 fun main() {
-    val numInvokes = 1_000_000_000L
+    val numInvokes = 100_000_000L
     val trialInvokes = 5
     val maxInt = 27
     val maxLong = 2.0.pow(53).toLong()
-    val obj = RandomKtJdkTrial(maxInt, maxLong, numInvokes, trialInvokes)
+    val obj = RandomNextProfile(maxInt, maxLong, numInvokes, trialInvokes)
     obj.run()
 }

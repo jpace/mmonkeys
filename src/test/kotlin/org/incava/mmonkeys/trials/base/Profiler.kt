@@ -17,16 +17,12 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
     }
 
     fun runAll(): Map<String, List<Duration>> {
-        return run(functions, trialInvokes)
-    }
-
-    fun run(funcs: Map<String, () -> Unit>, numTrials: Int): Map<String, List<Duration>> {
-        val indexed = funcs.entries.withIndex().associate { it.index to it.value }
+        val indexed = functions.entries.withIndex().associate { it.index to it.value }
         indexed.forEach { (index, entry) ->
             println("$index - ${entry.key}")
         }
-        repeat(numTrials) { trial ->
-            print("$trial / $numTrials")
+        repeat(trialInvokes) { trial ->
+            print("$trial / $trialInvokes")
             indexed.entries.shuffled().forEach { (index, entry) ->
                 print(" . $index")
                 val block = entry.value

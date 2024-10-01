@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.trials.base.Profiler
-import org.incava.rando.RandSlottedCalcMap
-import org.incava.rando.RandSlottedGenMap
+import org.incava.rando.RandSlotsFactory
 import kotlin.math.abs
 
 class GenVsCalcProfile(private val numInvokes: Long, private val trialInvokes: Int) {
@@ -13,11 +12,8 @@ class GenVsCalcProfile(private val numInvokes: Long, private val trialInvokes: I
     fun profile() {
         val size = 27
         val numSlots = 100
-        val calc = RandSlottedCalcMap(size, numSlots, 10000)
-        val gen = RandSlottedGenMap(size, numSlots, 10000)
-
-        calc.map.forEach { (key, value) -> println("calc[$key] = $value") }
-        gen.map.forEach { (key, value) -> println("gen[$key] = $value") }
+        val calc = RandSlotsFactory.calcMap(size, numSlots, 10000)
+        val gen = RandSlotsFactory.genMap(size, numSlots, 10000)
 
         val profiler = Profiler(numInvokes, trialInvokes)
         val calcNumbers = mutableMapOf<Int, Int>()

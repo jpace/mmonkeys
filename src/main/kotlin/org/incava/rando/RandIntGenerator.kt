@@ -42,13 +42,6 @@ class RandIntGenerator {
         return toNumberArray(num3)
     }
 
-    fun nextInts5(): IntArray {
-        val num1 = random.nextInt()
-        val num2 = abs(num1)
-        val num3 = if (num2 >= 100_000_000) num2 % 100_000_000 else num2
-        return toNumberArray(num3)
-    }
-
     private fun toNumberArray(num: Int): IntArray {
         var n = num
         val nums = IntArray(4)
