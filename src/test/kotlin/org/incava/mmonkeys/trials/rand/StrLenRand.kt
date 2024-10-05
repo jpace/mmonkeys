@@ -1,10 +1,12 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.rando.RndSlots
 import kotlin.random.Random
 
-abstract class StrLenRand : StrRand() {
+abstract class StrLenRand(val slots: RndSlots) : StrRand() {
     var filtered: Long = 0L
-    abstract fun randomLength() : Int
+
+    fun randomLength() = slots.nextInt()
 
     override fun randInt(limit: Int) = Random.nextInt(limit)
 

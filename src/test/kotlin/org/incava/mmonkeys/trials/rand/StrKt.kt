@@ -2,7 +2,7 @@ package org.incava.mmonkeys.trials.rand
 
 import kotlin.random.Random
 
-class StrKt : StrRand() {
+open class StrKt : StrRand() {
     override fun randInt(limit: Int) = Random.nextInt(limit)
 
     override fun get(): String {

@@ -6,7 +6,7 @@ import org.incava.rando.RandSlotsFactory
 import java.math.BigInteger
 
 class StrCalcBigIntToggle : StrRand() {
-    private val lengthRand = RandSlotsFactory.calcList(Constants.NUM_CHARS + 1, 100, 10000)
+    private val slots = RandSlotsFactory.calcList(Constants.NUM_CHARS + 1, 100, 10000)
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
     val longDecoder = StrCalcLongDecode()
@@ -36,12 +36,12 @@ class StrCalcBigIntToggle : StrRand() {
     }
 
     override fun get(): String {
-        val len = lengthRand.nextInt()
+        val len = slots.nextInt()
         return getString(len)
     }
 
     override fun get(filter: Int): String {
-        val len = lengthRand.nextInt()
+        val len = slots.nextInt()
         return if (len > filter) { ++filtered; ""} else getString(len)
     }
 }

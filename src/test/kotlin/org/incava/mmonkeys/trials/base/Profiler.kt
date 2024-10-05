@@ -46,6 +46,11 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
         return showdown
     }
 
+    fun spawn() : Profiler {
+        // @todo - make this smarter, based on durations of previous run
+        return spawn(functions.size / 2, 2)
+    }
+
     fun showResults(sortType: SortType = SortType.BY_NAME) {
         val table = ProfileTable()
         table.show(durations.toSortedMap(), trialInvokes, numInvokes, sortType)
