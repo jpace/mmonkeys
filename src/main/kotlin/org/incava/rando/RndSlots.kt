@@ -1,10 +1,10 @@
 package org.incava.rando
 
-abstract class RndSlots(val numSlots: Int) : RandInt() {
+class RndSlots(val numSlots: Int, val slotProvider: (Int) -> Int) : RandInt() {
     override fun nextInt(): Int {
         val index = random.nextInt(numSlots)
         return slotValue(index)
     }
 
-    abstract fun slotValue(slot: Int): Int
+    fun slotValue(slot: Int) = slotProvider(slot)
 }

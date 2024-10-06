@@ -1,6 +1,5 @@
 package org.incava.rando
 
-import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.testutil.assertWithin
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
@@ -9,7 +8,7 @@ internal class RandSlottedCalcVsGenTest {
     @Test
     fun slots() {
         // @todo - fix this; at 10M or so, we get out of heap space errors
-        val numTrials = 1_000_000
+        val numTrials = 10_000_000
         val numSlots = 100
         val gen = RandSlotsFactory.genMap(27, numSlots, numTrials)
         val maxDistance = 1.1
@@ -34,32 +33,17 @@ internal class RandSlottedCalcVsGenTest {
 
     @Test
     fun findGap1() {
-        // calculated and generated should have the same gap (slot N without N + 1)
-        val numTrials = 1_000_000
-        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
-        val numSlots = 100
-        val numChars = 27
-        findGap(numTrials, numSlots, numChars)
+        findGap(100, 27)
     }
 
     @Test
     fun findGap2() {
-        // calculated and generated should have the same gap (slot N without N + 1)
-        val numTrials = 1_000_000
-        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
-        val numSlots = 64
-        val numChars = 27
-        findGap(numTrials, numSlots, numChars)
+        findGap(64, 27)
     }
 
     @Test
     fun findGap3() {
-        // calculated and generated should have the same gap (slot N without N + 1)
-        val numTrials = 1_000_000
-        // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
-        val numSlots = 64
-        val numChars = 30
-        findGap(numTrials, numSlots, numChars)
+        findGap(100, 30)
     }
 
     private fun slotValues(obj: RndSlots, numSlots: Int) : List<Int> {
@@ -69,9 +53,10 @@ internal class RandSlottedCalcVsGenTest {
             .toList()
     }
 
-    private fun findGap(numTrials: Int, numSlots: Int, numChars: Int) {
+    private fun findGap(numSlots: Int, numChars: Int) {
         // calculated and generated should have the same gap (slot N without N + 1)
         // 70 results in a gap at 29-31, which is beyond our longest word of 27 characters
+        val numTrials = 10_000_000
         val gen = RandSlotsFactory.genMap(numChars, numSlots, numTrials)
         val calc = RandSlotsFactory.calcMap(numChars, numSlots, numTrials)
 
