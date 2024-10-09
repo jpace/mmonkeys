@@ -42,7 +42,6 @@ object RandSlotsFactory {
 
     fun generate(size: Int, numTrials: Int): List<Int> {
         val random = Random.Default
-        // @todo - reimplement this to use a map of number -> count
         return (0 until numTrials).map {
             val num = (1 until Int.MAX_VALUE).find { random.nextInt(size) == 0 }
             num ?: throw RuntimeException("not generated")
@@ -52,7 +51,6 @@ object RandSlotsFactory {
     fun generate2(size: Int, numTrials: Int): MutableMap<Int, Int> {
         val map = mutableMapOf<Int, Int>()
         val random = Random.Default
-        // @todo - reimplement this to use a map of number -> count
         repeat(numTrials) { _ ->
             val num = (1 until Int.MAX_VALUE).find { random.nextInt(size) == 0 }
             num ?: throw RuntimeException("not generated")
@@ -61,10 +59,38 @@ object RandSlotsFactory {
         return map
     }
 
-    private fun genSlots(size: Int, numSlots: Int, numTrials: Int): List<Double> {
+    fun genSlots(size: Int, numSlots: Int, numTrials: Int): List<Double> {
         val perSlot = numTrials / numSlots
         val result = generate(size, numTrials)
         return result.chunked(perSlot) { it.average() }
+    }
+
+    fun genSlots2(size: Int, numSlots: Int, numTrials: Int): List<Double> {
+        val perSlot = numTrials / numSlots
+        val numbersToCount = generate2(size, numTrials)
+        val keys = numbersToCount.keys.sorted()
+        var index = 0
+        var current: Pair<Int, Int> = 0 to 0
+        val averages = mutableListOf<Double>()
+        while (index < keys.size) {
+            val number = keys[index]
+            var count = numbersToCount[number] ?: throw RuntimeException("invalid index $index / number $number")
+            while (count > 0) {
+                if (current.first == 0) {
+                    current = 1 to number
+                } else {
+                    current = (current.first + 1) to (current.second + number)
+                    if (current.first == perSlot) {
+                        val avg = current.second.toDouble() / current.first
+                        averages += avg
+                        current = 0 to 0
+                    }
+                }
+                --count
+            }
+            ++index
+        }
+        return averages
     }
 
     private fun calculate(size: Int, numSlots: Int, numIterations: Int) : Map<Int, Pair<Int, Int>> {
