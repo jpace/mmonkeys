@@ -1,9 +1,6 @@
 package org.incava.confile
 
-import org.incava.ikdk.io.Console
 import org.incava.time.Durations.measureDuration
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
     val simulations = LinkedHashMap<String, Simulation>()
@@ -36,39 +33,7 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
     }
 
     fun spawn(): Profiler {
-        val simToAvg = simulations.keys.associateWith { name ->
-            simulations.getValue(name).average().toMillis()
-        }
-        val millis = simToAvg.values
-        val mean = millis.average()
-        val variance = millis.map { (it - mean).pow(2) }.average()
-        val deviation = sqrt(variance)
-        Console.info("millis", millis)
-        Console.info("mean", mean)
-        // Console.info("variance", variance)
-        Console.info("deviation", deviation)
-
-        val shortest = simToAvg.values.minOrNull() ?: throw RuntimeException("no shortest")
-        Console.info("shortest", shortest)
-
-        val multiple = (2000 / shortest).coerceAtMost(2)
-        Console.info("multiple", multiple)
-
-        val nextNumInvokes = numInvokes * multiple
-        val showdown = Profiler(nextNumInvokes, trialInvokes)
-
-        simToAvg.forEach { (name, dur) ->
-            val diff = dur - mean
-            val off = diff / deviation
-            Console.info(name, off)
-            if (off > 1.5) {
-                Console.info("skipping", name)
-            } else {
-                showdown.add(name, simulations.getValue(name).function)
-            }
-        }
-
-        return showdown
+        return Spawner.spawn(this)
     }
 
     fun showResults(sortType: SortType = SortType.BY_NAME) {

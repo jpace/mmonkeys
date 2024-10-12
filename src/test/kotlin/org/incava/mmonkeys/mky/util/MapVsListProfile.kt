@@ -36,6 +36,10 @@ class MapVsListProfile(private val numInvokes: Long, private val trialInvokes: I
 
         profiler.runAll()
         profiler.showResults(SortType.BY_INSERTION)
+
+        val showdown = profiler.spawn()
+        showdown.runAll()
+        showdown.showResults()
     }
 
     private fun generate(size: Int, count: Int): List<Int> = (0..count).map {

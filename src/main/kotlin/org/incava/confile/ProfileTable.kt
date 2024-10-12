@@ -49,7 +49,6 @@ class ProfileTable : Table(
 
     fun show(runs: Map<String, List<Duration>>, trialInvokes: Int, numInvokes: Long, sortType: SortType) {
         val overallAvg = runs.values.map { Durations.average(it).toMillis() }.average()
-        println("overallAvg: ${overallAvg.toLong()}")
         println("trialInvokes: $trialInvokes")
         writeHeader()
         val sorter = typeToFunction(sortType)

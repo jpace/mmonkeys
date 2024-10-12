@@ -2,6 +2,7 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
 import org.incava.confile.Profiler
+import org.incava.confile.SortType
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.random.Random
@@ -44,12 +45,16 @@ class RandomNextProfile(private val intMax: Int, private val longMax: Long, numI
         profiler.add("thr < long") { t.nextLong(longMax) }
         profiler.add("xor < long") { xorRand.nextLong(longMax) }
         profiler.runAll()
-        profiler.showResults()
+        profiler.showResults(SortType.BY_DURATION)
+
+        val showdown = profiler.spawn()
+        showdown.runAll()
+        showdown.showResults(SortType.BY_DURATION)
     }
 }
 
 fun main() {
-    val numInvokes = 100_000_000L
+    val numInvokes = 10_000_000L
     val trialInvokes = 5
     val maxInt = 27
     val maxLong = 2.0.pow(53).toLong()
