@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.trials.base.Profiler
-import org.incava.mmonkeys.trials.base.SortType
+import org.incava.confile.Profiler
+import org.incava.confile.SortType
 import kotlin.random.Random
 
 class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
@@ -102,14 +102,14 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         addFilters("builder unsized", ::`string builder unsized`)
         addFilters("byte array", ::`byte array`)
         addFilters("byte list", ::`byte list`)
-        // addFilters("char array", ::`char array`)
-        // addFilters("char list", ::`char list`)
+        addFilters("char array", ::`char array`)
+        addFilters("char list", ::`char list`)
         profiler.runAll()
         profiler.showResults(SortType.BY_INSERTION)
     }
 }
 
 fun main() {
-    val obj = StrFactoryProfile(25_000_000L, 3)
+    val obj = StrFactoryProfile(10_000_000L, 3)
     obj.profile()
 }

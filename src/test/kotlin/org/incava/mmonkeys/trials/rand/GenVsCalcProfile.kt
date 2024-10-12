@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.trials.base.Profiler
+import org.incava.confile.Profiler
 import org.incava.rando.RandSlotsFactory
 import kotlin.math.abs
 

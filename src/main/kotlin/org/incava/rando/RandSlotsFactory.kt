@@ -40,15 +40,7 @@ object RandSlotsFactory {
         return bySlot.mapValues { it.value.second.toDouble() / it.value.first }
     }
 
-    fun generate(size: Int, numTrials: Int): List<Int> {
-        val random = Random.Default
-        return (0 until numTrials).map {
-            val num = (1 until Int.MAX_VALUE).find { random.nextInt(size) == 0 }
-            num ?: throw RuntimeException("not generated")
-        }.sorted()
-    }
-
-    fun generate2(size: Int, numTrials: Int): MutableMap<Int, Int> {
+    private fun generate(size: Int, numTrials: Int): MutableMap<Int, Int> {
         val map = mutableMapOf<Int, Int>()
         val random = Random.Default
         repeat(numTrials) { _ ->
@@ -61,21 +53,13 @@ object RandSlotsFactory {
 
     fun genSlots(size: Int, numSlots: Int, numTrials: Int): List<Double> {
         val perSlot = numTrials / numSlots
-        val result = generate(size, numTrials)
-        return result.chunked(perSlot) { it.average() }
-    }
-
-    fun genSlots2(size: Int, numSlots: Int, numTrials: Int): List<Double> {
-        val perSlot = numTrials / numSlots
-        val numbersToCount = generate2(size, numTrials)
+        val numbersToCount = generate(size, numTrials)
         val keys = numbersToCount.keys.sorted()
-        var index = 0
         var current: Pair<Int, Int> = 0 to 0
         val averages = mutableListOf<Double>()
-        while (index < keys.size) {
-            val number = keys[index]
-            var count = numbersToCount[number] ?: throw RuntimeException("invalid index $index / number $number")
-            while (count > 0) {
+        keys.forEach { number ->
+            val count = numbersToCount[number] ?: throw RuntimeException("invalid number $number")
+            repeat(count) {
                 if (current.first == 0) {
                     current = 1 to number
                 } else {
@@ -86,9 +70,7 @@ object RandSlotsFactory {
                         current = 0 to 0
                     }
                 }
-                --count
             }
-            ++index
         }
         return averages
     }

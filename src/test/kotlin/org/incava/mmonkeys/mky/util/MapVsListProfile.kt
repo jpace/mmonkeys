@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.mky.util
 
-import org.incava.mmonkeys.trials.base.Profiler
-import org.incava.mmonkeys.trials.base.SortType
+import org.incava.confile.Profiler
+import org.incava.confile.SortType
 import java.util.*
 import kotlin.random.Random
 

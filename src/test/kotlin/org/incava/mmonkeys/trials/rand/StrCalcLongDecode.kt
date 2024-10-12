@@ -14,18 +14,16 @@ class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 10
 
     override fun randInt(limit: Int) = Random.nextInt(limit)
 
-    fun randLong(limit: Long) = Random.nextLong(limit)
-
     override fun getString(length: Int): String {
         val rangeEncoded = rangesEncoded[length] ?: return "??!"
         val range = rangeEncoded.first * 25 + 26
-        val randInRange = randLong(range)
+        val randInRange = Random.nextLong(range)
         val encoded = rangeEncoded.first + randInRange
         return StringEncoderV3.decode(encoded)
     }
 
     override fun get(): String {
-        val len = slots.nextInt()
+        val len = randomLength()
         if (len > 13) {
             ++overruns
         }
@@ -33,7 +31,7 @@ class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 10
     }
 
     override fun get(filter: Int): String {
-        val len = slots.nextInt()
+        val len = randomLength()
         if (len > 13) {
             ++overruns
         }

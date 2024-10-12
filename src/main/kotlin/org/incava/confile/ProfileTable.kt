@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.trials.base
+package org.incava.confile
 
 import org.incava.mesa.DoubleColumn
 import org.incava.mesa.DurationColumn
@@ -7,33 +7,9 @@ import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.time.Durations
 import java.time.Duration
-import java.time.Duration.ofMillis
 
 
 typealias MapSorter = (Map<String, List<Duration>>) -> Map<String, List<Duration>>
-
-data class RunStats(
-    val durations: List<Duration>,
-    val numInvokes: Long,
-    val overallAvg: Double,
-) {
-    fun average() = Durations.average(durations)
-    fun totalDuration(): Duration = ofMillis(durations.sumOf { it.toMillis() })
-    fun minimumDuration(): Duration = ofMillis(durations.minOf { it.toMillis() })
-    fun maximumDuration(): Duration = ofMillis(durations.maxOf { it.toMillis() })
-    fun variance(): Duration {
-        return ofMillis(maximumDuration().toMillis() - minimumDuration().toMillis())
-    }
-    fun variancePct(): Double {
-        return 100.0 * variance().toMillis() / average().toMillis()
-    }
-}
-
-enum class SortType {
-    BY_INSERTION,
-    BY_NAME,
-    BY_DURATION
-}
 
 class ProfileTable : Table(
     listOf(

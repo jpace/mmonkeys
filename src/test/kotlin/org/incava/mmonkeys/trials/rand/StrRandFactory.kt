@@ -3,38 +3,43 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 
-class StrLenRando(slots: RndSlots, val stringProvider: (Int, () -> Int) -> String, val charProvider: (StrRand) -> Int) :
-    StrLenRand(slots) {
-    override fun getString(length: Int) = stringProvider(length) { charProvider(this) }
-}
-
 object StrRandFactory {
-    fun genMapBuild(): StrRand = create(RandSlotsFactory::genMap, StringFactory::buildString)
+    val genList = RandSlotsFactory::genList
+    val genMap = RandSlotsFactory::genMap
+    val calcList = RandSlotsFactory::calcList
+    val calcMap = RandSlotsFactory::calcMap
+    val build = StringFactory::buildString
+    val buffer = StringFactory::bufferString
+    val assemble = StringFactory::assembleString
 
-    fun genMapAssemble(): StrRand = create(RandSlotsFactory::genMap, StringFactory::assembleString)
+    fun genMapBuild(): StrRand = create(genMap, build)
 
-    fun genMapBuffer(): StrRand = create(RandSlotsFactory::genMap, StringFactory::bufferString)
+    fun genMapAssemble(): StrRand = create(genMap, assemble)
 
-    fun genListBuild(): StrRand = create(RandSlotsFactory::genList, StringFactory::buildString)
+    fun genMapBuffer(): StrRand = create(genMap, buffer)
 
-    fun genListAssemble(): StrRand = create(RandSlotsFactory::genList, StringFactory::assembleString)
+    fun genListBuild(): StrRand = create(genList, build)
 
-    fun genListBuffer(): StrRand = create(RandSlotsFactory::genList, StringFactory::bufferString)
+    fun genListAssemble(): StrRand = create(genList, assemble)
 
-    fun calcMapBuild(): StrRand = create(RandSlotsFactory::calcMap, StringFactory::buildString)
+    fun genListBuffer(): StrRand = create(genList, buffer)
 
-    fun calcMapAssemble(): StrRand = create(RandSlotsFactory::calcMap, StringFactory::assembleString)
+    fun calcMapBuild(): StrRand = create(calcMap, build)
 
-    fun calcMapBuffer(): StrRand = create(RandSlotsFactory::calcMap, StringFactory::bufferString)
+    fun calcMapAssemble(): StrRand = create(calcMap, assemble)
 
-    fun calcListBuild(): StrRand = create(RandSlotsFactory::calcList, StringFactory::buildString)
+    fun calcMapBuffer(): StrRand = create(calcMap, buffer)
 
-    fun calcListAssemble(): StrRand = create(RandSlotsFactory::calcList, StringFactory::assembleString)
+    fun calcListBuild(): StrRand = create(calcList, build)
 
-    fun calcListBuffer(): StrRand = create(RandSlotsFactory::calcList, StringFactory::bufferString)
+    fun calcListAssemble(): StrRand = create(calcList, assemble)
+
+    fun calcListBuffer(): StrRand = create(calcList, buffer)
 
     fun create(slotsProvider: (Int, Int, Int) -> RndSlots, stringProvider: (Int, () -> Int) -> String): StrRand {
         val slots = slotsProvider(StrRand.Constants.NUM_CHARS + 1, 100, 10000)
-        return StrLenRando(slots, stringProvider, StrRand::randCharAz)
+        return object : StrLenRand(slots) {
+            override fun getString(length: Int) = stringProvider(length) { (StrRand::randCharAz)(this) }
+        }
     }
 }

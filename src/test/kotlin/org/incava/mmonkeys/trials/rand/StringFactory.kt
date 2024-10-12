@@ -4,8 +4,8 @@ object StringFactory {
     fun buildString(length: Int, charProvider: () -> Int): String {
         val sb = StringBuilder()
         repeat(length) {
-            val ch = 'a' + charProvider()
-            sb.append(ch)
+            val ch = charProvider()
+            sb.append('a' + ch)
         }
         return sb.toString()
     }

@@ -6,7 +6,7 @@ import org.incava.mmonkeys.mky.corpus.HashMapCorpus
 import org.incava.mmonkeys.mky.corpus.LengthCorpus
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.incava.mmonkeys.trials.base.Profiler
+import org.incava.confile.Profiler
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.rando.RandSlotsFactory
 

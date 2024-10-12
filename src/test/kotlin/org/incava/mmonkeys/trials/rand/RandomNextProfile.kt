@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.trials.base.Profiler
+import org.incava.confile.Profiler
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.random.Random

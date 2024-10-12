@@ -1,13 +1,15 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.trials.base.Profiler
-import org.incava.mmonkeys.trials.base.SortType
+import org.incava.confile.Profiler
+import org.incava.confile.SortType
 
 open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
     val profiler = Profiler(numInvokes, trialInvokes)
     val functions: Map<String, ()-> StrRand>
 
     init {
+        val obj = StrRandFactory.create(StrRandFactory.genMap, StrRandFactory.build)
+
         functions = mapOf(
             "calc map builder" to StrRandFactory::calcMapBuild,
             "calc map assemble" to StrRandFactory::calcMapAssemble,
@@ -17,7 +19,7 @@ open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
             "calc list assemble" to StrRandFactory::calcListAssemble,
             "calc list buffer" to StrRandFactory::calcListBuffer,
 
-            "gen map builder" to StrRandFactory::genMapBuild,
+            "gen map builder" to { obj },
             "gen map assemble" to StrRandFactory::genMapAssemble,
             "gen map buffer" to StrRandFactory::genMapBuffer,
 
@@ -60,14 +62,14 @@ open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
 
     open fun profile() {
         profiler.runAll()
-        profiler.showResults(SortType.BY_INSERTION)
+        profiler.showResults(SortType.BY_DURATION)
 
         val showdown = profiler.spawn()
         showdown.runAll()
-        showdown.showResults(SortType.BY_INSERTION)
+        showdown.showResults(SortType.BY_DURATION)
 
         val showdown2 = showdown.spawn()
         showdown2.runAll()
-        showdown2.showResults(SortType.BY_INSERTION)
+        showdown2.showResults(SortType.BY_DURATION)
     }
 }

@@ -15,6 +15,6 @@ class RandomStringLenProfile(numInvokes: Long, trialInvokes: Int) : RandomString
 }
 
 fun main() {
-    val obj = RandomStringLenProfile(5_000_000L, 3)
+    val obj = RandomStringLenProfile(1_000_000L, 5)
     obj.profile()
 }
