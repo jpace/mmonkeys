@@ -6,8 +6,6 @@ class RandomStringProfile(numInvokes: Long, trialInvokes: Int) : RandomStringPro
             val gen = entry()
             profiler.add(key) { gen.get() }
         }
-        profiler.add("jdk", ::StrJdk)
-        profiler.add("kt", ::StrKt)
     }
 }
 

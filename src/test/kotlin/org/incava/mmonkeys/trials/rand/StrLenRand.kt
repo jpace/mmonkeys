@@ -19,6 +19,6 @@ abstract class StrLenRand(val slots: RndSlots) : StrRand() {
 
     override fun get(filter: Int): String {
         val len = randomLength()
-        return if (len > filter) { ++filtered; ""} else getString(len)
+        return if (len > filter) "" else getString(len)
     }
 }

@@ -33,7 +33,7 @@ object Spawner {
         simToAvg.forEach { (name, dur) ->
             val off = (dur - mean) / deviation
             val keep = off < 1.5
-            System.out.printf("%-10.10s | %.2f | %s\n", name, off, keep)
+            System.out.printf("%-24.24s | %5.2f | %s\n", name, off, keep)
             if (keep) {
                 showdown.add(name, current.simulations.getValue(name).function)
             }

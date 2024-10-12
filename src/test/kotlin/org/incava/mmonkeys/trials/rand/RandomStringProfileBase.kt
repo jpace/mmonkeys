@@ -9,28 +9,40 @@ open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
 
     init {
         val obj = StrRandFactory.create(StrRandFactory.genMap, StrRandFactory.build)
+        // we know that list[x] is faster than map[x] where sizes <= 100, so don't always test this:
+        val profileMaps = false
 
-        functions = mapOf(
+        val mapFunctions = mapOf(
             "calc map builder" to StrRandFactory::calcMapBuild,
             "calc map assemble" to StrRandFactory::calcMapAssemble,
             "calc map buffer" to StrRandFactory::calcMapBuffer,
 
-            "calc list builder" to StrRandFactory::calcListBuild,
-            "calc list assemble" to StrRandFactory::calcListAssemble,
-            "calc list buffer" to StrRandFactory::calcListBuffer,
-
             "gen map builder" to { obj },
             "gen map assemble" to StrRandFactory::genMapAssemble,
             "gen map buffer" to StrRandFactory::genMapBuffer,
+        )
+
+        functions = mutableMapOf<String, () -> StrRand>(
+            "calc list builder" to StrRandFactory::calcListBuild,
+            "calc list assemble" to StrRandFactory::calcListAssemble,
+            "calc list buffer" to StrRandFactory::calcListBuffer,
 
             "gen list builder" to StrRandFactory::genListBuild,
             "gen list assemble" to StrRandFactory::genListAssemble,
             "gen list buffer" to StrRandFactory::genListBuffer,
 
             "calc long decode" to ::StrCalcLongDecode,
+            "calc long encoded" to ::StrCalcLongEncoded,
             "calc big decode (only)" to ::StrCalcBigIntOnly,
             "calc big decode (toggle)" to ::StrCalcBigIntToggle,
+
+            "toggle string" to ::StrToggleRand,
+            "toggle any" to ::StrToggleAnyRand,
         )
+
+        if (profileMaps) {
+            functions.putAll(mapFunctions)
+        }
     }
 
     fun addFilters(name: String, generator: StrRand) {

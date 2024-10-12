@@ -42,6 +42,6 @@ class StrCalcBigIntToggle : StrRand() {
 
     override fun get(filter: Int): String {
         val len = slots.nextInt()
-        return if (len > filter) { ++filtered; ""} else getString(len)
+        return if (len > filter) "" else getString(len)
     }
 }

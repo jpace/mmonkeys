@@ -5,7 +5,7 @@ import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import org.incava.rando.RandSlotsFactory
 import kotlin.random.Random
 
-class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 100, 10000)) {
+class StrCalcLongEncoded : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 100, 10000)) {
     var overruns = 0L
     private val rangesEncoded = (1..13).associateWith { length ->
         val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
@@ -19,22 +19,17 @@ class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 10
         val range = rangeEncoded.first * 25 + 26
         val randInRange = Random.nextLong(range)
         val encoded = rangeEncoded.first + randInRange
-        return StringEncoderV3.decode(encoded)
+        // same as StrCalcLongDecode, but no decode
+        return ""
     }
 
     override fun get(): String {
         val len = randomLength()
-        if (len > 13) {
-            ++overruns
-        }
         return getString(len)
     }
 
     override fun get(filter: Int): String {
         val len = randomLength()
-        if (len > 13) {
-            ++overruns
-        }
         return if (len > filter) "" else getString(len)
     }
 }
