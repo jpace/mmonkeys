@@ -16,8 +16,6 @@ object StrRandFactory {
     val buffer = StringFactory::bufferString
     val assemble = StringFactory::assembleString
 
-    fun calcListBuild(): StrRand = create(calcList, build)
-
     fun create(slotsProvider: (Int, Int, Int) -> RndSlots, stringProvider: (Int, () -> Int) -> String): StrRand {
         val slots = slotsProvider(StrRand.Constants.NUM_CHARS + 1, 100, 10000)
         return object : StrLenRand(slots) {

@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
-abstract class StrRand : StrRandSupplier {
+abstract class StrRandAlpha : StrRandSupplier {
     object Constants {
         const val NUM_CHARS : Int = 26
     }

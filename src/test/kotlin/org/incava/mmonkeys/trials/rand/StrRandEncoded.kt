@@ -5,10 +5,7 @@ import kotlin.random.Random
 
 // generates an encoded value (not a string), but fails if the synthesize length is > 13
 class StrRandEncoded(slots: RndSlots) : StrLenRand(slots) {
-    var overruns = 0L
-    val delegate = RandEncoded()
-
-    override fun randInt(limit: Int) = Random.nextInt(limit)
+    private val delegate = RandEncoded()
 
     override fun getString(length: Int): String {
         val encoded = delegate.getEncoded(length)

@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.rando.RndSlots
-import kotlin.random.Random
 
 // RandEncoded, but StrRand if length > 13
 class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
@@ -9,11 +8,9 @@ class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
     val littleGen = RandEncoded()
     val bigGen = StrRandFactory.create(StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
 
-    override fun randInt(limit: Int) = Random.nextInt(limit)
-
     override fun getString(length: Int): String {
         val encoded = littleGen.getEncoded(length)
-        // no decoding
+        // no decoding; return encoded as Any
         // val result = encoded
         return ""
     }
@@ -22,7 +19,7 @@ class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
         val len = randomLength()
         return if (len > 13) {
             ++overruns
-            bigGen.get(len)
+            bigGen.getString(len)
         } else {
             getString(len)
         }
@@ -33,9 +30,17 @@ class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
         return if (len > filter) {
             ""
         } else if (len > 13) {
-            bigGen.getString(filter)
+            bigGen.getString(len)
         } else {
             getString(len)
+        }
+    }
+
+    fun doGet(length: Int): Any {
+        return if (length > 13) {
+            bigGen.getString(length)
+        } else {
+            littleGen.getEncoded(length)
         }
     }
 }

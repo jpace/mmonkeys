@@ -9,8 +9,6 @@ class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
     var overruns = 0L
     val delegate = RandEncoded()
 
-    override fun randInt(limit: Int) = Random.nextInt(limit)
-
     override fun getString(length: Int): String {
         val encoded = delegate.getEncoded(length)
         return StringEncoderV3.decode(encoded)
@@ -20,7 +18,7 @@ class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
         val len = randomLength()
         if (len > 13) {
             ++overruns
-            if (overruns % 100_000L == 0L) {
+            if (overruns % 1_000_000L == 0L) {
                 Console.info("overruns", overruns)
             }
         }
@@ -31,7 +29,7 @@ class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
         val len = randomLength()
         if (len > 13) {
             ++overruns
-            if (overruns % 100_000L == 0L) {
+            if (overruns % 1_000_000L == 0L) {
                 Console.info("overruns", overruns)
             }
         }

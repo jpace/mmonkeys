@@ -8,9 +8,7 @@ import kotlin.random.Random
 class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
     var overruns = 0L
     val littleGen = RandEncoded()
-    val bigGen = StrRandFactory.calcListBuild() as StrLenRand
-
-    override fun randInt(limit: Int) = Random.nextInt(limit)
+    val bigGen = StrRandFactory.create(StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
 
     override fun getString(length: Int): String {
         val encoded = littleGen.getEncoded(length)
@@ -32,7 +30,7 @@ class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
         return if (len > filter) {
             ""
         } else if (len > 13) {
-            bigGen.getString(filter)
+            bigGen.getString(len)
         } else {
             getString(len)
         }
