@@ -1,24 +1,18 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.number.StringEncoderV3
-import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
-import org.incava.rando.RandSlotsFactory
+import org.incava.rando.RndSlots
 import kotlin.random.Random
 
-class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 100, 10000)) {
+class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
     var overruns = 0L
-    private val rangesEncoded = (1..13).associateWith { length ->
-        val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
-        encoded to (encoded + 1) * 26
-    }
+    val delegate = RandEncoded()
 
     override fun randInt(limit: Int) = Random.nextInt(limit)
 
     override fun getString(length: Int): String {
-        val rangeEncoded = rangesEncoded[length] ?: return "??!"
-        val range = rangeEncoded.first * 25 + 26
-        val randInRange = Random.nextLong(range)
-        val encoded = rangeEncoded.first + randInRange
+        val encoded = delegate.getEncoded(length)
         return StringEncoderV3.decode(encoded)
     }
 
@@ -26,6 +20,9 @@ class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 10
         val len = randomLength()
         if (len > 13) {
             ++overruns
+            if (overruns % 100_000L == 0L) {
+                Console.info("overruns", overruns)
+            }
         }
         return getString(len)
     }
@@ -34,6 +31,9 @@ class StrCalcLongDecode : StrLenRand(RandSlotsFactory.calcList(NUM_CHARS + 1, 10
         val len = randomLength()
         if (len > 13) {
             ++overruns
+            if (overruns % 100_000L == 0L) {
+                Console.info("overruns", overruns)
+            }
         }
         return if (len > filter) "" else getString(len)
     }

@@ -11,8 +11,19 @@ class MapVsListGetLtProfile(private val numInvokes: Long, private val trialInvok
         val linkedHashMap = list.associateByTo(linkedMapOf()) { it }
         val hashMap = list.associateByTo(hashMapOf()) { it }
         val treeMap = list.associateByTo(TreeMap()) { it }
+        val array = list.toTypedArray()
 
         val profiler = Profiler(numInvokes, trialInvokes)
+
+        profiler.add("array []") {
+            val index = Random.Default.nextInt(100)
+            array[index]
+        }
+
+        profiler.add("array <") {
+            val index = Random.Default.nextInt(100)
+            if (index < 27) array[index] else 1
+        }
 
         profiler.add("list []") {
             val index = Random.Default.nextInt(100)

@@ -9,56 +9,60 @@ object RandSlotsFactory {
         this[number] = (this[number] ?: 0) + 1
     }
 
+    fun calcArray(size: Int, numSlots: Int, numIterations: Int): RndSlots {
+        val slots = calcSlots(size, numSlots, numIterations).values.toTypedArray()
+        return RndSlots(numSlots) { slot -> slots[slot] }
+    }
+
     fun calcList(size: Int, numSlots: Int, numIterations: Int): RndSlots {
-        val list = calcSlots(size, numSlots, numIterations)
-            .map { it.value.roundToInt() }
-        return RndSlots(numSlots) { slot -> list[slot] }
+        val slots = calcSlots(size, numSlots, numIterations).values.toList()
+        return RndSlots(numSlots) { slot -> slots[slot] }
     }
 
     fun calcMap(size: Int, numSlots: Int, numIterations: Int): RndSlots {
-        val map = calcSlots(size, numSlots, numIterations)
-            .mapValues { it.value.roundToInt() }
-        return RndSlots(numSlots) { slot -> map.getOrDefault(slot, 0) }
+        val slots = calcSlots(size, numSlots, numIterations)
+        return RndSlots(numSlots) { slot -> slots.getValue(slot) }
+    }
+
+    fun genArray(size: Int, numSlots: Int, numIterations: Int): RndSlots {
+        val slots = genSlots(size, numSlots, numIterations).toTypedArray()
+        return RndSlots(numSlots) { slot -> slots[slot] }
     }
 
     fun genList(size: Int, numSlots: Int, numTrials: Int): RndSlots {
         val slots = genSlots(size, numSlots, numTrials)
-            .map { it.roundToInt() }
         return RndSlots(numSlots) { slot -> slots[slot] }
     }
 
     fun genMap(size: Int, numSlots: Int, numTrials: Int): RndSlots {
-        val slots = genSlots(size, numSlots, numTrials)
-            .withIndex()
-            .associate { it.index to it.value }
-            .mapValues { it.value.roundToInt() }
-        return RndSlots(numSlots) { slot -> slots.getOrDefault(slot, 0) }
+        val slots = genSlots(size, numSlots, numTrials).withIndex().associate { it.index to it.value }
+        return RndSlots(numSlots) { slot -> slots.getValue(slot) }
     }
 
-    private fun calcSlots(size: Int, numSlots: Int, numIterations: Int): Map<Int, Double> {
-        val bySlot = calculate(size, numSlots, numIterations)
-        return bySlot.mapValues { it.value.second.toDouble() / it.value.first }
+    fun calcSlots(size: Int, numSlots: Int, numIterations: Int): Map<Int, Int> {
+        return calculate(size, numSlots, numIterations)
+            .mapValues { (it.value.second.toDouble() / it.value.first).roundToInt() }
     }
 
     private fun generate(size: Int, numTrials: Int): MutableMap<Int, Int> {
         val map = mutableMapOf<Int, Int>()
         val random = Random.Default
         repeat(numTrials) { _ ->
-            val num = (1 until Int.MAX_VALUE).find { random.nextInt(size) == 0 }
-            num ?: throw RuntimeException("not generated")
+            val num = (1 until Int.MAX_VALUE)
+                .find { random.nextInt(size) == 0 } ?: throw RuntimeException("not generated")
             map.add(num)
         }
         return map
     }
 
-    fun genSlots(size: Int, numSlots: Int, numTrials: Int): List<Double> {
+    private fun genSlots(size: Int, numSlots: Int, numTrials: Int): List<Int> {
         val perSlot = numTrials / numSlots
         val numbersToCount = generate(size, numTrials)
         val keys = numbersToCount.keys.sorted()
         var current: Pair<Int, Int> = 0 to 0
-        val averages = mutableListOf<Double>()
+        val averages = mutableListOf<Int>()
         keys.forEach { number ->
-            val count = numbersToCount[number] ?: throw RuntimeException("invalid number $number")
+            val count = numbersToCount.getValue(number)
             repeat(count) {
                 if (current.first == 0) {
                     current = 1 to number
@@ -66,7 +70,7 @@ object RandSlotsFactory {
                     current = (current.first + 1) to (current.second + number)
                     if (current.first == perSlot) {
                         val avg = current.second.toDouble() / current.first
-                        averages += avg
+                        averages += avg.roundToInt()
                         current = 0 to 0
                     }
                 }
@@ -75,7 +79,7 @@ object RandSlotsFactory {
         return averages
     }
 
-    private fun calculate(size: Int, numSlots: Int, numIterations: Int) : Map<Int, Pair<Int, Int>> {
+    private fun calculate(size: Int, numSlots: Int, numIterations: Int): Map<Int, Pair<Int, Int>> {
         var iteration = 0
         var count = 1
         val factor = (size - 1).toDouble() / size

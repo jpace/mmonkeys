@@ -10,7 +10,7 @@ class RandomStringLenProfile(numInvokes: Long, trialInvokes: Int) : RandomString
     }
 }
 
-fun main() {
+private fun main() {
     val obj = RandomStringLenProfile(1_000_000L, 5)
     obj.profile()
 }

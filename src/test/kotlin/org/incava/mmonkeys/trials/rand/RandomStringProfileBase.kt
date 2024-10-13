@@ -2,47 +2,58 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
+import org.incava.ikdk.io.Console
+import org.incava.rando.RandSlotsFactory
 
 open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
     val profiler = Profiler(numInvokes, trialInvokes)
-    val functions: Map<String, ()-> StrRand>
+    val functions: Map<String, () -> StrRand>
 
     init {
-        val obj = StrRandFactory.create(StrRandFactory.genMap, StrRandFactory.build)
         // we know that list[x] is faster than map[x] where sizes <= 100, so don't always test this:
         val profileMaps = false
 
-        val mapFunctions = mapOf(
-            "calc map builder" to StrRandFactory::calcMapBuild,
-            "calc map assemble" to StrRandFactory::calcMapAssemble,
-            "calc map buffer" to StrRandFactory::calcMapBuffer,
-
-            "gen map builder" to { obj },
-            "gen map assemble" to StrRandFactory::genMapAssemble,
-            "gen map buffer" to StrRandFactory::genMapBuffer,
+        val slotsProviders = mapOf(
+            "calc array" to StrRandFactory.calcArray,
+            "calc list" to StrRandFactory.calcList,
+            "calc map" to StrRandFactory.calcMap,
+            "gen array" to StrRandFactory.genArray,
+            "gen list" to StrRandFactory.genList,
+            "gen map" to StrRandFactory.genMap,
         )
 
-        functions = mutableMapOf<String, () -> StrRand>(
-            "calc list builder" to StrRandFactory::calcListBuild,
-            "calc list assemble" to StrRandFactory::calcListAssemble,
-            "calc list buffer" to StrRandFactory::calcListBuffer,
-
-            "gen list builder" to StrRandFactory::genListBuild,
-            "gen list assemble" to StrRandFactory::genListAssemble,
-            "gen list buffer" to StrRandFactory::genListBuffer,
-
-            "calc long decode" to ::StrCalcLongDecode,
-            "calc long encoded" to ::StrCalcLongEncoded,
-            "calc big decode (only)" to ::StrCalcBigIntOnly,
-            "calc big decode (toggle)" to ::StrCalcBigIntToggle,
-
-            "toggle string" to ::StrToggleRand,
-            "toggle any" to ::StrToggleAnyRand,
+        val stringProviders = mapOf(
+            "builder" to StrRandFactory.build,
+            "assemble" to StrRandFactory.assemble,
+            "buffer" to StrRandFactory.buffer
         )
 
-        if (profileMaps) {
-            functions.putAll(mapFunctions)
-        }
+        val keys = slotsProviders.keys.filter { profileMaps || !it.contains("map") }
+
+        val functions1 = keys.flatMap { slotsType ->
+            stringProviders.map { (provName, stringProvider) ->
+                "$slotsType $provName" to { StrRandFactory.create(slotsProviders.getValue(slotsType), stringProvider) }
+            }
+        }.toMap()
+
+        val calcList = RandSlotsFactory.calcList(StrRand.Constants.NUM_CHARS + 1, 100, 10000)
+        val calcArray = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 100, 10000)
+
+        functions = mapOf(
+            "calc (array) decode" to { StrRandDecoded(calcArray) },
+            "calc (list) decode" to { StrRandDecoded(calcList) },
+            "calc (array) encoded" to { StrRandEncoded(calcArray) },
+            "calc (list) encoded" to { StrRandEncoded(calcList) },
+            "calc big decode (only)" to { StrCalcBigIntOnly(calcList) },
+            "calc big decode (toggle)" to { StrCalcBigIntToggle(calcList) },
+            "toggle string (array)" to { StrToggleStringRand(calcArray) },
+            "toggle string (list)" to { StrToggleStringRand(calcList) },
+            "toggle any (array)" to { StrToggleAnyRand(calcArray) },
+            "toggle any (list)" to { StrToggleAnyRand(calcList) },
+        ) + functions1
+
+        Console.info("functions", functions)
+        Console.info("functions1", functions1)
     }
 
     fun addFilters(name: String, generator: StrRand) {

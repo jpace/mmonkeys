@@ -1,5 +1,6 @@
 package org.incava.rando
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.testutil.assertWithin
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -11,8 +12,20 @@ class RandSlotsFactoryTest {
     private val numTrials = 10_000_000
 
     @Test
+    fun calcArray() {
+        val obj = RandSlotsFactory.calcArray(numChars, numSlots, numTrials)
+        Console.info("obj", obj)
+        Console.info("obj.numSlots", obj.numSlots)
+        assertAll(
+            { RndSlotsAssertions.assertNextInt(obj) },
+            { RndSlotsAssertions.assertSlotValues(obj) }
+        )
+    }
+
+    @Test
     fun calcList() {
         val obj = RandSlotsFactory.calcList(numChars, numSlots, numTrials)
+        Console.info("obj", obj)
         assertAll(
             { RndSlotsAssertions.assertNextInt(obj) },
             { RndSlotsAssertions.assertSlotValues(obj) }
@@ -95,5 +108,11 @@ class RandSlotsFactoryTest {
         val unique = collection.sorted().distinct()
         val index = (0 until unique.size - 1).find { unique[it] + 1 != unique[it + 1] }
         return if (index == null) -1 else unique[index]
+    }
+
+    @Test
+    fun calcSlots() {
+        val result = RandSlotsFactory.calcSlots(numChars, numSlots, numTrials).values.toList()
+        Console.info("result", result)
     }
 }

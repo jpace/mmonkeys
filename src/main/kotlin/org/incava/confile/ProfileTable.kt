@@ -26,11 +26,11 @@ class ProfileTable : Table(
     ),
     breakInterval = 5
 ) {
-    fun byInsertion(runs: Map<String, List<Duration>>) = runs
+    private fun byInsertion(runs: Map<String, List<Duration>>) = runs
 
-    fun byName(runs: Map<String, List<Duration>>) = runs.toSortedMap()
+    private fun byName(runs: Map<String, List<Duration>>) = runs.toSortedMap()
 
-    fun byDuration(runs: Map<String, List<Duration>>): Map<String, List<Duration>> {
+    private fun byDuration(runs: Map<String, List<Duration>>): Map<String, List<Duration>> {
         // a bit of silliness because map.sortedBy { x } will include only the first element matching x
         val byAverage = runs.keys.sortedBy {
             val durs = runs.getOrElse(it) { listOf() }
@@ -39,7 +39,7 @@ class ProfileTable : Table(
         return byAverage.associateWith { runs.getOrElse(it) { listOf() } }
     }
 
-    fun typeToFunction(type: SortType): MapSorter {
+    private fun typeToFunction(type: SortType): MapSorter {
         return when (type) {
             SortType.BY_DURATION -> ::byDuration
             SortType.BY_NAME -> ::byName
@@ -62,7 +62,7 @@ class ProfileTable : Table(
         showRun("average", stats, numInvokes, overallAvg)
     }
 
-    fun showRun(name: String, stats: RunStats, numInvokes: Long, overallAvg: Double) {
+    private fun showRun(name: String, stats: RunStats, numInvokes: Long, overallAvg: Double) {
         val avg = stats.average().toMillis()
         writeRow(
             name,

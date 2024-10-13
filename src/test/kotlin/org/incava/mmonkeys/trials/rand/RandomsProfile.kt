@@ -22,8 +22,10 @@ class RandomsProfile(numInvokes: Long, trialInvokes: Int = 5) {
     fun profile() {
         add("calc map", RandSlotsFactory::calcMap)
         add("calc list", RandSlotsFactory::calcList)
+        add("calc array", RandSlotsFactory::calcArray)
         add("gen map", RandSlotsFactory::genMap)
         add("gen list", RandSlotsFactory::genList)
+        add("gen array", RandSlotsFactory::genArray)
 
         if (false) {
             val kt = Random
@@ -42,19 +44,19 @@ class RandomsProfile(numInvokes: Long, trialInvokes: Int = 5) {
         }
 
         profiler.runAll()
-        profiler.showResults(SortType.BY_INSERTION)
+        profiler.showResults(SortType.BY_DURATION)
 
         val showdown = profiler.spawn()
         showdown.runAll()
-        showdown.showResults(SortType.BY_INSERTION)
+        showdown.showResults(SortType.BY_DURATION)
 
         val showdown2 = showdown.spawn()
         showdown2.runAll()
-        showdown2.showResults(SortType.BY_INSERTION)
+        showdown2.showResults(SortType.BY_DURATION)
     }
 }
 
 fun main() {
-    val obj = RandomsProfile(100_000_000L, 5)
+    val obj = RandomsProfile(20_000_000L, 5)
     obj.profile()
 }

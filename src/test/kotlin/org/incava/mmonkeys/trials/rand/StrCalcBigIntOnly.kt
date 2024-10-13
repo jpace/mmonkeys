@@ -4,10 +4,10 @@ import org.incava.mmonkeys.mky.number.StringEncoderV3
 import org.incava.mmonkeys.rand.RandBigInt
 import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import org.incava.rando.RandSlotsFactory
+import org.incava.rando.RndSlots
 import java.math.BigInteger
 
-class StrCalcBigIntOnly : StrRand() {
-    private val slots = RandSlotsFactory.calcList(NUM_CHARS + 1, 100, 10000)
+class StrCalcBigIntOnly(val slots: RndSlots) : StrRand() {
     private val maxNumChars = 500
     var filtered = 0L
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()

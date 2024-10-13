@@ -3,14 +3,18 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.rando.RndSlots
 import kotlin.random.Random
 
-abstract class StrLenRand(private val slots: RndSlots) : StrRand() {
-    var filtered: Long = 0L
-
-    fun randomLength() = slots.nextInt()
+// generates an encoded value (not a string), but fails if the synthesize length is > 13
+class StrRandEncoded(slots: RndSlots) : StrLenRand(slots) {
+    var overruns = 0L
+    val delegate = RandEncoded()
 
     override fun randInt(limit: Int) = Random.nextInt(limit)
 
-    abstract fun getString(length: Int): String
+    override fun getString(length: Int): String {
+        val encoded = delegate.getEncoded(length)
+        // same as StrCalcLongDecode, but no decode
+        return ""
+    }
 
     override fun get(): String {
         val len = randomLength()

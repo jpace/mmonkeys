@@ -2,14 +2,13 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.number.StringEncoderV3
 import org.incava.mmonkeys.rand.RandBigInt
-import org.incava.rando.RandSlotsFactory
+import org.incava.rando.RndSlots
 import java.math.BigInteger
 
-class StrCalcBigIntToggle : StrRand() {
-    private val slots = RandSlotsFactory.calcList(Constants.NUM_CHARS + 1, 100, 10000)
+class StrCalcBigIntToggle(val slots: RndSlots) : StrRand() {
     private val maxNumChars = 500
     val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
-    val longDecoder = StrCalcLongDecode()
+    val longDecoder = StrRandDecoded(slots)
     var filtered = 0L
 
     init {
