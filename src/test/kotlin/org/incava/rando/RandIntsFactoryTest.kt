@@ -82,5 +82,4 @@ class RandIntsFactoryTest {
         Console.info("r5.size", r5.size)
         Console.info("r6.size", r6.size)
     }
-
 }

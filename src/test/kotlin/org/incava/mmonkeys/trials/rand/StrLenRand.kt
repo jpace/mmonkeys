@@ -19,4 +19,10 @@ abstract class StrLenRand(private val slots: RndSlots) : StrRand() {
         val len = randomLength()
         return if (len > filter) "" else getString(len)
     }
+
+    override fun doGet(length: Int): Any = getString(length)
+
+    override fun doGet(length: Int, filter: GenFilter): Any? {
+        return doGet(length)
+    }
 }

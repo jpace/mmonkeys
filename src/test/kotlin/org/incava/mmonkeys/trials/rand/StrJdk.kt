@@ -31,4 +31,12 @@ class StrJdk : StrRand() {
             }
         }
     }
+
+    override fun doGet(length: Int): Any {
+        TODO("Not yet implemented")
+    }
+
+    override fun doGet(length: Int, filter: GenFilter): Any? {
+        TODO("Not yet implemented")
+    }
 }

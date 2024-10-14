@@ -10,4 +10,6 @@ abstract class StrRand : StrRandSupplier {
     fun randCharAz() = randInt(Constants.NUM_CHARS)
 
     abstract fun randInt(limit: Int) : Int
+
+    override fun doGet(length: Int): Any = 1
 }

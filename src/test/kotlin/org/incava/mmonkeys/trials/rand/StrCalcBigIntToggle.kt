@@ -40,4 +40,10 @@ class StrCalcBigIntToggle(private val slots: RndSlots) : StrRandSupplier {
         val len = slots.nextInt()
         return if (len > filter) "" else getString(len)
     }
+
+    override fun doGet(length: Int): Any = getString(length)
+
+    override fun doGet(length: Int, filter: GenFilter): Any? {
+        TODO("Not yet implemented")
+    }
 }

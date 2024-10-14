@@ -36,7 +36,7 @@ class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
         }
     }
 
-    fun doGet(length: Int): Any {
+    override fun doGet(length: Int): Any {
         return if (length > 13) {
             bigGen.getString(length)
         } else {

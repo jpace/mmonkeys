@@ -50,7 +50,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
             }
         }
         var listMatches = 0
-        if (false) {
+        if (true) {
             profiler.add("list - indexOf") {
                 val length = calc1.nextInt()
                 val forLength = lengthCorpus1.soughtByLength[length]
@@ -65,7 +65,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
             }
         }
         var listContainsMatches = 0
-        if (false) {
+        if (true) {
             profiler.add("list - contains") {
                 val length = calc1.nextInt()
                 val forLength = lengthCorpus2.soughtByLength[length]
@@ -102,6 +102,6 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
 }
 
 fun main() {
-    val obj = CorpusProfile(1_000_000L, 5)
+    val obj = CorpusProfile(20_000L, 5)
     obj.profile()
 }

@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.corpus
 
+// @todo - replace this with one of the MapCorpi
 class LengthCorpus(words: List<String>) : Corpus(words) {
     val soughtByLength = words.groupByTo(mutableMapOf(), { it.length }, { it })
 

@@ -22,4 +22,11 @@ object StrRandFactory {
             override fun getString(length: Int) = stringProvider(length) { (StrRand::randCharAz)(this) }
         }
     }
+
+    fun create(numSlots: Int, slotsProvider: (Int, Int, Int) -> RndSlots, stringProvider: (Int, () -> Int) -> String): StrRand {
+        val slots = slotsProvider(StrRand.Constants.NUM_CHARS + 1, numSlots, 10000)
+        return object : StrLenRand(slots) {
+            override fun getString(length: Int) = stringProvider(length) { (StrRand::randCharAz)(this) }
+        }
+    }
 }
