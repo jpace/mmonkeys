@@ -15,7 +15,7 @@ class RepeatCharFilter2(val filter: CorpusFilter) : GenFilter {
                 return false
             }
             if (prev2 != null) {
-                if (filter.missingThrees.get(prev2)?.get(prev1)?.contains(ch) == true) {
+                if (filter.missingThrees[prev2]?.get(prev1)?.contains(ch) == true) {
                     return false
                 }
             }

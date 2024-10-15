@@ -24,6 +24,10 @@ class RepeatCharFilter : GenFilter {
 }
 
 private class WordGeneratorProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
+    fun matchCount(result: Words, allWords: List<String>): Int {
+        return result.strings.filter { allWords.contains(it) }.size
+    }
+
     fun profile() {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
         val generator1 = StrToggleAnyRand(slots)
@@ -37,12 +41,48 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
         val filter = CorpusFilter(words)
         val mapCorpus = MapCorpus(words)
         val profiler = Profiler(numInvokes, trialInvokes)
+        val wordGenerator = WordGenerator(mapCorpus)
 
-        profiler.add("toggle any") { wordsGenerator1.generate() }
-        profiler.add("calc array assemble") { wordsGenerator2.generate() }
-        profiler.add("filtered 1") { wordsGenerator3.generate(::RepeatCharFilter) }
-        profiler.add("filtered 2") { wordsGenerator3.generate { RepeatCharFilter2(filter) } }
-        profiler.add("filtered 3") { wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) } }
+        val matchGoal = 10L
+
+        if (false) {
+            profiler.add("toggle any") {
+                runToMatchCount("toggle any", matchGoal) {
+                    val result = wordsGenerator1.generate()
+                    matchCount(result, words)
+                }
+            }
+        }
+        profiler.add("calc array assemble") {
+            runToMatchCount("calc array assemble", matchGoal) {
+                val result = wordsGenerator2.generate()
+                matchCount(result, words)
+            }
+        }
+        profiler.add("repeat chars hardcoded") {
+            runToMatchCount("repeat chars hardcoded", matchGoal) {
+                val result = wordsGenerator3.generate(::RepeatCharFilter)
+                matchCount(result, words)
+            }
+        }
+        profiler.add("repeat chars 2/3") {
+            runToMatchCount("repeat chars 2/3", matchGoal) {
+                val result = wordsGenerator3.generate { RepeatCharFilter2(filter) }
+                matchCount(result, words)
+            }
+        }
+        profiler.add("known word") {
+            runToMatchCount("known word", matchGoal) {
+                val result = wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) }
+                matchCount(result, words)
+            }
+        }
+        profiler.add("individual word") {
+            runToMatchCount("individual word", matchGoal) {
+                val result = wordGenerator.generate()
+                if (result.first >= 0) 1 else 0
+            }
+        }
 
         profiler.runAll()
         profiler.showResults(SortType.BY_DURATION)
@@ -51,9 +91,19 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
         showdown.runAll()
         showdown.showResults(SortType.BY_DURATION)
     }
+
+    fun runToMatchCount(name: String, matchGoal: Long, generator: () -> Int) {
+        Console.info(name)
+        var matches = 0L
+        while (matches < matchGoal) {
+            val result = generator()
+            matches += result
+        }
+        Console.info("matches", matches)
+    }
 }
 
 fun main() {
-    val obj = WordGeneratorProfile(100L, 3)
+    val obj = WordGeneratorProfile(10L, 3)
     obj.profile()
 }

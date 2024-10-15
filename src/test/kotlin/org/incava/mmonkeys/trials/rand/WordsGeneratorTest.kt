@@ -126,25 +126,49 @@ class WordsGeneratorTest {
         println()
     }
 
+    fun testGenerator3(
+        name: String,
+        generator: WordGenerator
+    ) {
+        Console.info("name", name)
+        var matches = 0L
+        var generated = 0L
+        val duration = measureDuration {
+            repeat(100) {
+                val result = generator.generate()
+                generated++
+                if (result.first >= 0) {
+                    matches++
+                }
+            }
+        }
+        Console.info("matches", matches)
+        Console.info("generated", generated)
+        println("duration: $duration")
+        println()
+    }
+
     @Test
     fun generateMatches() {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
-        val generator1 = StrToggleAnyRand(slots)
-        val generator2 = StrRandFactory.create(128, StrRandFactory.calcArray, StrRandFactory.assemble)
-        val generator3 = StrRandFiltered(slots)
-        val wordsGenerator1 = WordsGenerator(slots, generator1)
-        val wordsGenerator2 = WordsGenerator(slots, generator2)
-        val wordsGenerator3 = WordsGenerator(slots, generator3)
+        // val generator1 = StrToggleAnyRand(slots)
+        val strRand = StrRandFactory.create(128, StrRandFactory.calcArray, StrRandFactory.assemble)
+        val strRandFiltered = StrRandFiltered(slots)
+        // val wordsGenerator1 = WordsGenerator(slots, generator1)
+        val randGen = WordsGenerator(slots, strRand)
+        val filteredGen = WordsGenerator(slots, strRandFiltered)
         val file = ResourceUtil.getResourceFile("pg100.txt")
         val words = CorpusFactory.readFileWords(file, -1)
         val filter = CorpusFilter(words)
         val mapCorpus = MapCorpus(words)
+        val wordGen = WordGenerator(mapCorpus)
 
-        testGenerator("toggle any rand", wordsGenerator1, words)
-        testGenerator("calc array assemble", wordsGenerator2, words)
-        testGenerator("filtered", wordsGenerator3, words)
-        testGenerator("repeat 2 chars", wordsGenerator3, words, ::RepeatCharFilter)
-        testGenerator("repeat 2,3 chars", wordsGenerator3, words) { RepeatCharFilter2(filter) }
-        testGenerator2("known word", wordsGenerator3, words) { KnownWordFilter(mapCorpus, it) }
+        // testGenerator("toggle any rand", wordsGenerator1, words)
+        testGenerator("calc array assemble", randGen, words)
+        testGenerator("filtered", filteredGen, words)
+        testGenerator("repeat 2 chars", filteredGen, words, ::RepeatCharFilter)
+        testGenerator("repeat 2,3 chars", filteredGen, words) { RepeatCharFilter2(filter) }
+        testGenerator2("known word", filteredGen, words) { KnownWordFilter(mapCorpus, it) }
+        testGenerator3("individual word", wordGen)
     }
 }

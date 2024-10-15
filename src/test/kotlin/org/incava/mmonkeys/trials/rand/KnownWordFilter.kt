@@ -7,12 +7,12 @@ class KnownWordFilter(val corpus: MapCorpus, val length: Int) : GenFilter {
     val current = StringBuilder(length)
 
     override fun check(ch: Char): Boolean {
-        if (candidates == null) {
-            return false
+        return if (candidates == null) {
+            false
         } else {
             current.append(ch)
             val matching = candidates.find { it.startsWith(current.toString()) }
-            return matching != null
+            matching != null
         }
     }
 }

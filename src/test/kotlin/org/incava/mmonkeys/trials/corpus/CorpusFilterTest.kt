@@ -10,6 +10,19 @@ import kotlin.math.pow
 
 class CorpusFilterTest {
     @Test
+    fun duplicates() {
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val words = CorpusFactory.readFileWords(file, -1)
+        val obj = CorpusFilter(words)
+        val result = obj.missingTwos
+        result.forEach { (first, nexts) ->
+            if (nexts.contains(first)) {
+                println(first)
+            }
+        }
+    }
+
+    @Test
     fun twos() {
         val file = ResourceUtil.getResourceFile("pg100.txt")
         val words = CorpusFactory.readFileWords(file, -1)

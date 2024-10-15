@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.ikdk.io.Console
 import org.incava.rando.RndSlots
 
 class StrRandFiltered(slots: RndSlots) : StrLenRand(slots) {

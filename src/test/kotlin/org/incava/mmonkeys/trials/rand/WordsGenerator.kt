@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.ikdk.io.Console
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RndSlots
 
