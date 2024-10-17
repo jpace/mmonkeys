@@ -7,7 +7,7 @@ import org.incava.rando.RandSlotsFactory
 
 open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
     val profiler = Profiler(numInvokes, trialInvokes)
-    val functions: Map<String, () -> StrRandSupplier>
+    val functions: Map<String, () -> StrLongRandSupplier>
 
     init {
         // we know that list[x] is faster than map[x] where sizes <= 100, so don't always test this:

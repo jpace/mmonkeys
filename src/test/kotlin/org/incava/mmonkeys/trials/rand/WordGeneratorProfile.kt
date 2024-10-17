@@ -24,6 +24,10 @@ class RepeatCharFilter : GenFilter {
 }
 
 private class WordGeneratorProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
+    fun matchCount(result: WordsLongs, allWords: List<String>): Int {
+        return result.strings.filter { allWords.contains(it) }.size
+    }
+
     fun matchCount(result: Words, allWords: List<String>): Int {
         return result.strings.filter { allWords.contains(it) }.size
     }
@@ -38,7 +42,6 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
         val wordsGenerator3 = WordsGenerator(slots, generator3)
         val file = ResourceUtil.getResourceFile("pg100.txt")
         val words = CorpusFactory.readFileWords(file, -1)
-        val filter = CorpusFilter(words)
         val mapCorpus = MapCorpus(words)
         val profiler = Profiler(numInvokes, trialInvokes)
         val wordGenerator = WordGenerator(mapCorpus)
@@ -65,12 +68,15 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
                 matchCount(result, words)
             }
         }
+
+        val filter = CorpusFilter(words)
         profiler.add("repeat chars 2/3") {
             runToMatchCount("repeat chars 2/3", matchGoal) {
                 val result = wordsGenerator3.generate { RepeatCharFilter2(filter) }
                 matchCount(result, words)
             }
         }
+
         profiler.add("known word") {
             runToMatchCount("known word", matchGoal) {
                 val result = wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) }
@@ -81,6 +87,13 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
             runToMatchCount("individual word", matchGoal) {
                 val result = wordGenerator.generate()
                 if (result.first >= 0) 1 else 0
+            }
+        }
+        val wordsLenGenerator = WordsLenGenerator(slots) { KnownWordFilter(mapCorpus, it) }
+        profiler.add("words/length generator") {
+            runToMatchCount("words/length generator", matchGoal) {
+                val result = wordsLenGenerator.generate()
+                matchCount(result, words)
             }
         }
 

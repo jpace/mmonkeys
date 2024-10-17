@@ -6,7 +6,7 @@ import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import org.incava.rando.RndSlots
 import java.math.BigInteger
 
-class StrCalcBigIntOnly(private val slots: RndSlots) : StrRandSupplier {
+class StrCalcBigIntOnly(private val slots: RndSlots) : StrLongRandSupplier {
     private val maxNumChars = 500
     private val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
 

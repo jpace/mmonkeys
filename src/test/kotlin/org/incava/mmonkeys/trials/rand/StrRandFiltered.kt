@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.ikdk.io.Console
 import org.incava.rando.RndSlots
 
 class StrRandFiltered(slots: RndSlots) : StrLenRand(slots) {
@@ -26,6 +25,20 @@ class StrRandFiltered(slots: RndSlots) : StrLenRand(slots) {
     override fun doGet(length: Int): Any = getString(length)
 
     override fun doGet(length: Int, filter: GenFilter): Any? {
+        val bytes = ByteArray(length)
+        repeat(length) { index ->
+            val n = randCharAz()
+            val ch = 'a' + n
+            val valid = filter.check(ch)
+            if (!valid) {
+                return null
+            }
+            bytes[index] = ch.toByte()
+        }
+        return String(bytes)
+    }
+
+    override fun doGetString(length: Int, filter: GenFilter): String? {
         val bytes = ByteArray(length)
         repeat(length) { index ->
             val n = randCharAz()

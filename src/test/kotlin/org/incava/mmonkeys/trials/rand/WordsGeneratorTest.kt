@@ -14,6 +14,10 @@ interface GenFilter {
     fun check(ch: Char): Boolean
 }
 
+interface GenLenFilter : GenFilter {
+    fun checkLength(length: Int): Boolean
+}
+
 class WordsGeneratorTest {
     @Test
     fun match() {
@@ -128,7 +132,7 @@ class WordsGeneratorTest {
 
     fun testGenerator3(
         name: String,
-        generator: WordGenerator
+        generator: WordGenerator,
     ) {
         Console.info("name", name)
         var matches = 0L
@@ -171,4 +175,21 @@ class WordsGeneratorTest {
         testGenerator2("known word", filteredGen, words) { KnownWordFilter(mapCorpus, it) }
         testGenerator3("individual word", wordGen)
     }
+
+
+    @Test
+    fun generateMany() {
+        val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
+        val generator3 = StrRandFiltered(slots)
+        val wordsGenerator3 = WordsGenerator(slots, generator3)
+        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val words = CorpusFactory.readFileWords(file, -1)
+        val mapCorpus = MapCorpus(words)
+        repeat(100) {
+            val result = wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) }
+            // Console.info("result", result)
+            Console.info("result.strings", result.strings)
+        }
+    }
+
 }

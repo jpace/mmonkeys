@@ -3,13 +3,15 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RndSlots
 
-data class Words(val strings: List<String>, val encoded: List<Long>, val totalKeyStrokes: Long)
+data class Words(val strings: List<String>, val totalKeyStrokes: Long)
 
-class WordsGenerator(val slots: RndSlots, private val generator: StrRandSupplier) {
+data class WordsLongs(val strings: List<String>, val encoded: List<Long>, val totalKeyStrokes: Long)
+
+class WordsGenerator(val slots: RndSlots, private val generator: StrLongRandSupplier) {
     private val intsFactory = RandIntsFactory()
     private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
 
-    fun generate(): Words {
+    fun generate(): WordsLongs {
         val slotIndices = intsFactory.nextInts2()
         val strings = mutableListOf<String>()
         val encoded = mutableListOf<Long>()
@@ -27,10 +29,10 @@ class WordsGenerator(val slots: RndSlots, private val generator: StrRandSupplier
                 }
             }
         }
-        return Words(strings, encoded, keystrokes)
+        return WordsLongs(strings, encoded, keystrokes)
     }
 
-    fun generate(filterSupplier: () -> GenFilter): Words {
+    fun generate(filterSupplier: () -> GenFilter): WordsLongs {
         val slotIndices = intsFactory.nextInts2()
         val strings = mutableListOf<String>()
         val encoded = mutableListOf<Long>()
@@ -49,10 +51,10 @@ class WordsGenerator(val slots: RndSlots, private val generator: StrRandSupplier
                 }
             }
         }
-        return Words(strings, encoded, keystrokes)
+        return WordsLongs(strings, encoded, keystrokes)
     }
 
-    fun generate2(filterSupplier: (Int) -> GenFilter): Words {
+    fun generate2(filterSupplier: (Int) -> GenFilter): WordsLongs {
         val slotIndices = intsFactory.nextInts2()
         val strings = mutableListOf<String>()
         val encoded = mutableListOf<Long>()
@@ -72,7 +74,7 @@ class WordsGenerator(val slots: RndSlots, private val generator: StrRandSupplier
                 }
             }
         }
-        return Words(strings, encoded, keystrokes)
+        return WordsLongs(strings, encoded, keystrokes)
     }
 
     fun generateWord(length: Int): Any? {

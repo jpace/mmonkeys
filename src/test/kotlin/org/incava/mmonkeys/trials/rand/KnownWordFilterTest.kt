@@ -26,7 +26,7 @@ internal class KnownWordFilterTest {
     }
 
     @Test
-    fun checkMany() {
+    fun generate2() {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
         val generator3 = StrRandFiltered(slots)
         val wordsGenerator3 = WordsGenerator(slots, generator3)
