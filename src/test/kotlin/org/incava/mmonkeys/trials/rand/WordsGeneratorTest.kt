@@ -23,8 +23,7 @@ class WordsGeneratorTest {
     fun match() {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
         val generator = StrRandFactory.create(128, StrRandFactory.calcArray, StrRandFactory.assemble)
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, 100).filter { it.length in 1..12 }
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, 100).filter { it.length in 1..12 }
         val corpus = Corpus(words)
         val wordsGenerator = WordsGenerator(slots, generator)
 
@@ -133,8 +132,7 @@ class WordsGeneratorTest {
         // val wordsGenerator1 = WordsGenerator(slots, generator1)
         val randGen = WordsGenerator(slots, strRand)
         val filteredGen = WordsGenerator(slots, strRandFiltered)
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
         val filter = CorpusFilter(words)
         val mapCorpus = MapCorpus(words)
         val wordGen = WordGenerator(mapCorpus)
@@ -154,8 +152,7 @@ class WordsGeneratorTest {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
         val generator3 = StrRandFiltered(slots)
         val wordsGenerator3 = WordsGenerator(slots, generator3)
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
         val mapCorpus = MapCorpus(words)
         repeat(100) {
             val result = wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) }

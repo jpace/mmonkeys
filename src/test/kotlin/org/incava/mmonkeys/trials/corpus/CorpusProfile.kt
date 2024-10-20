@@ -15,8 +15,7 @@ class CorpusProfile(val numInvokes: Long, private val trialInvokes: Int) {
     private val typewriter = Typewriter()
 
     fun profile() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1).filter { it.length > 2 }
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1).filter { it.length > 2 }
         val linkedHashMapCorpus = MapCorpus(words.toList())
         val hashMapCorpus = HashMapCorpus(words.toList())
         val lengthCorpus1 = LengthCorpus(words.toList())

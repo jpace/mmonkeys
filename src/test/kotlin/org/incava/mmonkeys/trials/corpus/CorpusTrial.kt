@@ -33,8 +33,7 @@ class CorpusTrial(
     val results = mutableMapOf<String, PerfResults>()
 
     init {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in lengthRange }
+        words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, numLines).filter { it.length in lengthRange }
         Console.info("sought.#", words.size)
     }
 

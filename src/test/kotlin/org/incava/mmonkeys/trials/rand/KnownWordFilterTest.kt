@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test
 internal class KnownWordFilterTest {
     @Test
     fun check() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
         val corpus = MapCorpus(words)
         val obj1 = KnownWordFilter(corpus, 5)
         listOf('c', 'h', 'e', 'c', 'k').forEach { ch ->
@@ -30,8 +29,7 @@ internal class KnownWordFilterTest {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
         val generator3 = StrRandFiltered(slots)
         val wordsGenerator3 = WordsGenerator(slots, generator3)
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
         val mapCorpus = MapCorpus(words)
         repeat(100) {
             val result = wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) }

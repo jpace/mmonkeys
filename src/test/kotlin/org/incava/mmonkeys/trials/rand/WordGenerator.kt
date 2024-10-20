@@ -5,7 +5,7 @@ import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import kotlin.random.Random
 
 class WordGenerator(val corpus: MapCorpus) {
-    val maxLen = corpus.lengthToStringsToIndices.keys.maxOrNull() ?: throw RuntimeException("no max")
+    private val maxLen = corpus.lengthToStringsToIndices.keys.maxOrNull() ?: throw RuntimeException("no max")
 
     fun generate(): Pair<Int, Long> {
         val current = StringBuilder()

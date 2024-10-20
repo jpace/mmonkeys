@@ -10,8 +10,7 @@ import kotlin.test.assertEquals
 internal class NumberedCorpusTest {
     @Test
     fun rangeEncoded() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, 100).filter { it.length in 1..12 }
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, 100).filter { it.length in 1..12 }
         val obj = NumberedCorpus(words)
         Console.info("obj", obj)
         Console.info("obj.rangeEncoded", obj.rangeEncoded)

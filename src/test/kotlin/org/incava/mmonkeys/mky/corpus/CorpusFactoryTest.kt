@@ -8,9 +8,7 @@ import org.junit.jupiter.api.Test
 class CorpusFactoryTest {
     @Test
     fun readFileWords() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, 100000)
-        println(words.filter { it.length == 1}.toSortedSet())
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, 100_000)
         assertEquals(602_945, words.size);
         assertFalse(words.contains(""))
     }

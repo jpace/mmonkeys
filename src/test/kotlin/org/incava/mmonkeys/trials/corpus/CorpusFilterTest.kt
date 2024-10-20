@@ -9,10 +9,10 @@ import java.math.BigInteger
 import kotlin.math.pow
 
 class CorpusFilterTest {
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+
     @Test
     fun duplicates() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
         result.forEach { (first, nexts) ->
@@ -24,8 +24,6 @@ class CorpusFilterTest {
 
     @Test
     fun twos() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
         Console.info("result", result)
@@ -33,8 +31,6 @@ class CorpusFilterTest {
 
     @Test
     fun threes() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
         val obj = CorpusFilter(words)
         val result = obj.missingThrees
         Console.info("result", result)
@@ -46,8 +42,6 @@ class CorpusFilterTest {
 
     @Test
     fun percentPresent() {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, -1)
         val unique = words.toSet()
 
         System.out.printf(

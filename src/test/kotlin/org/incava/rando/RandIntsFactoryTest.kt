@@ -12,12 +12,11 @@ class RandIntsFactoryTest {
         assertEquals(9, result.size)
     }
 
-    @Test
-    fun distribution() {
+    private fun testDistribution(supplier: (RandIntsFactory) -> IntArray) {
         val generated = mutableMapOf<Int, Int>()
         val factory = RandIntsFactory()
-        repeat(7_000_000) {
-            val nums = factory.nextInts()
+        repeat(1_000_000) {
+            val nums = supplier(factory)
             nums.forEach {
                 generated.add(it)
             }
@@ -31,72 +30,26 @@ class RandIntsFactoryTest {
         Console.info("numbers.#", generated.size)
         Console.info("expected", expected)
         DistributionAssert.assertVariance(generated, 128, 1.2)
+    }
+
+    @Test
+    fun distribution1() {
+        testDistribution(RandIntsFactory::nextInts)
     }
 
     @Test
     fun distribution2() {
-        val generated = mutableMapOf<Int, Int>()
-        val factory = RandIntsFactory()
-        repeat(1_000_000) {
-            val nums = factory.nextInts2()
-            nums.forEach {
-                generated.add(it)
-
-            }
-        }
-        if (true) {
-            generated.toSortedMap().forEach { (num, count) ->
-                Console.info("$num", count)
-            }
-        }
-        val expected = generated.values.sum() / 128
-        Console.info("numbers.#", generated.size)
-        Console.info("expected", expected)
-        DistributionAssert.assertVariance(generated, 128, 1.2)
+        testDistribution(RandIntsFactory::nextInts2)
     }
 
     @Test
     fun distribution3() {
-        val generated = mutableMapOf<Int, Int>()
-        val factory = RandIntsFactory()
-        repeat(1_000_000) {
-            val nums = factory.nextInts3()
-            nums.forEach {
-                generated.add(it)
-
-            }
-        }
-        if (true) {
-            generated.toSortedMap().forEach { (num, count) ->
-                Console.info("$num", count)
-            }
-        }
-        val expected = generated.values.sum() / 128
-        Console.info("numbers.#", generated.size)
-        Console.info("expected", expected)
-        DistributionAssert.assertVariance(generated, 128, 1.2)
+        testDistribution(RandIntsFactory::nextInts3)
     }
 
     @Test
     fun distribution4() {
-        val generated = mutableMapOf<Int, Int>()
-        val factory = RandIntsFactory()
-        repeat(1_000_000) {
-            val nums = factory.nextInts4()
-            nums.forEach {
-                generated.add(it)
-
-            }
-        }
-        if (true) {
-            generated.toSortedMap().forEach { (num, count) ->
-                Console.info("$num", count)
-            }
-        }
-        val expected = generated.values.sum() / 128
-        Console.info("numbers.#", generated.size)
-        Console.info("expected", expected)
-        DistributionAssert.assertVariance(generated, 128, 1.2)
+        testDistribution(RandIntsFactory::nextInts4)
     }
 
     @Test

@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test
 
 internal class NumberLongsMonkeyTest {
     private fun getTestCorpus(numLines: Int, wordSizeLimit: Int): NumberedCorpus {
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, numLines).filter { it.length <= wordSizeLimit }
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, numLines).filter { it.length <= wordSizeLimit }
         return NumberedCorpus(words)
     }
 

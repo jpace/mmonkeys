@@ -24,13 +24,11 @@ class RepeatCharFilter : GenFilter {
 }
 
 private class WordGeneratorProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
-    fun matchCount(result: WordsLongs, allWords: List<String>): Int {
-        return result.strings.filter { allWords.contains(it) }.size
+    fun matchCount(result: List<String>, allWords: List<String>): Int {
+        return result.filter { allWords.contains(it) }.size
     }
-
-    fun matchCount(result: Words, allWords: List<String>): Int {
-        return result.strings.filter { allWords.contains(it) }.size
-    }
+    fun matchCount(result: WordsLongs, allWords: List<String>) = matchCount(result.strings, allWords)
+    fun matchCount(result: Words, allWords: List<String>) = matchCount(result.strings, allWords)
 
     fun profile() {
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
@@ -40,8 +38,9 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
         val wordsGenerator1 = WordsGenerator(slots, generator1)
         val wordsGenerator2 = WordsGenerator(slots, generator2)
         val wordsGenerator3 = WordsGenerator(slots, generator3)
-        val file = ResourceUtil.getResourceFile("pg100.txt")
+        val file = ResourceUtil.FULL_FILE
         val words = CorpusFactory.readFileWords(file, -1)
+        Console.info("words.#", words.size)
         val profiler = Profiler(numInvokes, trialInvokes)
         val matchGoal = 50L
 
@@ -117,17 +116,15 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
     }
 
     fun runToMatchCount(name: String, matchGoal: Long, generator: () -> Int) {
-        Console.info(name)
         var matches = 0L
         while (matches < matchGoal) {
             val result = generator()
             matches += result
         }
- //       Console.info("matches", matches)
     }
 }
 
 fun main() {
-    val obj = WordGeneratorProfile(10L, 3)
+    val obj = WordGeneratorProfile(1L, 1)
     obj.profile()
 }

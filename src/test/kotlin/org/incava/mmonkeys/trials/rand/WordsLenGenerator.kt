@@ -9,29 +9,15 @@ class WordsLenGenerator(val slots: RndSlots, private val filterSupplier: (Int) -
     private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
 
     fun generate(): Words {
-        val slotIndices = intsFactory.nextInts2()
-        val matches = mutableListOf<String>()
-        var keystrokes = 0L
-        slotIndices.forEach { slotIndex ->
-            // number of keystrokes to a space:
-            val length = slots.slotValue(slotIndex)
-            keystrokes += length
-            if (length in 2..maxLength) {
-                val numChars = length - 1
-                val filter = filterSupplier(numChars)
-                if (filter.checkLength(numChars)) {
-                    val word = getWord(numChars, filter)
-                    if (word != null) {
-                        matches += word
-                    }
-                }
-            }
-        }
-        return Words(matches, keystrokes)
+        return generate { intsFactory.nextInts2() }
     }
 
     fun generate4(): Words {
-        val slotIndices = intsFactory.nextInts4()
+        return generate { intsFactory.nextInts4() }
+    }
+
+    fun generate(supplier: () -> IntArray): Words {
+        val slotIndices = supplier()
         val matches = mutableListOf<String>()
         var keystrokes = 0L
         slotIndices.forEach { slotIndex ->
