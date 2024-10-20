@@ -11,7 +11,7 @@ class StrCalcBigIntOnly(private val slots: RndSlots) : StrLongRandSupplier {
     private val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
 
     init {
-        val nChars = BigInteger.valueOf(NUM_CHARS.toLong())
+        val nChars = BigInteger.valueOf(StrRandAlpha.Constants.NUM_CHARS.toLong())
         ranges += BigInteger.ZERO to RandBigInt.pow(BigInteger.valueOf(26), 1)
         (2 until maxNumChars).forEach {
             ranges += ranges.last().second to (ranges.last().second + RandBigInt.pow(nChars, it))

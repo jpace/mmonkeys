@@ -56,6 +56,50 @@ class RandIntsFactoryTest {
     }
 
     @Test
+    fun distribution3() {
+        val generated = mutableMapOf<Int, Int>()
+        val factory = RandIntsFactory()
+        repeat(1_000_000) {
+            val nums = factory.nextInts3()
+            nums.forEach {
+                generated.add(it)
+
+            }
+        }
+        if (true) {
+            generated.toSortedMap().forEach { (num, count) ->
+                Console.info("$num", count)
+            }
+        }
+        val expected = generated.values.sum() / 128
+        Console.info("numbers.#", generated.size)
+        Console.info("expected", expected)
+        DistributionAssert.assertVariance(generated, 128, 1.2)
+    }
+
+    @Test
+    fun distribution4() {
+        val generated = mutableMapOf<Int, Int>()
+        val factory = RandIntsFactory()
+        repeat(1_000_000) {
+            val nums = factory.nextInts4()
+            nums.forEach {
+                generated.add(it)
+
+            }
+        }
+        if (true) {
+            generated.toSortedMap().forEach { (num, count) ->
+                Console.info("$num", count)
+            }
+        }
+        val expected = generated.values.sum() / 128
+        Console.info("numbers.#", generated.size)
+        Console.info("expected", expected)
+        DistributionAssert.assertVariance(generated, 128, 1.2)
+    }
+
+    @Test
     fun nextInts2() {
         val obj = RandIntsFactory()
         val result = obj.nextInts2()
@@ -68,18 +112,13 @@ class RandIntsFactoryTest {
         val generator = RandIntGenerator()
         val factory = RandIntsFactory()
 
-        val r1 = generator.nextInts()
-        val r2 = generator.nextInts2()
-        val r3 = generator.nextInts3()
-        val r4 = generator.nextInts4()
-        val r5 = factory.nextInts()
-        val r6 = factory.nextInts2()
-
-        Console.info("r1.size", r1.size)
-        Console.info("r2.size", r2.size)
-        Console.info("r3.size", r3.size)
-        Console.info("r4.size", r4.size)
-        Console.info("r5.size", r5.size)
-        Console.info("r6.size", r6.size)
+        Console.info("generator nextInts", generator.nextInts().size)
+        Console.info("generator nextInts2", generator.nextInts2().size)
+        Console.info("generator nextInts3", generator.nextInts3().size)
+        Console.info("generator nextInts4", generator.nextInts4().size)
+        Console.info("factory nextInts", factory.nextInts().size)
+        Console.info("factory nextInts2", factory.nextInts2().size)
+        Console.info("factory nextInts3", factory.nextInts3().size)
+        Console.info("factory nextInts4", factory.nextInts4().size)
     }
 }

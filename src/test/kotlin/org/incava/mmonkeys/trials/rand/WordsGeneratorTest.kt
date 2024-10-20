@@ -41,34 +41,6 @@ class WordsGeneratorTest {
         }
     }
 
-    @Test
-    fun filtered() {
-        val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
-        val generator = StrRandFiltered(slots)
-        val file = ResourceUtil.getResourceFile("pg100.txt")
-        val words = CorpusFactory.readFileWords(file, 100).filter { it.length in 1..12 }
-        val wordsGenerator = WordsGenerator(slots, generator)
-        val noTwos = listOf('j', 'k', 'q', 'v', 'w', 'x', 'y')
-        val filter = object : GenFilter {
-            var prev: Char? = null
-
-            override fun check(ch: Char): Boolean {
-                Console.info("prev", prev)
-                Console.info("ch", ch)
-
-                if (ch == prev && noTwos.contains(ch)) {
-                    Console.info("stopping!")
-                    return false
-                } else {
-                    prev = ch
-                    return true
-                }
-            }
-        }
-        val generated = wordsGenerator.generateWord(12, filter)
-        Console.info("generated", generated)
-    }
-
     fun testGenerator(name: String, generator: WordsGenerator, words: Collection<String>) {
         Console.info("name", name)
         var generated = 0L

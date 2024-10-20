@@ -12,21 +12,23 @@ class WordsLenGeneratorTest {
     fun runTest(corpus: MapCorpus, wordsLenGenerator: WordsLenGenerator) {
         var numMatched = 0L
         var keystrokes = 0L
+        val numToMatch = 1000L
+        val minLength = 3
 
         val duration = measureDuration {
-            while (numMatched < 10_000L && corpus.lengthToStringsToIndices.isNotEmpty()) {
+            while (numMatched < numToMatch && corpus.lengthToStringsToIndices.isNotEmpty()) {
                 val result = wordsLenGenerator.generate()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
                     corpus.matched(word, word.length)
-                    if (word.length > 0) {
+                    if (word.length > minLength) {
                         System.out.printf("%12.12s ", word)
                         ++numMatched
                         if (numMatched > 0 && numMatched % 10L == 0L) {
                             print(" -> $numMatched")
                             System.out.printf(" -> %,d\n", keystrokes)
                             val str = corpus.lengthToStringsToIndices.keys.sorted().joinToString(", ") { length ->
-                                val count = corpus.lengthToStringsToIndices[length]?.size
+                                val count = corpus.lengthToStringsToIndices[length]?.size ?: ""
                                 "$length -> $count"
                             }
                             println(str)

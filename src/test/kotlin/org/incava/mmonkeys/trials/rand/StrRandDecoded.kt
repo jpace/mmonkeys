@@ -16,7 +16,7 @@ class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
 
     override fun get(): String {
         val len = randomLength()
-        if (len > 13) {
+        if (len > RandEncoded.Constants.MAX_CHARS) {
             ++overruns
             if (overruns % 1_000_000L == 0L) {
                 Console.info("overruns", overruns)
@@ -27,7 +27,7 @@ class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
 
     override fun get(filter: Int): String {
         val len = randomLength()
-        if (len > 13) {
+        if (len > RandEncoded.Constants.MAX_CHARS) {
             ++overruns
             if (overruns % 1_000_000L == 0L) {
                 Console.info("overruns", overruns)

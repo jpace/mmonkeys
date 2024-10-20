@@ -42,11 +42,8 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
         val wordsGenerator3 = WordsGenerator(slots, generator3)
         val file = ResourceUtil.getResourceFile("pg100.txt")
         val words = CorpusFactory.readFileWords(file, -1)
-        val mapCorpus = MapCorpus(words)
         val profiler = Profiler(numInvokes, trialInvokes)
-        val wordGenerator = WordGenerator(mapCorpus)
-
-        val matchGoal = 10L
+        val matchGoal = 50L
 
         if (false) {
             profiler.add("toggle any") {
@@ -72,27 +69,41 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
         val filter = CorpusFilter(words)
         profiler.add("repeat chars 2/3") {
             runToMatchCount("repeat chars 2/3", matchGoal) {
-                val result = wordsGenerator3.generate { RepeatCharFilter2(filter) }
+                val result = wordsGenerator3.generate2 { RepeatCharFilter2(filter) }
                 matchCount(result, words)
             }
         }
 
+        val corpus2 = MapCorpus(words)
         profiler.add("known word") {
             runToMatchCount("known word", matchGoal) {
-                val result = wordsGenerator3.generate2 { KnownWordFilter(mapCorpus, it) }
+                val result = wordsGenerator3.generate2 { KnownWordFilter(corpus2, it) }
                 matchCount(result, words)
             }
         }
+        val corpus1 = MapCorpus(words)
+        val wordGenerator = WordGenerator(corpus1)
         profiler.add("individual word") {
             runToMatchCount("individual word", matchGoal) {
                 val result = wordGenerator.generate()
                 if (result.first >= 0) 1 else 0
             }
         }
-        val wordsLenGenerator = WordsLenGenerator(slots) { KnownWordFilter(mapCorpus, it) }
+
+        val corpus3 = MapCorpus(words)
+        val wordsLenGenerator = WordsLenGenerator(slots) { KnownWordFilter(corpus3, it) }
         profiler.add("words/length generator") {
             runToMatchCount("words/length generator", matchGoal) {
                 val result = wordsLenGenerator.generate()
+                matchCount(result, words)
+            }
+        }
+
+        val corpus4 = MapCorpus(words)
+        val wordsLenGenerator2 = WordsLenGenerator(slots) { KnownWordFilter(corpus4, it) }
+        profiler.add("words/length generator 4") {
+            runToMatchCount("words/length generator 4", matchGoal) {
+                val result = wordsLenGenerator2.generate4()
                 matchCount(result, words)
             }
         }
@@ -112,7 +123,7 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
             val result = generator()
             matches += result
         }
-        Console.info("matches", matches)
+ //       Console.info("matches", matches)
     }
 }
 

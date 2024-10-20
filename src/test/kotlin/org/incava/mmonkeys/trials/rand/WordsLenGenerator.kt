@@ -30,6 +30,28 @@ class WordsLenGenerator(val slots: RndSlots, private val filterSupplier: (Int) -
         return Words(matches, keystrokes)
     }
 
+    fun generate4(): Words {
+        val slotIndices = intsFactory.nextInts4()
+        val matches = mutableListOf<String>()
+        var keystrokes = 0L
+        slotIndices.forEach { slotIndex ->
+            // number of keystrokes to a space:
+            val length = slots.slotValue(slotIndex)
+            keystrokes += length
+            if (length in 2..maxLength) {
+                val numChars = length - 1
+                val filter = filterSupplier(numChars)
+                if (filter.checkLength(numChars)) {
+                    val word = getWord(numChars, filter)
+                    if (word != null) {
+                        matches += word
+                    }
+                }
+            }
+        }
+        return Words(matches, keystrokes)
+    }
+
     fun randCharAz() = Random.nextInt(StrRand.Constants.NUM_CHARS)
 
     fun getWord(length: Int, filter: GenFilter): String? {

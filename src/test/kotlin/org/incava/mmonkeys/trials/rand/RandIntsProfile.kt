@@ -33,6 +33,8 @@ private class RandIntsProfile(private val numInvokes: Long, private val trialInv
         profiler.add("generator v4") { repeat(63 / 4) { generator.nextInts4() } }
         profiler.add("factory ints") { repeat(7) { factory.nextInts() }}
         profiler.add("factory ints2") { factory.nextInts2() }
+        profiler.add("factory ints3") { factory.nextInts3() }
+        profiler.add("factory ints4") { factory.nextInts4() }
         profiler.add("random nextInt(num)", ::ktNextInts)
         // profiler.add("random nextLong(num)", ::ktNextLong)
 
@@ -50,6 +52,6 @@ private class RandIntsProfile(private val numInvokes: Long, private val trialInv
 }
 
 fun main() {
-    val obj = RandIntsProfile(5_000_000L, 3)
+    val obj = RandIntsProfile(100_000L, 3)
     obj.profile()
 }

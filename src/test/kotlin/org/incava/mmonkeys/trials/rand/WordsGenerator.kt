@@ -11,7 +11,7 @@ class WordsGenerator(val slots: RndSlots, private val generator: StrLongRandSupp
     private val intsFactory = RandIntsFactory()
     private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
 
-    fun generate(): WordsLongs {
+    fun doIt(block: (Int) -> Any?): WordsLongs {
         val slotIndices = intsFactory.nextInts2()
         val strings = mutableListOf<String>()
         val encoded = mutableListOf<Long>()
@@ -21,7 +21,8 @@ class WordsGenerator(val slots: RndSlots, private val generator: StrLongRandSupp
             val length = slots.slotValue(slotIndex)
             keystrokes += length
             if (length in 2..maxLength) {
-                val word = generateWord(length - 1)
+                block(length)
+                val word = block(length)
                 if (word is String) {
                     strings += word
                 } else if (word is Long) {
@@ -30,58 +31,28 @@ class WordsGenerator(val slots: RndSlots, private val generator: StrLongRandSupp
             }
         }
         return WordsLongs(strings, encoded, keystrokes)
+    }
+
+    fun generate(): WordsLongs {
+        return doIt { length ->
+            val numChars = length - 1
+            generator.doGet(numChars)
+        }
     }
 
     fun generate(filterSupplier: () -> GenFilter): WordsLongs {
-        val slotIndices = intsFactory.nextInts2()
-        val strings = mutableListOf<String>()
-        val encoded = mutableListOf<Long>()
-        var keystrokes = 0L
-        slotIndices.forEach { slotIndex ->
-            // number of keystrokes to a space:
-            val length = slots.slotValue(slotIndex)
-            keystrokes += length
-            if (length in 2..maxLength) {
-                val filter = filterSupplier()
-                val word = generateWord(length - 1, filter)
-                if (word is String) {
-                    strings += word
-                } else if (word is Long) {
-                    encoded += word
-                }
-            }
+        return doIt { length ->
+            val numChars = length - 1
+            val filter = filterSupplier()
+            generator.doGet(numChars, filter)
         }
-        return WordsLongs(strings, encoded, keystrokes)
     }
 
     fun generate2(filterSupplier: (Int) -> GenFilter): WordsLongs {
-        val slotIndices = intsFactory.nextInts2()
-        val strings = mutableListOf<String>()
-        val encoded = mutableListOf<Long>()
-        var keystrokes = 0L
-        slotIndices.forEach { slotIndex ->
-            // number of keystrokes to a space:
-            val length = slots.slotValue(slotIndex)
-            keystrokes += length
-            if (length in 2..maxLength) {
-                val numChars = length - 1
-                val filter = filterSupplier(numChars)
-                val word = generateWord(numChars, filter)
-                if (word is String) {
-                    strings += word
-                } else if (word is Long) {
-                    encoded += word
-                }
-            }
+        return doIt { length ->
+            val numChars = length - 1
+            val filter = filterSupplier(numChars)
+            generator.doGet(numChars, filter)
         }
-        return WordsLongs(strings, encoded, keystrokes)
-    }
-
-    fun generateWord(length: Int): Any? {
-        return generator.doGet(length)
-    }
-
-    fun generateWord(length: Int, filter: GenFilter): Any? {
-        return generator.doGet(length, filter)
     }
 }

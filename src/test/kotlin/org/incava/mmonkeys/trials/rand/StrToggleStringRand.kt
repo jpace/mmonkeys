@@ -17,7 +17,7 @@ class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
 
     override fun get(): String {
         val len = randomLength()
-        return if (len > 13) {
+        return if (len > RandEncoded.Constants.MAX_CHARS) {
             ++overruns
             bigGen.get(len)
         } else {
@@ -29,7 +29,7 @@ class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
         val len = randomLength()
         return if (len > filter) {
             ""
-        } else if (len > 13) {
+        } else if (len > RandEncoded.Constants.MAX_CHARS) {
             bigGen.getString(len)
         } else {
             getString(len)

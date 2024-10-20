@@ -20,7 +20,7 @@ class StrCalcBigIntToggle(private val slots: RndSlots) : StrLongRandSupplier {
     }
 
     private fun getString(length: Int): String {
-        return if (length > 13) {
+        return if (length > RandEncoded.Constants.MAX_CHARS) {
             val lowerLimit = ranges[length - 1].first
             val upperLimit = ranges[length - 1].second
             val rand = RandBigInt.rand(lowerLimit, upperLimit)

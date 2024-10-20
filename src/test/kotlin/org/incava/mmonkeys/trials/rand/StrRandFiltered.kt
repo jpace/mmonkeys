@@ -37,18 +37,4 @@ class StrRandFiltered(slots: RndSlots) : StrLenRand(slots) {
         }
         return String(bytes)
     }
-
-    override fun doGetString(length: Int, filter: GenFilter): String? {
-        val bytes = ByteArray(length)
-        repeat(length) { index ->
-            val n = randCharAz()
-            val ch = 'a' + n
-            val valid = filter.check(ch)
-            if (!valid) {
-                return null
-            }
-            bytes[index] = ch.toByte()
-        }
-        return String(bytes)
-    }
 }
