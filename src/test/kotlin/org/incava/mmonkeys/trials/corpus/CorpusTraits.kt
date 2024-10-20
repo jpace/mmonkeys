@@ -8,30 +8,28 @@ import java.math.BigInteger
 class CorpusTraits {
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
-    println("words.#: ${words.size}")
+    printf("word: %,d (%s)", words.size, "total")
+    printf("word: %,d (%s)", words.toSet().size, "unique")
     val bySize = words.groupBy { it.length }
     bySize.toSortedMap().forEach { (length, words) ->
-        println("$length: ${words.size} (total)")
-        println("$length: ${words.toSet().size} (unique)")
+        printf("%d: %,d (%s)", length, words.size, "total")
+        printf("%d: %,d (%s)", length, words.toSet().size, "unique")
         val y = BigInteger.valueOf(26L)
-        val z = y.pow(length)
-        System.out.printf("z: %s\n", z)
+        val seconds = y.pow(length)
         if (words.size < 5) {
             println("words: $words")
         }
-        val seconds = z
-        println("seconds: $seconds")
+        printf("seconds: %,d", seconds)
         val minutes = seconds / BigInteger.valueOf(60)
-        println("minutes: $minutes")
+        printf("minutes: %,d", minutes)
         val hours = minutes / BigInteger.valueOf(60)
-        println("hours: $hours")
+        printf("hours: %,d", hours)
         val days = hours / BigInteger.valueOf(24)
-        println("days: $days")
+        printf("days: %,d", days)
         val years = days / BigInteger.valueOf(365)
-        println("years: $years")
-        printf("years %,d\n", years)
+        printf("years: %,d", years)
         println()
     }
 }
