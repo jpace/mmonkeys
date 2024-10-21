@@ -125,24 +125,24 @@ class WordsGeneratorTest {
 
     @Test
     fun generateMatches() {
-        val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
-        // val generator1 = StrToggleAnyRand(slots)
-        val strRand = StrRandFactory.create(128, StrRandFactory.calcArray, StrRandFactory.assemble)
-        val strRandFiltered = StrRandFiltered(slots)
-        // val wordsGenerator1 = WordsGenerator(slots, generator1)
-        val randGen = WordsGenerator(slots, strRand)
-        val filteredGen = WordsGenerator(slots, strRandFiltered)
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
-        val filter = CorpusFilter(words)
-        val mapCorpus = MapCorpus(words)
-        val wordGen = WordGenerator(mapCorpus)
+        val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
 
-        // testGenerator("toggle any rand", wordsGenerator1, words)
+        val strRand = StrRandFactory.create(128, StrRandFactory.calcArray, StrRandFactory.assemble)
+        val randGen = WordsGenerator(slots, strRand)
         testGenerator("calc array assemble", randGen, words)
+
+        val strRandFiltered = StrRandFiltered(slots)
+        val filteredGen = WordsGenerator(slots, strRandFiltered)
         testGenerator("filtered", filteredGen, words)
-        testGenerator("repeat 2 chars", filteredGen, words, ::RepeatCharFilter)
-        testGenerator("repeat 2,3 chars", filteredGen, words) { RepeatCharFilter2(filter) }
-        testGenerator2("known word", filteredGen, words) { KnownWordFilter(mapCorpus, it) }
+
+        val filter = CorpusFilter(words)
+        testGenerator("repeat 2,3 chars", filteredGen, words) { RepeatCharFilter(filter) }
+
+        val mapCorpus1 = MapCorpus(words)
+        testGenerator2("known word", filteredGen, words) { KnownWordFilter(mapCorpus1, it) }
+        val mapCorpus2 = MapCorpus(words)
+        val wordGen = WordGenerator(mapCorpus2)
         testGenerator3("individual word", wordGen)
     }
 
@@ -160,5 +160,4 @@ class WordsGeneratorTest {
             Console.info("result.strings", result.strings)
         }
     }
-
 }

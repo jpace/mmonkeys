@@ -6,13 +6,13 @@ import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.trials.corpus.CorpusFilter
 import kotlin.test.Test
 
-internal class RepeatCharFilter2Test {
+internal class RepeatCharFilterTest {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
     val filter = CorpusFilter(words)
 
     @Test
     fun checkValid2() {
-        val obj = RepeatCharFilter2(filter)
+        val obj = RepeatCharFilter(filter)
         val r1 = obj.check('c')
         Console.info("r1", r1)
 
@@ -22,7 +22,7 @@ internal class RepeatCharFilter2Test {
 
     @Test
     fun checkInvalid2() {
-        val obj = RepeatCharFilter2(filter)
+        val obj = RepeatCharFilter(filter)
         val r1 = obj.check('c')
         Console.info("r1", r1)
 
