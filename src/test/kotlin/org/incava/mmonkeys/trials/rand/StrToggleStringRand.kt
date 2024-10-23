@@ -8,7 +8,7 @@ import kotlin.random.Random
 class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
     var overruns = 0L
     val littleGen = RandEncoded()
-    val bigGen = StrRandFactory.create(StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
+    val bigGen = StrRandFactory.create(slots.numSlots, StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
 
     override fun getString(length: Int): String {
         val encoded = littleGen.getEncoded(length)

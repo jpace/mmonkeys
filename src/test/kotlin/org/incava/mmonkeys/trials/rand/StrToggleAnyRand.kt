@@ -4,9 +4,9 @@ import org.incava.rando.RndSlots
 
 // RandEncoded, but StrRand if length > 13
 class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
-    var overruns = 0L
-    val littleGen = RandEncoded()
-    val bigGen = StrRandFactory.create(StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
+    private var overruns = 0L
+    private val littleGen = RandEncoded()
+    private val bigGen = StrRandFactory.create(slots.numSlots, StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
 
     override fun getString(length: Int): String {
         val encoded = littleGen.getEncoded(length)
@@ -33,14 +33,6 @@ class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
             bigGen.getString(len)
         } else {
             getString(len)
-        }
-    }
-
-    override fun doGet(length: Int): Any {
-        return if (length > RandEncoded.Constants.MAX_CHARS) {
-            bigGen.getString(length)
-        } else {
-            littleGen.getEncoded(length)
         }
     }
 }

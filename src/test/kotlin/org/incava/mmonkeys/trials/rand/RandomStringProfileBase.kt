@@ -7,7 +7,7 @@ import org.incava.rando.RandSlotsFactory
 
 open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
     val profiler = Profiler(numInvokes, trialInvokes)
-    val functions: Map<String, () -> StrLongRandSupplier>
+    val functions: Map<String, () -> StrSupplier>
 
     init {
         // we know that list[x] is faster than map[x] where sizes <= 100, so don't always test this:
@@ -32,7 +32,7 @@ open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
 
         val functions1 = keys.flatMap { slotsType ->
             stringProviders.map { (provName, stringProvider) ->
-                "$slotsType $provName" to { StrRandFactory.create(slotsProviders.getValue(slotsType), stringProvider) }
+                "$slotsType $provName" to { StrRandFactory.create(100, slotsProviders.getValue(slotsType), stringProvider) }
             }
         }.toMap()
 

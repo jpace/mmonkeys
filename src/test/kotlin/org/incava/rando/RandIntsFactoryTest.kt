@@ -21,14 +21,7 @@ class RandIntsFactoryTest {
                 generated.add(it)
             }
         }
-        if (true) {
-            generated.toSortedMap().forEach { (num, count) ->
-                Console.info("$num", count)
-            }
-        }
         val expected = generated.values.sum() / 128
-        Console.info("numbers.#", generated.size)
-        Console.info("expected", expected)
         DistributionAssert.assertVariance(generated, 128, 1.2)
     }
 
@@ -53,18 +46,9 @@ class RandIntsFactoryTest {
     }
 
     @Test
-    fun nextInts2() {
-        val obj = RandIntsFactory()
-        val result = obj.nextInts2()
-        Console.info("result.#", result.size)
-        Console.info("result", result.toList())
-    }
-
-    @Test
     fun count() {
         val generator = RandIntGenerator()
         val factory = RandIntsFactory()
-
         Console.info("generator nextInts", generator.nextInts().size)
         Console.info("generator nextInts2", generator.nextInts2().size)
         Console.info("generator nextInts3", generator.nextInts3().size)

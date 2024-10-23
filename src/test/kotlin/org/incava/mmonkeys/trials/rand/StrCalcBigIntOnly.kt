@@ -2,11 +2,10 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.number.StringEncoderV3
 import org.incava.mmonkeys.rand.RandBigInt
-import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import org.incava.rando.RndSlots
 import java.math.BigInteger
 
-class StrCalcBigIntOnly(private val slots: RndSlots) : StrLongRandSupplier {
+class StrCalcBigIntOnly(private val slots: RndSlots) : StrSupplier {
     private val maxNumChars = 500
     private val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
 
@@ -33,13 +32,5 @@ class StrCalcBigIntOnly(private val slots: RndSlots) : StrLongRandSupplier {
     override fun get(filter: Int): String {
         val len = slots.nextInt()
         return if (len > filter) "" else getString(len)
-    }
-
-    override fun doGet(length: Int): Any {
-        return getString(length)
-    }
-
-    override fun doGet(length: Int, filter: GenFilter): Any? {
-        TODO("Not yet implemented")
     }
 }

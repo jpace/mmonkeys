@@ -4,12 +4,12 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
-import kotlin.test.Test
 
-class WordsLenGeneratorTest {
-    fun runTest(corpus: MapCorpus, wordsLenGenerator: WordsLenGenerator) {
+class WordsGeneratorTrial {
+    fun runTest(corpus: MapCorpus, wordsGenerator: WordsGenerator) {
         var numMatched = 0L
         var keystrokes = 0L
         val numToMatch = 1000L
@@ -17,7 +17,7 @@ class WordsLenGeneratorTest {
 
         val duration = measureDuration {
             while (numMatched < numToMatch && corpus.lengthToStringsToIndices.isNotEmpty()) {
-                val result = wordsLenGenerator.generate()
+                val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
                     corpus.matched(word, word.length)
@@ -39,15 +39,14 @@ class WordsLenGeneratorTest {
         }
         Console.info("duration", duration)
     }
+}
 
-
-    @Test
-    fun generate() {
-        val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
-        val corpus = MapCorpus(words)
-        Console.info("mapCorpus.keys", corpus.lengthToStringsToIndices.keys.sorted())
-        val wordsLenGenerator = WordsLenGenerator(slots) { KnownWordFilter(corpus, it) }
-        runTest(corpus, wordsLenGenerator)
-    }
+fun main() {
+    val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+    val corpus = MapCorpus(words)
+    Console.info("mapCorpus.keys", corpus.lengthToStringsToIndices.keys.sorted())
+    val obj = WordsGeneratorTrial()
+    val generator2 = WordsGenerator(slots, RandIntsFactory::nextInts2) { length -> LengthFilter(corpus, length) }
+    obj.runTest(corpus, generator2)
 }

@@ -2,57 +2,59 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RndSlots
+import kotlin.random.Random
 
-data class Words(val strings: List<String>, val totalKeyStrokes: Long)
+interface Filtering {
+    fun check(ch: Char): Boolean
+}
 
-data class WordsLongs(val strings: List<String>, val encoded: List<Long>, val totalKeyStrokes: Long)
+abstract class LengthFiltering(val length: Int) : Filtering {
+    abstract fun checkLength(): Boolean
+}
 
-class WordsGenerator(val slots: RndSlots, private val generator: StrLongRandSupplier) {
+class WordsGenerator(
+    val slots: RndSlots,
+    private val indicesSupplier: (RandIntsFactory) -> IntArray,
+    private val filterSupplier: (Int) -> LengthFiltering
+) {
     private val intsFactory = RandIntsFactory()
     private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
 
-    fun doIt(block: (Int) -> Any?): WordsLongs {
-        val slotIndices = intsFactory.nextInts2()
+    fun getWords(): Words {
+        val slotIndices = indicesSupplier(intsFactory)
         val strings = mutableListOf<String>()
-        val encoded = mutableListOf<Long>()
         var keystrokes = 0L
         slotIndices.forEach { slotIndex ->
             // number of keystrokes to a space:
-            val length = slots.slotValue(slotIndex)
-            keystrokes += length
-            if (length in 2..maxLength) {
-                block(length)
-                val word = block(length)
-                if (word is String) {
-                    strings += word
-                } else if (word is Long) {
-                    encoded += word
+            val toSpace = slots.slotValue(slotIndex)
+            keystrokes += toSpace
+            if (toSpace in 2..maxLength) {
+                val numChars = toSpace - 1
+                val filter = filterSupplier(numChars)
+                if (filter.checkLength()) {
+                    val word = getWord(numChars, filter)
+                    if (word != null) {
+                        strings += word
+                    }
                 }
             }
         }
-        return WordsLongs(strings, encoded, keystrokes)
+        return Words(strings, keystrokes)
     }
 
-    fun generate(): WordsLongs {
-        return doIt { length ->
-            val numChars = length - 1
-            generator.doGet(numChars)
-        }
-    }
+    fun randCharAz() = Random.nextInt(StrRand.Constants.NUM_CHARS)
 
-    fun generate(filterSupplier: () -> GenFilter): WordsLongs {
-        return doIt { length ->
-            val numChars = length - 1
-            val filter = filterSupplier()
-            generator.doGet(numChars, filter)
+    fun getWord(numChars: Int, filter: Filtering): String? {
+        val bytes = ByteArray(numChars)
+        repeat(numChars) { index ->
+            val n = randCharAz()
+            val ch = 'a' + n
+            val valid = filter.check(ch)
+            if (!valid) {
+                return null
+            }
+            bytes[index] = ch.toByte()
         }
-    }
-
-    fun generate2(filterSupplier: (Int) -> GenFilter): WordsLongs {
-        return doIt { length ->
-            val numChars = length - 1
-            val filter = filterSupplier(numChars)
-            generator.doGet(numChars, filter)
-        }
+        return String(bytes)
     }
 }

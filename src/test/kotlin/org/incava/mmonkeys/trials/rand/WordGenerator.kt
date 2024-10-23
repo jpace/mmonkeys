@@ -4,6 +4,9 @@ import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import kotlin.random.Random
 
+/**
+ * Generates words without doing a simulated length check.
+ */
 class WordGenerator(val corpus: MapCorpus) {
     private val maxLen = corpus.lengthToStringsToIndices.keys.maxOrNull() ?: throw RuntimeException("no max")
 
@@ -27,7 +30,7 @@ class WordGenerator(val corpus: MapCorpus) {
         }
     }
 
-    fun hasCandidate(current: StringBuilder) : Boolean {
+    private fun hasCandidate(current: StringBuilder) : Boolean {
         val curStr = current.toString()
         (current.length .. maxLen).forEach { length ->
             val forLength = corpus.lengthToStringsToIndices[length]

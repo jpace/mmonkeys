@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
-abstract class StrRand : StrLongRandSupplier {
+abstract class StrRand : StrSupplier {
     object Constants {
         const val NUM_CHARS : Int = 26
     }
@@ -10,6 +10,4 @@ abstract class StrRand : StrLongRandSupplier {
     fun randCharAz() = randInt(Constants.NUM_CHARS)
 
     abstract fun randInt(limit: Int) : Int
-
-    override fun doGet(length: Int): Any = 1
 }

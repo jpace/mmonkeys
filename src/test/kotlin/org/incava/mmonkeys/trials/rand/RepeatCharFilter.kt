@@ -2,7 +2,7 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.trials.corpus.CorpusFilter
 
-class RepeatCharFilter(val filter: CorpusFilter) : GenFilter {
+class RepeatCharFilter(val filter: CorpusFilter) : Filtering {
     // one character back:
     var prev1: Char? = null
 

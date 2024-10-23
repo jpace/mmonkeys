@@ -16,12 +16,6 @@ private class RandIntsProfile(private val numInvokes: Long, private val trialInv
         }
     }
 
-    fun ktNextLong() {
-        repeat(2) {
-            random.nextLong(0x44ff_88ff_0444_3117)
-        }
-    }
-
     fun profile() {
         val profiler = Profiler(numInvokes, trialInvokes)
         val generator = RandIntGenerator()

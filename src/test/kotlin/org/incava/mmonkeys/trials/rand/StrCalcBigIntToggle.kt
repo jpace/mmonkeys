@@ -6,7 +6,7 @@ import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
 import org.incava.rando.RndSlots
 import java.math.BigInteger
 
-class StrCalcBigIntToggle(private val slots: RndSlots) : StrLongRandSupplier {
+class StrCalcBigIntToggle(private val slots: RndSlots) : StrSupplier {
     private val maxNumChars = 500
     private val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
     private val delegate = RandEncoded()
@@ -39,11 +39,5 @@ class StrCalcBigIntToggle(private val slots: RndSlots) : StrLongRandSupplier {
     override fun get(filter: Int): String {
         val len = slots.nextInt()
         return if (len > filter) "" else getString(len)
-    }
-
-    override fun doGet(length: Int): Any = getString(length)
-
-    override fun doGet(length: Int, filter: GenFilter): Any? {
-        TODO("Not yet implemented")
     }
 }

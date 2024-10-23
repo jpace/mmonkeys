@@ -1,16 +1,13 @@
 package org.incava.mmonkeys.trials.corpus
 
 class CorpusFilter(words: Collection<String>) {
-    val downers = words.map { it.toLowerCase() }.distinct()
     val chars = ('a'..'z')
-    val missingTwos: MutableMap<Char, MutableSet<Char>>
-    val missingThrees: MutableMap<Char, MutableMap<Char, MutableSet<Char>>>
+    val missingTwos: MutableMap<Char, MutableSet<Char>> = mutableMapOf()
+    val missingThrees: MutableMap<Char, MutableMap<Char, MutableSet<Char>>> = mutableMapOf()
 
     init {
-        missingTwos = mutableMapOf()
-        missingThrees = mutableMapOf()
+        val downers = words.map { it.toLowerCase() }.distinct()
         val chars = ('a'..'z')
-
         chars.forEach { first ->
             chars.forEach { second ->
                 val str2 = "$first$second"
@@ -31,7 +28,17 @@ class CorpusFilter(words: Collection<String>) {
         }
     }
 
-    fun canMatch(ch1: Char, ch2: Char): Boolean {
-        return false
+    fun canMatch(ch: Char, prev1: Char?, prev2: Char?): Boolean {
+        return if (prev1 != null) {
+            if (missingTwos[prev1]?.contains(ch) == true) {
+                false
+            } else if (prev2 != null && missingThrees[prev2]?.get(prev1)?.contains(ch) == true) {
+                false
+            } else {
+                true
+            }
+        } else {
+            true
+        }
     }
 }

@@ -2,11 +2,11 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 
-class KnownWordFilter(val corpus: MapCorpus, val length: Int) : GenLenFilter {
+class LengthFilter(val corpus: MapCorpus, length: Int) : LengthFiltering(length) {
     private val candidates = corpus.lengthToStringsToIndices[length]?.keys
-    private val current = StringBuilder(length)
+    private var current: String = ""
 
-    override fun checkLength(length: Int): Boolean {
+    override fun checkLength(): Boolean {
         return corpus.lengthToStringsToIndices.containsKey(length)
     }
 
@@ -14,8 +14,8 @@ class KnownWordFilter(val corpus: MapCorpus, val length: Int) : GenLenFilter {
         return if (candidates == null) {
             false
         } else {
-            current.append(ch)
-            candidates.firstOrNull { it.startsWith(current.toString()) } != null
+            current += ch
+            candidates.firstOrNull { it.startsWith(current) } != null
         }
     }
 }
