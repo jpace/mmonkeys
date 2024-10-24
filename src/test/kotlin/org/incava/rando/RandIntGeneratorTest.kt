@@ -10,16 +10,6 @@ fun MutableMap<Int, Int>.add(number: Int) {
 
 class RandIntGeneratorTest {
     @Test
-    fun multiRandDist() {
-        multiRandDist { it.nextInts() }
-    }
-
-    @Test
-    fun multiRandDist2() {
-        multiRandDist { it.nextInts2() }
-    }
-
-    @Test
     fun multiRandDist3() {
         multiRandDist { it.nextInts3() }
     }
@@ -44,15 +34,5 @@ class RandIntGeneratorTest {
             }
         }
         assertVariance(generated, 100, 1.2)
-    }
-
-    @Test
-    fun toNumbers() {
-        val gen = RandIntGenerator()
-        repeat(100) {
-            val x = 900_000 + (113 * it)
-            val nums = gen.toNumbersList(x)
-            Console.info("$it $x", nums.toList())
-        }
     }
 }

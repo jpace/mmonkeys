@@ -21,7 +21,6 @@ class RandIntsFactoryTest {
                 generated.add(it)
             }
         }
-        val expected = generated.values.sum() / 128
         DistributionAssert.assertVariance(generated, 128, 1.2)
     }
 
@@ -49,8 +48,6 @@ class RandIntsFactoryTest {
     fun count() {
         val generator = RandIntGenerator()
         val factory = RandIntsFactory()
-        Console.info("generator nextInts", generator.nextInts().size)
-        Console.info("generator nextInts2", generator.nextInts2().size)
         Console.info("generator nextInts3", generator.nextInts3().size)
         Console.info("generator nextInts4", generator.nextInts4().size)
         Console.info("factory nextInts", factory.nextInts().size)

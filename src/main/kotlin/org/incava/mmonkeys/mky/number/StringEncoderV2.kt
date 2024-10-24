@@ -1,16 +1,21 @@
 package org.incava.mmonkeys.mky.number
 
 object StringEncoderV2 {
-    // a .. z (no numbers yet)
-    private const val NUM_CHARS = 26
-
     fun encodeToInt(str: String): Int {
-        return if (str.isBlank()) -1 else str.toCharArray().fold(0) { value, ch -> value * 27 + getOffset(ch) }
+        return if (str.isBlank())
+            -1
+        else
+            str.toCharArray().fold(0) { value, ch ->
+                value * 27 + getOffset(ch)
+            }
     }
 
     fun encodeToLong(str: String): Long {
-        return if (str.isBlank()) return -1L else str.toCharArray()
-            .fold(0L) { value, ch -> value * 27L + getOffset(ch) }
+        return if (str.isBlank())
+            -1L
+        else
+            str.toCharArray()
+                .fold(0L) { value, ch -> value * 27L + getOffset(ch) }
     }
 
     fun decode(encoded: Int): String {

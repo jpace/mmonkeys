@@ -3,23 +3,22 @@ package org.incava.rando
 import org.incava.ikdk.io.Console
 import kotlin.test.Test
 
-class BitsMathTest {
-    fun bitsToString(number: Int): String {
+class BitsMathTrial {
+    private fun bitsToString(number: Int): String {
         return Integer.toBinaryString(number).padStart(Int.SIZE_BITS, '0')
     }
 
-    fun showBitsLine(leftSpaces: Int, chars: String, rightSpaces: Int, value: Int) {
+    private fun showBitsLine(leftSpaces: Int, chars: String, rightSpaces: Int, value: Int) {
         val leftPad = " ".repeat(leftSpaces)
         val rightPad = " ".repeat(rightSpaces)
-        println("$leftPad$chars$rightPad ($value) !")
+        println("$leftPad$chars$rightPad ($value)")
     }
 
-    @Test
-    fun testIntOutput() {
+    fun intOutput() {
         val number = 352_066_059
         val bits = bitsToString(number)
         val num = String.format("%,d", number)
-        println("$bits ($num) ?")
+        println("$bits ($num)")
         repeat(4) {
             val leftSpaces = bits.length - 7 * (it + 1)
             val rightSpaces = it * 7
@@ -58,8 +57,7 @@ class BitsMathTest {
         println("$bits ($num) ?")
     }
 
-    @Test
-    fun testIntOutput2() {
+    fun intOutput2() {
         val number = 352_066_059
         writeBitsLine(number)
         writeBitsLine2(number)
@@ -78,10 +76,10 @@ class BitsMathTest {
                 summarize(shifted, it)
             }
         }
+        println()
     }
 
-    @Test
-    fun testLongOutput() {
+    fun longOutput() {
         val number = 8_590_897_405_908_228_619L
         val (x, y) = BitsString.longToInts(number)
         Console.info("x", x)
@@ -98,10 +96,10 @@ class BitsMathTest {
             val pad = " ".repeat(it * 7)
             println("$indent$chars$pad ($value)")
         }
+        println()
     }
 
-    @Test
-    fun testIntOutputShift() {
+    fun intOutputShift() {
         val number = 352_066_059
         val bits = Integer.toBinaryString(number).padStart(Int.SIZE_BITS, '0')
         val num = String.format("%,d", number)
@@ -113,9 +111,18 @@ class BitsMathTest {
             val pad = " ".repeat(it * 7)
             println("$indent$chars$pad ($value)")
         }
+        println()
     }
 
-    fun extractBits(bits: String, offset: Int): String {
+    private fun extractBits(bits: String, offset: Int): String {
         return bits.substring(bits.length - 7 * (offset + 1), bits.length - 7 * offset)
     }
+}
+
+fun main() {
+    val obj = BitsMathTrial()
+    obj.intOutput()
+    obj.intOutput2()
+    obj.longOutput()
+    obj.intOutputShift()
 }

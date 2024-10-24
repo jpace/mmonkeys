@@ -26,10 +26,6 @@ object StringEncoderV3 {
             }
     }
 
-    fun encode(string: String): Number {
-        return if (string.length <= 6) encodeToInt(string) else encodeToLong(string)
-    }
-
     fun decode(number: Int): String {
         val sb = StringBuilder()
         var value = number

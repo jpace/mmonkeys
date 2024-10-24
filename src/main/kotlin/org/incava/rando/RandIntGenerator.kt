@@ -6,28 +6,6 @@ import kotlin.random.Random
 class RandIntGenerator {
     private val random = Random.Default
 
-    fun nextInts(): List<Int> {
-        val num1 = random.nextInt()
-
-        // if num4 == Int.MIN_VALUE we in trouble, since the result is MIN_VALUE
-        val num2 = abs(num1)
-
-        // >= or > ?
-        // 100 ^ 4 (fits under Int.max)
-        if (num2 >= 100_000_000) {
-            return nextInts()
-        }
-        return toNumbersList(num2)
-    }
-
-    fun nextInts2(): List<Int> {
-        val num1 = random.nextInt()
-        if (num1 < 0 || num1 >= 100_000_000) {
-            return nextInts2()
-        }
-        return toNumbersList(num1)
-    }
-
     fun nextInts3(): List<Int> {
         val num1 = random.nextInt()
         val num2 = abs(num1)
@@ -57,7 +35,7 @@ class RandIntGenerator {
         return nums
     }
 
-    fun toNumbersList(num: Int): List<Int> {
+    private fun toNumbersList(num: Int): List<Int> {
         var n = num
         // we probably know the size ... log something?
         val nums = mutableListOf<Int>()

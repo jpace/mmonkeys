@@ -22,6 +22,15 @@ internal class LengthCorpusTest {
     }
 
     @Test
+    fun v2() {
+        val words = listOf("this", "is", "a", "test")
+        val obj = MapCorpusV2(
+            words,
+            { LinkedHashMap<Int, MutableMap<String, MutableList<Int>>>() },
+        { LinkedHashMap<String, MutableList<Int>>() })
+    }
+
+    @Test
     fun matched() {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = LengthCorpus(input)

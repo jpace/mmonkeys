@@ -2,8 +2,6 @@ package org.incava.mmonkeys.mky.number
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import java.io.File
 
 class NumberedCorpus(words: List<String>) : Corpus(words) {
     // length to [ encoded to [ indices in sought ] ]
@@ -42,9 +40,5 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
             numbers.remove(length)
         }
         return index
-    }
-
-    override fun toString(): String {
-        return "NumberedCorpus(numbers.keys.#=${numbers.keys.size}, rangeEncoded=$rangeEncoded)"
     }
 }

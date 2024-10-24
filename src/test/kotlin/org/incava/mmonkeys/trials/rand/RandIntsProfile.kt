@@ -21,8 +21,6 @@ private class RandIntsProfile(private val numInvokes: Long, private val trialInv
         val generator = RandIntGenerator()
         val factory = RandIntsFactory()
 
-        profiler.add("generator v1") { repeat(63 / 4) { generator.nextInts() } }
-        profiler.add("generator v2") { repeat(63 / 4) { generator.nextInts2() } }
         profiler.add("generator v3") { repeat(63 / 4) { generator.nextInts3() } }
         profiler.add("generator v4") { repeat(63 / 4) { generator.nextInts4() } }
         profiler.add("factory ints") { repeat(7) { factory.nextInts() }}

@@ -1,90 +1,66 @@
 package org.incava.mmonkeys.mky.number
 
-import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.testutil.StringUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.Test
 
 internal class StringEncodersTest {
-
-    private fun findMaxInt(from: String, encoder: (String) -> Int) {
-        var str = from
-        var encoded: Int
-        var count = 0
-        var prev = str
-        while (true) {
-            encoded = encoder(str)
-            if (encoded < 0) {
-                break
-            }
-            if (count % 100000 == 0) {
-                Console.info("str", str)
-                Console.info("encoded", encoded)
-            }
-            prev = str
-            str = StringUtil.succ(str)
-            count++
-        }
-        Console.info("str", str)
-        Console.info("encoded", encoded)
-        Console.info("prev", prev)
-        Console.info("encoded(prev)", encoder(prev))
-    }
-
     @Test
-    fun encodeToIntMax() {
-        findMaxInt("zzzzzz", StringEncoderV1::encodeToInt)
+    fun encodeToIntMaxV1() {
+        val result = findMaxInt("zzzzzz", StringEncoderV1::encodeToInt)
+        assertEquals(617_831_551, result)
     }
 
     @Test
     fun encodeToBase27Max() {
-        findMaxInt("zzzzzzz", StringEncoderV2::encodeToInt)
+        val result = findMaxInt("zzzzzzz", StringEncoderV2::encodeToInt)
+        assertEquals(1_870_418_610, result)
     }
 
     @Test
-    fun encodeToIntNewMax() {
-        findMaxInt("fxshrxx", StringEncoderV3::encodeToInt)
+    fun encodeToIntMaxV3() {
+        val result = findMaxInt("fxshrxx", StringEncoderV3::encodeToInt)
+        assertEquals(Int.MAX_VALUE, result)
     }
 
     @Test
-    fun encodeToLongMax() {
-        findMaxLong("aaopxlgfbitsgd", StringEncoderV1::encodeToLong)
-    }
-
-    @Test
-    fun encodeToLongNewMax() {
-        findMaxLong("crpxnlskvljfhh", StringEncoderV3::encodeToLong)
+    fun encodeToLongMaxV1() {
+        val result = findMaxLong("aaopxlgfbitsgd", StringEncoderV1::encodeToLong)
+        assertEquals(Long.MAX_VALUE, result)
     }
 
     @Test
     fun encodeToBase27LongMax() {
-        findMaxLong("bgldhuekcgxjxy", StringEncoderV2::encodeToLong)
+        val result = findMaxLong("bgldhuekcgxjxy", StringEncoderV2::encodeToLong)
+        assertEquals(Long.MAX_VALUE, result)
     }
 
-    private fun findMaxLong(from: String, encoder: (String) -> Long) {
-        Console.info("Long.MAX_VALUE", Long.MAX_VALUE)
+    @Test
+    fun encodeToLongMaxV3() {
+        val result = findMaxLong("crpxnlskvljfhh", StringEncoderV3::encodeToLong)
+        assertEquals(Long.MAX_VALUE, result)
+    }
+
+    private fun findMaxInt(from: String, encoder: (String) -> Int): Int {
+        return findMax(from, 0, encoder)
+    }
+
+    private fun findMaxLong(from: String, encoder: (String) -> Long): Long {
+        return findMax(from, 0L, encoder)
+    }
+
+    private fun <T: Comparable<T>> findMax(from: String, initial: T, encoder: (String) -> T): T {
         var str = from
-        var encoded: Long
-        var count = 0
-        var prev = str
+        var prevEncoded = initial
         while (true) {
-            encoded = encoder(str)
-            if (encoded < 0) {
-                break
+            val encoded = encoder(str)
+            if (encoded < initial) {
+                return prevEncoded
+            } else {
+                prevEncoded = encoded
             }
-            if (count % 1000000 == 0) {
-                Console.info("count", count)
-                Console.info("str", str)
-                Console.info("encoded", encoded)
-            }
-            prev = str
             str = StringUtil.succ(str)
-            count++
         }
-        Console.info("str", str)
-        Console.info("encoded", encoded)
-        Console.info("prev", prev)
-        Console.info("encoded(prev)", encoder(prev))
     }
 
     @Test

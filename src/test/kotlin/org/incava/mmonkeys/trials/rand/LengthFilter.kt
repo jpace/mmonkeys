@@ -4,7 +4,7 @@ import org.incava.mmonkeys.mky.corpus.MapCorpus
 
 class LengthFilter(val corpus: MapCorpus, length: Int) : LengthFiltering(length) {
     private val candidates = corpus.lengthToStringsToIndices[length]?.keys
-    private var current: String = ""
+    private var current = ""
 
     override fun checkLength(): Boolean {
         return corpus.lengthToStringsToIndices.containsKey(length)
