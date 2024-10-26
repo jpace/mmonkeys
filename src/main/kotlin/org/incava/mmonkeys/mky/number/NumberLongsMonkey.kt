@@ -20,7 +20,7 @@ class NumberLongsMonkey(override val corpus: NumberedCorpus, id: Int, typewriter
         val encoded = rangeEncoded.first + randInRange
         val matchEncoded = forLength[encoded] ?: return noMatch(soughtLen)
         return if (matchEncoded.isNotEmpty()) {
-            val word = StringEncoderV3.decode(encoded)
+            val word = StringEncoder.decode(encoded)
             val index = corpus.matched(word, encoded, soughtLen)
             match(soughtLen, index)
         } else {
@@ -58,7 +58,7 @@ class NumberLongsMonkey(override val corpus: NumberedCorpus, id: Int, typewriter
         corpus.numbers.forEach { (length, numbers) ->
             println(length)
             numbers.forEach { (number, indices) ->
-                val str = StringEncoderV3.decode(number)
+                val str = StringEncoder.decode(number)
                 println("  $str")
                 println("    " + indices.joinToString(", "))
             }

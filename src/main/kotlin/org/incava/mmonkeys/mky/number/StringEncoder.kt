@@ -1,14 +1,11 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.mmonkeys.type.Chars
 import java.math.BigInteger
 
-/*
- * Encodes starting at zero, so it handles longer strings than V1.
- * @todo - replace V1 with this
- */
-object StringEncoderV3 {
+object StringEncoder {
     // a .. z (no numbers yet)
-    private const val NUM_CHARS = 26
+    private const val NUM_CHARS = Chars.NUM_ALPHA_CHARS
 
     fun encodeToInt(string: String): Int {
         return encode(string, -1) { value, ch ->

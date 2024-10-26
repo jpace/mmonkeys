@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.number.StringEncoderV3
+import org.incava.mmonkeys.mky.number.StringEncoder
 import org.incava.rando.RndSlots
 
 class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
@@ -10,7 +10,7 @@ class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
 
     override fun getString(length: Int): String {
         val encoded = delegate.getEncoded(length)
-        return StringEncoderV3.decode(encoded)
+        return StringEncoder.decode(encoded)
     }
 
     override fun get(): String {

@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.mky.number.StringEncoderV3
+import org.incava.mmonkeys.mky.number.StringEncoder
+import org.incava.mmonkeys.type.Chars
 import kotlin.random.Random
 
 class RandEncoded {
@@ -10,7 +11,7 @@ class RandEncoded {
     }
 
     private val rangesEncoded = (1..Constants.MAX_CHARS).associateWith { length ->
-        val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
+        val encoded = StringEncoder.encodeToLong("a".repeat(length))
         encoded to (encoded + 1) * Chars.NUM_ALPHA_CHARS
     }
 

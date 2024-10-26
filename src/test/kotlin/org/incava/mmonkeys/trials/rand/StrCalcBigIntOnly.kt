@@ -1,7 +1,8 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.mky.number.StringEncoderV3
+import org.incava.mmonkeys.mky.number.StringEncoder
 import org.incava.mmonkeys.rand.RandBigInt
+import org.incava.mmonkeys.type.Chars
 import org.incava.rando.RndSlots
 import java.math.BigInteger
 
@@ -21,7 +22,7 @@ class StrCalcBigIntOnly(private val slots: RndSlots) : StrSupplier {
         val lowerLimit = ranges[length - 1].first
         val upperLimit = ranges[length - 1].second
         val rand = RandBigInt.rand(lowerLimit, upperLimit)
-        return StringEncoderV3.decode(rand)
+        return StringEncoder.decode(rand)
     }
 
     override fun get(): String {

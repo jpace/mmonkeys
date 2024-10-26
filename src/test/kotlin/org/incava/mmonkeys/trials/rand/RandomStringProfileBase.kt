@@ -3,6 +3,7 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.type.Chars
 import org.incava.rando.RandSlotsFactory
 
 open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {

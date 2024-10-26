@@ -2,6 +2,7 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
+import org.incava.mmonkeys.type.Chars
 import kotlin.random.Random
 
 class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {

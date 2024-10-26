@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RndSlots
-import kotlin.random.Random
 
 interface Filtering {
     fun check(ch: Char): Boolean

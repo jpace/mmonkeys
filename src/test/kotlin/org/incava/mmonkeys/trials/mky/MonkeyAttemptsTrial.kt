@@ -8,8 +8,8 @@ import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyAttemptsMapAndList
 import org.incava.mmonkeys.mky.MonkeyMonitor
-import org.incava.mmonkeys.mky.corpus.LengthCorpus
-import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.MapCorpus
+import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.MemoryUtil
 import org.incava.time.Durations.measureDuration
@@ -49,7 +49,7 @@ class MonkeyTrial(
     fun runTest(supplier: (Int, Monkey) -> MonkeyMonitor) {
         var index = 0
         repeat(monkeyCount) { monkeyIndex ->
-            val monkey = LengthCorpusMonkey(LengthCorpus(listOf("abc")), 1, Typewriter())
+            val monkey = MapCorpusMonkey(MapCorpus(listOf("abc")), 1, Typewriter())
             val obj = supplier(monkeyIndex, monkey)
             repeat(numAttempts) { inner ->
                 tick(monkeyIndex, inner, attemptTick)

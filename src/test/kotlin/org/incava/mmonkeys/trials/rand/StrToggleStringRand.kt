@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.mky.number.StringEncoderV3
+import org.incava.mmonkeys.mky.number.StringEncoder
 import org.incava.rando.RndSlots
-import kotlin.random.Random
 
 // Str Long, but StrRand if length > 13
 class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
@@ -12,7 +11,7 @@ class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
 
     override fun getString(length: Int): String {
         val encoded = littleGen.getEncoded(length)
-        return StringEncoderV3.decode(encoded)
+        return StringEncoder.decode(encoded)
     }
 
     override fun get(): String {

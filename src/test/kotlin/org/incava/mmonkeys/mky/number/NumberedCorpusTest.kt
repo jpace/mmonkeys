@@ -22,7 +22,7 @@ internal class NumberedCorpusTest {
     @Test
     fun findMatch() {
         val rangesEncoded = (1..14).associateWith { length ->
-            val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
+            val encoded = StringEncoder.encodeToLong("a".repeat(length))
             encoded to (encoded + 1) * 26
         }
 
@@ -45,7 +45,7 @@ internal class NumberedCorpusTest {
         val encoded = rangeEncoded.first + randInRange
         Console.info("encoded", encoded)
 
-        val decoded = StringEncoderV3.decode(encoded)
+        val decoded = StringEncoder.decode(encoded)
         Console.info("decoded", decoded)
     }
 }

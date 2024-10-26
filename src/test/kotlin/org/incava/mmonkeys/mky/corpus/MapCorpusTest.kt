@@ -7,7 +7,7 @@ import kotlin.test.assertNull
 
 internal class MapCorpusTest {
     @Test
-    fun soughtByLength() {
+    fun lengthToStringsToIndices() {
         val input = listOf("ab", "cd", "def", "defg", "ghi", "lmnop")
         val obj = MapCorpus(input)
         val expected = mapOf(

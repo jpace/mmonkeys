@@ -1,17 +1,17 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.mmonkeys.testutil.StringUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.math.BigInteger
 import kotlin.test.Test
 
-internal class StringEncoderV3Test {
+internal class StringEncoderTest {
     @Test
     fun emptyString() {
-        val encoded = StringEncoderV3.encodeToInt("")
-        val result = StringEncoderV1.decode(encoded)
-        assertEquals("", result)
+        val result = StringEncoder.encodeToInt("")
+        assertEquals(-1, result)
     }
 
     @TestFactory
@@ -53,8 +53,8 @@ internal class StringEncoderV3Test {
             "fxshrxx"
         ).map { str ->
             DynamicTest.dynamicTest("ch: $str") {
-                val encoded = StringEncoderV3.encodeToInt(str)
-                val decoded = StringEncoderV3.decode(encoded)
+                val encoded = StringEncoder.encodeToInt(str)
+                val decoded = StringEncoder.decode(encoded)
                 assertEquals(str, decoded)
             }
         }
@@ -73,8 +73,8 @@ internal class StringEncoderV3Test {
             "crpxnlskvljfhh"
         ).map { str ->
             DynamicTest.dynamicTest(str) {
-                val encoded = StringEncoderV3.encodeToLong(str)
-                val decoded = StringEncoderV3.decode(encoded)
+                val encoded = StringEncoder.encodeToLong(str)
+                val decoded = StringEncoder.decode(encoded)
                 assertEquals(str, decoded)
             }
         }
@@ -93,10 +93,36 @@ internal class StringEncoderV3Test {
             "crpxnlskvljfhh"
         ).map { str ->
             DynamicTest.dynamicTest(str) {
-                val encoded = StringEncoderV3.encodeToLong(str)
+                val encoded = StringEncoder.encodeToLong(str)
                 val bigInt = BigInteger.valueOf(encoded)
-                val decoded = StringEncoderV3.decode(bigInt)
+                val decoded = StringEncoder.decode(bigInt)
                 assertEquals(str, decoded)
             }
         }
+
+    @Test
+    fun encodeToIntMaxV3() {
+        val result = findMax("fxshrxx", 0, StringEncoder::encodeToInt)
+        assertEquals(Int.MAX_VALUE, result)
+    }
+
+    @Test
+    fun encodeToLongMaxV3() {
+        val result = findMax("crpxnlskvljfhh", 0L, StringEncoder::encodeToLong)
+        assertEquals(Long.MAX_VALUE, result)
+    }
+
+    private fun <T : Comparable<T>> findMax(from: String, zero: T, encoder: (String) -> T): T {
+        var str = from
+        var prevEncoded = zero
+        while (true) {
+            val encoded = encoder(str)
+            if (encoded < zero) {
+                return prevEncoded
+            } else {
+                prevEncoded = encoded
+            }
+            str = StringUtil.succ(str)
+        }
+    }
 }

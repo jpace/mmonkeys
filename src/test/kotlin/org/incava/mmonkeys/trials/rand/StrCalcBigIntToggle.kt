@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.mky.number.StringEncoderV3
+import org.incava.mmonkeys.mky.number.StringEncoder
 import org.incava.mmonkeys.rand.RandBigInt
-import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
+import org.incava.mmonkeys.type.Chars
 import org.incava.rando.RndSlots
 import java.math.BigInteger
 
@@ -24,10 +24,10 @@ class StrCalcBigIntToggle(private val slots: RndSlots) : StrSupplier {
             val lowerLimit = ranges[length - 1].first
             val upperLimit = ranges[length - 1].second
             val rand = RandBigInt.rand(lowerLimit, upperLimit)
-            StringEncoderV3.decode(rand)
+            StringEncoder.decode(rand)
         } else {
             val encoded = delegate.getEncoded(length)
-            StringEncoderV3.decode(encoded)
+            StringEncoder.decode(encoded)
         }
     }
 

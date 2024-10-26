@@ -6,8 +6,6 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
-import org.incava.mmonkeys.mky.corpus.LengthCorpus
-import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
 import org.incava.mmonkeys.mky.number.NumberLongsMonkey
@@ -57,7 +55,6 @@ class CorpusTrial(
 
     fun run() {
         runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
-        runMonkey("length", ::LengthCorpus, ::LengthCorpusMonkey)
         runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
         runMonkey("map", ::MapCorpus, ::MapCorpusMonkey)
     }

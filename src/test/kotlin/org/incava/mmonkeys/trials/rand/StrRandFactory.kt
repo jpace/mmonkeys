@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.mmonkeys.type.Chars
 import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 

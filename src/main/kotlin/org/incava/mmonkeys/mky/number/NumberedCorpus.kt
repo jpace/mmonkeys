@@ -7,7 +7,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
     // length to [ encoded to [ indices in sought ] ]
     val numbers: MutableMap<Int, MutableMap<Long, MutableList<Int>>> = mutableMapOf()
     val rangeEncoded = (1..13).associateWith { length ->
-        val encoded = StringEncoderV3.encodeToLong("a".repeat(length))
+        val encoded = StringEncoder.encodeToLong("a".repeat(length))
         encoded to (encoded + 1) * 26
     }
 
@@ -15,7 +15,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
         val encoded = mutableMapOf<String, Long>()
         words.withIndex().forEach { word ->
             // trouble with words of size 14; see StringEncodersTest
-            val enc = encoded.computeIfAbsent(word.value, StringEncoderV3::encodeToLong)
+            val enc = encoded.computeIfAbsent(word.value, StringEncoder::encodeToLong)
             if (enc < 0) {
                 Console.info("overflow")
                 Console.info("word", word.value)

@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.corpus.LengthCorpus
-import org.incava.mmonkeys.mky.corpus.LengthCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.MapCorpus
+import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.MemoryUtil
 import org.junit.jupiter.api.Disabled
@@ -116,7 +116,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsList() {
-        val monkey = LengthCorpusMonkey(LengthCorpus(listOf("abc")), 1, Typewriter())
+        val monkey = MapCorpusMonkey(MapCorpus(listOf("abc")), 1, Typewriter())
         val obj = MonkeyAttemptsList(1, monkey)
         var index = 0
         repeat(100_000_000) {
@@ -130,7 +130,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsMapAndList() {
-        val monkey = LengthCorpusMonkey(LengthCorpus(listOf("abc")), 1, Typewriter())
+        val monkey = MapCorpusMonkey(MapCorpus(listOf("abc")), 1, Typewriter())
         val obj = MonkeyAttemptsMapAndList(1, monkey)
         var index = 0
         repeat(1_000_000_000) {
@@ -144,7 +144,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsMapAndList1() {
-        val monkey = LengthCorpusMonkey(LengthCorpus(listOf("abc")), 1, Typewriter())
+        val monkey = MapCorpusMonkey(MapCorpus(listOf("abc")), 1, Typewriter())
         var index = 0
         val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
         repeat(1_000) { outer ->
