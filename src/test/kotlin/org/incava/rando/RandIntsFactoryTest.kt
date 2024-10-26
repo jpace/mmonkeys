@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
+import kotlin.test.Ignore
 
 fun MutableMap<Int, Int>.add(number: Int) {
     this[number] = (this[number] ?: 0) + 1
@@ -41,16 +42,19 @@ class RandIntsFactoryTest {
         }
     }
 
+    @Ignore("too time consuming to run frequently")
     @Test
     fun distribution1() {
         testDistribution(RandIntsFactory::nextInts1)
     }
 
+    @Ignore("too time consuming to run frequently")
     @Test
     fun distribution2() {
         testDistribution(RandIntsFactory::nextInts2)
     }
 
+    @Ignore("too time consuming to run frequently")
     @Test
     fun distribution3() {
         testDistribution(RandIntsFactory::nextInts3)

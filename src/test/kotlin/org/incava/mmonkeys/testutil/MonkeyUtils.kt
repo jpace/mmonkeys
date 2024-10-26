@@ -2,7 +2,6 @@ package org.incava.mmonkeys.testutil
 
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusMonkey
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.type.DeterministicTypewriter
@@ -15,7 +14,7 @@ object MonkeyUtils {
         corpusMonkeyCtor: CorpusMonkeyCtor<T>,
         chars: List<Char> = Keys.fullList(),
         typewriterCtor: (chars: List<Char>) -> Typewriter = ::DeterministicTypewriter,
-    ): CorpusMonkey {
+    ): Monkey {
         val typewriter = typewriterCtor(chars)
         val monkeyFactory = CorpusMonkeyFactory({ typewriter }, monkeyCtor = corpusMonkeyCtor, charsCtor = chars)
         return monkeyFactory.createMonkey(corpus)

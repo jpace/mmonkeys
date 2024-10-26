@@ -5,8 +5,8 @@ import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
-import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
-import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.EqMonkey
+import org.incava.mmonkeys.mky.corpus.MapMonkey
 import java.lang.Thread.sleep
 
 fun runSimulation(type: String, simulation: CoroutineSimulation) {
@@ -36,8 +36,8 @@ fun <T : Corpus> runCorpusSimulation(toChar: Char, type: String, sought: T, monk
 fun runCorpusTest(toChar: Char) {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
-    val x = "equal" to ::EqCorpusMonkey
-    val y = "map" to ::MapCorpusMonkey
+    val x = "equal" to ::EqMonkey
+    val y = "map" to ::MapMonkey
     val m = x
     val corpus = Corpus(sought)
     runCorpusSimulation(toChar, m.first, corpus, m.second)

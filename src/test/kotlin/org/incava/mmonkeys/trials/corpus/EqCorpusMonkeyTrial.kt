@@ -3,11 +3,11 @@ package org.incava.mmonkeys.trials.corpus
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.EqMonkey
 import java.util.concurrent.atomic.AtomicLong
 
 fun main() {
-    val monkeyFactory = CorpusMonkeyFactory(monkeyCtor = ::EqCorpusMonkey)
+    val monkeyFactory = CorpusMonkeyFactory(monkeyCtor = ::EqMonkey)
     val sought = listOf("abc", "cde", "efg")
     val obj = monkeyFactory.createMonkey(Corpus(sought))
     Console.info("obj", obj)

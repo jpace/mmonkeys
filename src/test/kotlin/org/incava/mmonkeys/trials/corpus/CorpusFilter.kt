@@ -27,18 +27,4 @@ class CorpusFilter(words: Collection<String>) {
             }
         }
     }
-
-    fun canMatch(ch: Char, prev1: Char?, prev2: Char?): Boolean {
-        return if (prev1 != null) {
-            if (missingTwos[prev1]?.contains(ch) == true) {
-                false
-            } else if (prev2 != null && missingThrees[prev2]?.get(prev1)?.contains(ch) == true) {
-                false
-            } else {
-                true
-            }
-        } else {
-            true
-        }
-    }
 }

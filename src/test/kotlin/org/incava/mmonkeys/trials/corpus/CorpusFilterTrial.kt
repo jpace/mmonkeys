@@ -8,10 +8,9 @@ import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import kotlin.math.pow
 
-class CorpusFilterTest {
+class CorpusFilterTrial {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
 
-    @Test
     fun duplicates() {
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
@@ -22,14 +21,12 @@ class CorpusFilterTest {
         }
     }
 
-    @Test
     fun twos() {
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
         Console.info("result", result)
     }
 
-    @Test
     fun threes() {
         val obj = CorpusFilter(words)
         val result = obj.missingThrees
@@ -40,7 +37,6 @@ class CorpusFilterTest {
         }
     }
 
-    @Test
     fun percentPresent() {
         val unique = words.toSet()
 
@@ -52,14 +48,6 @@ class CorpusFilterTest {
         (1..30).forEach { length ->
             val totalCount = words.filter { it.length == length }.size
             val uniqueCount = unique.filter { it.length == length }.size
-
-//            Console.info("length", length)
-//            Console.info("total.#", totalCount)
-//            Console.info("unique.#", uniqueCount)
-//            Console.info("possible", possible)
-//            Console.info("unique / total", uniqueCount.toDouble() / totalCount)
-//            Console.info("unique / possible", uniqueCount.toDouble() / possible)
-//            Console.info("total / possible", totalCount.toDouble() / possible)
             if (length > 13) {
                 showStats(length, totalCount, uniqueCount)
             } else {
@@ -89,4 +77,12 @@ class CorpusFilterTest {
             possible.toBigInteger()
         )
     }
+}
+
+fun main() {
+    val obj = CorpusFilterTrial()
+    obj.duplicates()
+    obj.percentPresent()
+    obj.twos()
+    obj.threes()
 }

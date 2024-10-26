@@ -43,7 +43,7 @@ class WordsGenerator(
         return Words(strings, keystrokes)
     }
 
-    fun getWord(numChars: Int, filter: Filtering): String? {
+    private fun getWord(numChars: Int, filter: Filtering): String? {
         val bytes = ByteArray(numChars)
         repeat(numChars) { index ->
             val n = Chars.randCharAz()

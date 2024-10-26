@@ -1,9 +1,10 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.MatchData
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.type.Typewriter
 
-class MapCorpusMonkey(override val corpus: MapCorpus, id: Int, typewriter: Typewriter) : CorpusMonkey(corpus, id, typewriter) {
+class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus) : Monkey(id, typewriter, corpus) {
     override fun check(): MatchData {
         val toEndOfWord = randomLength()
         val length = toEndOfWord - 1

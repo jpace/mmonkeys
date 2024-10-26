@@ -1,9 +1,10 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.MatchData
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.type.Typewriter
 
-class EqCorpusMonkey(sought: Corpus, id: Int, typewriter: Typewriter) : CorpusMonkey(sought, id, typewriter) {
+class EqMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : Monkey(id, typewriter, corpus) {
     override fun check(): MatchData {
         val word = nextString()
         val index = corpus.match(word)

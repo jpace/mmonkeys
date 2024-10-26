@@ -6,8 +6,4 @@ class DeterministicTypewriter(private val chars: List<Char>) : Typewriter(chars)
     override fun nextChar(size: Int): Char {
         return chars[count++ % size]
     }
-
-    override fun toString(): String {
-        return "DeterministicTypewriter(chars=$chars, count=$count)"
-    }
 }

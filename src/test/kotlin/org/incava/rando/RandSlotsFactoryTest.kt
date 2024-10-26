@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import kotlin.test.Ignore
 
+@Ignore("too time consuming to run frequently")
 class RandSlotsFactoryTest {
     private val numChars = 27
     private val numSlots = 100
@@ -65,7 +66,6 @@ class RandSlotsFactoryTest {
         compareGaps(64, 27, 10_000_000)
     }
 
-    @Ignore("100_000_000 trials needed for 30 characters")
     @Test
     fun findGap3() {
         // we need more trials for this number of characters

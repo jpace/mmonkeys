@@ -6,10 +6,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.MatchData
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusMonkey
 
-open class CoroutineCorpusSimulation(private val corpus: Corpus, private val monkeys: List<CorpusMonkey>, private val toFind: Int) : CoroutineSimulation(monkeys.size) {
+open class CoroutineCorpusSimulation(private val corpus: Corpus, private val monkeys: List<Monkey>, private val toFind: Int) : CoroutineSimulation(monkeys.size) {
     private var numFound = 0L
     val matches = mutableListOf<MatchData>()
 
@@ -25,7 +25,7 @@ open class CoroutineCorpusSimulation(private val corpus: Corpus, private val mon
         return numFound >= toFind || corpus.isEmpty()
     }
 
-    private suspend fun runMonkey(monkey: CorpusMonkey) {
+    private suspend fun runMonkey(monkey: Monkey) {
         (0 until maxAttempts).forEach { attempt ->
             if (isComplete()) {
                 return
@@ -35,7 +35,7 @@ open class CoroutineCorpusSimulation(private val corpus: Corpus, private val mon
         Console.info("match failed", this)
     }
 
-    private suspend fun checkMonkey(monkey: CorpusMonkey): Boolean {
+    private suspend fun checkMonkey(monkey: Monkey): Boolean {
         iterations.incrementAndGet()
         val md = monkey.check()
         if (md.isMatch) {

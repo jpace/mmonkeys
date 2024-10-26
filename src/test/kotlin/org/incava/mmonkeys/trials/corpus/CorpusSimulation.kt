@@ -5,14 +5,11 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
 import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
-import org.incava.mmonkeys.mky.number.NumberLongsMonkey
-import org.incava.mmonkeys.mky.number.NumberedCorpus
+import org.incava.mmonkeys.mky.corpus.MapMonkey
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.time.Durations
 
@@ -28,7 +25,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int,
     }
 
     fun run() {
-        val monkeyCtor = ::MapCorpusMonkey
+        val monkeyCtor = ::MapMonkey
         val typewriterFactory = TypewriterFactory()
         val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, monkeyCtor)
         val manager = Manager(corpus)

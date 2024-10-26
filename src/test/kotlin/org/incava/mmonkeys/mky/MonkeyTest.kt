@@ -2,7 +2,7 @@ package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.EqMonkey
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -19,7 +19,7 @@ internal class MonkeyTest {
         Console.info("#expected", expected.length)
         Console.info("#characters", characters.size)
         val typewriter = Typewriter(characters)
-        val monkey = EqCorpusMonkey(Corpus(listOf("")), 37, typewriter)
+        val monkey = EqMonkey(37, typewriter, Corpus(listOf("")))
         val results = mutableListOf<Long>()
         val targetMatches = 3
         val start = System.currentTimeMillis()
@@ -45,7 +45,7 @@ internal class MonkeyTest {
     @MethodSource("dataForNextString")
     fun nextString(expected: String, characters: List<Char>) {
         val typewriter = DeterministicTypewriter(characters)
-        val obj = EqCorpusMonkey(Corpus(listOf("")), 37, typewriter)
+        val obj = EqMonkey(37, typewriter, Corpus(listOf("")))
         val result = obj.nextString()
         assertEquals(expected, result)
     }
@@ -87,7 +87,7 @@ internal class MonkeyTest {
     @Test
     fun nextChars() {
         val typewriter = DeterministicTypewriter(Keys.fullList())
-        val obj = EqCorpusMonkey(Corpus(listOf("")), 37, typewriter)
+        val obj = EqMonkey(37, typewriter, Corpus(listOf("")))
         val result = obj.nextChars(6)
         assertEquals("abcdef", result)
     }

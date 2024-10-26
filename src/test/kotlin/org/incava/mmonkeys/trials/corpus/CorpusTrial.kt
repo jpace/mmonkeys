@@ -5,10 +5,10 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
 import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
-import org.incava.mmonkeys.mky.corpus.EqCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.EqMonkey
 import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.corpus.MapCorpusMonkey
-import org.incava.mmonkeys.mky.number.NumberLongsMonkey
+import org.incava.mmonkeys.mky.corpus.MapMonkey
+import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.trials.base.PerfResults
@@ -54,9 +54,9 @@ class CorpusTrial(
     }
 
     fun run() {
-        runMonkey("eq", ::Corpus, ::EqCorpusMonkey)
-        runMonkey("longs", ::NumberedCorpus, ::NumberLongsMonkey)
-        runMonkey("map", ::MapCorpus, ::MapCorpusMonkey)
+        runMonkey("eq", ::Corpus, ::EqMonkey)
+        runMonkey("longs", ::NumberedCorpus, ::NumbersMonkey)
+        runMonkey("map", ::MapCorpus, ::MapMonkey)
     }
 
     fun showResults() {
