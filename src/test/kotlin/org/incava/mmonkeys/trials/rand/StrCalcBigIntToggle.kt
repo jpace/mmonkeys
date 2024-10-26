@@ -12,15 +12,15 @@ class StrCalcBigIntToggle(private val slots: RndSlots) : StrSupplier {
     private val delegate = RandEncoded()
 
     init {
-        val nChars = BigInteger.valueOf(NUM_CHARS.toLong())
-        ranges += BigInteger.ZERO to RandBigInt.pow(BigInteger.valueOf(26), 1)
+        val nChars = BigInteger.valueOf(Chars.NUM_ALPHA_CHARS.toLong())
+        ranges += BigInteger.ZERO to RandBigInt.pow(nChars, 1)
         (2 until maxNumChars).forEach {
             ranges += ranges.last().second to (ranges.last().second + RandBigInt.pow(nChars, it))
         }
     }
 
     private fun getString(length: Int): String {
-        return if (length > RandEncoded.Constants.MAX_CHARS) {
+        return if (length > Chars.NUM_ALPHA_CHARS) {
             val lowerLimit = ranges[length - 1].first
             val upperLimit = ranges[length - 1].second
             val rand = RandBigInt.rand(lowerLimit, upperLimit)

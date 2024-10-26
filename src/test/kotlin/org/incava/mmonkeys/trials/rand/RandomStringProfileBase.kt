@@ -36,8 +36,8 @@ open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
             }
         }.toMap()
 
-        val calcList = RandSlotsFactory.calcList(StrRand.Constants.NUM_CHARS + 1, 100, 10000)
-        val calcArray = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 100, 10000)
+        val calcList = RandSlotsFactory.calcList(Chars.NUM_ALL_CHARS, 100, 10000)
+        val calcArray = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 100, 10000)
 
         functions = mapOf(
             "calc (array) decode" to { StrRandDecoded(calcArray) },

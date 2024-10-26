@@ -4,17 +4,28 @@ import org.incava.mmonkeys.testutil.StringUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.Test
 
+
+internal class StringUtilTest {
+    @Test
+    fun succ() {
+        val str = "zzz"
+        val result = StringUtil.succ(str)
+        assertEquals("aaaa", result)
+    }
+
+    @Test
+    fun succOffset() {
+        val str = "aaa"
+        val result = StringUtil.succ(str, 25)
+        assertEquals("aaz", result)
+    }
+}
+
 internal class StringEncodersTest {
     @Test
     fun encodeToIntMaxV1() {
         val result = findMaxInt("zzzzzz", StringEncoderV1::encodeToInt)
         assertEquals(617_831_551, result)
-    }
-
-    @Test
-    fun encodeToBase27Max() {
-        val result = findMaxInt("zzzzzzz", StringEncoderV2::encodeToInt)
-        assertEquals(1_870_418_610, result)
     }
 
     @Test
@@ -26,12 +37,6 @@ internal class StringEncodersTest {
     @Test
     fun encodeToLongMaxV1() {
         val result = findMaxLong("aaopxlgfbitsgd", StringEncoderV1::encodeToLong)
-        assertEquals(Long.MAX_VALUE, result)
-    }
-
-    @Test
-    fun encodeToBase27LongMax() {
-        val result = findMaxLong("bgldhuekcgxjxy", StringEncoderV2::encodeToLong)
         assertEquals(Long.MAX_VALUE, result)
     }
 
@@ -49,31 +54,17 @@ internal class StringEncodersTest {
         return findMax(from, 0L, encoder)
     }
 
-    private fun <T: Comparable<T>> findMax(from: String, initial: T, encoder: (String) -> T): T {
+    private fun <T: Comparable<T>> findMax(from: String, zero: T, encoder: (String) -> T): T {
         var str = from
-        var prevEncoded = initial
+        var prevEncoded = zero
         while (true) {
             val encoded = encoder(str)
-            if (encoded < initial) {
+            if (encoded < zero) {
                 return prevEncoded
             } else {
                 prevEncoded = encoded
             }
             str = StringUtil.succ(str)
         }
-    }
-
-    @Test
-    fun succ() {
-        val str = "zzz"
-        val result = StringUtil.succ(str)
-        assertEquals("aaaa", result)
-    }
-
-    @Test
-    fun succOffset() {
-        val str = "aaa"
-        val result = StringUtil.succ(str, 25)
-        assertEquals("aaz", result)
     }
 }

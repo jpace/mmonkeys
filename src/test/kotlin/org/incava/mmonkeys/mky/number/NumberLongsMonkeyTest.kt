@@ -70,16 +70,7 @@ internal class NumberLongsMonkeyTest {
             )
         )
         val obj = makeMonkey(input)
-        obj as NumberLongsMonkey
         val result = obj.corpus.numbers
-        result.forEach { (length, numbers) ->
-            println(length)
-            numbers.forEach { (number, indices) ->
-                val str = StringEncoderV1.decode(number)
-                println("  $str")
-                println("    " + indices.joinToString(", "))
-            }
-        }
         assertEquals(expected, result)
     }
 

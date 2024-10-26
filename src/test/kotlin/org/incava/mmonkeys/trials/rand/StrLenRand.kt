@@ -6,8 +6,6 @@ import kotlin.random.Random
 abstract class StrLenRand(private val slots: RndSlots) : StrRand() {
     fun randomLength() = slots.nextInt()
 
-    override fun randInt(limit: Int) = Random.nextInt(limit)
-
     abstract fun getString(length: Int): String
 
     override fun get(): String {

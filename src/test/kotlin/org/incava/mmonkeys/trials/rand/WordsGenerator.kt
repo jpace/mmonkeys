@@ -43,12 +43,10 @@ class WordsGenerator(
         return Words(strings, keystrokes)
     }
 
-    fun randCharAz() = Random.nextInt(StrRand.Constants.NUM_CHARS)
-
     fun getWord(numChars: Int, filter: Filtering): String? {
         val bytes = ByteArray(numChars)
         repeat(numChars) { index ->
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             val ch = 'a' + n
             val valid = filter.check(ch)
             if (!valid) {

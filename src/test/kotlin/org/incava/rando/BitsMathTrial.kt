@@ -1,6 +1,7 @@
 package org.incava.rando
 
 import org.incava.ikdk.io.Console
+import kotlin.random.Random
 import kotlin.test.Test
 
 class BitsMathTrial {

@@ -2,7 +2,7 @@ package org.incava.confile
 
 import org.incava.time.Durations.measureDuration
 
-open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
+open class Profiler(val numInvokes: Long, val numTrials: Int) {
     val simulations = LinkedHashMap<String, Simulation>()
 
     fun add(name: String, block: () -> Unit) {
@@ -18,8 +18,8 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
         indexed.forEach { (index, name) ->
             println("$index - $name")
         }
-        repeat(trialInvokes) { trial ->
-            print("$trial / $trialInvokes")
+        repeat(numTrials) { trial ->
+            print("$trial / $numTrials")
             indexed.entries.shuffled().forEach { (index, name) ->
                 print(" . $index")
                 val simulation = simulations.getValue(name)
@@ -39,7 +39,7 @@ open class Profiler(val numInvokes: Long, val trialInvokes: Int) {
     fun showResults(sortType: SortType = SortType.BY_NAME) {
         val table = ProfileTable()
         val runs = simulations.keys.associateWith { simulations.getValue(it).durations }
-        table.show(runs, trialInvokes, numInvokes, sortType)
+        table.show(runs, numTrials, numInvokes, sortType)
         println()
     }
 }

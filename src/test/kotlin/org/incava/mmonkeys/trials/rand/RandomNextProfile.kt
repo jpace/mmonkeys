@@ -22,7 +22,7 @@ class RandomNextProfile(private val intMax: Int, private val longMax: Long, numI
         Console.info("Int.MAX_VALUE", Int.MAX_VALUE)
         Console.info("Long.MAX_VALUE", Long.MAX_VALUE)
 
-        val profiler = Profiler(numInvokes, trialInvokes)
+        val profiler = Profiler(numInvokes, numTrials)
         val t = ThreadLocalRandom.current()
         profiler.add("kt int") { ktRandom.nextInt() }
         profiler.add("jdk int") { jdkRandom.nextInt() }

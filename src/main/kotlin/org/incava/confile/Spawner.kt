@@ -28,7 +28,7 @@ object Spawner {
         Console.info("multiple", multiple)
 
         val nextNumInvokes = current.numInvokes * multiple
-        val showdown = Profiler(nextNumInvokes, current.trialInvokes)
+        val showdown = Profiler(nextNumInvokes, current.numTrials)
 
         simToAvg.forEach { (name, dur) ->
             val off = (dur - mean) / deviation

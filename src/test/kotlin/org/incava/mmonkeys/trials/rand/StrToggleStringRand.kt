@@ -6,9 +6,9 @@ import kotlin.random.Random
 
 // Str Long, but StrRand if length > 13
 class StrToggleStringRand(slots: RndSlots) : StrLenRand(slots) {
-    var overruns = 0L
-    val littleGen = RandEncoded()
-    val bigGen = StrRandFactory.create(slots.numSlots, StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
+    private var overruns = 0L
+    private val littleGen = RandEncoded()
+    private val bigGen = StrRandFactory.create(slots.numSlots, StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
 
     override fun getString(length: Int): String {
         val encoded = littleGen.getEncoded(length)

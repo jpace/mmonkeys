@@ -10,14 +10,13 @@ import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 
-private class WordGeneratorProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
-    val file = ResourceUtil.FULL_FILE
-    val words = CorpusFactory.readFileWords(file, -1).filter { it.length in 3..17 }
-    val matchGoal = 100L
+private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1).filter { it.length in 3..17 }
+    val matchGoal = 200L
 
     fun profile() {
         Console.info("words.#", words.size)
-        val profiler = Profiler(numInvokes, trialInvokes)
+        val profiler = Profiler(numInvokes, numTrials)
 
         run {
             val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
@@ -71,6 +70,6 @@ private class WordGeneratorProfile(private val numInvokes: Long, private val tri
 }
 
 fun main() {
-    val obj = WordGeneratorProfile(1L, 1)
+    val obj = WordsGeneratorProfile(1L, 5)
     obj.profile()
 }

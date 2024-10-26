@@ -9,13 +9,12 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
     private val range = 100
 
     fun randInt(limit: Int) = Random.nextInt(limit)
-    fun randCharAz() = randInt(StrRand.Constants.NUM_CHARS)
 
     fun `string builder unsized`() : String {
         val length = randInt(range)
         val sb = StringBuilder()
         repeat(length) {
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             sb.append('a' + n)
         }
         return sb.toString()
@@ -25,7 +24,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val sb = StringBuilder(length)
         repeat(length) {
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             sb.append('a' + n)
         }
         return sb.toString()
@@ -35,7 +34,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val sb = StringBuffer()
         repeat(length) {
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             sb.append('a' + n)
         }
         return sb.toString()
@@ -45,7 +44,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val sb = StringBuffer(length)
         repeat(length) {
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             sb.append('a' + n)
         }
         return sb.toString()
@@ -55,7 +54,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val bytes = mutableListOf<Byte>()
         repeat(length) {
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             bytes += ('a' + n).toByte()
         }
         return String(bytes.toByteArray())
@@ -65,7 +64,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val bytes = ByteArray(length)
         repeat(length) { index ->
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             bytes[index] = ('a' + n).toByte()
         }
         return String(bytes)
@@ -75,7 +74,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val chars = mutableListOf<Char>()
         repeat(length) {
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             chars += 'a' + n
         }
         return chars.joinToString()
@@ -85,7 +84,7 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         val length = randInt(range)
         val chars = CharArray(length)
         repeat(length) { index ->
-            val n = randCharAz()
+            val n = Chars.randCharAz()
             chars[index] = 'a' + n
         }
         return chars.joinToString()

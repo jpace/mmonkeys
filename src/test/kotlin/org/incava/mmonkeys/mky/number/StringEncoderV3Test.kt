@@ -55,9 +55,7 @@ internal class StringEncoderV3Test {
             DynamicTest.dynamicTest("ch: $str") {
                 val encoded = StringEncoderV3.encodeToInt(str)
                 val decoded = StringEncoderV3.decode(encoded)
-                System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
                 assertEquals(str, decoded)
-                println()
             }
         }
 
@@ -77,7 +75,6 @@ internal class StringEncoderV3Test {
             DynamicTest.dynamicTest(str) {
                 val encoded = StringEncoderV3.encodeToLong(str)
                 val decoded = StringEncoderV3.decode(encoded)
-                System.out.printf("%-8s | %8d | %s\n", str, encoded, decoded)
                 assertEquals(str, decoded)
             }
         }
@@ -99,7 +96,6 @@ internal class StringEncoderV3Test {
                 val encoded = StringEncoderV3.encodeToLong(str)
                 val bigInt = BigInteger.valueOf(encoded)
                 val decoded = StringEncoderV3.decode(bigInt)
-                System.out.printf("%-8s | %8d | %s\n", str, bigInt, decoded)
                 assertEquals(str, decoded)
             }
         }
