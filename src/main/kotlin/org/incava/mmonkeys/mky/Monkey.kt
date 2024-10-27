@@ -16,26 +16,6 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: 
         return typewriter.nextCharacter()
     }
 
-    fun nextString(): String {
-        val builder = StringBuilder()
-        while (true) {
-            val ch = nextChar()
-            if (ch == Keys.END_CHAR) {
-                return builder.toString()
-            } else {
-                builder.append(ch)
-            }
-        }
-    }
-
-    fun nextChars(length: Int): String {
-        // returns a string of the given length
-        return (0 until length).fold(StringBuilder()) { sb, _ ->
-            val ch = typewriter.nextWordCharacter()
-            sb.append(ch)
-        }.toString()
-    }
-
     override fun toString(): String {
         return "Monkey(id=$id)"
     }

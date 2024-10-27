@@ -21,4 +21,12 @@ class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus)
         }
         return noMatch(length)
     }
+
+    fun nextChars(length: Int): String {
+        // returns a string of the given length
+        return (0 until length).fold(StringBuilder()) { sb, _ ->
+            val ch = typewriter.nextWordCharacter()
+            sb.append(ch)
+        }.toString()
+    }
 }

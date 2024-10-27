@@ -12,7 +12,8 @@ class MonkeyCheckTrials {
     fun mapMonkeyCheck() {
         Console.info("map")
         val corpus = MapCorpus(words)
-        val obj = MonkeyUtils.createMonkey(corpus, ::MapMonkey, typewriterCtor = { Typewriter(it) })
+        val typewriter = Typewriter()
+        val obj = MapMonkey(1, typewriter, corpus)
         var iterations = 0
         while (!obj.corpus.isEmpty()) {
             obj.check()
@@ -26,8 +27,7 @@ class MonkeyCheckTrials {
         Console.info("eq")
         val corpus = Corpus(words)
         val typewriter = Typewriter()
-        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, monkeyCtor = ::EqMonkey)
-        val obj = monkeyFactory.createMonkey(corpus)
+        val obj = EqMonkey(1, typewriter, corpus)
         var iterations = 0
         while (!obj.corpus.isEmpty()) {
             obj.check()
@@ -41,8 +41,7 @@ class MonkeyCheckTrials {
         Console.info("numbers")
         val corpus = NumberedCorpus(words)
         val typewriter = Typewriter()
-        val monkeyFactory = CorpusMonkeyFactory({ typewriter }, monkeyCtor = ::NumbersMonkey)
-        val obj = monkeyFactory.createMonkey(corpus)
+        val obj = NumbersMonkey(1, typewriter, corpus)
         var iterations = 0
         while (!obj.corpus.isEmpty()) {
             obj.check()

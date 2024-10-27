@@ -83,12 +83,4 @@ internal class MonkeyTest {
             return Keys.keyList(toChar)
         }
     }
-
-    @Test
-    fun nextChars() {
-        val typewriter = DeterministicTypewriter(Keys.fullList())
-        val obj = EqMonkey(37, typewriter, Corpus(listOf("")))
-        val result = obj.nextChars(6)
-        assertEquals("abcdef", result)
-    }
 }

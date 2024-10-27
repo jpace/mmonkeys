@@ -4,7 +4,7 @@ import org.incava.rando.RndSlots
 
 // RandEncoded, but StrRand if length > 13
 class StrToggleAnyRand(slots: RndSlots) : StrLenRand(slots) {
-    private var overruns = 0L
+    var overruns = 0L
     private val littleGen = RandEncoded()
     private val bigGen = StrRandFactory.create(slots.numSlots, StrRandFactory.calcArray, StrRandFactory.assemble) as StrLenRand
 

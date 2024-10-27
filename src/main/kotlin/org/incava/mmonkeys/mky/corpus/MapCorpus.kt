@@ -1,14 +1,10 @@
 package org.incava.mmonkeys.mky.corpus
 
-import org.incava.ikdk.io.Console
-
 class MapCorpus(words: List<String>) : Corpus(words) {
     // HashMap consumes less memory than the default LinkedHashMap:
     val lengthToStringsToIndices: MutableMap<Int, MutableMap<String, MutableList<Int>>> = hashMapOf()
 
     init {
-        Console.info("lengthToStringsToIndices", lengthToStringsToIndices)
-        Console.info("lengthToStringsToIndices.class", lengthToStringsToIndices.javaClass)
         words.withIndex().forEach { word ->
             lengthToStringsToIndices
                 .computeIfAbsent(word.value.length) { hashMapOf() }

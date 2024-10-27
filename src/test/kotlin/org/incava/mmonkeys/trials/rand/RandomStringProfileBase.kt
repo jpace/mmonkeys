@@ -52,9 +52,6 @@ open class RandomStringProfileBase(numInvokes: Long, trialInvokes: Int) {
             "toggle any (array)" to { StrToggleAnyRand(calcArray) },
             "toggle any (list)" to { StrToggleAnyRand(calcList) },
         ) + functions1
-
-        Console.info("functions", functions)
-        Console.info("functions1", functions1)
     }
 
     fun addFilters(name: String, generator: StrRand) {

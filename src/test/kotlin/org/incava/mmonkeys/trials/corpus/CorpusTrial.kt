@@ -67,7 +67,7 @@ class CorpusTrial(
 
 fun main() {
     // NumberLongsMonkey can only support up through words of length 13
-    val obj = CorpusTrial(3 .. 17, 10000, Duration.ofSeconds(120L))
+    val obj = CorpusTrial(3 .. 17, 10000, Duration.ofSeconds(10L))
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

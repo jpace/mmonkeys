@@ -24,16 +24,16 @@ class CorpusFilterTrial {
     fun twos() {
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
-        Console.info("result", result)
+        result.forEach { (first, seconds) ->
+            Console.info("$first", seconds)
+        }
     }
 
     fun threes() {
         val obj = CorpusFilter(words)
         val result = obj.missingThrees
-        Console.info("result", result)
         result.forEach { (first, seconds) ->
-            Console.info("first", first)
-            Console.info("seconds", seconds)
+            seconds.forEach { (x, y) -> Console.info("$first $x", y)}
         }
     }
 

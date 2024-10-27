@@ -2,6 +2,7 @@ package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
 class EqMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : Monkey(id, typewriter, corpus) {
@@ -13,5 +14,17 @@ class EqMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : Monkey(id, typ
             match(word.length, index)
         } else
             noMatch(word.length)
+    }
+
+    fun nextString(): String {
+        val builder = StringBuilder()
+        while (true) {
+            val ch = nextChar()
+            if (ch == Keys.END_CHAR) {
+                return builder.toString()
+            } else {
+                builder.append(ch)
+            }
+        }
     }
 }
