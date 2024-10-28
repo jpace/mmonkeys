@@ -1,15 +1,12 @@
 package org.incava.mmonkeys.mky.corpus
 
-class IndexedCorpus<T>(words: List<String>, supplier: (String) -> T) {
+class SingleCorpus<T> {
     // HashMap consumes less memory than the default LinkedHashMap:
     val elements: MutableMap<Int, MutableMap<T, MutableList<Int>>> = hashMapOf()
 
-    init {
-        words.withIndex().forEach { word ->
-            elements
-                .computeIfAbsent(word.value.length) { hashMapOf() }
-                .computeIfAbsent(supplier(word.value)) { mutableListOf() }.also { it.add(word.index) }
-        }
+    fun add(item: T, length: Int, index: Int) {
+        elements.computeIfAbsent(length) { hashMapOf() }
+            .computeIfAbsent(item) { mutableListOf() }.also { it.add(index) }
     }
 
     fun matched(item: T, length: Int): Int {

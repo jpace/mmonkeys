@@ -1,15 +1,16 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
 import org.incava.rando.RndSlots
 
 class StrRandDecoded(slots: RndSlots) : StrLenRand(slots) {
     var overruns = 0L
-    val delegate = RandEncoded()
+    val delegate = RandEncoded
 
     override fun getString(length: Int): String {
-        val encoded = delegate.getEncoded(length)
+        val encoded = delegate.random(length)
         return StringEncoder.decode(encoded)
     }
 

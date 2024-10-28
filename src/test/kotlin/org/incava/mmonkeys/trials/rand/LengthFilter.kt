@@ -1,13 +1,22 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 
-class LengthFilter(val corpus: MapCorpus, length: Int) : LengthFiltering(length) {
-    private val candidates = corpus.lengthToStringsToIndices[length]?.keys
+object LengthFilterFactory {
+    fun create(corpus: MapCorpus, length: Int): LengthFilter {
+        return LengthFilter(corpus, length)
+    }
+}
+
+class LengthFilter(private val candidates: Set<String>?, length: Int) : LengthFiltering(length) {
+    constructor(corpus: MapCorpus, length: Int) : this(corpus.forLength(length)?.keys, length)
+    constructor(corpus: DualCorpus, length: Int) : this(corpus.stringsForLength(length)?.keys, length)
+
     private var current = ""
 
     override fun checkLength(): Boolean {
-        return corpus.lengthToStringsToIndices.containsKey(length)
+        return candidates != null
     }
 
     override fun check(ch: Char): Boolean {

@@ -1,7 +1,9 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -10,16 +12,20 @@ import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
 
 class WordsGeneratorV2Trial {
-    fun runTest(corpus: MapCorpus, wordsGenerator: WordsGeneratorV2) {
+    fun runTest(corpus: Corpus, wordsGenerator: WordsGeneratorV2) {
         var numMatched = 0
         var keystrokes = 0L
-        val numToMatch = 10_000L
-        val minLength = 3
+        val numToMatch = 250_000L
+        val minLength = 4
         var longerMatched = 0
         val matchedByLength = sortedMapOf<Int, Int>()
+        val bySize = corpus.words.groupBy { it.length }.mapValues { it.value.size }
+        println("by size:")
+        println(bySize.toSortedMap())
+        Console.printf("total: %,d", bySize.values.sum())
 
         val duration = measureDuration {
-            while (longerMatched < numToMatch && corpus.lengthToStringsToIndices.isNotEmpty()) {
+            while (longerMatched < numToMatch && !corpus.isEmpty()) {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
@@ -27,6 +33,12 @@ class WordsGeneratorV2Trial {
                     ++numMatched
                     if (word.length > minLength) {
                         ++longerMatched
+                        if (longerMatched % 1000 == 0) {
+                            println("by size: ")
+                            println(bySize.toSortedMap())
+                            Console.printf("total: %,d", bySize.values.sum())
+                            println()
+                        }
                     }
                     WordsTrialBase.showCurrent(numMatched, longerMatched, matchedByLength)
 //                    if (word.length > 13) {
@@ -43,13 +55,8 @@ class WordsGeneratorV2Trial {
 fun main() {
     val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
-    val corpus = MapCorpus(words)
-    Console.info("mapCorpus.keys", corpus.lengthToStringsToIndices.keys.sorted())
     val obj = WordsGeneratorV2Trial()
-    val shortWords = words.filter { it.length <= 13 }
-    val longWords = words.filter { it.length > 13 }
-    val numberedCorpus = NumberedCorpus(shortWords)
-    val mapCorpus = MapCorpus(longWords)
-    val generator2 = WordsGeneratorV2(mapCorpus, numberedCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(mapCorpus, it) }
-    obj.runTest(corpus, generator2)
+    val dualCorpus = DualCorpus(words)
+    val generator2 = WordsGeneratorV2(dualCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(dualCorpus, it) }
+    obj.runTest(dualCorpus, generator2)
 }

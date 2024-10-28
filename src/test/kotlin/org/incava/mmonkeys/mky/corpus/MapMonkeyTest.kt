@@ -22,7 +22,7 @@ internal class MapMonkeyTest {
             result = monkey1.check()
         } while (!result.isMatch)
         assertSame(monkey1.corpus, monkey2.corpus)
-        assertEquals(corpus.lengthToStringsToIndices, corpus.lengthToStringsToIndices)
+        assertEquals(corpus.indexedCorpus.elements, corpus.indexedCorpus.elements)
     }
 
     @Test

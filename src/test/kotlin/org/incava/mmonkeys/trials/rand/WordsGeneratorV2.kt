@@ -1,23 +1,20 @@
 package org.incava.mmonkeys.trials.rand
 
-import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.type.Chars
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RndSlots
 
 class WordsGeneratorV2(
-    val mapCorpus: MapCorpus,
-    numberedCorpus: NumberedCorpus,
+    val dualCorpus: DualCorpus,
     val slots: RndSlots,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
     private val filterSupplier: (Int) -> LengthFiltering,
 ) {
-
     private val intsFactory = RandIntsFactory()
     private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
-    private val encodedGenerator = EncodedGenerator(numberedCorpus)
+    private val encodedGenerator = EncodedGenerator(dualCorpus)
+    private val filteringGenerator = FilteringGenerator(dualCorpus)
 
     fun checkWord(numChars: Int, strings: MutableList<String>) {
         if (numChars <= 13) {
@@ -29,12 +26,9 @@ class WordsGeneratorV2(
         } else {
             // use "legacy"
             val filter = filterSupplier(numChars)
-            if (filter.checkLength()) {
-                val word = getWord(numChars, filter)
-                if (word != null) {
-                    mapCorpus.match(word)
-                    strings += word
-                }
+            val word = filteringGenerator.getWord(numChars, filter)
+            if (word != null) {
+                strings += word
             }
         }
     }
@@ -53,19 +47,5 @@ class WordsGeneratorV2(
             }
         }
         return Words(strings, keystrokes)
-    }
-
-    private fun getWord(numChars: Int, filter: Filtering): String? {
-        val bytes = ByteArray(numChars)
-        repeat(numChars) { index ->
-            val n = Chars.randCharAz()
-            val ch = 'a' + n
-            val valid = filter.check(ch)
-            if (!valid) {
-                return null
-            }
-            bytes[index] = ch.toByte()
-        }
-        return String(bytes)
     }
 }

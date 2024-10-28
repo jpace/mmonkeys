@@ -17,7 +17,7 @@ class WordsGeneratorTrial {
         val minLength = 3
 
         val duration = measureDuration {
-            while (numMatched < numToMatch && corpus.lengthToStringsToIndices.isNotEmpty()) {
+            while (numMatched < numToMatch && corpus.lengths.isNotEmpty()) {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
@@ -29,8 +29,8 @@ class WordsGeneratorTrial {
                         if (numMatched > 0 && numMatched % 10L == 0L) {
                             print(" -> $numMatched")
                             System.out.printf(" -> %,d\n", keystrokes)
-                            val str = corpus.lengthToStringsToIndices.keys.sorted().joinToString(", ") { length ->
-                                val count = corpus.lengthToStringsToIndices[length]?.size ?: ""
+                            val str = corpus.lengths.sorted().joinToString(", ") { length ->
+                                val count = corpus.indexedCorpus.elements[length]?.size ?: ""
                                 "$length -> $count"
                             }
                             println(str)
@@ -51,7 +51,7 @@ class WordsGeneratorTrial {
         val matchedByLength = sortedMapOf<Int, Int>()
 
         val duration = measureDuration {
-            while (longerMatched < numToMatch && corpus.lengthToStringsToIndices.isNotEmpty()) {
+            while (longerMatched < numToMatch && corpus.lengths.isNotEmpty()) {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
@@ -73,7 +73,7 @@ fun main() {
     val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
     val corpus = MapCorpus(words)
-    Console.info("mapCorpus.keys", corpus.lengthToStringsToIndices.keys.sorted())
+    Console.info("mapCorpus.lengths", corpus.lengths.sorted())
     val obj = WordsGeneratorTrial()
     val generator2 = WordsGenerator(slots, RandIntsFactory::nextInts2) { length -> LengthFilter(corpus, length) }
     obj.runTest(corpus, generator2)

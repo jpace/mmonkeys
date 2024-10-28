@@ -39,7 +39,7 @@ internal class NumbersMonkeyTest {
         )
         val obj = makeMonkey(input)
         obj as NumbersMonkey
-        val result = obj.corpus.numbers
+        val result = obj.corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
@@ -62,7 +62,7 @@ internal class NumbersMonkeyTest {
             )
         )
         val obj = makeMonkey(input)
-        val result = obj.corpus.numbers
+        val result = obj.corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
@@ -86,6 +86,6 @@ internal class NumbersMonkeyTest {
         do {
             result = monkey1.check()
         } while (!result.isMatch)
-        assertEquals(monkey1.corpus.numbers, monkey2.corpus.numbers)
+        assertEquals(monkey1.corpus.indexedCorpus.elements, monkey2.corpus.indexedCorpus.elements)
     }
 }

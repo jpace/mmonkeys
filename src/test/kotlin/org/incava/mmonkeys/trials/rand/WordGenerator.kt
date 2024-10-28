@@ -8,7 +8,7 @@ import kotlin.random.Random
  * Generates words without doing a simulated length check.
  */
 class WordGenerator(val corpus: MapCorpus) {
-    private val maxLen = corpus.lengthToStringsToIndices.keys.maxOrNull() ?: throw RuntimeException("no max")
+    private val maxLen = corpus.lengths.maxOrNull() ?: throw RuntimeException("no max")
 
     fun generate(): Pair<Int, Long> {
         val current = StringBuilder()
@@ -33,7 +33,7 @@ class WordGenerator(val corpus: MapCorpus) {
     private fun hasCandidate(current: StringBuilder) : Boolean {
         val curStr = current.toString()
         (current.length .. maxLen).forEach { length ->
-            val forLength = corpus.lengthToStringsToIndices[length]
+            val forLength = corpus.forLength(length)
             forLength?.keys?.forEach {
                 if (it.startsWith(curStr)) {
                     return true

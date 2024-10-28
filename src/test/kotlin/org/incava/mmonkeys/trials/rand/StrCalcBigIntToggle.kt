@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
 import org.incava.mmonkeys.rand.RandBigInt
 import org.incava.mmonkeys.type.Chars
@@ -9,7 +10,7 @@ import java.math.BigInteger
 class StrCalcBigIntToggle(private val slots: RndSlots) : StrSupplier {
     private val maxNumChars = 500
     private val ranges = mutableListOf<Pair<BigInteger, BigInteger>>()
-    private val delegate = RandEncoded()
+    private val delegate = RandEncoded
 
     init {
         val nChars = BigInteger.valueOf(Chars.NUM_ALPHA_CHARS.toLong())
@@ -26,7 +27,7 @@ class StrCalcBigIntToggle(private val slots: RndSlots) : StrSupplier {
             val rand = RandBigInt.rand(lowerLimit, upperLimit)
             StringEncoder.decode(rand)
         } else {
-            val encoded = delegate.getEncoded(length)
+            val encoded = delegate.random(length)
             StringEncoder.decode(encoded)
         }
     }

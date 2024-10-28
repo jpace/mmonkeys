@@ -1,14 +1,14 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.number.NumberedCorpus
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
 
 class EncodedGeneratorTrial {
-    fun runTest(corpus: NumberedCorpus, generator: EncodedGenerator) {
+    fun runTest(corpus: Corpus, generator: EncodedGenerator) {
         var numMatched = 0L
         var keystrokes = 0L
         val numToMatch = 1000L
@@ -30,7 +30,7 @@ class EncodedGeneratorTrial {
 
 fun main() {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
-    val corpus = NumberedCorpus(words)
+    val corpus = DualCorpus(words)
     Console.info("corpus", corpus)
     val obj = EncodedGeneratorTrial()
     val generator2 = EncodedGenerator(corpus)

@@ -4,6 +4,7 @@ import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -61,13 +62,8 @@ private class WordsGeneratorProfile(private val numInvokes: Long, private val nu
         }
 
         run {
-            // words could be filtered here, by length, since 1..13 is numbers, and 14+ is map
-            val shortWords = words.filter { it.length <= 13 }
-            // oh, the delicious irony that long words remain strings, and short words become longs.
-            val longWords = words.filter { it.length > 13 }
-            val numberedCorpus = NumberedCorpus(shortWords)
-            val mapCorpus = MapCorpus(longWords)
-            val generator = WordsGeneratorV2(mapCorpus, numberedCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(mapCorpus, it) }
+            val dualCorpus = DualCorpus(words)
+            val generator = WordsGeneratorV2(dualCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(dualCorpus, it) }
             profiler.add("dual encode/string") {
                 matchWords { generator.getWords() }
             }

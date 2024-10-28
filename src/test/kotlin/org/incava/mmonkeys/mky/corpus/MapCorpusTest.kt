@@ -17,7 +17,7 @@ internal class MapCorpusTest {
             4 to mapOf("defg" to listOf(3)),
             5 to mapOf("lmnop" to listOf(5)),
         )
-        val result = obj.lengthToStringsToIndices
+        val result = obj.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
@@ -29,11 +29,11 @@ internal class MapCorpusTest {
         Console.info("obj", obj)
         obj.matched("ab", 2)
         assertEquals(setOf(0), obj.matched)
-        val result = obj.lengthToStringsToIndices[2]
+        val result = obj.forLength(2)
         Console.info("result", result)
-        assertEquals(mapOf("cd" to listOf(1)), obj.lengthToStringsToIndices[2])
+        assertEquals(mapOf("cd" to listOf(1)), obj.forLength(2))
         obj.matched("cd", 2)
         assertEquals(setOf(0, 1), obj.matched)
-        assertNull(obj.lengthToStringsToIndices[2])
+        assertNull(obj.forLength(2))
     }
 }

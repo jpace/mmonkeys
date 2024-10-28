@@ -8,18 +8,13 @@ class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus)
     override fun check(): MatchData {
         val toEndOfWord = randomLength()
         val length = toEndOfWord - 1
-        val forLength = corpus.lengthToStringsToIndices[length]
-        if (forLength != null) {
-            val word = nextChars(length)
-            val indices = forLength[word]
-            if (indices != null) {
-                // we're always removing/matching the *first* index
-                val index = indices.first()
-                corpus.matched(word, length)
-                return match(length, index)
-            }
-        }
-        return noMatch(length)
+        val forLength = corpus.forLength(length) ?: return noMatch(length)
+        val word = nextChars(length)
+        val indices = forLength[word] ?: return noMatch(length)
+        // we're always removing/matching the *first* index
+        val index = indices.first()
+        corpus.matched(word, length)
+        return match(length, index)
     }
 
     fun nextChars(length: Int): String {

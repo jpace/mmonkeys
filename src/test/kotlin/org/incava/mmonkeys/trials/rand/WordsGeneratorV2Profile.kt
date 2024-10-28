@@ -4,6 +4,7 @@ import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -21,9 +22,8 @@ private class WordsGeneratorV2Profile(private val numInvokes: Long, private val 
         val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
 
         run {
-            val mapCorpus = MapCorpus(words)
-            val numberedCorpus = NumberedCorpus(words)
-            val generator = WordsGeneratorV2(mapCorpus, numberedCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(mapCorpus, it) }
+            val dualCorpus = DualCorpus(words)
+            val generator = WordsGeneratorV2(dualCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(dualCorpus, it) }
             profiler.add("indices 2, length") {
                 matchWords { generator.getWords() }
             }
