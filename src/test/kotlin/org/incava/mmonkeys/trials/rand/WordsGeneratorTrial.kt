@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.io.Console.printf
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -9,7 +10,7 @@ import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
 
 class WordsGeneratorTrial {
-    fun runTest(corpus: MapCorpus, wordsGenerator: WordsGenerator) {
+    fun runTestOrig(corpus: MapCorpus, wordsGenerator: WordsGenerator) {
         var numMatched = 0L
         var keystrokes = 0L
         val numToMatch = 1000L
@@ -20,6 +21,7 @@ class WordsGeneratorTrial {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
+                    Console.info("word", word)
                     corpus.matched(word, word.length)
                     if (word.length > minLength) {
                         System.out.printf("%12.12s ", word)
@@ -34,6 +36,32 @@ class WordsGeneratorTrial {
                             println(str)
                         }
                     }
+                }
+            }
+        }
+        Console.info("duration", duration)
+    }
+
+    fun runTest(corpus: MapCorpus, wordsGenerator: WordsGenerator) {
+        var numMatched = 0
+        var keystrokes = 0L
+        val numToMatch = 1000L
+        val minLength = 3
+        var longerMatched = 0
+        val matchedByLength = sortedMapOf<Int, Int>()
+
+        val duration = measureDuration {
+            while (longerMatched < numToMatch && corpus.lengthToStringsToIndices.isNotEmpty()) {
+                val result = wordsGenerator.getWords()
+                keystrokes += result.totalKeyStrokes
+                result.strings.forEach { word ->
+                    matchedByLength.compute(word.length) { _, value -> if (value == null) 1 else value + 1 }
+                    ++numMatched
+                    if (word.length > minLength) {
+                        ++longerMatched
+                    }
+                    WordsTrialBase.showCurrent(numMatched, longerMatched, matchedByLength)
+                    corpus.matched(word, word.length)
                 }
             }
         }

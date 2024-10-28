@@ -42,19 +42,16 @@ class RandIntsFactoryTest {
         }
     }
 
-    @Ignore("too time consuming to run frequently")
     @Test
     fun distribution1() {
         testDistribution(RandIntsFactory::nextInts1)
     }
 
-    @Ignore("too time consuming to run frequently")
     @Test
     fun distribution2() {
         testDistribution(RandIntsFactory::nextInts2)
     }
 
-    @Ignore("too time consuming to run frequently")
     @Test
     fun distribution3() {
         testDistribution(RandIntsFactory::nextInts3)

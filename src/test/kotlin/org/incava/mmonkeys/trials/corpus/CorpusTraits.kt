@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.trials.corpus
 
-import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Console.printf
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -47,9 +46,19 @@ object CorpusTraits {
             }
         }
     }
+
+    fun showByLength() {
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+        printf("word: %,d (%s)", words.size, "total")
+        val bySize = words.groupBy { it.length }
+        bySize.toSortedMap().forEach { (length, words) ->
+            printf("%d: %,d (%s)", length, words.size, "total")
+        }
+    }
 }
 
 fun main() {
     CorpusTraits.showDuplicatedChars()
     CorpusTraits.showEstimateMatchTimes()
+    CorpusTraits.showByLength()
 }

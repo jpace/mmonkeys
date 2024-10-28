@@ -15,8 +15,8 @@ open class Corpus(val words: List<String>) {
 
     fun remove(word: String) : Int? {
         words.withIndex().forEach { (index, str) ->
-            if (!matched.contains(index) && str == word) {
-                matched.add(index)
+            if (index !in matched && str == word) {
+                matched += index
                 return@remove index
             }
         }

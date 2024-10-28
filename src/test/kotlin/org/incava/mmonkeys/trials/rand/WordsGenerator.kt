@@ -15,9 +15,16 @@ abstract class LengthFiltering(val length: Int) : Filtering {
 
 class WordsGenerator(
     val slots: RndSlots,
+    val repeat: Int,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
-    private val filterSupplier: (Int) -> LengthFiltering
+    private val filterSupplier: (Int) -> LengthFiltering,
 ) {
+    constructor(
+        slots: RndSlots,
+        indicesSupplier: (RandIntsFactory) -> IntArray,
+        filterSupplier: (Int) -> LengthFiltering,
+    ) : this(slots, 1, indicesSupplier, filterSupplier)
+
     private val intsFactory = RandIntsFactory()
     private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
 
@@ -25,17 +32,19 @@ class WordsGenerator(
         val slotIndices = indicesSupplier(intsFactory)
         val strings = mutableListOf<String>()
         var keystrokes = 0L
-        slotIndices.forEach { slotIndex ->
-            // number of keystrokes to a space:
-            val toSpace = slots.slotValue(slotIndex)
-            keystrokes += toSpace
-            if (toSpace in 2..maxLength) {
-                val numChars = toSpace - 1
-                val filter = filterSupplier(numChars)
-                if (filter.checkLength()) {
-                    val word = getWord(numChars, filter)
-                    if (word != null) {
-                        strings += word
+        repeat(repeat) {
+            slotIndices.forEach { slotIndex ->
+                // number of keystrokes to a space:
+                val toSpace = slots.slotValue(slotIndex)
+                keystrokes += toSpace
+                if (toSpace in 2..maxLength) {
+                    val numChars = toSpace - 1
+                    val filter = filterSupplier(numChars)
+                    if (filter.checkLength()) {
+                        val word = getWord(numChars, filter)
+                        if (word != null) {
+                            strings += word
+                        }
                     }
                 }
             }
