@@ -38,7 +38,6 @@ internal class NumbersMonkeyTest {
             )
         )
         val obj = makeMonkey(input)
-        obj as NumbersMonkey
         val result = obj.corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }

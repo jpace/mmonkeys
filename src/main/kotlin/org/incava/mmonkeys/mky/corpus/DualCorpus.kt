@@ -1,15 +1,18 @@
 package org.incava.mmonkeys.mky.corpus
 
+import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
 
 class DualCorpus(words: List<String>) : Corpus(words) {
     val stringCorpus: SingleCorpus<String> = SingleCorpus()
     val encodedCorpus: SingleCorpus<Long> = SingleCorpus()
+    // @todo - make this based on words (words.max ...), and dynamic
+    val maxLength = 27 // "honorificabilitudinitatibus"
 
     init {
         words.withIndex().forEach { (index, word) ->
             // oh, the delicious irony that long words remain strings, and short words become longs.
-            if (word.length > 13) {
+            if (word.length > RandEncoded.Constants.MAX_ENCODED_CHARS) {
                 stringCorpus.add(word, word.length, index)
             } else {
                 val encoded = StringEncoder.encodeToLong(word)

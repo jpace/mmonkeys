@@ -8,7 +8,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class LengthFilterTest {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
     val corpus = MapCorpus(words)
 
     @Test

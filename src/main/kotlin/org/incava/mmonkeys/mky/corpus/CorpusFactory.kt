@@ -1,19 +1,22 @@
 package org.incava.mmonkeys.mky.corpus
 
 import java.io.File
-import kotlin.math.min
 
 object CorpusFactory {
     fun readFileWords(file: File, numLines: Int): List<String> {
         val lines = file.readLines()
-        val sonnet = if (numLines >= 0) lines.subList(0, min(numLines, lines.size)) else lines
 
         // I forgot numbers.
-        return sonnet
+        return lines
+            .withIndex()
+            .filter { numLines < 0 || it.index < numLines }
+            .map { it.value }
             .map { it.trim() }
             .map(String::lowercase)
             .map { it.replace(Regex("[^a-z+]"), " ") }
             .flatMap { it.split(Regex("\\s+")) }
             .filterNot { it.isBlank() }
     }
+
+    fun readFileWords(file: File): List<String> = readFileWords(file, -1)
 }

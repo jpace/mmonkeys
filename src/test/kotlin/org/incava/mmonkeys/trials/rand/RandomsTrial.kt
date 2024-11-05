@@ -128,8 +128,6 @@ class RandomsTrial(private val numChars: Int, private val strLength: Int, privat
             ::nextBytes,
             ::`nextBytes toString`,
         )
-        val methods2 = methods.map { it.name to it }
-        // val shuffled = methods.shuffled()
         methods.forEach { function ->
             function()
             sleep(500L)

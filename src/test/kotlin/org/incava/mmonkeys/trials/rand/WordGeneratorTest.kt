@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class WordGeneratorTest {
     @Test
     fun generate() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
         val corpus = MapCorpus(words)
         val obj = WordGenerator(corpus)
         val result = obj.generate()

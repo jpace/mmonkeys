@@ -13,6 +13,8 @@ open class Corpus(val words: List<String>) {
         return -1
     }
 
+    fun isMatched(index: Int) = matched.contains(index)
+
     fun remove(word: String) : Int? {
         words.withIndex().forEach { (index, str) ->
             if (index !in matched && str == word) {

@@ -1,23 +1,37 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.corpus.DualCorpus
+import org.incava.mmonkeys.mky.number.RandEncoded
+import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
+import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 
+object WordsGeneratorFactory {
+    object Defaults {
+        val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
+        val indicesSupplier: (RandIntsFactory) -> IntArray = RandIntsFactory::nextInts2
+    }
+    fun createWithDefaults(corpus: DualCorpus) : WordsGeneratorV2 {
+        return WordsGeneratorV2(corpus, Defaults.slots, Defaults.indicesSupplier) { LengthFilter(corpus, it) }
+    }
+}
+
 class WordsGeneratorV2(
-    val dualCorpus: DualCorpus,
+    val corpus: DualCorpus,
     val slots: RndSlots,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
     private val filterSupplier: (Int) -> LengthFiltering,
 ) {
     private val intsFactory = RandIntsFactory()
-    private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
-    private val encodedGenerator = EncodedGenerator(dualCorpus)
-    private val filteringGenerator = FilteringGenerator(dualCorpus)
+    private val encodedGenerator = EncodedGenerator(corpus)
+    private val filteringGenerator = FilteringGenerator(corpus)
+    private val maxToSpace = corpus.maxLength + 1
+    private val minToSpace = 2
 
     fun checkWord(numChars: Int, strings: MutableList<String>) {
-        if (numChars <= 13) {
+        if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
             // use long/encoded, convert back to string
             val word = encodedGenerator.getWord(numChars)
             if (word != null) {
@@ -38,10 +52,10 @@ class WordsGeneratorV2(
         val strings = mutableListOf<String>()
         var keystrokes = 0L
         slotIndices.forEach { slotIndex ->
-            // number of keystrokes to a space:
+            // number of keystrokes to (through) a space:
             val toSpace = slots.slotValue(slotIndex)
             keystrokes += toSpace
-            if (toSpace in 2..maxLength) {
+            if (toSpace in minToSpace..maxToSpace) {
                 val numChars = toSpace - 1
                 checkWord(numChars, strings)
             }

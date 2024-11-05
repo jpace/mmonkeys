@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.trials.rand.StrRand.Constants.NUM_CHARS
+import org.incava.mmonkeys.type.Chars
 import kotlin.random.Random
 
 /**
@@ -15,9 +15,9 @@ class WordGenerator(val corpus: MapCorpus) {
         var keystrokes = 0L
         while (true) {
             ++keystrokes
-            val ch = Random.nextInt(NUM_CHARS + 1)
+            val ch = Random.nextInt(Chars.NUM_ALL_CHARS)
             // that is, a space:
-            if (ch == NUM_CHARS) {
+            if (ch == Chars.NUM_ALPHA_CHARS) {
                 // @todo - fix this -- should return whether a word matches,
                 // and look at the MapCorpus (for length), not Corpus
                 return corpus.match(current.toString()) to keystrokes

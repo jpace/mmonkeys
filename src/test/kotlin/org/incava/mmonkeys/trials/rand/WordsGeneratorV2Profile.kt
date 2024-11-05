@@ -5,25 +5,24 @@ import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.DualCorpus
-import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 
 private class WordsGeneratorV2Profile(private val numInvokes: Long, private val numTrials: Int = 5) {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1).filter { it.length in 3..17 }
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 3..17 }
     val matchGoal = 1000L
 
     fun profile() {
         Console.info("words.#", words.size)
         val profiler = Profiler(numInvokes, numTrials)
-        val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
+        val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
 
         run {
-            val dualCorpus = DualCorpus(words)
-            val generator = WordsGeneratorV2(dualCorpus, slots, RandIntsFactory::nextInts2) { LengthFilter(dualCorpus, it) }
+            val corpus = DualCorpus(words)
+            val generator = WordsGeneratorV2(corpus, slots, RandIntsFactory::nextInts2) { LengthFilter(corpus, it) }
             profiler.add("indices 2, length") {
                 matchWords { generator.getWords() }
             }

@@ -10,15 +10,11 @@ import org.incava.time.Durations.measureDuration
 class EncodedGeneratorTrial {
     fun runTest(corpus: Corpus, generator: EncodedGenerator) {
         var numMatched = 0L
-        var keystrokes = 0L
         val numToMatch = 1000L
-        val minLength = 3
-
         val duration = measureDuration {
             while (numMatched < numToMatch && !corpus.isEmpty()) {
                 val result = generator.getWord(1)
                 if (result != null) {
-                    Console.info("result", result)
                     corpus.match(result)
                     ++numMatched
                 }
@@ -29,7 +25,7 @@ class EncodedGeneratorTrial {
 }
 
 fun main() {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
     val corpus = DualCorpus(words)
     Console.info("corpus", corpus)
     val obj = EncodedGeneratorTrial()

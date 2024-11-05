@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.corpus
 
-import org.incava.ikdk.io.Console
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -25,13 +24,11 @@ internal class MapCorpusTest {
     fun matched() {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = MapCorpus(input)
-        Console.info("obj.class", obj.javaClass)
-        Console.info("obj", obj)
         obj.matched("ab", 2)
         assertEquals(setOf(0), obj.matched)
-        val result = obj.forLength(2)
-        Console.info("result", result)
-        assertEquals(mapOf("cd" to listOf(1)), obj.forLength(2))
+        val expectedMap = mapOf("cd" to listOf(1))
+        val resultMap = obj.forLength(2) as Map<String, List<Int>>
+        assertEquals(expectedMap, resultMap)
         obj.matched("cd", 2)
         assertEquals(setOf(0, 1), obj.matched)
         assertNull(obj.forLength(2))

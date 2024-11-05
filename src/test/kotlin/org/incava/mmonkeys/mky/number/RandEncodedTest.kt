@@ -11,7 +11,7 @@ internal class RandEncodedTest {
 
     @Test
     fun random() {
-        val result = RandEncoded.random(3) ?: throw AssertionError()
+        val result = RandEncoded.random(3)
         Console.info("result", result)
         assertTrue(result >= 702, "result: $result")
         assertTrue(result < 18_278, "result: $result")

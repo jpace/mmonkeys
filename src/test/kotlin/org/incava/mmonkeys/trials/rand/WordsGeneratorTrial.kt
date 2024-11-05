@@ -2,9 +2,11 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Console.printf
+import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.type.Chars
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
@@ -55,7 +57,7 @@ class WordsGeneratorTrial {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
-                    matchedByLength.compute(word.length) { _, value -> if (value == null) 1 else value + 1 }
+                    MapUtil.increment(matchedByLength, word.length)
                     ++numMatched
                     if (word.length > minLength) {
                         ++longerMatched
@@ -70,8 +72,8 @@ class WordsGeneratorTrial {
 }
 
 fun main() {
-    val slots = RandSlotsFactory.calcArray(StrRand.Constants.NUM_CHARS + 1, 128, 100_000)
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+    val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
     val corpus = MapCorpus(words)
     Console.info("mapCorpus.lengths", corpus.lengths.sorted())
     val obj = WordsGeneratorTrial()

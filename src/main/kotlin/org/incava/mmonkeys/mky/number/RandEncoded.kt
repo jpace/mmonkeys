@@ -6,10 +6,10 @@ import kotlin.random.Random
 object RandEncoded {
     object Constants {
         // number of characters that can fit into a long (with "crpxnlskvljfhh" at 14 characters, Long.MAX_VALUE)
-        const val MAX_CHARS: Int = 13
+        const val MAX_ENCODED_CHARS: Int = 13
     }
 
-    private val rangesEncoded = (1..Constants.MAX_CHARS).associateWith { length ->
+    private val rangesEncoded = (1..Constants.MAX_ENCODED_CHARS).associateWith { length ->
         val encoded = StringEncoder.encodeToLong("a".repeat(length))
         encoded to (encoded + 1) * Chars.NUM_ALPHA_CHARS
     }

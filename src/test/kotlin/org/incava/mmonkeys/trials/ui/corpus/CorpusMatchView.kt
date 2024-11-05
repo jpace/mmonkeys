@@ -21,8 +21,7 @@ class CorpusMatchView(private val wordSizeLimit: Int, val results: Map<String, P
         table.writeBreak('=')
         (1..wordSizeLimit).forEach { length ->
             val matchCells = mutableListOf<Any>("match $length")
-            val countCells = mutableListOf<Any>("count $length")
-            results.forEach { (name, res) ->
+            results.forEach { (_, res) ->
                 matchCells += matchesForLength(res, length)
             }
             // all corpuses have the same number of words
