@@ -13,6 +13,7 @@ object WordsGeneratorFactory {
         val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
         val indicesSupplier: (RandIntsFactory) -> IntArray = RandIntsFactory::nextInts2
     }
+
     fun createWithDefaults(corpus: DualCorpus) : WordsGeneratorV2 {
         return WordsGeneratorV2(corpus, Defaults.slots, Defaults.indicesSupplier) { LengthFilter(corpus, it) }
     }
@@ -20,7 +21,7 @@ object WordsGeneratorFactory {
 
 class WordsGeneratorV2(
     val corpus: DualCorpus,
-    val slots: RndSlots,
+    private val slots: RndSlots,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
     private val filterSupplier: (Int) -> LengthFiltering,
 ) {

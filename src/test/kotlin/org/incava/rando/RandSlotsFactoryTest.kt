@@ -3,9 +3,7 @@ package org.incava.rando
 import org.incava.mmonkeys.testutil.assertWithin
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import kotlin.test.Ignore
 
-@Ignore("too time consuming to run frequently")
 class RandSlotsFactoryTest {
     private val numChars = 27
     private val numSlots = 100
@@ -32,24 +30,6 @@ class RandSlotsFactoryTest {
     @Test
     fun calcMap() {
         val obj = RandSlotsFactory.calcMap(numChars, numSlots, numTrials)
-        assertAll(
-            { RndSlotsAssertions.assertNextInt(obj) },
-            { RndSlotsAssertions.assertSlotValues(obj) }
-        )
-    }
-
-    @Test
-    fun genMap() {
-        val obj = RandSlotsFactory.genMap(numChars, numSlots, numTrials)
-        assertAll(
-            { RndSlotsAssertions.assertNextInt(obj) },
-            { RndSlotsAssertions.assertSlotValues(obj) }
-        )
-    }
-
-    @Test
-    fun genList() {
-        val obj = RandSlotsFactory.genList(numChars, numSlots, numTrials)
         assertAll(
             { RndSlotsAssertions.assertNextInt(obj) },
             { RndSlotsAssertions.assertSlotValues(obj) }

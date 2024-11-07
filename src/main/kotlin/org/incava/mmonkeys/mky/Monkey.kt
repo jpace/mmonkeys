@@ -9,7 +9,6 @@ import org.incava.rando.RandInt
 abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: Corpus) {
     val monitors = mutableListOf<MonkeyMonitor>()
     val rand : RandInt = RandomFactory.getCalculated(typewriter.numChars())
-    var totalKeystrokes = 0L
     val matchKeystrokes = mutableMapOf<Int, Int>()
 
     fun nextChar(): Char {

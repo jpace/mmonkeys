@@ -9,6 +9,6 @@ object RandomFactory {
 
     fun getCalculated(numChars: Int): RandInt {
         val numSlots = 100
-        return randoms.computeIfAbsent(numChars) { RandSlotsFactory.calcMap(numChars, numSlots, 10000) }
+        return randoms.computeIfAbsent(numChars) { RandSlotsFactory.calcArray(numChars, numSlots, 10000) }
     }
 }

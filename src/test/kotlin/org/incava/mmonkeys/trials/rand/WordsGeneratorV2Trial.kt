@@ -46,7 +46,7 @@ class WordsGeneratorV2Trial {
                             println()
                         }
                     }
-                    view.showWordsAsList(true)
+                    // view.showWordsAsList(true)
                     WordsTrialBase.showCurrent(numMatched, longerMatched, matchedByLength)
                 }
             }
