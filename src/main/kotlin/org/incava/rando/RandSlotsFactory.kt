@@ -29,16 +29,6 @@ object RandSlotsFactory {
         return RndSlots(numSlots) { slot -> slots[slot] }
     }
 
-    fun genList(size: Int, numSlots: Int, numTrials: Int): RndSlots {
-        val slots = genSlots(size, numSlots, numTrials)
-        return RndSlots(numSlots) { slot -> slots[slot] }
-    }
-
-    fun genMap(size: Int, numSlots: Int, numTrials: Int): RndSlots {
-        val slots = genSlots(size, numSlots, numTrials).withIndex().associate { it.index to it.value }
-        return RndSlots(numSlots) { slot -> slots.getValue(slot) }
-    }
-
     fun calcSlots(size: Int, numSlots: Int, numIterations: Int): Map<Int, Int> {
         return calculate(size, numSlots, numIterations)
             .mapValues { (it.value.second.toDouble() / it.value.first).roundToInt() }

@@ -16,62 +16,64 @@ class MapVsListGetLtProfile(private val numInvokes: Long, private val trialInvok
         val profiler = Profiler(numInvokes, trialInvokes)
 
         profiler.add("array []") {
-            val index = Random.Default.nextInt(100)
+            val index = getRandom()
             array[index]
         }
 
         profiler.add("array <") {
-            val index = Random.Default.nextInt(100)
-            if (index < 27) array[index] else 1
+            val index = getRandom()
+            if (index < 27) array[index]
         }
 
         profiler.add("list []") {
-            val index = Random.Default.nextInt(100)
+            val index = getRandom()
             list[index]
         }
 
         profiler.add("list <") {
-            val index = Random.Default.nextInt(100)
-            if (index < 27) list[index] else 1
+            val index = getRandom()
+            if (index < 27) list[index]
         }
 
         profiler.add("linked hash map []") {
-            val index = Random.Default.nextInt(100)
+            val index = getRandom()
             linkedHashMap[index]
         }
 
         profiler.add("linked hash map <") {
-            val index = Random.Default.nextInt(100)
-            if (index < 27) linkedHashMap[index] else 1
+            val index = getRandom()
+            if (index < 27) linkedHashMap[index]
         }
 
         profiler.add("hash map []") {
-            val index = Random.Default.nextInt(100)
+            val index = getRandom()
             hashMap[index]
         }
 
         profiler.add("hash map <") {
-            val index = Random.Default.nextInt(100)
-            if (index < 27) hashMap[index] else 1
+            val index = getRandom()
+            if (index < 27) hashMap[index]
         }
 
         profiler.add("tree map []") {
-            val index = Random.Default.nextInt(100)
+            val index = getRandom()
             treeMap[index]
         }
 
         profiler.add("tree map <") {
-            val index = Random.Default.nextInt(100)
-            if (index < 27) treeMap[index] else 1
+            val index = getRandom()
+            if (index < 27) treeMap[index]
         }
 
         profiler.runAll()
-        profiler.showResults(SortType.BY_INSERTION)
+        profiler.showResults(SortType.BY_DURATION)
 
         val showdown = profiler.spawn()
         showdown.runAll()
-        showdown.showResults()
+        showdown.showResults(SortType.BY_DURATION)
     }
+
+    fun getRandom() = Random.Default.nextInt(100)
 }
 
 fun main() {

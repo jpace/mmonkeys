@@ -3,6 +3,8 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.ikdk.io.Console
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
+import org.incava.mmonkeys.rand.RandBigInt
+import java.math.BigInteger
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.random.Random
@@ -44,6 +46,10 @@ class RandomNextProfile(private val intMax: Int, private val longMax: Long, numI
         // profiler.add("jdk < long") { jdkRandom.nextLong(maxLong) }
         profiler.add("thr < long") { t.nextLong(longMax) }
         profiler.add("xor < long") { xorRand.nextLong(longMax) }
+
+        val maxBigInt = BigInteger.valueOf(26).pow(27)
+        profiler.add("big int") { RandBigInt.rand(maxBigInt) }
+
         profiler.runAll()
         profiler.showResults(SortType.BY_DURATION)
 

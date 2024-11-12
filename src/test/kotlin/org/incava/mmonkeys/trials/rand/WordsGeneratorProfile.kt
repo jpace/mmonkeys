@@ -13,11 +13,14 @@ import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 1..27 }
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 3..27 }
     val matchGoal = 100L
 
-    fun profile() {
+    init {
         Console.info("words.#", words.size)
+    }
+
+    fun profile() {
         val profiler = Profiler(numInvokes, numTrials)
         val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
 

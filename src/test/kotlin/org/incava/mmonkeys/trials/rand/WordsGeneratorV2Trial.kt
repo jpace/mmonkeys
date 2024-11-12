@@ -19,15 +19,13 @@ class WordsGeneratorV2Trial {
         val startTime: ZonedDateTime = ZonedDateTime.of(0, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"))
         var numMatched = 0
         var keystrokes = 0L
-        val numToMatch = 100L
+        val numToMatch = 10_000L
         val minLength = 4
         var longerMatched = 0
         val matchedByLength = sortedMapOf<Int, Int>()
         val bySize = corpus.words.groupBy { it.length }.mapValues { it.value.size }
-        println("by size:")
-        println(bySize.toSortedMap())
+        Console.info("by size", bySize.toSortedMap())
         Console.printf("total: %,d", bySize.values.sum())
-
         val duration = measureDuration {
             while (longerMatched < numToMatch && !corpus.isEmpty()) {
                 val result = wordsGenerator.getWords()
@@ -38,16 +36,17 @@ class WordsGeneratorV2Trial {
                     if (word.length > minLength) {
                         ++longerMatched
                         if (longerMatched % 100 == 0) {
+                            Console.info("longerMatched", longerMatched)
                             view.showSimulationTime(startTime, keystrokes)
                             view.showMatchesByLength()
-                            println("by size: ")
-                            println(bySize.toSortedMap())
+                            Console.info("by size", bySize.toSortedMap())
                             Console.printf("total: %,d", bySize.values.sum())
+                            Console.info("matches", matchedByLength.toSortedMap())
                             println()
                         }
                     }
                     // view.showWordsAsList(true)
-                    WordsTrialBase.showCurrent(numMatched, longerMatched, matchedByLength)
+                    WordsTrialUtil.showCurrent(numMatched, longerMatched, matchedByLength)
                 }
             }
         }

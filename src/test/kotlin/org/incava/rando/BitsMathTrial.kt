@@ -118,6 +118,13 @@ class BitsMathTrial {
     private fun extractBits(bits: String, offset: Int): String {
         return bits.substring(bits.length - 7 * (offset + 1), bits.length - 7 * offset)
     }
+
+    fun xorTest() {
+        val value = 317L
+        val result = value xor Long.MIN_VALUE
+        Console.info("value", value)
+        Console.info("result", result)
+    }
 }
 
 fun main() {
@@ -126,4 +133,5 @@ fun main() {
     obj.intOutput2()
     obj.longOutput()
     obj.intOutputShift()
+    obj.xorTest()
 }

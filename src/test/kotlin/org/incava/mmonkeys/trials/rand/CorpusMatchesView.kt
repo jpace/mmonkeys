@@ -7,7 +7,8 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class CorpusMatchesView(val corpus: Corpus) {
-    val pattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+    val fullPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+    val ymdPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
     fun showWordsAsList(onlyMatched: Boolean) {
         corpus.words.withIndex().forEach { (index, word) ->
@@ -26,7 +27,7 @@ class CorpusMatchesView(val corpus: Corpus) {
             .forEach {
                 MapUtil.increment(matchedByLength, it)
             }
-        printf("total: %,d", matchedByLength.values.sum())
+        printf("%5s | %8s | %8s", "total", "words.#", "matched.#")
         val lengthToCount = corpus.words.groupBy { it.length }.mapValues { it.value.size }
         lengthToCount.toSortedMap().forEach { (length, count) ->
             printf("%5d | %,8d | %,8d", length, count, matchedByLength.getOrDefault(length, 0))
@@ -39,5 +40,5 @@ class CorpusMatchesView(val corpus: Corpus) {
         printf("%16.16s | %24.24s | %,12d", dateTimeStr(ZonedDateTime.now()), dateTimeStr(virtualDateTime), keystrokes)
     }
 
-    fun dateTimeStr(dateTime: ZonedDateTime) = pattern.format(dateTime)
+    fun dateTimeStr(dateTime: ZonedDateTime) = ymdPattern.format(dateTime)
 }
