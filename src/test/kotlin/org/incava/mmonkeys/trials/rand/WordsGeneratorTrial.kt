@@ -2,25 +2,32 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.util.MapUtil
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.MapCorpus
+import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.incava.mmonkeys.type.Chars
-import org.incava.rando.RandIntsFactory
-import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class WordsGeneratorTrial {
-    fun runTest(corpus: MapCorpus, wordsGenerator: WordsGenerator) {
+    val pattern = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+
+    fun runTest(corpus: Corpus, wordsGenerator: WordsGenerator) {
+        val view = CorpusMatchesView(corpus)
+        val startTime: ZonedDateTime = ZonedDateTime.of(0, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"))
         var numMatched = 0
         var keystrokes = 0L
-        val numToMatch = 1000L
-        val minLength = 3
+        val numToMatch = 100_000L
+        val minLength = 4
         var longerMatched = 0
         val matchedByLength = sortedMapOf<Int, Int>()
-
+        val bySize = corpus.words.groupBy { it.length }.mapValues { it.value.size }
+        Console.info("by size", bySize.toSortedMap())
+        Console.info("total", bySize.values.sum())
         val duration = measureDuration {
-            while (longerMatched < numToMatch && corpus.lengths.isNotEmpty()) {
+            while (longerMatched < numToMatch && !corpus.isEmpty()) {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
                 result.strings.forEach { word ->
@@ -28,22 +35,45 @@ class WordsGeneratorTrial {
                     ++numMatched
                     if (word.length > minLength) {
                         ++longerMatched
+                        if (longerMatched % 100 == 0) {
+                            Console.info("longerMatched", longerMatched)
+                            view.showSimulationTime(startTime, keystrokes)
+                            view.showMatchesByLength()
+                            Console.info("by size", bySize.toSortedMap())
+                            Console.printf("total: %,d", bySize.values.sum())
+                            Console.info("matches", matchedByLength.toSortedMap())
+                            println()
+                        }
                     }
-                    WordsTrialUtil.showCurrent(numMatched, longerMatched, matchedByLength)
-                    corpus.matched(word, word.length)
+                    // view.showWordsAsList(true)
+                    // WordsTrialUtil.showCurrent(numMatched, longerMatched, matchedByLength)
                 }
             }
         }
-        Console.info("duration", duration)
+        Console.info("duration", duration.second)
+    }
+
+    fun showStatus(keystrokes: Long, startTime: ZonedDateTime) {
+        Console.printf("actual time: %s", ZonedDateTime.now().format(pattern))
+        val virtualDateTime = startTime.plusSeconds(keystrokes)
+        Console.printf("virtual time: %s", virtualDateTime.format(pattern))
+        Console.printf("current keystrokes: %,d", keystrokes)
+        println()
+    }
+
+    fun showCorpus(corpus: Corpus) {
+        val now = ZonedDateTime.now()
+        println(now.format(pattern))
+        corpus.words.withIndex().forEach { (index, word) ->
+            println("$index - $word - ${corpus.matched.contains(index)}")
+        }
     }
 }
 
 fun main() {
-    val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-    val corpus = MapCorpus(words)
-    Console.info("mapCorpus.lengths", corpus.lengths.sorted())
     val obj = WordsGeneratorTrial()
-    val generator2 = WordsGenerator(slots, RandIntsFactory::nextInts2) { length -> LengthFilter(corpus, length) }
-    obj.runTest(corpus, generator2)
+    val corpus = DualCorpus(words)
+    val wordsGenerator = WordsGeneratorFactory.createWithDefaults(corpus)
+    obj.runTest(corpus, wordsGenerator)
 }

@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Console.printf
 import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.mky.corpus.Corpus
@@ -37,6 +38,8 @@ class CorpusMatchesView(val corpus: Corpus) {
 
     fun showSimulationTime(startTime: ZonedDateTime, keystrokes: Long) {
         val virtualDateTime = startTime.plusSeconds(keystrokes)
+        Console.info("now", fullPattern.format(ZonedDateTime.now()))
+        Console.info("virtualDateTime", fullPattern.format(virtualDateTime))
         printf("%16.16s | %24.24s | %,12d", dateTimeStr(ZonedDateTime.now()), dateTimeStr(virtualDateTime), keystrokes)
     }
 

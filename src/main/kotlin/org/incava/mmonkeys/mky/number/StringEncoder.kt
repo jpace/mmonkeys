@@ -8,16 +8,20 @@ object StringEncoder {
     private const val NUM_CHARS = Chars.NUM_ALPHA_CHARS
 
     fun encodeToInt(string: String): Int {
-        return encode(string, -1) { value, ch ->
-            val num = ch - 'a'
+        return encode2(string, -1) { value, num ->
             (value + 1) * NUM_CHARS + num
         }
     }
 
     fun encodeToLong(string: String): Long {
-        return encode(string, -1L) { value, ch ->
-            val num = ch - 'a'
+        return encode2(string, -1L) { value: Long, num: Int ->
             (value + 1L) * NUM_CHARS + num
+        }
+    }
+
+    fun encodeToBigInt(string: String): BigInteger {
+        return encode2(string, BigInteger.valueOf(-1)) { value: BigInteger, num: Int ->
+            (value + BigInteger.ONE) * BigInteger.valueOf(NUM_CHARS.toLong()) + BigInteger.valueOf(num.toLong())
         }
     }
 
@@ -48,6 +52,13 @@ object StringEncoder {
             negativeOne
         else
             string.toCharArray().fold(negativeOne, folding)
+    }
+
+    private fun <T> encode2(string: String, negativeOne: T, folding: (T, Int) -> T): T {
+        return if (string.isBlank())
+            negativeOne
+        else
+            string.toCharArray().map { it - 'a' }.fold(negativeOne, folding)
     }
 
     private fun <T : Comparable<T>> decode(number: T, zero: T, mod: (T) -> Int, div: (T) -> T, dec: (T) -> T): String {

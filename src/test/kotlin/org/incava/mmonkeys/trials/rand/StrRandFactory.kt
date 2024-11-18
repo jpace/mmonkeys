@@ -1,16 +1,11 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.type.Chars
-import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 
 object StrRandFactory {
-    val calcArray = RandSlotsFactory::calcArray
-    val calcList = RandSlotsFactory::calcList
-    val calcMap = RandSlotsFactory::calcMap
-
     val build = ::buildString
-    val buffer = ::bufferString
+    val assemble = ::assembleString
 
     fun create(numSlots: Int, slotsProvider: (Int, Int, Int) -> RndSlots, stringProvider: (Int, () -> Int) -> String): StrSupplier {
         val slots = slotsProvider(Chars.NUM_ALL_CHARS, numSlots, 10000)
@@ -19,8 +14,8 @@ object StrRandFactory {
         }
     }
 
-    private fun buildString(length: Int, charProvider: () -> Int): String {
-        val sb = StringBuilder()
+    fun buildString(length: Int, charProvider: () -> Int): String {
+        val sb = StringBuilder(length)
         repeat(length) {
             val ch = charProvider()
             sb.append('a' + ch)
@@ -28,12 +23,12 @@ object StrRandFactory {
         return sb.toString()
     }
 
-    private fun bufferString(length: Int, charProvider: () -> Int): String {
-        val sb = StringBuffer(length)
-        repeat(length) {
+    fun assembleString(length: Int, charProvider: () -> Int): String {
+        val bytes = ByteArray(length)
+        repeat(length) { index ->
             val n = charProvider()
-            sb.append('a' + n)
+            bytes[index] = ('a' + n).toByte()
         }
-        return sb.toString()
+        return String(bytes)
     }
 }

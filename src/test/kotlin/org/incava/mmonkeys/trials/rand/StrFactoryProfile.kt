@@ -104,12 +104,17 @@ class StrFactoryProfile(numInvokes: Long, trialInvokes: Int) {
         addFilters("byte list", ::`byte list`)
         addFilters("char array", ::`char array`)
         addFilters("char list", ::`char list`)
+
         profiler.runAll()
         profiler.showResults(SortType.BY_INSERTION)
+
+        val showdown = profiler.spawn()
+        showdown.runAll()
+        showdown.showResults(SortType.BY_DURATION)
     }
 }
 
 fun main() {
-    val obj = StrFactoryProfile(10_000_000L, 3)
+    val obj = StrFactoryProfile(1_000_000L, 3)
     obj.profile()
 }

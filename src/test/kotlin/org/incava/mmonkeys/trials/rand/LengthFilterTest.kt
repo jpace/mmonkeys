@@ -3,7 +3,7 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 

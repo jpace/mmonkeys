@@ -7,7 +7,7 @@ import org.incava.mmonkeys.testutil.ResourceUtil
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-internal class WordsGeneratorV2Test {
+internal class WordsGeneratorTest {
     @Test
     fun getWords() {
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).subList(0, 80)

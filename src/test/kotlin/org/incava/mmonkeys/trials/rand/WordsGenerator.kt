@@ -1,8 +1,11 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.mmonkeys.mky.corpus.DualCorpus
+import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
+import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 
 interface Filtering {
@@ -13,56 +16,59 @@ abstract class LengthFiltering(val length: Int) : Filtering {
     abstract fun checkLength(): Boolean
 }
 
+object WordsGeneratorFactory {
+    object Defaults {
+        val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
+        val indicesSupplier: (RandIntsFactory) -> IntArray = RandIntsFactory::nextInts2
+    }
+
+    fun createWithDefaults(corpus: DualCorpus) : WordsGenerator {
+        return WordsGenerator(corpus, Defaults.slots, Defaults.indicesSupplier) { LengthFilter(corpus, it) }
+    }
+}
+
 class WordsGenerator(
-    val slots: RndSlots,
-    val repeat: Int,
+    val corpus: DualCorpus,
+    private val slots: RndSlots,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
     private val filterSupplier: (Int) -> LengthFiltering,
 ) {
-    constructor(
-        slots: RndSlots,
-        indicesSupplier: (RandIntsFactory) -> IntArray,
-        filterSupplier: (Int) -> LengthFiltering,
-    ) : this(slots, 1, indicesSupplier, filterSupplier)
-
     private val intsFactory = RandIntsFactory()
-    private val maxLength = 27 + 1 // "honorificabilitudinitatibus"
+    private val encodedGenerator = EncodedGenerator(corpus)
+    private val filteringGenerator = FilteringGenerator(corpus)
+    private val maxToSpace = corpus.maxLength + 1
+    private val minToSpace = 2
+
+    fun checkWord(numChars: Int, strings: MutableList<String>) {
+        if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
+            // use long/encoded, convert back to string
+            val word = encodedGenerator.getWord(numChars)
+            if (word != null) {
+                strings += word
+            }
+        } else {
+            // use "legacy"
+            val filter = filterSupplier(numChars)
+            val word = filteringGenerator.getWord(numChars, filter)
+            if (word != null) {
+                strings += word
+            }
+        }
+    }
 
     fun getWords(): Words {
         val slotIndices = indicesSupplier(intsFactory)
         val strings = mutableListOf<String>()
         var keystrokes = 0L
-        repeat(repeat) {
-            slotIndices.forEach { slotIndex ->
-                // number of keystrokes to a space:
-                val toSpace = slots.slotValue(slotIndex)
-                keystrokes += toSpace
-                if (toSpace in 2..maxLength) {
-                    val numChars = toSpace - 1
-                    val filter = filterSupplier(numChars)
-                    if (filter.checkLength()) {
-                        val word = getWord(numChars, filter)
-                        if (word != null) {
-                            strings += word
-                        }
-                    }
-                }
+        slotIndices.forEach { slotIndex ->
+            // number of keystrokes to (through) a space:
+            val toSpace = slots.slotValue(slotIndex)
+            keystrokes += toSpace
+            if (toSpace in minToSpace..maxToSpace) {
+                val numChars = toSpace - 1
+                checkWord(numChars, strings)
             }
         }
         return Words(strings, keystrokes)
-    }
-
-    private fun getWord(numChars: Int, filter: Filtering): String? {
-        val bytes = ByteArray(numChars)
-        repeat(numChars) { index ->
-            val n = Chars.randCharAz()
-            val ch = 'a' + n
-            val valid = filter.check(ch)
-            if (!valid) {
-                return null
-            }
-            bytes[index] = ch.toByte()
-        }
-        return String(bytes)
     }
 }

@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.mmonkeys.rand.RandBigInt
+import org.incava.mmonkeys.rand.RandBigInt2
 import java.math.BigInteger
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
@@ -50,6 +51,10 @@ class RandomNextProfile(private val intMax: Int, private val longMax: Long, numI
         val maxBigInt = BigInteger.valueOf(26).pow(27)
         profiler.add("big int") { RandBigInt.rand(maxBigInt) }
 
+        profiler.add("big int 2") { RandBigInt.rand2(maxBigInt) }
+        val randBigInt2 = RandBigInt2(maxBigInt)
+        profiler.add("2 - big int 2") { randBigInt2.rand() }
+
         profiler.runAll()
         profiler.showResults(SortType.BY_DURATION)
 
@@ -60,8 +65,8 @@ class RandomNextProfile(private val intMax: Int, private val longMax: Long, numI
 }
 
 fun main() {
-    val numInvokes = 10_000_000L
-    val trialInvokes = 5
+    val numInvokes = 100_000_000L
+    val trialInvokes = 3
     val maxInt = 27
     val maxLong = 2.0.pow(53).toLong()
     val obj = RandomNextProfile(maxInt, maxLong, numInvokes, trialInvokes)

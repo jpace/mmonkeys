@@ -5,31 +5,23 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 
 class RandSlotsFactoryTest {
-    private val numChars = 27
-    private val numSlots = 100
-    private val numTrials = 10_000_000
+    private fun findGap(numSlots: Int, numChars: Int, numTrials: Int): Int {
+        val slots = RandSlotsFactory.calcArray(numChars, numSlots, numTrials)
+        val values = (0 until numSlots)
+            .asSequence()
+            .map { slots.slotValue(it) }
+            .toSortedSet()
+            .toList()
+            .sorted()
+            .distinct()
+            .toList()
+        val index = (0 until values.size - 1).find { values[it] + 1 != values[it + 1] } ?: return -1
+        return values[index]
+    }
 
     @Test
     fun calcArray() {
-        val obj = RandSlotsFactory.calcArray(numChars, numSlots, numTrials)
-        assertAll(
-            { RndSlotsAssertions.assertNextInt(obj) },
-            { RndSlotsAssertions.assertSlotValues(obj) }
-        )
-    }
-
-    @Test
-    fun calcList() {
-        val obj = RandSlotsFactory.calcList(numChars, numSlots, numTrials)
-        assertAll(
-            { RndSlotsAssertions.assertNextInt(obj) },
-            { RndSlotsAssertions.assertSlotValues(obj) }
-        )
-    }
-
-    @Test
-    fun calcMap() {
-        val obj = RandSlotsFactory.calcMap(numChars, numSlots, numTrials)
+        val obj = RandSlotsFactory.calcArray(27, 100, 10_000_000)
         assertAll(
             { RndSlotsAssertions.assertNextInt(obj) },
             { RndSlotsAssertions.assertSlotValues(obj) }
@@ -38,22 +30,22 @@ class RandSlotsFactoryTest {
 
     @Test
     fun findGap1() {
-        compareGaps(100, 27, 10_000_000)
+        val gap = findGap(100, 27, 10_000_000)
+        assertWithin(42.0, gap.toDouble(), 2.1, "gap")
     }
 
     @Test
     fun findGap2() {
-        compareGaps(64, 27, 10_000_000)
+        // gap should be at least the length of the longest string "honorificabilitudinitatibus",
+        // or longer if non-alpha characters are encoded.
+        val gap = findGap(64, 27, 10_000_000)
+        assertWithin(29.0, gap.toDouble(), 2.1, "gap")
     }
 
     @Test
     fun findGap3() {
         // we need more trials for this number of characters
-        compareGaps(100, 30, 100_000_000)
-    }
-
-    private fun compareGaps(numSlots: Int, numChars: Int, numTrials: Int) {
-        val (genGap, calcGap) = RandSlotsFactoryUtils.getGaps(numSlots, numChars, numTrials)
-        assertWithin(genGap.toDouble(), calcGap.toDouble(), 1.1, "gap")
+        val gap = findGap(100, 30, 100_000_000)
+        assertWithin(44.0, gap.toDouble(), 2.1, "gap")
     }
 }

@@ -1,6 +1,8 @@
 package org.incava.confile
 
+import org.incava.ikdk.io.Console
 import org.incava.time.Durations.measureDuration
+import java.time.Duration
 
 open class Profiler(val numInvokes: Long, val numTrials: Int) {
     val simulations = LinkedHashMap<String, Simulation>()
@@ -25,6 +27,9 @@ open class Profiler(val numInvokes: Long, val numTrials: Int) {
                 val simulation = simulations.getValue(name)
                 val block = simulation.function
                 val duration = measureDuration { (0 until numInvokes).forEach { _ -> block() } }
+                if (duration.second < Duration.ofMillis(200)) {
+                    Console.info("duration too low", duration.second)
+                }
                 simulation.durations += duration.second
                 Thread.sleep(100L)
             }

@@ -1,10 +1,8 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.corpus.DualCorpus
-import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
-import kotlin.random.Random
 
 class EncodedGenerator(val corpus: DualCorpus) {
     fun getWord(numChars: Int): String? {

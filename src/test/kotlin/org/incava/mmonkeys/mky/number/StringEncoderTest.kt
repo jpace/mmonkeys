@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.testutil.StringUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
@@ -90,12 +91,14 @@ internal class StringEncoderTest {
             "aaaaaaaaa",
             "zzzzzzzzz",
             "aaaazzzzzzzzz",
-            "crpxnlskvljfhh"
+            "crpxnlskvljfhh",
+            "honorificabilitudinitatibus"
         ).map { str ->
             DynamicTest.dynamicTest(str) {
-                val encoded = StringEncoder.encodeToLong(str)
-                val bigInt = BigInteger.valueOf(encoded)
-                val decoded = StringEncoder.decode(bigInt)
+                val encoded = StringEncoder.encodeToBigInt(str)
+                Console.info("encoded", encoded)
+                val decoded = StringEncoder.decode(encoded)
+                Console.info("decoded", decoded)
                 assertEquals(str, decoded)
             }
         }
