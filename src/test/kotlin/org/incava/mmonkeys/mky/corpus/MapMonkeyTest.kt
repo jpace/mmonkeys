@@ -1,8 +1,6 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.MatchData
-import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -13,8 +11,8 @@ internal class MapMonkeyTest {
     fun sharedCorpus() {
         val input = listOf("this", "test", "is", "no", "test")
         val corpus = MapCorpus(input)
-        val monkey1 = makeMonkey(corpus) as MapMonkey
-        val monkey2 = makeMonkey(corpus) as MapMonkey
+        val monkey1 = makeMonkey(1, corpus)
+        val monkey2 = makeMonkey(2, corpus)
         var result: MatchData
         do {
             result = monkey1.check()
@@ -23,7 +21,8 @@ internal class MapMonkeyTest {
         assertEquals(corpus.indexedCorpus.elements, corpus.indexedCorpus.elements)
     }
 
-    private fun makeMonkey(corpus: MapCorpus): Monkey {
-        return MonkeyUtils.createMonkey(corpus, ::MapMonkey, typewriterCtor = { Typewriter(it) })
+    private fun makeMonkey(id: Int, corpus: MapCorpus): MapMonkey {
+        val typewriter = Typewriter()
+        return MapMonkey(id, typewriter, corpus)
     }
 }

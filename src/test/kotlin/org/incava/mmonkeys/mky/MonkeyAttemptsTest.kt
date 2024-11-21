@@ -114,9 +114,13 @@ class MonkeyAttemptsTest {
         Console.info("total", total)
     }
 
+    private fun createDefaultMonkey() : Monkey {
+        return MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
+    }
+
     @Test
     fun addMonkeyAttemptsList() {
-        val monkey = MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
+        val monkey = createDefaultMonkey()
         val obj = MonkeyAttemptsList(1, monkey)
         var index = 0
         repeat(100_000_000) {
@@ -130,7 +134,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsMapAndList() {
-        val monkey = MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
+        val monkey = createDefaultMonkey()
         val obj = MonkeyAttemptsMapAndList(1, monkey)
         var index = 0
         repeat(1_000_000_000) {
@@ -144,7 +148,7 @@ class MonkeyAttemptsTest {
 
     @Test
     fun addMonkeyAttemptsMapAndList1() {
-        val monkey = MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
+        val monkey = createDefaultMonkey()
         var index = 0
         val monkeyAttempts = mutableListOf<MonkeyAttemptsMapAndList>()
         repeat(1_000) { outer ->

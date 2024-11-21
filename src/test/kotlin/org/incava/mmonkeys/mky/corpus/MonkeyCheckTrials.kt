@@ -1,9 +1,8 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.testutil.MonkeyUtils
+import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.type.Typewriter
 
 class MonkeyCheckTrials {

@@ -46,10 +46,14 @@ class MonkeyTrial(
         }
     }
 
+    fun createDefaultMonkey() : Monkey {
+        return MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
+    }
+
     fun runTest(supplier: (Int, Monkey) -> MonkeyMonitor) {
         var index = 0
         repeat(monkeyCount) { monkeyIndex ->
-            val monkey = MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
+            val monkey = createDefaultMonkey()
             val obj = supplier(monkeyIndex, monkey)
             repeat(numAttempts) { inner ->
                 tick(monkeyIndex, inner, attemptTick)

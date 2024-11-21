@@ -4,34 +4,38 @@ import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
-import org.incava.mmonkeys.exec.TypewriterFactory
-import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.mky.corpus.MapMonkey
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations
 
-class CorpusSimulation(wordLength: IntRange, numLines: Int, val numMonkeys: Int, val toMatch: Int) {
+class CorpusSimulation(wordLength: IntRange, numLines: Int, private val numMonkeys: Int, private val toMatch: Int) {
     private val words: List<String>
-    private val corpus: MapCorpus
+    private val corpus: Corpus
+    private val monkeys: List<Monkey>
 
     init {
         val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
         words = CorpusFactory.readFileWords(file, numLines).filter { it.length in wordLength }
         Console.info("sought.#", words.size)
         corpus = MapCorpus(words)
+
+        val charList = Keys.fullList()
+        val manager = Manager(corpus)
+        monkeys = (0 until numMonkeys).map { id ->
+            val typewriter = Typewriter(charList)
+            val monkey = MapMonkey(id, typewriter, corpus)
+            monkey.also { monkey -> monkey.monitors += manager }
+        }
     }
 
     fun run() {
-        val monkeyCtor = ::MapMonkey
-        val typewriterFactory = TypewriterFactory()
-        val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, monkeyCtor)
-        val manager = Manager(corpus)
-        val monkeys = (0 until numMonkeys).map { id ->
-            monkeyFactory.createMonkey(corpus, id).also { monkey -> monkey.monitors += manager }
-        }
         val simulation = CoroutineCorpusSimulation(corpus, monkeys, toMatch)
         simulation.verbose = false
         simulation.run()
