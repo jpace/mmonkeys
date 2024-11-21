@@ -7,24 +7,25 @@ import org.incava.mmonkeys.type.Typewriter
 
 class EqMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : Monkey(id, typewriter, corpus) {
     override fun check(): MatchData {
-        val word = nextString()
-        val index = corpus.match(word)
-        return if (index >= 0) {
-            corpus.removeAt(index)
-            match(word.length, index)
-        } else
-            noMatch(word.length)
-    }
-
-    fun nextString(): String {
         val builder = StringBuilder()
         while (true) {
             val ch = nextChar()
             if (ch == Keys.END_CHAR) {
-                return builder.toString()
+                break
             } else {
                 builder.append(ch)
             }
+        }
+        val word = builder.toString()
+        val index = corpus.words.indices.find { index ->
+            // not sure which condition is faster:
+            corpus.words[index] == word && !corpus.isMatched(index)
+        }
+        return if (index == null) {
+            noMatch(word.length)
+        } else {
+            corpus.setMatched(index)
+            match(word.length, index)
         }
     }
 }

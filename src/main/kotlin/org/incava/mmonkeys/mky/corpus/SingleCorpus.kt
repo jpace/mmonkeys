@@ -9,7 +9,7 @@ class SingleCorpus<T> {
             .computeIfAbsent(item) { mutableListOf() }.also { it.add(index) }
     }
 
-    fun matched(item: T, length: Int): Int {
+    fun setMatched(item: T, length: Int): Int {
         val forLength: MutableMap<T, MutableList<Int>> = elements[length] ?: return -1
         val forEncoded: MutableList<Int> = forLength[item] ?: return -1
         // this is the index into the corpus words

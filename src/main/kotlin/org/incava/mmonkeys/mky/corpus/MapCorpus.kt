@@ -5,10 +5,8 @@ class MapCorpus(words: List<String>) : Corpus(words) {
 
     fun matched(word: String, length: Int): Int {
         // this is the index into sought
-        return indexedCorpus.matched(word, length).also { index -> removeAt(index) }
+        return indexedCorpus.matched(word, length).also { index -> setMatched(index) }
     }
-
-    val lengths get() = indexedCorpus.elements.keys
 
     fun forLength(length: Int) = indexedCorpus.elements[length]
 }

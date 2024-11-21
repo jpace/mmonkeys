@@ -11,13 +11,9 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: 
     val rand : RandInt = RandomFactory.getCalculated(typewriter.numChars())
     val matchKeystrokes = mutableMapOf<Int, Int>()
 
-    fun nextChar(): Char {
-        return typewriter.nextCharacter()
-    }
+    fun nextChar(): Char = typewriter.nextCharacter()
 
-    override fun toString(): String {
-        return "Monkey(id=$id)"
-    }
+    override fun toString(): String = "Monkey(id=$id)"
 
     abstract fun check(): MatchData
 

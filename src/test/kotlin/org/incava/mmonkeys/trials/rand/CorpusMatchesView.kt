@@ -13,7 +13,7 @@ class CorpusMatchesView(val corpus: Corpus) {
 
     fun showWordsAsList(onlyMatched: Boolean) {
         corpus.words.withIndex().forEach { (index, word) ->
-            val matched = corpus.matched.contains(index)
+            val matched = corpus.isMatched(index)
             if (!onlyMatched || matched) {
                 printf("%1s %3d - %s", if (matched) "+" else "", index, word)
             }

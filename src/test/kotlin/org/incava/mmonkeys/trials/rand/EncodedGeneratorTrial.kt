@@ -1,21 +1,20 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.time.Durations.measureDuration
 
 class EncodedGeneratorTrial {
-    fun runTest(corpus: Corpus, generator: EncodedGenerator) {
+    fun runTest(corpus: DualCorpus, generator: EncodedGenerator) {
         var numMatched = 0L
         val numToMatch = 1000L
         val duration = measureDuration {
             while (numMatched < numToMatch && !corpus.isEmpty()) {
                 val result = generator.getWord(7)
                 if (result != null) {
-                    corpus.match(result)
+                    corpus.setMatched(result, result.length)
                     ++numMatched
                 }
             }

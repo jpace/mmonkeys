@@ -10,12 +10,11 @@ class EncodedGenerator(val corpus: DualCorpus) {
         val forLength = corpus.longsForLength(numChars) ?: return null
         val encoded = RandEncoded.random(numChars)
         val match = forLength[encoded]
-        // @todo - remove from corpus.numbers
         return if (match.isNullOrEmpty()) {
             null
         } else {
             StringEncoder.decode(encoded).also {
-                corpus.matched(encoded, numChars)
+                corpus.setMatched(encoded, numChars)
             }
         }
     }

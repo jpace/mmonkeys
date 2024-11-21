@@ -3,8 +3,6 @@ package org.incava.mmonkeys.mky.corpus
 import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.testutil.MonkeyUtils
-import org.incava.mmonkeys.type.DeterministicTypewriter
-import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -23,14 +21,6 @@ internal class MapMonkeyTest {
         } while (!result.isMatch)
         assertSame(monkey1.corpus, monkey2.corpus)
         assertEquals(corpus.indexedCorpus.elements, corpus.indexedCorpus.elements)
-    }
-
-    @Test
-    fun nextChars() {
-        val typewriter = DeterministicTypewriter(Keys.fullList())
-        val obj = MapMonkey(37, typewriter, MapCorpus(listOf("")))
-        val result = obj.nextChars(6)
-        kotlin.test.assertEquals("abcdef", result)
     }
 
     private fun makeMonkey(corpus: MapCorpus): Monkey {

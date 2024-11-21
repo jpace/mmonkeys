@@ -1,12 +1,11 @@
 package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.corpus.DualCorpus
-import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.type.Chars
 
 class FilteringGenerator(val corpus: DualCorpus) {
-    fun getWord(numChars: Int, filter: LengthFiltering): String? {
-        if (!filter.checkLength()) {
+    fun getWord(numChars: Int, filter: LengthFilter): String? {
+        if (!filter.hasCandidates()) {
             return null
         }
         val bytes = ByteArray(numChars)
@@ -20,7 +19,7 @@ class FilteringGenerator(val corpus: DualCorpus) {
             bytes[index] = ch.toByte()
         }
         return String(bytes).also { word ->
-            corpus.matched(word, numChars)
+            corpus.setMatched(word, numChars)
         }
     }
 }

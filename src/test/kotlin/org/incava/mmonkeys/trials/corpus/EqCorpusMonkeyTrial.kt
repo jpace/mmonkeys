@@ -17,7 +17,7 @@ fun main() {
     while (!obj.corpus.isEmpty()) {
         val result = obj.check()
         iterations.incrementAndGet()
-        if (iterations.incrementAndGet() % 1_000_000L == 0L) {
+        if (iterations.get() % 1_000_000L == 0L) {
             Console.info("(1) iterations", iterations)
         }
         if (result.isMatch) {

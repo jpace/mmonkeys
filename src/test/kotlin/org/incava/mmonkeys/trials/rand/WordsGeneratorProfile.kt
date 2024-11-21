@@ -8,7 +8,6 @@ import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Words
-import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
@@ -18,16 +17,13 @@ private class WordsGeneratorProfile(private val numInvokes: Long, private val nu
     fun profile() {
         Console.info("words.#", words.size)
         val profiler = Profiler(numInvokes, numTrials)
-        val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
-
         run {
             val corpus = DualCorpus(words)
-            val generator = WordsGenerator(corpus, slots, RandIntsFactory::nextInts2) { LengthFilter(corpus, it) }
+            val generator = WordsGeneratorFactory.createWithDefaults(corpus)
             profiler.add("indices 2, length") {
                 matchWords { generator.getWords() }
             }
         }
-
         profiler.runAll()
         profiler.showResults(SortType.BY_DURATION)
     }

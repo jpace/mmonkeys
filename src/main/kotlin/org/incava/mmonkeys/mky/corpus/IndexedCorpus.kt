@@ -10,5 +10,5 @@ class IndexedCorpus<T>(words: List<String>, supplier: (String) -> T) {
         }
     }
 
-    fun matched(item: T, length: Int): Int = delegate.matched(item, length)
+    fun matched(item: T, length: Int): Int = delegate.setMatched(item, length)
 }

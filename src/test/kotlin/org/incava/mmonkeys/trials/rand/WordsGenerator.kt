@@ -8,14 +8,6 @@ import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 
-interface Filtering {
-    fun check(ch: Char): Boolean
-}
-
-abstract class LengthFiltering(val length: Int) : Filtering {
-    abstract fun checkLength(): Boolean
-}
-
 object WordsGeneratorFactory {
     object Defaults {
         val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
@@ -23,15 +15,18 @@ object WordsGeneratorFactory {
     }
 
     fun createWithDefaults(corpus: DualCorpus) : WordsGenerator {
-        return WordsGenerator(corpus, Defaults.slots, Defaults.indicesSupplier) { LengthFilter(corpus, it) }
+        return WordsGenerator(corpus, Defaults.slots, Defaults.indicesSupplier) { length ->
+            val candidates = corpus.stringsForLength(length)?.keys
+            LengthFilter(candidates)
+        }
     }
 }
 
 class WordsGenerator(
-    val corpus: DualCorpus,
+    corpus: DualCorpus,
     private val slots: RndSlots,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
-    private val filterSupplier: (Int) -> LengthFiltering,
+    private val filterSupplier: (Int) -> LengthFilter,
 ) {
     private val intsFactory = RandIntsFactory()
     private val encodedGenerator = EncodedGenerator(corpus)

@@ -26,11 +26,11 @@ internal class SingleCorpusTest {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = SingleCorpus<String>()
         input.withIndex().forEach { obj.add(it.value, it.value.length, it.index) }
-        obj.matched("ab", 2)
+        obj.setMatched("ab", 2)
         val expectedMap = mapOf("cd" to listOf(1))
         val resultMap = obj.elements[2] as Map<String, List<Int>>
         assertEquals(expectedMap, resultMap)
-        obj.matched("cd", 2)
+        obj.setMatched("cd", 2)
         assertNull(obj.elements[2])
     }
 }

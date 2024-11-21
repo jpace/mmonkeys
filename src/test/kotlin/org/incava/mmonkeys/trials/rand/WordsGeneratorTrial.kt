@@ -65,7 +65,7 @@ class WordsGeneratorTrial {
         val now = ZonedDateTime.now()
         println(now.format(pattern))
         corpus.words.withIndex().forEach { (index, word) ->
-            println("$index - $word - ${corpus.matched.contains(index)}")
+            println("$index - $word - ${corpus.isMatched(index)}")
         }
     }
 }

@@ -6,6 +6,7 @@ import org.incava.mmonkeys.mky.number.StringEncoder
 class DualCorpus(words: List<String>) : Corpus(words) {
     val stringCorpus: SingleCorpus<String> = SingleCorpus()
     val encodedCorpus: SingleCorpus<Long> = SingleCorpus()
+
     // @todo - make this based on words (words.max ...), and dynamic
     val maxLength = 27 // "honorificabilitudinitatibus"
 
@@ -16,24 +17,32 @@ class DualCorpus(words: List<String>) : Corpus(words) {
                 stringCorpus.add(word, word.length, index)
             } else {
                 val encoded = StringEncoder.encodeToLong(word)
-                encodedCorpus.add(encoded, word.length, index)}
-
+                encodedCorpus.add(encoded, word.length, index)
+            }
         }
     }
 
     fun stringsForLength(length: Int): MutableMap<String, MutableList<Int>>? {
-        return stringCorpus.elements[length]
+        return forLength(stringCorpus, length)
     }
 
-    fun longsForLength(length: Int) : MutableMap<Long, MutableList<Int>>? {
-        return encodedCorpus.elements[length]
+    fun longsForLength(length: Int): MutableMap<Long, MutableList<Int>>? {
+        return forLength(encodedCorpus, length)
     }
 
-    fun matched(word: String, length: Int): Int {
-        return stringCorpus.matched(word, length).also { index -> removeAt(index) }
+    private fun <T> forLength(corpus: SingleCorpus<T>, length: Int): MutableMap<T, MutableList<Int>>? {
+        return corpus.elements[length]
     }
 
-    fun matched(encoded: Long, length: Int): Int {
-        return encodedCorpus.matched(encoded, length).also { index -> removeAt(index) }
+    fun setMatched(word: String, length: Int): Int {
+        return setMatched(stringCorpus, word, length)
+    }
+
+    fun setMatched(encoded: Long, length: Int): Int {
+        return setMatched(encodedCorpus, encoded, length)
+    }
+
+    private fun <T> setMatched(corpus: SingleCorpus<T>, value: T, length: Int) : Int {
+        return corpus.setMatched(value, length).also { index -> setMatched(index) }
     }
 }

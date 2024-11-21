@@ -54,7 +54,7 @@ class ManagerView(
             corpus.words[it] == word
         }
         val numWordMatches = wordCount.filter {
-            corpus.matched.contains(it)
+            corpus.isMatched(it)
         }.size
         if (linesUntilHeader == 0) {
             println()
