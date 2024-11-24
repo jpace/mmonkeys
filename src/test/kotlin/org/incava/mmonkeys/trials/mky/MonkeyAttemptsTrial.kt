@@ -8,9 +8,7 @@ import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyAttemptsMapAndList
 import org.incava.mmonkeys.mky.MonkeyMonitor
-import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.corpus.MapMonkey
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.mky.corpus.MapMonkeyUtils
 import org.incava.mmonkeys.util.MemoryUtil
 import org.incava.time.Durations.measureDuration
 import kotlin.random.Random
@@ -46,14 +44,10 @@ class MonkeyTrial(
         }
     }
 
-    fun createDefaultMonkey() : Monkey {
-        return MapMonkey(1, Typewriter(), MapCorpus(listOf("abc")))
-    }
-
     fun runTest(supplier: (Int, Monkey) -> MonkeyMonitor) {
         var index = 0
         repeat(monkeyCount) { monkeyIndex ->
-            val monkey = createDefaultMonkey()
+            val monkey = MapMonkeyUtils.createDefaultMonkey(listOf("abc"))
             val obj = supplier(monkeyIndex, monkey)
             repeat(numAttempts) { inner ->
                 tick(monkeyIndex, inner, attemptTick)

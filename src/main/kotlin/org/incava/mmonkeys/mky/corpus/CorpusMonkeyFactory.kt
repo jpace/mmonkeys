@@ -9,12 +9,12 @@ typealias CorpusMonkeyCtor<T> = (id: Int, typewriter: Typewriter, sought: T) -> 
 class CorpusMonkeyFactory<T : Corpus>(
     val typewriterSupplier: (chars: List<Char>) -> Typewriter = ::Typewriter,
     val monkeyCtor: CorpusMonkeyCtor<T> = ::EqMonkey,
-    val charsCtor: List<Char> = Keys.fullList(),
 ) {
     private var id: Int = 1
+    val chars: List<Char> = Keys.fullList()
 
     fun createMonkey(corpus: T, id: Int = this.id++): Monkey {
-        val typewriter = typewriterSupplier(charsCtor)
+        val typewriter = typewriterSupplier(chars)
         return monkeyCtor(id, typewriter, corpus)
     }
 }

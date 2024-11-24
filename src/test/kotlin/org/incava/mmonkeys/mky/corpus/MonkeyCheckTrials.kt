@@ -11,8 +11,7 @@ class MonkeyCheckTrials {
     fun mapMonkeyCheck() {
         Console.info("map")
         val corpus = MapCorpus(words)
-        val typewriter = Typewriter()
-        val obj = MapMonkey(1, typewriter, corpus)
+        val obj = MapMonkeyUtils.createMapMonkey(1, corpus)
         var iterations = 0
         while (!obj.corpus.isEmpty()) {
             obj.check()

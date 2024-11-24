@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.MatchData
-import org.incava.mmonkeys.type.DeterministicTypewriter
-import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Disabled
@@ -10,21 +9,12 @@ import org.junit.jupiter.api.Test
 
 internal class NumbersMonkeyTest {
     private fun makeMonkeys(corpus: NumberedCorpus, count: Int): List<NumbersMonkey> {
-        val chars = Keys.fullList()
-        val typewriter = DeterministicTypewriter(chars)
         return (0 until count).map {
-            NumbersMonkey(it, typewriter, corpus)
+            NumbersMonkey(it, Typewriter(), corpus)
         }
     }
 
-    private fun makeMonkey(corpus: NumberedCorpus): NumbersMonkey {
-        return makeMonkeys(corpus, 1).first()
-    }
-
-    private fun makeMonkey(words: List<String>): NumbersMonkey {
-        val corpus = NumberedCorpus(words)
-        return makeMonkeys(corpus, 1).first()
-    }
+    private fun makeMonkey(words: List<String>) = makeMonkeys(NumberedCorpus(words), 1).first()
 
     @Test
     fun numbers() {
@@ -70,7 +60,7 @@ internal class NumbersMonkeyTest {
     fun hasUnmatched() {
         val words = listOf("this", "is", "a", "test")
         val corpus = NumberedCorpus(words)
-        val obj = makeMonkey(corpus)
+        val obj = makeMonkeys(corpus, 1).first()
         repeat(1000000) { obj.check() }
         val result = corpus.hasUnmatched()
         assertFalse(result, "corpus.words: ${corpus.words}, matched: ${corpus.matched}")

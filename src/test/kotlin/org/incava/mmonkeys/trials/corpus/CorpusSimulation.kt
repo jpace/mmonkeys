@@ -8,11 +8,9 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.corpus.MapMonkey
+import org.incava.mmonkeys.mky.corpus.MapMonkeyUtils
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations
 
 class CorpusSimulation(wordLength: IntRange, numLines: Int, private val numMonkeys: Int, private val toMatch: Int) {
@@ -25,12 +23,9 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, private val numMonke
         words = CorpusFactory.readFileWords(file, numLines).filter { it.length in wordLength }
         Console.info("sought.#", words.size)
         corpus = MapCorpus(words)
-
-        val charList = Keys.fullList()
         val manager = Manager(corpus)
         monkeys = (0 until numMonkeys).map { id ->
-            val typewriter = Typewriter(charList)
-            val monkey = MapMonkey(id, typewriter, corpus)
+            val monkey = MapMonkeyUtils.createMapMonkey(id, corpus)
             monkey.also { monkey -> monkey.monitors += manager }
         }
     }

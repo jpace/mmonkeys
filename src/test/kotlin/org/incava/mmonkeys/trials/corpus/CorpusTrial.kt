@@ -16,11 +16,6 @@ import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
 import org.incava.time.Durations
 import java.time.Duration
 
-data class TrialParams(
-    val wordRange: IntRange,
-    val timeLimit: Duration,
-)
-
 class CorpusTrial(
     private val lengthRange: IntRange,
     numLines: Int,
@@ -67,7 +62,8 @@ class CorpusTrial(
 
 fun main() {
     // NumberLongsMonkey can only support up through words of length 13
-    val obj = CorpusTrial(3 .. 17, 10000, Duration.ofSeconds(10L))
+    val limit = 13
+    val obj = CorpusTrial(3 .. limit, 10000, Duration.ofSeconds(10L))
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()
