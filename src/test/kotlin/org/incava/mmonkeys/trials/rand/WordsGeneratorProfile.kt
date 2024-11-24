@@ -31,7 +31,7 @@ private class WordsGeneratorProfile(private val numInvokes: Long, private val nu
     fun matchWords(generator: () -> Words) {
         runToMatchCount(matchGoal) {
             val result = generator()
-            result.strings.count { words.contains(it) }
+            result.words.count { words.contains(it.string) }
         }
     }
 

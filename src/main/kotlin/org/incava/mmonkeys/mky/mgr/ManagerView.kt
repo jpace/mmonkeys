@@ -4,7 +4,6 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import java.time.ZoneId
@@ -42,14 +41,14 @@ class ManagerView(
 
     private fun formatTime(dateTime: ZonedDateTime): String = dateTime.format(pattern)
 
-    fun addMatch(monkey: Monkey, matchData: MatchData) {
+    fun addMatch(monkey: Monkey, index: Int) {
         if (manager.matchCount() % outputInterval == 0) {
-            writeMatch(monkey, matchData)
+            writeMatch(monkey, index)
         }
     }
 
-    fun writeMatch(monkey: Monkey, matchData: MatchData) {
-        val word = corpus.words[matchData.index]
+    private fun writeMatch(monkey: Monkey, index: Int) {
+        val word = corpus.words[index]
         val wordCount = (0 until numWords).filter {
             corpus.words[it] == word
         }
@@ -59,7 +58,6 @@ class ManagerView(
         if (linesUntilHeader == 0) {
             println()
             table.writeHeader()
-            table.writeBreak('-')
             linesUntilHeader = 9
         } else {
             --linesUntilHeader
@@ -70,8 +68,8 @@ class ManagerView(
             formatTime(startTime.plusSeconds(manager.totalKeystrokes)),
             monkey.id,
             word,
-            matchData.keystrokes,
-            matchData.index,
+            word.length,
+            index,
             numWordMatches,
             wordCount.size,
             manager.matchCount(),

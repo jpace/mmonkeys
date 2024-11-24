@@ -1,15 +1,23 @@
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
-import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.exec.TypewriterFactory
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusMonkeyCtor
-import org.incava.mmonkeys.mky.corpus.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.MonkeyCtor
+import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.EqMonkey
 import org.incava.mmonkeys.mky.corpus.MapMonkey
+import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 import java.lang.Thread.sleep
 
-fun runSimulation(type: String, simulation: CoroutineSimulation) {
+fun <T : Corpus> runSimulation(toChar: Char, type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
+    val charList = Keys.keyList(toChar)
+    val typewriterSupplier: (List<Char>) -> Typewriter = { Typewriter(charList) }
+    val monkeyFactory = MonkeyFactory(typewriterSupplier, monkeyCtor)
+    // I don't make monkeys; I just train them!
+    val numMonkeys = 10
+    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
+    Console.info("monkeys.#", monkeys.size)
+    val simulation = CoroutineCorpusSimulation(sought, monkeys, 10)
     Console.info("type", type)
     Console.info("# monkeys", simulation.numMonkeys)
     Console.info("main", "simulation")
@@ -19,20 +27,6 @@ fun runSimulation(type: String, simulation: CoroutineSimulation) {
     println()
 }
 
-fun <T : Corpus> runSimulation(type: String, sought: T, numMonkeys: Int, monkeyFactory: CorpusMonkeyFactory<T>) {
-    // I don't make monkeys; I just train them!
-    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
-    Console.info("monkeys.#", monkeys.size)
-    val simulation = CoroutineCorpusSimulation(sought, monkeys, 10)
-    runSimulation(type, simulation)
-}
-
-fun <T : Corpus> runCorpusSimulation(toChar: Char, type: String, sought: T, monkeyCtor: CorpusMonkeyCtor<T>) {
-    val typewriterFactory = TypewriterFactory(toChar)
-    val monkeyFactory = CorpusMonkeyFactory({ typewriterFactory.create() }, monkeyCtor = monkeyCtor)
-    runSimulation(type, sought, 10, monkeyFactory)
-}
-
 fun runCorpusTest(toChar: Char) {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
@@ -40,7 +34,7 @@ fun runCorpusTest(toChar: Char) {
     val y = "map" to ::MapMonkey
     val m = x
     val corpus = Corpus(sought)
-    runCorpusSimulation(toChar, m.first, corpus, m.second)
+    runSimulation(toChar, m.first, corpus, m.second)
 }
 
 fun main(args: Array<String>) {

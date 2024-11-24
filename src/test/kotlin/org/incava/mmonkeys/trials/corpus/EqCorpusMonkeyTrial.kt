@@ -13,15 +13,15 @@ fun main() {
     val obj = EqMonkey(1, typewriter, Corpus(sought))
     Console.info("obj", obj)
     Console.info("sought", obj.corpus)
-    Console.info("sought.present?", !obj.corpus.isEmpty())
+    Console.info("sought.present?", obj.corpus.hasUnmatched())
     val iterations = AtomicLong()
-    while (!obj.corpus.isEmpty()) {
-        val result = obj.check()
+    while (obj.corpus.hasUnmatched()) {
+        val result = obj.findMatch()
         iterations.incrementAndGet()
         if (iterations.get() % 1_000_000L == 0L) {
             Console.info("(1) iterations", iterations)
         }
-        if (result.isMatch) {
+        if (result != null) {
             Console.info("(2) iterations", iterations)
             Console.info("sought", sought)
         }

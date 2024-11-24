@@ -7,7 +7,7 @@ import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.testutil.StringUtil
 
-class CorpusMonkeyTable(private val maxWordLength: Int) : Table(
+class MonkeyTable(private val maxWordLength: Int) : Table(
     listOf(
         IntColumn("id", 4),
         StringColumn("type", 16, leftJustified = true),
@@ -28,7 +28,7 @@ class CorpusMonkeyTable(private val maxWordLength: Int) : Table(
             monitor.attemptCount(),
             monitor.keystrokesCount(),
             numMatches
-        ) + (1..maxWordLength).map { monkey.matchKeystrokes[it] ?: 0 }
+        ) + (1..maxWordLength).map { monkey.matchesByLength[it] ?: 0 }
         writeRow(values)
         writeBreak('-')
     }

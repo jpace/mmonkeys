@@ -5,7 +5,7 @@ import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.trials.base.PerfResults
 
-class CorpusMatchView(private val wordSizeLimit: Int, val results: Map<String, PerfResults>) {
+class CorpusMatchView(private val wordSizeLimit: Int, private val results: Map<String, PerfResults>) {
     val table: Table
 
     init {

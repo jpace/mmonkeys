@@ -38,7 +38,7 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, private val numMonke
         Console.info("simulation.matches.#", simulation.matches.size)
         Console.info("corpus.matched.size", corpus.matched.size)
         Console.info("corpus.words.size", corpus.words.size)
-        Console.info("corpus.isEmpty()", corpus.isEmpty())
+        Console.info("corpus.unmatched?", corpus.hasUnmatched())
         val numMatched = corpus.matched.size
         Console.info("corpus.match %", 100.0 * numMatched / corpus.words.size)
 //        (0 until corpus.words.size).filter { corpus.matched.contains(it) }.forEach { index ->

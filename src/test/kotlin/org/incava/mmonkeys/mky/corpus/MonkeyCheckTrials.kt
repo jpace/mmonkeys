@@ -1,24 +1,28 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.type.Typewriter
 
-class MonkeyCheckTrials {
+private class MonkeyCheckTrials {
     val words = listOf("ab", "cd", "def", "defg", "ghi")
+
+    fun monkeyCheck(monkey: Monkey) {
+        var iterations = 0
+        while (monkey.corpus.hasUnmatched()) {
+            monkey.check()
+            iterations++
+        }
+        Console.info("iterations", iterations)
+    }
 
     fun mapMonkeyCheck() {
         Console.info("map")
         val corpus = MapCorpus(words)
         val obj = MapMonkeyUtils.createMapMonkey(1, corpus)
-        var iterations = 0
-        while (!obj.corpus.isEmpty()) {
-            obj.check()
-            iterations++
-        }
-        Console.info("iterations", iterations)
-        assert(obj.corpus.isEmpty())
+        monkeyCheck(obj)
     }
 
     fun eqMonkeyCheck() {
@@ -26,13 +30,7 @@ class MonkeyCheckTrials {
         val corpus = Corpus(words)
         val typewriter = Typewriter()
         val obj = EqMonkey(1, typewriter, corpus)
-        var iterations = 0
-        while (!obj.corpus.isEmpty()) {
-            obj.check()
-            iterations++
-        }
-        Console.info("iterations", iterations)
-        assert(obj.corpus.isEmpty())
+        monkeyCheck(obj)
     }
 
     fun numberedMonkeyCheck() {
@@ -40,13 +38,7 @@ class MonkeyCheckTrials {
         val corpus = NumberedCorpus(words)
         val typewriter = Typewriter()
         val obj = NumbersMonkey(1, typewriter, corpus)
-        var iterations = 0
-        while (!obj.corpus.isEmpty()) {
-            obj.check()
-            iterations++
-        }
-        Console.info("iterations", iterations)
-        assert(obj.corpus.isEmpty())
+        monkeyCheck(obj)
     }
 }
 

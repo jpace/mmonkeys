@@ -12,10 +12,10 @@ internal class MapMonkeyTest {
         val corpus = MapCorpus(input)
         val monkey1 = MapMonkeyUtils.createMapMonkey(1, corpus)
         val monkey2 = MapMonkeyUtils.createMapMonkey(2, corpus)
-        var result: MatchData
+        var result: Int?
         do {
-            result = monkey1.check()
-        } while (!result.isMatch)
+            result = monkey1.findMatch()
+        } while (result == null)
         assertSame(monkey1.corpus, monkey2.corpus)
         assertEquals(corpus.indexedCorpus.elements, corpus.indexedCorpus.elements)
     }

@@ -20,7 +20,7 @@ internal class WordsGeneratorTest {
         while (!foundMatch && attempt++ < 1000) {
             val result = obj.getWords()
             Console.info("result", result)
-            foundMatch = result.strings.isNotEmpty()
+            foundMatch = result.words.isNotEmpty()
         }
         assertTrue(foundMatch)
     }

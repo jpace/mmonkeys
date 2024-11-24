@@ -2,9 +2,10 @@ package org.incava.mmonkeys.trials.rand
 
 import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.type.Chars
+import org.incava.mmonkeys.words.Word
 
 class FilteringGenerator(val corpus: DualCorpus) {
-    fun getWord(numChars: Int, filter: LengthFilter): String? {
+    fun getWord(numChars: Int, filter: LengthFilter): Word? {
         if (!filter.hasCandidates()) {
             return null
         }
@@ -18,8 +19,8 @@ class FilteringGenerator(val corpus: DualCorpus) {
             }
             bytes[index] = ch.toByte()
         }
-        return String(bytes).also { word ->
-            corpus.setMatched(word, numChars)
-        }
+        val string = String(bytes)
+        val index = corpus.setMatched(string, numChars)
+        return Word(string, index)
     }
 }

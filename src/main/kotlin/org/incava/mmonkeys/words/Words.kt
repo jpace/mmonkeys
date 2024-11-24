@@ -1,3 +1,3 @@
 package org.incava.mmonkeys.words
 
-data class Words(val strings: List<String>, val totalKeyStrokes: Long)
+data class Words(val words: List<Word>, val totalKeyStrokes: Long)

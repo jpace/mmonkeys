@@ -9,5 +9,5 @@ open class Corpus(val words: List<String>) {
 
     fun hasUnmatched(): Boolean = matched.size < words.size
 
-    fun isEmpty(): Boolean = matched.size == words.size
+    fun isEmpty(): Boolean = !hasUnmatched()
 }

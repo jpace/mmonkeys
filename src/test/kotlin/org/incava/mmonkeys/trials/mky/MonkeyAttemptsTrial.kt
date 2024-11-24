@@ -52,7 +52,7 @@ class MonkeyTrial(
             repeat(numAttempts) { inner ->
                 tick(monkeyIndex, inner, attemptTick)
                 val isMatch = random.nextDouble(1.0) < matchPercent
-                val matchData = MatchData(isMatch, random.nextInt(40), if (isMatch) index++ else 0)
+                val matchData = MatchData(isMatch, random.nextInt(40), if (isMatch) index++ else null)
                 obj.add(monkey, matchData)
             }
             if (monkeyIndex % 10 == 0) {

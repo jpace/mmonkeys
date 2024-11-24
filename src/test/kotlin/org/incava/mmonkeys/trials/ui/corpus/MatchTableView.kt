@@ -28,17 +28,19 @@ class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(cor
         table.writeBreak('=')
     }
 
-    override fun showResult(monkey: Monkey, result: MatchData) {
+    override fun showResult(monkey: Monkey, result: Int?) {
         val values = listOf(
-            result.isMatch,
+            result != null,
             corpus.matched.size,
             corpus.words.size,
             corpus.isEmpty(),
             if (monkey.monitors.isEmpty()) -1 else monkey.monitors.first().attemptCount()
-        ) + if (result.isMatch) {
+        ) + if (result == null) {
             listOf("n/a", -1, -1, "")
         } else {
-            listOf(monkey.javaClass, result.keystrokes, result.index, corpus.words[result.index])
+            val word = corpus.words[result]
+            val length = word.length
+            listOf(monkey.javaClass, length, result, word)
         }
         table.writeRow(values)
     }

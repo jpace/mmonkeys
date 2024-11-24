@@ -3,6 +3,7 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.type.Chars
+import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
@@ -34,26 +35,26 @@ class WordsGenerator(
     private val maxToSpace = corpus.maxLength + 1
     private val minToSpace = 2
 
-    fun checkWord(numChars: Int, strings: MutableList<String>) {
+    private fun checkWord(numChars: Int, words: MutableList<Word>) {
         if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
             // use long/encoded, convert back to string
             val word = encodedGenerator.getWord(numChars)
             if (word != null) {
-                strings += word
+                words += word
             }
         } else {
             // use "legacy"
             val filter = filterSupplier(numChars)
             val word = filteringGenerator.getWord(numChars, filter)
             if (word != null) {
-                strings += word
+                words += word
             }
         }
     }
 
     fun getWords(): Words {
         val slotIndices = indicesSupplier(intsFactory)
-        val strings = mutableListOf<String>()
+        val matches = mutableListOf<Word>()
         var keystrokes = 0L
         slotIndices.forEach { slotIndex ->
             // number of keystrokes to (through) a space:
@@ -61,9 +62,9 @@ class WordsGenerator(
             keystrokes += toSpace
             if (toSpace in minToSpace..maxToSpace) {
                 val numChars = toSpace - 1
-                checkWord(numChars, strings)
+                checkWord(numChars, matches)
             }
         }
-        return Words(strings, keystrokes)
+        return Words(matches, keystrokes)
     }
 }

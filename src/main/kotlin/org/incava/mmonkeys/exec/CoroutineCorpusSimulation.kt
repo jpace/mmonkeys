@@ -11,7 +11,7 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 
 open class CoroutineCorpusSimulation(private val corpus: Corpus, private val monkeys: List<Monkey>, private val toFind: Int) : CoroutineSimulation(monkeys.size) {
     private var numFound = 0L
-    val matches = mutableListOf<MatchData>()
+    val matches = mutableListOf<Int>()
 
     override fun CoroutineScope.launchMonkeys(): List<Job> {
         return monkeys.map { monkey ->
@@ -26,7 +26,7 @@ open class CoroutineCorpusSimulation(private val corpus: Corpus, private val mon
     }
 
     private suspend fun runMonkey(monkey: Monkey) {
-        (0 until maxAttempts).forEach { attempt ->
+        (0 until maxAttempts).forEach { _ ->
             if (isComplete()) {
                 return
             }
@@ -38,13 +38,14 @@ open class CoroutineCorpusSimulation(private val corpus: Corpus, private val mon
     private suspend fun checkMonkey(monkey: Monkey): Boolean {
         iterations.incrementAndGet()
         val md = monkey.check()
-        if (md.isMatch) {
+        val index = md.index
+        if (index != null) {
             if (verbose) {
                 Console.info("monkey", monkey)
                 Console.info("md", md)
                 Console.info("numFound", numFound)
             }
-            matches += md
+            matches += index
             numFound++
             return true
         } else {

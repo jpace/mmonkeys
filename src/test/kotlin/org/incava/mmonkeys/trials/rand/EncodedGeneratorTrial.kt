@@ -11,10 +11,9 @@ class EncodedGeneratorTrial {
         var numMatched = 0L
         val numToMatch = 1000L
         val duration = measureDuration {
-            while (numMatched < numToMatch && !corpus.isEmpty()) {
+            while (numMatched < numToMatch && corpus.hasUnmatched()) {
                 val result = generator.getWord(7)
                 if (result != null) {
-                    corpus.setMatched(result, result.length)
                     ++numMatched
                 }
             }

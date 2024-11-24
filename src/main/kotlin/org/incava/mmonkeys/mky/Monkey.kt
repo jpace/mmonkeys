@@ -2,14 +2,13 @@ package org.incava.mmonkeys.mky
 
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.rand.RandomFactory
-import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.rando.RandInt
 
 abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: Corpus) {
     val monitors = mutableListOf<MonkeyMonitor>()
-    val rand : RandInt = RandomFactory.getCalculated(typewriter.numChars())
-    val matchKeystrokes = mutableMapOf<Int, Int>()
+    val rand: RandInt = RandomFactory.getCalculated(typewriter.numChars())
+    val matchesByLength = mutableMapOf<Int, Int>()
 
     fun nextChar(): Char = typewriter.nextCharacter()
 
@@ -17,14 +16,23 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: 
 
     abstract fun check(): MatchData
 
+    fun findMatch(): Int? {
+        val match = check()
+        return if (match.isMatch) match.index else null
+    }
+
     open fun match(keystrokes: Int, index: Int): MatchData {
-        return MatchData(true, keystrokes, index).also { addAttempt(it) }
+        return MatchData(keystrokes, index).also {
+            val length = corpus.words[index].length
+            matchesByLength.merge(length, 1) { prev, _ -> prev + 1 }
+            notifyMonitors(it)
+        }
     }
 
     // keystroke value is the number of character *before* the space, i.e.,
     // the length of the non-matching word.
     fun noMatch(keystrokes: Int): MatchData {
-        return MatchData(false, keystrokes, -1).also { addAttempt(it) }
+        return MatchData(false, keystrokes, null).also { notifyMonitors(it) }
     }
 
     // number of keystrokes at which we'll hit the end-of-word character
@@ -33,10 +41,7 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: 
     // and so on and so forth.
     fun randomLength() = rand.nextInt()
 
-    private fun addAttempt(matchData: MatchData) {
-        if (matchData.isMatch) {
-            matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
-        }
+    private fun notifyMonitors(matchData: MatchData) {
         monitors.forEach { it.add(this, matchData) }
     }
 }

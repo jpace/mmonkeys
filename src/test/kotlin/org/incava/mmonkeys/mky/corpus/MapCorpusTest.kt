@@ -24,12 +24,12 @@ internal class MapCorpusTest {
     fun matched() {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = MapCorpus(input)
-        obj.matched("ab", 2)
+        obj.setMatched("ab", 2)
         assertEquals(setOf(0), obj.matched)
         val expectedMap = mapOf("cd" to listOf(1))
         val resultMap = obj.forLength(2) as Map<String, List<Int>>
         assertEquals(expectedMap, resultMap)
-        obj.matched("cd", 2)
+        obj.setMatched("cd", 2)
         assertEquals(setOf(0, 1), obj.matched)
         assertNull(obj.forLength(2))
     }

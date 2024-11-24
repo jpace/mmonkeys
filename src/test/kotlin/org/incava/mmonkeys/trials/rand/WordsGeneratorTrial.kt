@@ -27,13 +27,13 @@ class WordsGeneratorTrial {
         Console.info("by size", bySize.toSortedMap())
         Console.info("total", bySize.values.sum())
         val duration = measureDuration {
-            while (longerMatched < numToMatch && !corpus.isEmpty()) {
+            while (longerMatched < numToMatch && corpus.hasUnmatched()) {
                 val result = wordsGenerator.getWords()
                 keystrokes += result.totalKeyStrokes
-                result.strings.forEach { word ->
-                    MapUtil.increment(matchedByLength, word.length)
+                result.words.forEach { word ->
+                    MapUtil.increment(matchedByLength, word.string.length)
                     ++numMatched
-                    if (word.length > minLength) {
+                    if (word.string.length > minLength) {
                         ++longerMatched
                         if (longerMatched % 100 == 0) {
                             Console.info("longerMatched", longerMatched)

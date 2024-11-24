@@ -1,7 +1,7 @@
 package org.incava.mesa
 
-open class DoubleColumn(header: String, width: Int, private val precision: Int) : Column(header, width) {
-    override fun cellFormat(): String {
-        return "%${width}.${precision}f"
-    }
+open class DoubleColumn(header: String, width: Int, precision: Int) : Column(header, width) {
+    private val format = "%${width}.${precision}f"
+
+    override fun cellFormat(): String = format
 }

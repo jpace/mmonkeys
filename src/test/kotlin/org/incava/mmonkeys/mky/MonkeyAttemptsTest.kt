@@ -3,23 +3,22 @@ package org.incava.mmonkeys.mky
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.MapMonkeyUtils
 import org.incava.mmonkeys.util.MemoryUtil
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
 // keeping these around in case I want to profile the overhead
-abstract class MonkeyAttempts(val id: Int, val monkey: Monkey) : MonkeyMonitor {
-    var totalKeystrokes: Long = 0L
+abstract class MonkeyAttempts(val monkey: Monkey) : MonkeyMonitor {
+    private var totalKeystrokes: Long = 0L
     var count: Long = 0L
-    val matchKeystrokes = mutableMapOf<Int, Int>()
+    private var matchCount = 0
 
     override fun add(monkey: Monkey, matchData: MatchData) {
         // add 1 to account for the space after the match/mismatch
+        // totalKeystrokes == virtual seconds:
         totalKeystrokes += (matchData.keystrokes + 1)
         count++
-        if (matchData.isMatch) {
-            // totalKeystrokes == virtual seconds:
-            matchKeystrokes.merge(matchData.keystrokes, 1) { prev, _ -> prev + 1 }
+        if (matchData.index != null) {
+            ++matchCount
         }
     }
 
@@ -27,12 +26,12 @@ abstract class MonkeyAttempts(val id: Int, val monkey: Monkey) : MonkeyMonitor {
 
     override fun attemptCount(): Long = count
 
-    override fun matchCount(): Int = matchKeystrokes.values.sum()
+    override fun matchCount(): Int = matchCount
 
     abstract fun showMatches(limit: Int)
 }
 
-class MonkeyAttemptsList(id: Int, monkey: Monkey, private val tick: Int = 50_000) : MonkeyAttempts(id, monkey) {
+class MonkeyAttemptsList(id: Int, monkey: Monkey, private val tick: Int = 50_000) : MonkeyAttempts(monkey) {
     private val attempts = mutableListOf<MatchData>()
 
     override fun add(monkey: Monkey, matchData: MatchData) {
@@ -59,7 +58,7 @@ class MonkeyAttemptsList(id: Int, monkey: Monkey, private val tick: Int = 50_000
     }
 }
 
-class MonkeyAttemptsMapAndList(id: Int, monkey: Monkey, private val tick: Int = 50_000) : MonkeyAttempts(id, monkey) {
+class MonkeyAttemptsMapAndList(id: Int, monkey: Monkey, private val tick: Int = 50_000) : MonkeyAttempts(monkey) {
     val succeeded = mutableMapOf<Int, MatchData>()
     val failed = mutableListOf<Long>()
     var index = 0
@@ -103,7 +102,6 @@ class MonkeyAttemptsMapAndList(id: Int, monkey: Monkey, private val tick: Int = 
     }
 }
 
-@Disabled
 class MonkeyAttemptsTest {
     val random = Random.Default
 
@@ -112,16 +110,20 @@ class MonkeyAttemptsTest {
         Console.info("total", total)
     }
 
+    fun runIt(iteration: Int, index: Int, attempts: MonkeyAttempts, monkey: Monkey): Int {
+        tick(iteration)
+        val (matchData, newIndex) = createMatchData(index)
+        attempts.add(monkey, matchData)
+        return newIndex
+    }
+
     @Test
     fun addMonkeyAttemptsList() {
         val monkey = MapMonkeyUtils.createDefaultMonkey(listOf("abc"))
         val obj = MonkeyAttemptsList(1, monkey)
         var index = 0
         repeat(100_000_000) {
-            tick(it)
-            val (matchData, newIndex) = createMatchData(index)
-            index = newIndex
-            obj.add(monkey, matchData)
+            index = runIt(it, index, obj, monkey)
         }
         obj.summarize()
     }
@@ -132,10 +134,7 @@ class MonkeyAttemptsTest {
         val obj = MonkeyAttemptsMapAndList(1, monkey)
         var index = 0
         repeat(1_000_000_000) {
-            tick(it, 1_000_000)
-            val (matchData, newIndex) = createMatchData(index)
-            index = newIndex
-            obj.add(monkey, matchData)
+            index = runIt(it, index, obj, monkey)
         }
         obj.summarize()
     }
@@ -150,10 +149,7 @@ class MonkeyAttemptsTest {
             monkeyAttempts += obj
             Console.info("outer", outer)
             repeat(1_000_000_000) { inner ->
-                tick(inner, 500_000_000)
-                val (matchData, newIndex) = createMatchData(index)
-                index = newIndex
-                obj.add(monkey, matchData)
+                index = runIt(inner, index, obj, monkey)
             }
             if (outer % 100 == 0) {
                 obj.summarize()
@@ -165,9 +161,9 @@ class MonkeyAttemptsTest {
         val isMatch = random.nextInt(10_000) == 3
         val keystrokes = random.nextInt(40)
         return if (isMatch) {
-            MatchData(true, keystrokes, index) to index + 1
+            MatchData(keystrokes, index) to index + 1
         } else {
-            MatchData(false, keystrokes, 0) to index
+            MatchData(false, keystrokes, null) to index
         }
     }
 

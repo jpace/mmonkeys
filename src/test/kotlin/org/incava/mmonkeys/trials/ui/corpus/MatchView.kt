@@ -17,7 +17,7 @@ abstract class MatchView<T : Corpus>(val corpus: T, private val verbose: Boolean
 
     open fun showStart() {}
 
-    abstract fun showResult(monkey: Monkey, result: MatchData)
+    abstract fun showResult(monkey: Monkey, result: Int?)
 
     fun init() {
         if (verbose) {
@@ -25,7 +25,7 @@ abstract class MatchView<T : Corpus>(val corpus: T, private val verbose: Boolean
         }
     }
 
-    fun show(monkey: Monkey, result: MatchData) {
+    fun show(monkey: Monkey, result: Int?) {
         if (verbose) {
             showResult(monkey, result)
         }
