@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.mky.number
 
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Disabled
@@ -61,7 +61,7 @@ internal class NumbersMonkeyTest {
         val words = listOf("this", "is", "a", "test")
         val corpus = NumberedCorpus(words)
         val obj = makeMonkeys(corpus, 1).first()
-        repeat(1000000) { obj.check() }
+        repeat(1000000) { obj.findMatches() }
         val result = corpus.hasUnmatched()
         assertFalse(result, "corpus.words: ${corpus.words}, matched: ${corpus.matched}")
     }
@@ -71,10 +71,10 @@ internal class NumbersMonkeyTest {
         val words = listOf("this", "test", "is", "no", "test")
         val corpus = NumberedCorpus(words)
         val (monkey1, monkey2) = makeMonkeys(corpus, 2)
-        var result: MatchData
+        var result: Words
         do {
-            result = monkey1.check()
-        } while (!result.isMatch)
+            result = monkey1.findMatches()
+        } while (!result.hasMatch())
         assertEquals(monkey1.corpus.indexedCorpus.elements, monkey2.corpus.indexedCorpus.elements)
     }
 }

@@ -5,11 +5,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 
-open class CoroutineCorpusSimulation(private val corpus: Corpus, private val monkeys: List<Monkey>, private val toFind: Int) : CoroutineSimulation(monkeys.size) {
+open class CoroutineCorpusSimulation(
+    private val corpus: Corpus,
+    private val monkeys: List<Monkey>,
+    private val toFind: Int,
+) : CoroutineSimulation(monkeys.size) {
     private var numFound = 0L
     val matches = mutableListOf<Int>()
 
@@ -21,7 +24,7 @@ open class CoroutineCorpusSimulation(private val corpus: Corpus, private val mon
         }
     }
 
-    override fun isComplete() : Boolean {
+    override fun isComplete(): Boolean {
         return numFound >= toFind || corpus.isEmpty()
     }
 
@@ -37,16 +40,15 @@ open class CoroutineCorpusSimulation(private val corpus: Corpus, private val mon
 
     private suspend fun checkMonkey(monkey: Monkey): Boolean {
         iterations.incrementAndGet()
-        val md = monkey.check()
-        val index = md.index
-        if (index != null) {
+        val words = monkey.findMatches()
+        if (words.hasMatch()) {
             if (verbose) {
                 Console.info("monkey", monkey)
-                Console.info("md", md)
+                Console.info("words", words)
                 Console.info("numFound", numFound)
             }
-            matches += index
-            numFound++
+            matches.addAll(words.words.map { it.index })
+            numFound += words.words.size
             return true
         } else {
             delay(5L)

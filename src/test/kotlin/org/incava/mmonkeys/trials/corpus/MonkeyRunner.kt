@@ -10,6 +10,7 @@ import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.ViewType
 import org.incava.mmonkeys.trials.ui.corpus.MatchView
 import org.incava.mmonkeys.trials.ui.corpus.MonkeyTable
+import org.incava.mmonkeys.words.Words
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -53,16 +54,14 @@ class MonkeyRunner<T : Corpus>(
         Console.info("monkey.class", monkey.javaClass.name)
         while (corpus.hasUnmatched()) {
             var iteration = 0L
-            var result: Int?
+            var result: Words
             do {
                 ++iteration
-                result = monkey.findMatch()
+                result = monkey.findMatches()
 
-            } while (result == null && iteration < maxAttempts && corpus.hasUnmatched())
-            view.show(monkey, result)
-            if (result != null) {
-                ++matchCount
-            }
+            } while (!result.hasMatch() && iteration < maxAttempts && corpus.hasUnmatched())
+            result.words.forEach { view.show(monkey, it.index) }
+            matchCount += result.words.size
             iterations += iteration
             val now = ZonedDateTime.now()
             val elapsed = Duration.between(start, now)

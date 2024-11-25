@@ -3,6 +3,8 @@ package org.incava.mmonkeys.mky
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.words.Word
+import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
 abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: Corpus) {
@@ -16,9 +18,14 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: 
 
     abstract fun check(): MatchData
 
-    fun findMatch(): Int? {
+    fun findMatches(): Words {
         val match = check()
-        return if (match.isMatch) match.index else null
+        // for matchData, keystrokes is *until*, not *through*, the space.
+        val totalKeystrokes = match.keystrokes.toLong() + 1
+        return if (match.index == null)
+            Words(totalKeystrokes)
+        else
+            Words(listOf(Word(corpus.words[match.index], match.index)), totalKeystrokes)
     }
 
     open fun match(keystrokes: Int, index: Int): MatchData {
@@ -32,7 +39,7 @@ abstract class Monkey(val id: Int, val typewriter: Typewriter, open val corpus: 
     // keystroke value is the number of character *before* the space, i.e.,
     // the length of the non-matching word.
     fun noMatch(keystrokes: Int): MatchData {
-        return MatchData(false, keystrokes, null).also { notifyMonitors(it) }
+        return MatchData(keystrokes, null).also { notifyMonitors(it) }
     }
 
     // number of keystrokes at which we'll hit the end-of-word character
