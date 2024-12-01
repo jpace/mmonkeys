@@ -1,5 +1,5 @@
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
+import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.MonkeyCtor
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
@@ -17,13 +17,12 @@ fun <T : Corpus> runSimulation(toChar: Char, type: String, sought: T, monkeyCtor
     val numMonkeys = 10
     val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
     Console.info("monkeys.#", monkeys.size)
-    val simulation = CoroutineCorpusSimulation(sought, monkeys, 10)
+    val simulation = CoroutineSimulation(sought, monkeys, 10, true)
     Console.info("type", type)
-    Console.info("# monkeys", simulation.numMonkeys)
+    Console.info("# monkeys", numMonkeys)
     Console.info("main", "simulation")
     Console.info("type", type)
     simulation.run()
-    simulation.summarize()
     println()
 }
 

@@ -1,6 +1,5 @@
-package org.incava.mmonkeys.trials.rand
+package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.mmonkeys.mky.corpus.DualCorpus
 import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Word
 

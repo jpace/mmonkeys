@@ -1,5 +1,6 @@
-package org.incava.mmonkeys.trials.rand
+package org.incava.mmonkeys.mky.corpus.dc
 
+import org.incava.mmonkeys.mky.corpus.dc.LengthFilter
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

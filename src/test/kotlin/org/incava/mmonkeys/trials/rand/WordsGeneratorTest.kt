@@ -1,7 +1,9 @@
 package org.incava.mmonkeys.trials.rand
 
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -15,7 +17,8 @@ internal class WordsGeneratorTest {
         var foundMatch = false
         var attempt = 0
         while (!foundMatch && attempt++ < 1000) {
-            val result = obj.getWords()
+            val result = obj.findMatches()
+            Console.info("result", result)
             foundMatch = result.hasMatch()
         }
         assertTrue(foundMatch)

@@ -4,11 +4,13 @@ import org.incava.ikdk.io.Console
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
 
+data class ProfileSimulation(val function: () -> Unit, val durations: MutableList<Duration>)
+
 open class Profiler(val numInvokes: Long, val numTrials: Int) {
-    val simulations = LinkedHashMap<String, Simulation>()
+    val simulations = LinkedHashMap<String, ProfileSimulation>()
 
     fun add(name: String, block: () -> Unit) {
-        simulations[name] = Simulation(name, block)
+        simulations[name] = ProfileSimulation(block, mutableListOf())
     }
 
     private fun indexedKeys(): Map<Int, String> {

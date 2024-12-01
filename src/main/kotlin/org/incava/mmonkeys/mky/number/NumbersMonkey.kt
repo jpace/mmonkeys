@@ -2,9 +2,10 @@ package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.SingleCorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 
-class NumbersMonkey(id: Int, typewriter: Typewriter, override val corpus: NumberedCorpus) : Monkey(id, typewriter, corpus) {
+class NumbersMonkey(id: Int, typewriter: Typewriter, override val corpus: NumberedCorpus) : SingleCorpusMonkey(id, typewriter, corpus) {
     override fun check(): MatchData {
         val length = randomLength()
         val numChars = length - 1

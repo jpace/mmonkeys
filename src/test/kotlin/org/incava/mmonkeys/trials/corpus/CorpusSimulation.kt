@@ -3,9 +3,8 @@ package org.incava.mmonkeys.trials.corpus
 import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.exec.CoroutineCorpusSimulation
+import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MapCorpus
 import org.incava.mmonkeys.mky.corpus.MapMonkeyUtils
@@ -13,37 +12,26 @@ import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.time.Durations
 
-class CorpusSimulation(wordLength: IntRange, numLines: Int, private val numMonkeys: Int, private val toMatch: Int) {
-    private val words: List<String>
-    private val corpus: Corpus
+class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch: Int) {
+    private val corpus = MapCorpus(words)
     private val monkeys: List<Monkey>
 
     init {
-        val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
-        words = CorpusFactory.readFileWords(file, numLines).filter { it.length in wordLength }
-        Console.info("sought.#", words.size)
-        corpus = MapCorpus(words)
         val manager = Manager(corpus)
         monkeys = (0 until numMonkeys).map { id ->
-            val monkey = MapMonkeyUtils.createMapMonkey(id, corpus)
-            monkey.also { monkey -> monkey.monitors += manager }
+            MapMonkeyUtils.createMapMonkey(id, corpus).also { it.monitors += manager }
         }
     }
 
     fun run() {
-        val simulation = CoroutineCorpusSimulation(corpus, monkeys, toMatch)
-        simulation.verbose = false
+        val simulation = CoroutineSimulation(corpus, monkeys, toMatch, false)
         simulation.run()
-        simulation.summarize()
         Console.info("simulation.matches.#", simulation.matches.size)
         Console.info("corpus.matched.size", corpus.matched.size)
         Console.info("corpus.words.size", corpus.words.size)
         Console.info("corpus.unmatched?", corpus.hasUnmatched())
         val numMatched = corpus.matched.size
         Console.info("corpus.match %", 100.0 * numMatched / corpus.words.size)
-//        (0 until corpus.words.size).filter { corpus.matched.contains(it) }.forEach { index ->
-//            Console.info("index", index)
-//        }
     }
 
     fun showResults() {
@@ -67,8 +55,10 @@ class CorpusSimulation(wordLength: IntRange, numLines: Int, private val numMonke
 
 fun main() {
     // @todo - change the memory settings here, and the word length, with the Map implementation ...
-    val obj = CorpusSimulation(1..50, -1, 1_000_000, 2_000)
-    println("obj: $obj")
+    val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
+    val words = CorpusFactory.readFileWords(file, -1)
+    Console.info("sought.#", words.size)
+    val obj = CorpusSimulation(words, 1_000_000, 2000)
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

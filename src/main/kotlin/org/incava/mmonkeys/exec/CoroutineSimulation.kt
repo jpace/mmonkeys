@@ -6,30 +6,27 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.util.Memory
-import org.incava.time.Durations
-import java.time.Duration
 import java.util.concurrent.atomic.AtomicLong
 
-abstract class CoroutineSimulation(val numMonkeys: Int) {
-    val iterations = AtomicLong(0L)
+class CoroutineSimulation(
+    private val corpus: Corpus,
+    private val monkeys: List<Monkey>,
+    private val toFind: Int,
+    private val verbose: Boolean,
+) {
+    private val iterations = AtomicLong(0L)
     private val monitorInterval = 10_000L
-    private val showMemory = true
-    var verbose = true
+    private var numFound = 0L
+    val matches = mutableListOf<Int>()
 
     // @todo = tweak this to get better coroutining
-    val maxAttempts = 100_000_000L
+    private val maxAttempts = 100_000_000L
 
-    fun run(): Pair<Long, Duration> = Durations.measureDuration {
-        process()
-    }
-
-    fun summarize() {
-    }
-
-    private fun process(): Long {
+    fun run() {
         val memory = Memory()
-        Console.info("memory", memory)
         runBlocking {
             val timer = launchTimer(memory)
             val jobs = launchMonkeys()
@@ -37,25 +34,28 @@ abstract class CoroutineSimulation(val numMonkeys: Int) {
             jobs.forEach { it.join() }
             timer.cancel()
             watcher.cancel()
-            if (showMemory) {
-                memory.showCurrent(iterations)
-            }
+            memory.showCurrent(iterations)
         }
         if (verbose) {
             Console.info("complete?", isComplete())
             // this is how many iterations it took to complete:
             Console.info("iterations", iterations.get())
         }
-        return if (isComplete()) iterations.get() else -1
     }
 
-    abstract fun CoroutineScope.launchMonkeys(): List<Job>
+    private fun CoroutineScope.launchMonkeys(): List<Job> {
+        return monkeys.map { monkey ->
+            launch {
+                runMonkey(monkey)
+            }
+        }
+    }
+
+    private fun isComplete(): Boolean = numFound >= toFind || corpus.isEmpty()
 
     private fun CoroutineScope.launchTimer(memory: Memory): Job {
         return launch {
-            if (showMemory) {
-                memory.monitor(iterations, monitorInterval)
-            }
+            memory.monitor(iterations, monitorInterval)
         }
     }
 
@@ -70,5 +70,31 @@ abstract class CoroutineSimulation(val numMonkeys: Int) {
         }
     }
 
-    abstract fun isComplete(): Boolean
+    private suspend fun runMonkey(monkey: Monkey) {
+        (0 until maxAttempts).forEach { _ ->
+            if (isComplete()) {
+                return
+            }
+            checkMonkey(monkey)
+        }
+        Console.info("match failed", this)
+    }
+
+    private suspend fun checkMonkey(monkey: Monkey): Boolean {
+        iterations.incrementAndGet()
+        val words = monkey.findMatches()
+        if (words.hasMatch()) {
+            if (verbose) {
+                Console.info("monkey", monkey)
+                Console.info("words", words)
+                Console.info("numFound", numFound)
+            }
+            matches.addAll(words.words.map { it.index })
+            numFound += words.words.size
+            return true
+        } else {
+            delay(5L)
+        }
+        return false
+    }
 }

@@ -12,7 +12,7 @@ private class MonkeyCheckTrials {
     fun monkeyCheck(monkey: Monkey) {
         var iterations = 0
         while (monkey.corpus.hasUnmatched()) {
-            monkey.check()
+            monkey.findMatches()
             iterations++
         }
         Console.info("iterations", iterations)

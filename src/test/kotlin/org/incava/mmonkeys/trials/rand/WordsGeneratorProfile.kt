@@ -4,11 +4,10 @@ import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Words
-import org.incava.rando.RandSlotsFactory
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 3..17 }
@@ -21,7 +20,7 @@ private class WordsGeneratorProfile(private val numInvokes: Long, private val nu
             val corpus = DualCorpus(words)
             val generator = WordsGeneratorFactory.createWithDefaults(corpus)
             profiler.add("indices 2, length") {
-                matchWords { generator.getWords() }
+                matchWords { generator.findMatches() }
             }
         }
         profiler.runAll()

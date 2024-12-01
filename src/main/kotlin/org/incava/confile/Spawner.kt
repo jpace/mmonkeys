@@ -1,13 +1,16 @@
 package org.incava.confile
 
 import org.incava.ikdk.io.Console
+import org.incava.time.Durations
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 object Spawner {
-    fun spawn(current: Profiler) : Profiler {
+    private fun getAverageTime(simulation: ProfileSimulation): Long = Durations.average(simulation.durations).toMillis()
+
+    fun spawn(current: Profiler): Profiler {
         val simToAvg = current.simulations.keys.associateWith { name ->
-            current.simulations.getValue(name).average().toMillis()
+            getAverageTime(current.simulations.getValue(name))
         }
         val millis = simToAvg.values
         val mean = millis.average()

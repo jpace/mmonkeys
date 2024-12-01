@@ -5,11 +5,11 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 
-class EqMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : Monkey(id, typewriter, corpus) {
+class EqMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : SingleCorpusMonkey(id, typewriter, corpus) {
     override fun check(): MatchData {
         val builder = StringBuilder()
         while (true) {
-            val ch = nextChar()
+            val ch = typewriter.nextCharacter()
             if (ch == Keys.END_CHAR) {
                 break
             } else {

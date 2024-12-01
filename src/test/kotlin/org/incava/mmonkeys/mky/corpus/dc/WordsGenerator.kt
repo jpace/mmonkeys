@@ -1,6 +1,6 @@
-package org.incava.mmonkeys.trials.rand
+package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.mmonkeys.mky.corpus.DualCorpus
+import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Word
@@ -15,7 +15,7 @@ object WordsGeneratorFactory {
         val indicesSupplier: (RandIntsFactory) -> IntArray = RandIntsFactory::nextInts2
     }
 
-    fun createWithDefaults(corpus: DualCorpus) : WordsGenerator {
+    fun createWithDefaults(corpus: DualCorpus): WordsGenerator {
         return WordsGenerator(corpus, Defaults.slots, Defaults.indicesSupplier) { length ->
             val candidates = corpus.stringsForLength(length)?.keys
             LengthFilter(candidates)
@@ -35,24 +35,25 @@ class WordsGenerator(
     private val maxToSpace = corpus.maxLength + 1
     private val minToSpace = 2
 
-    private fun checkWord(numChars: Int, words: MutableList<Word>) {
-        if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
-            // use long/encoded, convert back to string
-            val word = encodedGenerator.getWord(numChars)
-            if (word != null) {
-                words += word
-            }
-        } else {
-            // use "legacy"
-            val filter = filterSupplier(numChars)
-            val word = filteringGenerator.getWord(numChars, filter)
-            if (word != null) {
-                words += word
-            }
+    private fun findMatch(numChars: Int, words: MutableList<Word>) {
+        findMatch(numChars)?.also { word ->
+            Console.info("word", word)
+            words += word
         }
     }
 
-    fun getWords(): Words {
+    private fun findMatch(numChars: Int): Word? {
+        if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
+            // use long/encoded, convert back to string
+            return encodedGenerator.getWord(numChars)
+        } else {
+            // use "legacy"
+            val filter = filterSupplier(numChars)
+            return filteringGenerator.getWord(numChars, filter)
+        }
+    }
+
+    fun findMatches(): Words {
         val slotIndices = indicesSupplier(intsFactory)
         val matches = mutableListOf<Word>()
         var keystrokes = 0L
@@ -62,9 +63,9 @@ class WordsGenerator(
             keystrokes += toSpace
             if (toSpace in minToSpace..maxToSpace) {
                 val numChars = toSpace - 1
-                checkWord(numChars, matches)
+                findMatch(numChars, matches)
             }
         }
-        return Words(matches, keystrokes)
+        return Words(matches, keystrokes, slotIndices.size)
     }
 }

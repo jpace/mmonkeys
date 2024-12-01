@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.trials.rand
+package org.incava.mmonkeys.mky.corpus.dc
 
 class LengthFilter(private val candidates: Set<String>?) {
     private var current = ""

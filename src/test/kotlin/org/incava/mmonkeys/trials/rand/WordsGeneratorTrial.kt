@@ -4,7 +4,9 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.WordsGenerator
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.time.Durations.measureDuration
 import java.time.ZoneId
@@ -28,7 +30,7 @@ class WordsGeneratorTrial {
         Console.info("total", bySize.values.sum())
         val duration = measureDuration {
             while (longerMatched < numToMatch && corpus.hasUnmatched()) {
-                val result = wordsGenerator.getWords()
+                val result = wordsGenerator.findMatches()
                 keystrokes += result.totalKeyStrokes
                 result.words.forEach { word ->
                     MapUtil.increment(matchedByLength, word.string.length)
