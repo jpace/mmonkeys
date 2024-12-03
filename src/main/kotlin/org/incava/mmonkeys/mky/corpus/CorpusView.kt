@@ -17,14 +17,14 @@ class CorpusView(val corpus: Corpus) {
 
     fun show() {
         val table = Table(columns)
-        table.writeHeader()
-        table.writeBreak('=')
+        table.writeHeader('=')
         val byLength = corpus.words.groupingBy { it.length }.eachCount()
         byLength.toSortedMap().forEach { (length, count) ->
             table.writeRow(listOf("length $length", count))
         }
         table.writeRow(listOf("unique", corpus.words.toSet().size))
         table.writeRow(listOf("total", corpus.words.size))
+        table.writeBreak('=')
         println()
     }
 }

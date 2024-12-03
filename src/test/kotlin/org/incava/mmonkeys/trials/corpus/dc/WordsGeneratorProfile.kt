@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.trials.rand
+package org.incava.mmonkeys.trials.corpus.dc
 
 import org.incava.confile.Profiler
 import org.incava.confile.SortType

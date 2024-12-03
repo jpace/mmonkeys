@@ -11,7 +11,8 @@ abstract class Monkey(val id: Int, open val corpus: Corpus) {
 
     abstract fun findMatches(): Words
 
-    fun notifyMonitors(words: Words) {
+    fun recordWords(words: Words) {
+        words.words.forEach { matchesByLength.merge(it.string.length, 1) { prev, _ -> prev + 1 } }
         monitors.forEach {
             it.notify(this, words)
         }

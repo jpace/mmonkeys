@@ -11,15 +11,14 @@ class MonkeyTable(private val maxWordLength: Int) : Table(
     listOf(
         IntColumn("id", 4),
         StringColumn("type", 16, leftJustified = true),
-        LongColumn("attempts", 14),
+        LongColumn("attempts", 16),
         LongColumn("keystrokes", 14),
         LongColumn("matches#", 8),
-    ) + (1..maxWordLength).map { IntColumn("match $it", 8) }
+    ) + (1..maxWordLength).map { LongColumn("match $it", 8) }
 ) {
     fun write(monkey: Monkey) {
         // this requires that a monkey have a monitor
         writeHeader()
-        writeBreak('=')
         val monitor = monkey.monitors.first()
         val numMatches = monitor.matchCount()
         val values = listOf(
@@ -31,5 +30,6 @@ class MonkeyTable(private val maxWordLength: Int) : Table(
         ) + (1..maxWordLength).map { monkey.matchesByLength[it] ?: 0 }
         writeRow(values)
         writeBreak('-')
+        println()
     }
 }

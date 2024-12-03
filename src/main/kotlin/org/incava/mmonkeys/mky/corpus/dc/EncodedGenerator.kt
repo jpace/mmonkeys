@@ -14,7 +14,7 @@ class EncodedGenerator(val corpus: DualCorpus) {
             null
         } else {
             val string = StringEncoder.decode(encoded)
-            val index = corpus.setMatched(string, numChars)
+            val index = corpus.setMatched(encoded, numChars)
             return Word(string, index)
         }
     }

@@ -10,7 +10,7 @@ import org.incava.mmonkeys.trials.base.PerfResults
 
 class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int) : Table(
     listOf(
-        StringColumn("type", 8, leftJustified = true),
+        StringColumn("type", 12, leftJustified = true),
         LongColumn("words.#", 8),
         IntColumn("max len", 8),
         DurationColumn("duration", 12),
@@ -22,8 +22,7 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
     )
 ) {
     fun summarize(results: Map<String, PerfResults>) {
-        writeHeader()
-        writeBreak('=')
+        writeHeader('=')
         results.forEach { (name, res) ->
             val durSecs = res.durations.sum() / 1000
             val cells = mutableListOf(

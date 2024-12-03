@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Word
@@ -37,7 +36,6 @@ class WordsGenerator(
 
     private fun findMatch(numChars: Int, words: MutableList<Word>) {
         findMatch(numChars)?.also { word ->
-            Console.info("word", word)
             words += word
         }
     }

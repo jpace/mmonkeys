@@ -1,12 +1,15 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.DualCorpusMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.EqMonkey
 import org.incava.mmonkeys.mky.corpus.MapCorpus
+import org.incava.mmonkeys.mky.corpus.MapGenMonkey
 import org.incava.mmonkeys.mky.corpus.MapMonkey
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.testutil.ResourceUtil
@@ -40,9 +43,13 @@ class CorpusTrial(
     }
 
     fun run() {
-        runMonkey("eq", EqMonkey(1, Typewriter(), Corpus(words)))
-        runMonkey("longs", NumbersMonkey(2, Typewriter(), NumberedCorpus(words)))
-        runMonkey("map", MapMonkey(3, Typewriter(), MapCorpus(words)))
+        var id = 1
+        runMonkey("gen eq", EqMonkey(id++, Typewriter(), Corpus(words)))
+        runMonkey("gen map", MapGenMonkey(id++, Typewriter(), MapCorpus(words)))
+        val numWords = words.filter { it.length <= 13 }
+        runMonkey("len longs", NumbersMonkey(id++, Typewriter(), NumberedCorpus(words)))
+        runMonkey("len map", MapMonkey(id++, Typewriter(), MapCorpus(words)))
+        runMonkey("dual", DualCorpusMonkey(id++, DualCorpus(words)))
     }
 
     fun showResults() {
@@ -54,7 +61,7 @@ class CorpusTrial(
 fun main() {
     // NumberLongsMonkey can only support up through words of length 13
     val limit = 13
-    val obj = CorpusTrial(3..limit, 10000, Duration.ofSeconds(10L))
+    val obj = CorpusTrial(3..limit, 10000, Duration.ofMinutes(10L))
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

@@ -14,9 +14,7 @@ abstract class SingleCorpusMonkey(id: Int, val typewriter: Typewriter, corpus: C
 
     override fun findMatches(): Words {
         val matchData = check()
-        val words = matchData.toWords(corpus)
-        notifyMonitors(words)
-        return words
+        return matchData.toWords(corpus).also { recordWords(it) }
     }
 
     // number of keystrokes at which we'll hit the end-of-word character
@@ -25,11 +23,8 @@ abstract class SingleCorpusMonkey(id: Int, val typewriter: Typewriter, corpus: C
     // and so on and so forth.
     fun randomLength() = rand.nextInt()
 
-    open fun match(keystrokes: Int, index: Int): MatchData {
-        return MatchData(keystrokes, index).also {
-            val length = corpus.words[index].length
-            matchesByLength.merge(length, 1) { prev, _ -> prev + 1 }
-        }
+    fun match(keystrokes: Int, index: Int): MatchData {
+        return MatchData(keystrokes, index)
     }
 
     // keystroke value is the number of character *before* the space, i.e.,

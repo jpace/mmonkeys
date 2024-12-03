@@ -7,7 +7,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
     val indexedCorpus: IndexedCorpus<Long> = IndexedCorpus(words, StringEncoder::encodeToLong)
 
     fun setMatched(number: Long, length: Int): Int {
-        return indexedCorpus.setMatched(number, length).also { index -> setMatched(index) }
+        return indexedCorpus.setMatched(number, length).also { index -> super.setMatched(index) }
     }
 
     fun longsForLength(length: Int) : MutableMap<Long, MutableList<Int>>? {

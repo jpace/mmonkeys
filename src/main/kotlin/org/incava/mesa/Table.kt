@@ -11,9 +11,13 @@ open class Table(
     private var rowsWritten = 0
 
     fun writeHeader() {
+        writeHeader(breakChar)
+    }
+
+    fun writeHeader(char: Char) {
         val names = columns.map(Column::formatHeader)
         writeStrings(names)
-        writeBreak(breakChar)
+        writeBreak(char)
     }
 
     fun writeBreak(char: Char) {
