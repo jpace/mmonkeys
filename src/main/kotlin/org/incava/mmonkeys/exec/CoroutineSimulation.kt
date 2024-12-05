@@ -71,29 +71,26 @@ class CoroutineSimulation(
     }
 
     private suspend fun runMonkey(monkey: Monkey) {
-        (0 until maxAttempts).forEach { _ ->
-            if (isComplete()) {
-                return
-            }
+        while (!isComplete()) {
             checkMonkey(monkey)
         }
-        Console.info("match failed", this)
     }
 
     private suspend fun checkMonkey(monkey: Monkey): Boolean {
         iterations.incrementAndGet()
         val words = monkey.findMatches()
         if (words.hasMatch()) {
+            matches.addAll(words.words.map { it.index })
+            numFound += words.words.size
             if (verbose) {
-                Console.info("monkey", monkey)
+                Console.info("monkey", monkey.id)
                 Console.info("words", words)
                 Console.info("numFound", numFound)
             }
-            matches.addAll(words.words.map { it.index })
-            numFound += words.words.size
+            delay(2500L)
             return true
         } else {
-            delay(5L)
+            delay(1000L)
         }
         return false
     }

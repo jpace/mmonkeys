@@ -4,22 +4,22 @@ import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineSimulation
+import org.incava.mmonkeys.mky.DualCorpusMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.corpus.MapMonkeyUtils
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.time.Durations
 
 class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch: Int) {
-    private val corpus = MapCorpus(words)
+    private val corpus = DualCorpus(words)
     private val monkeys: List<Monkey>
 
     init {
         val manager = Manager(corpus)
         monkeys = (0 until numMonkeys).map { id ->
-            MapMonkeyUtils.createMapMonkey(id, corpus).also { it.monitors += manager }
+            DualCorpusMonkey(id, corpus).also { it.monitors += manager }
         }
     }
 
@@ -55,10 +55,12 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
 
 fun main() {
     // @todo - change the memory settings here, and the word length, with the Map implementation ...
-    val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
+    // val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
+    val file = ResourceUtil.getResourceFile("pg100.txt")
     val words = CorpusFactory.readFileWords(file, -1)
     Console.info("sought.#", words.size)
-    val obj = CorpusSimulation(words, 1_000_000, 2000)
+    val toFind = Int.MAX_VALUE
+    val obj = CorpusSimulation(words, 1_000_000, toFind)
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

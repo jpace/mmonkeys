@@ -5,7 +5,7 @@ import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 
-class CorpusView(val corpus: Corpus) {
+class CorpusSummaryTable(val corpus: Corpus) {
     private val columns: List<Column>
 
     init {

@@ -1,10 +1,10 @@
 package org.incava.ikdk.math
 
 import org.incava.ikdk.io.Console.printf
-import org.incava.mmonkeys.trials.base.InvokeTrial
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 import java.math.BigInteger
+import java.time.Duration
 
 class MathsTrial {
     private val iterations = 100_000_000L
@@ -13,14 +13,21 @@ class MathsTrial {
         Maths.clear()
         try {
             val result = powerFunction()
-            val invokeTrial = InvokeTrial(name, iterations, powerFunction)
-            val duration = invokeTrial.run()
+            val duration = runTrial(iterations, powerFunction)
             val durStr = Durations.formatted(duration)
             printf("%-24.24s | %-,16d | %-10s", name, result, durStr)
         } catch (ex: Exception) {
             printf("%-24.24s | %-16s | %-10s", name, "exception", ex)
         }
         sleep(500)
+    }
+
+    private fun runTrial(numInvokes: Long, block: () -> Any): Duration {
+        return Durations.measureDuration {
+            (0 until numInvokes).forEach { _ ->
+                block()
+            }
+        }.second
     }
 
     fun runTrial(base: Int, exponent: Int, iterations: Long = this.iterations) {

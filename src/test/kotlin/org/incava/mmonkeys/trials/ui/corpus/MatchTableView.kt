@@ -25,7 +25,6 @@ class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(cor
 
     override fun showStart() {
         table.writeHeader()
-        table.writeBreak('=')
     }
 
     override fun showResult(monkey: Monkey, result: Int?) {

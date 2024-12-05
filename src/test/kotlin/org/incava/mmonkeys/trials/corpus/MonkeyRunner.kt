@@ -1,10 +1,9 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusView
+import org.incava.mmonkeys.mky.corpus.CorpusSummaryTable
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.ViewType
@@ -32,8 +31,8 @@ class MonkeyRunner<T : Corpus>(
     private val manager = Manager(corpus, outputInterval)
 
     init {
-        val corpusView = CorpusView(corpus)
-        corpusView.show()
+        val table = CorpusSummaryTable(corpus)
+        table.show()
         monkey.monitors += manager
     }
 

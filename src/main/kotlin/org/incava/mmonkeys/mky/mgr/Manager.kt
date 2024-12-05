@@ -1,41 +1,45 @@
 package org.incava.mmonkeys.mky.mgr
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.CorpusStatsView
 import org.incava.mmonkeys.words.Words
+import java.io.File
+import java.io.PrintStream
 
 class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
-    var totalKeystrokes: Long = 0L
+    private var totalKeystrokes: Long = 0L
     private var count: Long = 0L
     private var matchCount = 0
-    private val view = ManagerView(corpus, this, outputInterval)
+    private val managerView: ManagerView
+    private val statsView: CorpusStatsView
+    private val perfView: SimPerfView
 
-    override fun add(monkey: Monkey, matchData: MatchData) {
-        val words = if (matchData.index == null)
-            Words(matchData.keystrokes.toLong() + 1, 1)
-        else
-            Words(matchData.keystrokes.toLong() + 1, matchData.index)
-        // add 1 to account for the space after the match/mismatch
-        totalKeystrokes += (matchData.keystrokes + 1)
-        count++
-        if (matchData.index != null) {
-            view.addMatch(monkey, matchData.index)
-            ++matchCount
-        }
+    init {
+        val simOut = PrintStream(File("/tmp/simulation.out"))
+        val simMatchView = SimMatchView(corpus, outputInterval, simOut)
+        managerView = ManagerView(simMatchView)
+        val statsOut = PrintStream(File("/tmp/corpus-stats.out"))
+        statsView = CorpusStatsView(corpus, 100, statsOut)
+        val perfOut = PrintStream(File("/tmp/monkeys-stats.out"))
+        perfView = SimPerfView(corpus, 100, perfOut)
     }
 
-    override fun notify(monkey: Monkey, words: Words) {
+    override fun update(monkey: Monkey, words: Words) {
         // this includes spaces
         totalKeystrokes += words.totalKeyStrokes
         // @todo - reintroduce the number of attempts (count of all words, not just matches):
         count++
         words.words.forEach { word ->
-            view.addMatch(monkey, word.index)
             ++matchCount
+            managerView.addMatch(monkey, word.index, matchCount, totalKeystrokes)
         }
+        if (words.hasMatch()) {
+            statsView.update(matchCount, totalKeystrokes)
+        }
+        perfView.update(matchCount, totalKeystrokes)
     }
 
     override fun summarize() {

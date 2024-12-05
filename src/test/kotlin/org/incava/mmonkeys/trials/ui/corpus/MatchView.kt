@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.trials.ui.corpus
 
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.trials.ui.ViewType
