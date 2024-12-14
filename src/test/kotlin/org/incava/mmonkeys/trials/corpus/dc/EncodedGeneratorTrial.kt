@@ -24,8 +24,7 @@ class EncodedGeneratorTrial {
 }
 
 fun main() {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-    val corpus = DualCorpus(words)
+    val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE)
     Console.info("corpus", corpus)
     val obj = EncodedGeneratorTrial()
     val generator2 = EncodedGenerator(corpus)

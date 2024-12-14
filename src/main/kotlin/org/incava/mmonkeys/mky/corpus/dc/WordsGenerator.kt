@@ -34,12 +34,6 @@ class WordsGenerator(
     private val maxToSpace = corpus.maxLength + 1
     private val minToSpace = 2
 
-    private fun findMatch(numChars: Int, words: MutableList<Word>) {
-        findMatch(numChars)?.also { word ->
-            words += word
-        }
-    }
-
     private fun findMatch(numChars: Int): Word? {
         if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
             // use long/encoded, convert back to string
@@ -61,7 +55,10 @@ class WordsGenerator(
             keystrokes += toSpace
             if (toSpace in minToSpace..maxToSpace) {
                 val numChars = toSpace - 1
-                findMatch(numChars, matches)
+                val word = findMatch(numChars)
+                if (word != null) {
+                    matches += word
+                }
             }
         }
         return Words(matches, keystrokes, slotIndices.size)

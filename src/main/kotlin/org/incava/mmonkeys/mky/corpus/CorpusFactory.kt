@@ -1,22 +1,49 @@
 package org.incava.mmonkeys.mky.corpus
 
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import java.io.File
 
 object CorpusFactory {
     fun readFileWords(file: File, numLines: Int): List<String> {
+        val lineFilter: (Int) -> Boolean = { numLines < 0 || it < numLines }
+        return readFileWords(file, lineFilter = lineFilter, wordFilter = { true })
+    }
+
+    fun readFileWords(file: File, lineFilter: (Int) -> Boolean = { true }, wordFilter: (String) -> Boolean = { true }): List<String> {
         val lines = file.readLines()
 
         // I forgot numbers.
         return lines
             .withIndex()
-            .filter { numLines < 0 || it.index < numLines }
+            .filter { lineFilter(it.index) }
             .map { it.value }
             .map { it.trim() }
             .map(String::lowercase)
             .map { it.replace(Regex("[^a-z+]"), " ") }
             .flatMap { it.split(Regex("\\s+")) }
             .filterNot { it.isBlank() }
+            .filter(wordFilter)
     }
 
-    fun readFileWords(file: File): List<String> = readFileWords(file, -1)
+    fun readFileWords(file: File): List<String> = readFileWords(file, lineFilter = { true }, wordFilter = { true })
+
+    fun readFileWords(file: File, wordFilter: (String) -> Boolean): List<String> {
+        return readFileWords(file, lineFilter = { true }, wordFilter = wordFilter)
+    }
+
+    fun corpusOf(file: File): Corpus = corpusOf(file) { true }
+
+    fun corpusOf(file: File, filter: (String) -> Boolean): Corpus {
+        return Corpus(wordsOf(file, filter))
+    }
+
+    fun dualCorpusOf(file: File): DualCorpus = dualCorpusOf(file) { true }
+
+    fun dualCorpusOf(file: File, filter: (String) -> Boolean): DualCorpus {
+        return DualCorpus(wordsOf(file, filter))
+    }
+
+    fun wordsOf(file: File, filter: (String) -> Boolean): List<String> {
+        return readFileWords(file).filter(filter)
+    }
 }

@@ -19,7 +19,7 @@ import org.incava.mmonkeys.words.Words
 
 private class MonkeyProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     // limiting to 13 for numbers monkey
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 3..13 }
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 3..13 }
     val matchGoal = 1000L
 
     fun profile() {

@@ -4,12 +4,11 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.math.Maths
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
-import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import kotlin.math.pow
 
 class CorpusFilterTrial {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, -1)
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
 
     fun duplicates() {
         val obj = CorpusFilter(words)

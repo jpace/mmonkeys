@@ -53,14 +53,15 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
     }
 }
 
-fun main() {
+private fun main() {
     // @todo - change the memory settings here, and the word length, with the Map implementation ...
     // val file = ResourceUtil.getResourceFile("to-be-or-not.txt")
     val file = ResourceUtil.getResourceFile("pg100.txt")
-    val words = CorpusFactory.readFileWords(file, -1)
+    val words = CorpusFactory.readFileWords(file)
     Console.info("sought.#", words.size)
     val toFind = Int.MAX_VALUE
-    val obj = CorpusSimulation(words, 1_000_000, toFind)
+    val numMonkeys = 1_000
+    val obj = CorpusSimulation(words, numMonkeys, toFind)
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

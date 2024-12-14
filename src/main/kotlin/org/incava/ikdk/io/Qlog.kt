@@ -5,7 +5,7 @@ import java.io.PrintStream
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicLong
 
-object Glog {
+object Qlog {
     var out: PrintStream = System.out
 
     fun info(msg: String, obj: Any?) = println(ConsoleFormat.format(msg, obj))
@@ -36,7 +36,7 @@ object Glog {
     }
 
     private fun whence(): StackTraceElement? {
-        val classes = listOf("org.incava.ikdk.io.Glog", "org.incava.ikdk.io.Console")
+        val classes = listOf("org.incava.ikdk.io.Qlog", "org.incava.ikdk.io.Console")
         var found = false
         Thread.currentThread().stackTrace.forEach {
             if (classes.contains(it.className)) {

@@ -24,10 +24,14 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
         val statsOut = PrintStream(File("/tmp/corpus-stats.out"))
         statsView = CorpusStatsView(corpus, 100, statsOut)
         val perfOut = PrintStream(File("/tmp/monkeys-stats.out"))
-        perfView = SimPerfView(corpus, 100, perfOut)
+        perfView = SimPerfView(corpus, 100_000, perfOut)
     }
 
     override fun update(monkey: Monkey, words: Words) {
+        Console.info("monkey", monkey)
+        Console.info("monkey.totalKeystrokes", monkey.totalKeystrokes)
+        Console.info("words", words)
+
         // this includes spaces
         totalKeystrokes += words.totalKeyStrokes
         // @todo - reintroduce the number of attempts (count of all words, not just matches):

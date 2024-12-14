@@ -1,11 +1,12 @@
 package org.incava.mmonkeys.mky.corpus
 
-import org.incava.mmonkeys.mky.MatchData
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.words.Words
 
-class MapGenMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus) : SingleCorpusMonkey(id, typewriter, corpus) {
-    override fun check(): MatchData {
+class MapGenMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus) :
+    SingleCorpusMonkey(id, typewriter, corpus) {
+    override fun findMatches(): Words {
         val builder = StringBuilder()
         while (true) {
             val ch = typewriter.nextCharacter()
@@ -15,13 +16,18 @@ class MapGenMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorp
                 builder.append(ch)
             }
         }
-        val word = builder.toString()
-        val numChars = word.length
-        val forLength = corpus.forLength(numChars) ?: return noMatch(numChars)
-        val indices = forLength[word] ?: return noMatch(numChars)
-        // we're always removing/matching the *first* index
-        val index = indices.first()
-        corpus.setMatched(index)
-        return match(numChars, index)
+        val typed = builder.toString()
+        val numChars = typed.length
+        // keystrokes here are only through the word, not the trailing space
+        val attemptKeystrokes = numChars + 1
+        val forLength = corpus.forLength(numChars)
+        val indices = forLength?.getValue(typed)
+        return if (indices != null) {
+            // we're always removing/matching the *first* index
+            val index = indices.first()
+            toWordsMatch(typed, index, attemptKeystrokes)
+        } else {
+            toNonMatch(attemptKeystrokes)
+        }
     }
 }

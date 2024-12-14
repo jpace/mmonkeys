@@ -40,12 +40,9 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     private fun formatTime(dateTime: ZonedDateTime): String = dateTime.format(pattern)
 
     fun update(monkey: Monkey, index: Int, matchCount: Int, totalKeystrokes: Long) {
-        if (matchCount % outputInterval == 0) {
-            writeMatch(monkey, index, matchCount, totalKeystrokes)
+        if (matchCount % outputInterval != 0) {
+            return
         }
-    }
-
-    fun writeMatch(monkey: Monkey, index: Int, matchCount: Int, totalKeystrokes: Long) {
         val word = corpus.words[index]
         val wordCount = (0 until numWords).filter {
             corpus.words[it] == word
@@ -63,7 +60,8 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
         // totalKeystrokes == virtual seconds:
         val values = listOf(
             formatTime(ZonedDateTime.now()),
-            formatTime(startTime.plusSeconds(totalKeystrokes)),
+            // seconds to when monkey did this match (the start of it), not cumulative
+            formatTime(startTime.plusSeconds(monkey.totalKeystrokes)),
             monkey.id,
             word,
             word.length,

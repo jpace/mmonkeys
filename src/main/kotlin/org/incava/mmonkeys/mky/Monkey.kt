@@ -6,6 +6,7 @@ import org.incava.mmonkeys.words.Words
 abstract class Monkey(val id: Int, open val corpus: Corpus) {
     val monitors = mutableListOf<MonkeyMonitor>()
     val matchesByLength = mutableMapOf<Int, Int>()
+    var totalKeystrokes = 0L
 
     override fun toString(): String = "Monkey(id=$id)"
 
@@ -16,5 +17,6 @@ abstract class Monkey(val id: Int, open val corpus: Corpus) {
         monitors.forEach {
             it.update(this, words)
         }
+        totalKeystrokes += words.totalKeyStrokes
     }
 }

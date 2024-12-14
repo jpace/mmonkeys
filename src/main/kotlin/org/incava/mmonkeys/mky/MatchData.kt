@@ -4,7 +4,7 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 
-class MatchData(val keystrokes: Int, val index: Int?) {
+class MatchData(private val keystrokes: Int, val index: Int?) {
     fun toWords(corpus: Corpus): Words {
         // keystrokes here are only through the word, not the trailing space
         val totalKeystrokes = keystrokes.toLong() + 1

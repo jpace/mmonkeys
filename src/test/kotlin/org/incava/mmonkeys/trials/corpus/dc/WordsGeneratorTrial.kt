@@ -74,9 +74,8 @@ class WordsGeneratorTrial {
 }
 
 fun main() {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE)
     val obj = WordsGeneratorTrial()
-    val corpus = DualCorpus(words)
     val wordsGenerator = WordsGeneratorFactory.createWithDefaults(corpus)
     obj.runTest(corpus, wordsGenerator)
 }
