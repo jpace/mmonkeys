@@ -1,14 +1,14 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.EqMonkey
-import org.incava.mmonkeys.mky.corpus.MapCorpus
-import org.incava.mmonkeys.mky.corpus.MapGenMonkey
-import org.incava.mmonkeys.mky.corpus.MapMonkey
+import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
+import org.incava.mmonkeys.mky.corpus.sc.MapCorpus
+import org.incava.mmonkeys.mky.corpus.sc.MapGenMonkey
+import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey

@@ -4,7 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.exec.CoroutineSimulation
-import org.incava.mmonkeys.mky.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus

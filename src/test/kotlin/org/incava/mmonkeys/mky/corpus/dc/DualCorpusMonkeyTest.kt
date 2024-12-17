@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.junit.jupiter.api.Test

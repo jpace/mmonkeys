@@ -1,9 +1,8 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.type.Chars
+import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Word
-import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
@@ -26,41 +25,29 @@ class WordsGenerator(
     corpus: DualCorpus,
     private val slots: RndSlots,
     private val indicesSupplier: (RandIntsFactory) -> IntArray,
-    private val filterSupplier: (Int) -> LengthFilter,
+    filterSupplier: (Int) -> LengthFilter,
 ) {
     private val intsFactory = RandIntsFactory()
-    private val encodedGenerator = EncodedGenerator(corpus)
-    private val filteringGenerator = FilteringGenerator(corpus)
     private val maxToSpace = corpus.maxLength + 1
     private val minToSpace = 2
+    private val wordGenerator = WordGenerator(corpus, filterSupplier)
 
-    private fun findMatch(numChars: Int): Word? {
-        if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
-            // use long/encoded, convert back to string
-            return encodedGenerator.getWord(numChars)
-        } else {
-            // use "legacy"
-            val filter = filterSupplier(numChars)
-            return filteringGenerator.getWord(numChars, filter)
-        }
-    }
-
-    fun findMatches(): Words {
+    fun attemptMatch(): Attempt {
         val slotIndices = indicesSupplier(intsFactory)
-        val matches = mutableListOf<Word>()
+        val matches = LinkedHashMap<Long, Word>()
         var keystrokes = 0L
         slotIndices.forEach { slotIndex ->
             // number of keystrokes to (through) a space:
             val toSpace = slots.slotValue(slotIndex)
-            keystrokes += toSpace
             if (toSpace in minToSpace..maxToSpace) {
                 val numChars = toSpace - 1
-                val word = findMatch(numChars)
+                val word = wordGenerator.findMatch(numChars)
                 if (word != null) {
-                    matches += word
+                    matches[keystrokes] = word
                 }
             }
+            keystrokes += toSpace
         }
-        return Words(matches, keystrokes, slotIndices.size)
+        return Attempt(matches, keystrokes, slotIndices.size)
     }
 }

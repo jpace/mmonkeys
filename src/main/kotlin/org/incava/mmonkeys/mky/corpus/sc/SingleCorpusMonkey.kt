@@ -1,6 +1,7 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.corpus.sc
 
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Word

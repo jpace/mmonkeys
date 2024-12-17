@@ -9,16 +9,16 @@ import kotlin.test.assertTrue
 
 internal class WordsGeneratorTest {
     @Test
-    fun getWords() {
+    fun attemptMatch() {
         var count = 0
-        val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE) { it.length > 1 && ++count < 1000 }
+        val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE) { it.isNotEmpty() && ++count < 1000 }
         val obj = WordsGeneratorFactory.createWithDefaults(corpus)
         var foundMatch = false
         var attempt = 0
         while (!foundMatch && attempt++ < 1000) {
-            val result = obj.findMatches()
+            val result = obj.attemptMatch()
             Console.info("result", result)
-            foundMatch = result.hasMatch()
+            foundMatch = result.words.isNotEmpty()
         }
         assertTrue(foundMatch)
     }

@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.mky.number
 
-import org.incava.mmonkeys.mky.corpus.SingleCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 

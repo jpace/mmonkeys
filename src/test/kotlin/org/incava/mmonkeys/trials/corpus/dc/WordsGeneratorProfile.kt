@@ -7,6 +7,7 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Words
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
@@ -20,14 +21,14 @@ private class WordsGeneratorProfile(private val numInvokes: Long, private val nu
             val corpus = DualCorpus(words)
             val generator = WordsGeneratorFactory.createWithDefaults(corpus)
             profiler.add("indices 2, length") {
-                matchWords { generator.findMatches() }
+                matchWords { generator.attemptMatch() }
             }
         }
         profiler.runAll()
         profiler.showResults(SortType.BY_DURATION)
     }
 
-    fun matchWords(generator: () -> Words) {
+    fun matchWords(generator: () -> Attempt) {
         runToMatchCount(matchGoal) {
             val result = generator()
             result.words.count { words.contains(it.string) }

@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.corpus
 
+import org.incava.mmonkeys.mky.corpus.sc.MapCorpus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

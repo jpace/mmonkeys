@@ -20,6 +20,8 @@ object Qlog {
 
     fun info(msg: String) = println(whence(), msg)
 
+    fun blankLine() = printf("")
+
     fun println(msg: String) {
         val frame = whence()
         println(frame, msg)

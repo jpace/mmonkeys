@@ -26,6 +26,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
                 // we'll get a + when the year is over something? 10,000?
                 StringColumn("sim time", 24, leftJustified = false),
                 LongColumn("monkey", 8),
+                LongColumn("#total keys", 12),
                 StringColumn("word", 16, leftJustified = true),
                 IntColumn("#keys", 5),
                 LongColumn("index", 8),
@@ -63,6 +64,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
             // seconds to when monkey did this match (the start of it), not cumulative
             formatTime(startTime.plusSeconds(monkey.totalKeystrokes)),
             monkey.id,
+            monkey.totalKeystrokes,
             word,
             word.length,
             index,

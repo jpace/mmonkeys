@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys

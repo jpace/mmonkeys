@@ -2,6 +2,7 @@ package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.testutil.ResourceUtil
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words

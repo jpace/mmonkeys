@@ -1,4 +1,7 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.corpus.sc
+
+import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.IndexedCorpus
 
 class MapCorpus(words: List<String>) : Corpus(words) {
     val indexedCorpus: IndexedCorpus<String> = IndexedCorpus(words) { it }

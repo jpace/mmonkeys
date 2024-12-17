@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.corpus.sc
 
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
