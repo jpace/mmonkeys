@@ -1,15 +1,19 @@
 package org.incava.mmonkeys.mky.mgr
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.mky.time.WindowedClock
 import java.io.PrintStream
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+
+data class SimUpdate(val monkey: Monkey, val index: Int, val matchCount: Int)
 
 class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private val out: PrintStream = System.out) {
     private val startTime: ZonedDateTime = ZonedDateTime.of(0, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"))
@@ -17,6 +21,8 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     private val numWords = corpus.words.size
     private val table: Table
     private var linesUntilHeader: Int = 0
+    private val clock = WindowedClock(10000)
+    private val updates = mutableMapOf<ZonedDateTime, MutableList<SimUpdate>>()
 
     init {
         table = Table(
@@ -41,10 +47,25 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     private fun formatTime(dateTime: ZonedDateTime): String = dateTime.format(pattern)
 
     fun update(monkey: Monkey, index: Int, matchCount: Int, totalKeystrokes: Long) {
-        if (matchCount % outputInterval != 0) {
+        // seconds to when monkey did this match (the start of it), not cumulative
+        // seconds to when monkey completed this word:
+        val doneAt = monkey.totalKeystrokes + corpus.words[index].length
+        // @todo - use start time instead of done time?
+        //  val simTime = startTime.plusSeconds(monkey.totalKeystrokes)
+        val doneTime = startTime.plusSeconds(doneAt)
+        updates.computeIfAbsent(doneTime) { mutableListOf() }.also { it += SimUpdate(monkey, index, matchCount) }
+        val times = clock.pushTime(doneTime)
+        times.forEach { time ->
+            val updates = updates.remove(time)
+            updates?.forEach { update -> update(update, time) }
+        }
+    }
+
+    private fun update(update: SimUpdate, simTime: ZonedDateTime) {
+        if (update.matchCount % outputInterval != 0) {
             return
         }
-        val word = corpus.words[index]
+        val word = corpus.words[update.index]
         val wordCount = (0 until numWords).filter {
             corpus.words[it] == word
         }
@@ -61,16 +82,15 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
         // totalKeystrokes == virtual seconds:
         val values = listOf(
             formatTime(ZonedDateTime.now()),
-            // seconds to when monkey did this match (the start of it), not cumulative
-            formatTime(startTime.plusSeconds(monkey.totalKeystrokes)),
-            monkey.id,
-            monkey.totalKeystrokes,
+            formatTime(simTime),
+            update.monkey.id,
+            update.monkey.totalKeystrokes,
             word,
             word.length,
-            index,
+            update.index,
             numWordMatches,
             wordCount.size,
-            matchCount,
+            update.matchCount,
             numWords
         )
         table.writeRow(values)

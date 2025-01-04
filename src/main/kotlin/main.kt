@@ -1,5 +1,6 @@
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.exec.CoroutineSimulation
+import org.incava.mmonkeys.exec.CorpusSimulationFactory
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.MonkeyCtor
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
@@ -7,6 +8,7 @@ import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.time.Durations
 import java.lang.Thread.sleep
 
 fun <T : Corpus> runSimulation(toChar: Char, type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
@@ -39,7 +41,13 @@ fun runCorpusTest(toChar: Char) {
 fun main(args: Array<String>) {
     Console.info("main")
     Console.info("args", args.toList())
-    runCorpusTest('z')
+    // runCorpusTest('z')
+    val obj = CorpusSimulationFactory.create()
+    val trialDuration = Durations.measureDuration {
+        obj.run()
+        obj.showResults()
+    }
+    Console.info("trialDuration", trialDuration)
 }
 
 fun mainCls(args: Array<String>) {

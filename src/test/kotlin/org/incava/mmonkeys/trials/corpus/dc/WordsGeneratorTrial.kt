@@ -4,10 +4,9 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGenerator
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
-import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.trials.rand.CorpusMatchesView
 import org.incava.time.Durations.measureDuration
 import java.time.ZoneId

@@ -25,6 +25,19 @@ object CorpusFactory {
             .filter(wordFilter)
     }
 
+    fun readFileWords(lines: List<String>, lineFilter: (Int) -> Boolean = { true }, wordFilter: (String) -> Boolean = { true }): List<String> {
+        return lines
+            .withIndex()
+            .filter { lineFilter(it.index) }
+            .map { it.value }
+            .map { it.trim() }
+            .map(String::lowercase)
+            .map { it.replace(Regex("[^a-z+]"), " ") }
+            .flatMap { it.split(Regex("\\s+")) }
+            .filterNot { it.isBlank() }
+            .filter(wordFilter)
+    }
+
     fun readFileWords(file: File): List<String> = readFileWords(file, lineFilter = { true }, wordFilter = { true })
 
     fun readFileWords(file: File, wordFilter: (String) -> Boolean): List<String> {

@@ -3,7 +3,7 @@ package org.incava.mmonkeys.trials.corpus.dc
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
-import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.util.ResourceUtil
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

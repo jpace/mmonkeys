@@ -4,7 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.EncodedGenerator
-import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations.measureDuration
 
 class EncodedGeneratorTrial {

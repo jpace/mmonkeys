@@ -12,7 +12,7 @@ import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
-import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
 import org.incava.mmonkeys.type.Typewriter

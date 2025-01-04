@@ -6,9 +6,8 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
-import org.incava.mmonkeys.testutil.ResourceUtil
+import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
-import org.incava.mmonkeys.words.Words
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 3..17 }
