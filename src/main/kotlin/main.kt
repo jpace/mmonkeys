@@ -5,7 +5,7 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.MonkeyCtor
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
-import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations

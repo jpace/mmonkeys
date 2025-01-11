@@ -75,4 +75,14 @@ class WindowedClockTest {
         }
         Qlog.info("results", results)
     }
+
+    @Test
+    fun timeTest() {
+        val startTime: ZonedDateTime = ZonedDateTime.of(0, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"))
+        val seconds = 64_899_051L
+        val doneTime = startTime.plusSeconds(seconds)
+        Qlog.info("startTime", startTime)
+        Qlog.info("seconds", seconds)
+        Qlog.info("doneTime", doneTime)
+    }
 }

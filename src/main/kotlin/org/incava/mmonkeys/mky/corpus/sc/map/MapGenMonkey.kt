@@ -1,5 +1,6 @@
-package org.incava.mmonkeys.mky.corpus.sc
+package org.incava.mmonkeys.mky.corpus.sc.map
 
+import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
@@ -21,7 +22,7 @@ class MapGenMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorp
         // keystrokes here are only through the word, not the trailing space
         val attemptKeystrokes = numChars + 1
         val forLength = corpus.forLength(numChars)
-        val indices = forLength?.getValue(typed)
+        val indices = forLength?.get(typed)
         return if (indices != null) {
             // we're always removing/matching the *first* index
             val index = indices.first()

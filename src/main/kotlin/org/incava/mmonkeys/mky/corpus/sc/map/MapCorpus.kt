@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus.sc
+package org.incava.mmonkeys.mky.corpus.sc.map
 
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.IndexedCorpus

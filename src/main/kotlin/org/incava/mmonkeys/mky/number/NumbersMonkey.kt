@@ -4,8 +4,7 @@ import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 
-class NumbersMonkey(id: Int, typewriter: Typewriter, override val corpus: NumberedCorpus) :
-    SingleCorpusMonkey(id, typewriter, corpus) {
+class NumbersMonkey(id: Int, typewriter: Typewriter, override val corpus: NumberedCorpus) : SingleCorpusMonkey(id, typewriter, corpus) {
     override fun findMatches(): Words {
         val length = randomLength()
         val numChars = length - 1

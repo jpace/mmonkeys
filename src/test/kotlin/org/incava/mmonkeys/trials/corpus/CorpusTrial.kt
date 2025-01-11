@@ -6,9 +6,9 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
-import org.incava.mmonkeys.mky.corpus.sc.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.MapGenMonkey
-import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
+import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey

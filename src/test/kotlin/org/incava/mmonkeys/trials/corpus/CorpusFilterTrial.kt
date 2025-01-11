@@ -13,9 +13,9 @@ class CorpusFilterTrial {
     fun duplicates() {
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
-        result.forEach { (first, nexts) ->
-            if (nexts.contains(first)) {
-                println(first)
+        result.forEach { (a, nexts) ->
+            if (nexts.contains(a)) {
+                Console.info("$a")
             }
         }
     }
@@ -23,16 +23,20 @@ class CorpusFilterTrial {
     fun twos() {
         val obj = CorpusFilter(words)
         val result = obj.missingTwos
-        result.forEach { (first, seconds) ->
-            Console.info("$first", seconds)
+        result.forEach { (a, bs) ->
+            bs.forEach { b ->
+                Console.info("$a$b")
+            }
         }
     }
 
     fun threes() {
         val obj = CorpusFilter(words)
         val result = obj.missingThrees
-        result.forEach { (first, seconds) ->
-            seconds.forEach { (x, y) -> Console.info("$first $x", y)}
+        result.forEach { (a, bcs) ->
+            bcs.forEach { (b, cs) ->
+                cs.forEach { c -> Console.info("$a$b$c") }
+            }
         }
     }
 
@@ -76,12 +80,30 @@ class CorpusFilterTrial {
             possible.toBigInteger()
         )
     }
+
+    fun charFrequency() {
+        val byChar = mutableMapOf<Char, Int>()
+        var numChars = 0
+        words.forEach { word ->
+            word.toCharArray().forEach { ch ->
+                byChar[ch] = (byChar[ch] ?: 0) + 1
+                ++numChars
+            }
+        }
+        println("byChar: ${byChar.toSortedMap()}")
+        byChar.toSortedMap().forEach { (ch, count) ->
+            println("$ch: ${100.0 * count / numChars}")
+        }
+    }
 }
 
 fun main() {
     val obj = CorpusFilterTrial()
-    obj.duplicates()
-    obj.percentPresent()
-    obj.twos()
-    obj.threes()
+    if (false) {
+        obj.duplicates()
+        obj.percentPresent()
+        obj.twos()
+        obj.threes()
+    }
+    obj.charFrequency()
 }

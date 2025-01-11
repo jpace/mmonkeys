@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.mgr
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
@@ -13,7 +12,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-data class SimUpdate(val monkey: Monkey, val index: Int, val matchCount: Int)
+data class SimUpdate(val id: Int, val totalKeystrokes: Long, val index: Int, val matchCount: Int)
 
 class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private val out: PrintStream = System.out) {
     private val startTime: ZonedDateTime = ZonedDateTime.of(0, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"))
@@ -21,7 +20,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     private val numWords = corpus.words.size
     private val table: Table
     private var linesUntilHeader: Int = 0
-    private val clock = WindowedClock(10000)
+    private val clock = WindowedClock(1000)
     private val updates = mutableMapOf<ZonedDateTime, MutableList<SimUpdate>>()
 
     init {
@@ -50,10 +49,12 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
         // seconds to when monkey did this match (the start of it), not cumulative
         // seconds to when monkey completed this word:
         val doneAt = monkey.totalKeystrokes + corpus.words[index].length
+
         // @todo - use start time instead of done time?
         //  val simTime = startTime.plusSeconds(monkey.totalKeystrokes)
         val doneTime = startTime.plusSeconds(doneAt)
-        updates.computeIfAbsent(doneTime) { mutableListOf() }.also { it += SimUpdate(monkey, index, matchCount) }
+        updates.computeIfAbsent(doneTime) { mutableListOf() }
+            .also { it += SimUpdate(monkey.id, monkey.totalKeystrokes, index, matchCount) }
         val times = clock.pushTime(doneTime)
         times.forEach { time ->
             val updates = updates.remove(time)
@@ -79,12 +80,11 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
         } else {
             --linesUntilHeader
         }
-        // totalKeystrokes == virtual seconds:
         val values = listOf(
             formatTime(ZonedDateTime.now()),
             formatTime(simTime),
-            update.monkey.id,
-            update.monkey.totalKeystrokes,
+            update.id,
+            update.totalKeystrokes + corpus.words[update.index].length,
             word,
             word.length,
             update.index,

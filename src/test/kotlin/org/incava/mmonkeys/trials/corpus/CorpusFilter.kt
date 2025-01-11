@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.trials.corpus
 
 class CorpusFilter(words: Collection<String>) {
-    val chars = ('a'..'z')
     val missingTwos: MutableMap<Char, MutableSet<Char>> = mutableMapOf()
     val missingThrees: MutableMap<Char, MutableMap<Char, MutableSet<Char>>> = mutableMapOf()
 

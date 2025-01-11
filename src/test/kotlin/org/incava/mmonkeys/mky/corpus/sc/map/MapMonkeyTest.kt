@@ -1,8 +1,8 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.corpus.sc.map
 
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.sc.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals

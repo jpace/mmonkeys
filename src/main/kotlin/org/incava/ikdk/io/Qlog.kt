@@ -22,6 +22,8 @@ object Qlog {
             info(msg, obj)
         } else if (obj is ZonedDateTime) {
             info(msg, obj)
+        } else if (obj is Collection<*>) {
+            info(msg, obj)
         } else {
             println(ConsoleFormat.format(msg, obj))
         }

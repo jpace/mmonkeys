@@ -1,10 +1,10 @@
-package org.incava.mmonkeys.mky.corpus.sc
+package org.incava.mmonkeys.mky.corpus.sc.map
 
+import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 
-class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus) :
-    SingleCorpusMonkey(id, typewriter, corpus) {
+class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus) : SingleCorpusMonkey(id, typewriter, corpus) {
     override fun findMatches(): Words {
         val toEndOfWord = randomLength()
         val numChars = toEndOfWord - 1
@@ -17,7 +17,7 @@ class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus)
             toNonMatch(toEndOfWord)
         } else {
             // we're always removing/matching the *first* index
-            val index = indices.first()
+            val index = indices.removeAt(0)
             corpus.setMatched(word, numChars)
             toWordsMatch(word, index, toEndOfWord)
         }

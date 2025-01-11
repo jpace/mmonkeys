@@ -7,10 +7,11 @@ import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
-import org.incava.mmonkeys.mky.corpus.sc.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.MapGenMonkey
-import org.incava.mmonkeys.mky.corpus.sc.MapMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
+import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.sc.SequenceMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.util.ResourceUtil
@@ -28,7 +29,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         run {
             val corpus = DualCorpus(words)
             val monkey = DualCorpusMonkey(1, corpus)
-            profiler.add("dual monkey") {
+            profiler.add("dual") {
                 matchWords { monkey.findMatches() }
             }
         }
@@ -36,7 +37,15 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         if (false) {
             val corpus = Corpus(words)
             val monkey = EqMonkey(2, Typewriter(), corpus)
-            profiler.add("gen eq") {
+            profiler.add("eq") {
+                matchWords { monkey.findMatches() }
+            }
+        }
+
+        if (false) {
+            val corpus = Corpus(words)
+            val monkey = SequenceMonkey(2, Typewriter(), corpus)
+            profiler.add("dyno") {
                 matchWords { monkey.findMatches() }
             }
         }

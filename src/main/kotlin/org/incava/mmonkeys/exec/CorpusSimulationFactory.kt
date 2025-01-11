@@ -20,6 +20,7 @@ object CorpusSimulationFactory {
         Console.info("sought.#", words.size)
         val toFind = Int.MAX_VALUE
         val numMonkeys = 1_000_000
+        // val numMonkeys = 1_000
         val obj = CorpusSimulation(words, numMonkeys, toFind)
         val trialDuration = Durations.measureDuration {
             obj.run()
