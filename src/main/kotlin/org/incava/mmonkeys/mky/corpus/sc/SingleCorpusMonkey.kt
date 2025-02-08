@@ -9,7 +9,7 @@ import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
 abstract class SingleCorpusMonkey(id: Int, val typewriter: Typewriter, corpus: Corpus) : Monkey(id, corpus) {
-    val rand: RandInt = RandomFactory.getCalculated(typewriter.numChars())
+    val rand: RandInt = RandomFactory.getCalculated(typewriter.chars.size)
 
     // number of keystrokes at which we'll hit the end-of-word character
     // thus length == 1 means we'll hit at the first invocation, with

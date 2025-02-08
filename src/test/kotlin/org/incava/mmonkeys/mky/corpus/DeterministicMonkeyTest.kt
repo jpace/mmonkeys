@@ -1,10 +1,10 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
+import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
 import org.incava.mmonkeys.testutil.MonkeyUtils
-import org.incava.mmonkeys.type.DeterministicTypewriter
 import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -12,7 +12,34 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class EqMonkeyTest {
+internal class DeterministicMonkeyTest {
+    class DeterministicStrategy(val chars: List<Char>) {
+        private var count = 0
+        private val size = chars.size
+
+        fun nextCharacter(): Char {
+            return chars[count++ % size]
+        }
+    }
+
+    class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : DefaultMonkey(id, typewriter, corpus) {
+        private val strategy = DeterministicStrategy(typewriter.chars)
+
+        // this is actually random.
+        override fun typeWord(): String {
+            val builder = StringBuilder()
+            while (true) {
+                val ch = strategy.nextCharacter()
+                if (ch == Keys.END_CHAR) {
+                    return builder.toString()
+                } else {
+                    builder.append(ch)
+                }
+            }
+        }
+
+    }
+
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
         listOf(
@@ -41,7 +68,7 @@ internal class EqMonkeyTest {
     }
 
     private fun createMonkey(words: List<String>, toChar: Char): Monkey {
-        val typewriter = DeterministicTypewriter(Keys.keyList(toChar))
-        return EqMonkey(1, typewriter, Corpus(words))
+        val typewriter = Typewriter(Keys.keyList(toChar))
+        return DeterministicMonkey(1, typewriter, Corpus(words))
     }
 }

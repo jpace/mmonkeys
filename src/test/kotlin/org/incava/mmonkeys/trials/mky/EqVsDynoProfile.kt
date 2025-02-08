@@ -8,7 +8,6 @@ import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
 import org.incava.mmonkeys.mky.corpus.sc.SequenceMonkey
 import org.incava.mmonkeys.mky.corpus.sc.WeightedMonkey
-import org.incava.mmonkeys.mky.corpus.sc.WeightedTypewriter
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
 import org.incava.mmonkeys.type.Typewriter
@@ -29,6 +28,12 @@ private class EqVsDynoProfile {
         }
 
         run {
+            val corpus = MapCorpus(words)
+            val monkey = MapGenMonkey(4, Typewriter(), corpus)
+            matchWords("gen map") { monkey.findMatches() }
+        }
+
+        run {
             val corpus = Corpus(words)
             val typewriter = Typewriter()
             val monkey = DefaultMonkey(2, typewriter, corpus)
@@ -38,20 +43,14 @@ private class EqVsDynoProfile {
         run {
             val corpus = Corpus(words)
             val typewriter = Typewriter()
-            val monkey = SequenceMonkey(2, typewriter, corpus)
+            val monkey = SequenceMonkey(3, typewriter, corpus)
             matchWords("sequence") { monkey.findMatches() }
         }
 
         run {
-            val corpus = MapCorpus(words)
-            val monkey = MapGenMonkey(2, Typewriter(), corpus)
-            matchWords("gen map") { monkey.findMatches() }
-        }
-
-        run {
             val corpus = Corpus(words)
-            val typewriter = WeightedTypewriter(corpus.words)
-            val monkey = WeightedMonkey(2, typewriter, corpus)
+            val typewriter = Typewriter()
+            val monkey = WeightedMonkey(5, typewriter, corpus)
             matchWords("weighted") { monkey.findMatches() }
         }
     }

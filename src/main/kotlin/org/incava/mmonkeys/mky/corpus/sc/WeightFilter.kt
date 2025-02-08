@@ -1,29 +1,16 @@
 package org.incava.mmonkeys.mky.corpus.sc
 
-import org.incava.mmonkeys.type.Typewriter
-import kotlin.random.Random
+import org.incava.mmonkeys.rand.DistributedRandom
 
-class WeightFilter(val words: List<String>) : Typewriter() {
-    val slots: Map<Char, Double>
+class WeightFilter(val words: List<String>) {
+    private val random: DistributedRandom<Char, Int>
 
     init {
-        val byChar: MutableMap<Char, Int> = mutableMapOf()
-        val numSpaces = words.size - 1
-        byChar[' '] = numSpaces
-        val numChars = words.sumOf { it.length } + numSpaces
-        words.forEach { word ->
-            word.forEach { ch -> byChar[ch] = (byChar[ch] ?: 0) + 1 }
-        }
-        var pct = 0.0
-        slots = byChar.toSortedMap().map { (ch, count) ->
-            val chPct = pct + 100.0 * count / numChars
-            pct = chPct
-            ch to chPct
-        }.toMap()
+        val byChar = CorpusTraits().characterCounts(words)
+        random = DistributedRandom(byChar)
     }
 
-    override fun nextCharacter(): Char {
-        val num = Random.Default.nextDouble(100.0)
-        return slots.keys.first { num < slots.getValue(it) }
+    fun nextCharacter(): Char {
+        return random.nextRandom()
     }
 }

@@ -3,7 +3,7 @@ package org.incava.mmonkeys.mky.corpus.sc
 import org.incava.mmonkeys.type.Keys
 import java.util.*
 
-class SequenceFilter(words: List<String>) {
+class SequenceFinder(words: List<String>) {
     val presentTwos: Map<Char, List<Char>>
 
     init {

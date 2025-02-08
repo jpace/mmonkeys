@@ -9,17 +9,6 @@ import org.junit.jupiter.api.Test
 
 class SequenceMonkeyTest {
     @Test
-    fun getValidSequences() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val corpus = Corpus(words)
-        val obj = SequenceMonkey(1, Typewriter(), corpus)
-        val result = obj.validSequences
-        result.forEach { (from, to) ->
-            Qlog.info("$from", to.toString())
-        }
-    }
-
-    @Test
     fun findMatches() {
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
         val corpus = Corpus(words)

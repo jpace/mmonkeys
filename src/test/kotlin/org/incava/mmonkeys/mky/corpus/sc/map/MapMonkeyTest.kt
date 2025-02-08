@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -23,6 +22,8 @@ internal class MapMonkeyTest {
         var result: Words
         do {
             result = monkey1.findMatches()
+            if (result.hasMatch())
+                Qlog.info("result", result)
         } while (!result.hasMatch())
         assertSame(monkey1.corpus, monkey2.corpus)
         assertEquals(corpus.indexedCorpus.elements, corpus.indexedCorpus.elements)

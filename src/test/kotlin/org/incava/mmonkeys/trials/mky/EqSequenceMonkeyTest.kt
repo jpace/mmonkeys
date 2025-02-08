@@ -26,7 +26,7 @@ private class EqSequenceMonkeyTest {
 
 
     @Test
-    fun dynoMonkey() {
+    fun sequenceMonkey() {
         val corpus = Corpus(words)
         val monkey = SequenceMonkey(2, Typewriter(), corpus)
         matchWords("dyno") { monkey.findMatches() }

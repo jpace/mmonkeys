@@ -1,35 +1,11 @@
 package org.incava.mmonkeys.mky.corpus.sc
 
-import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.testutil.assertWithin
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
 class WeightFilterTest {
-    @Test
-    fun getValidSequences() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val corpus = Corpus(words)
-        val obj = SequenceMonkey(1, Typewriter(), corpus)
-        val result = obj.validSequences
-        result.forEach { (from, to) ->
-            Qlog.info("$from", to.toString())
-        }
-    }
-
-    @Test
-    fun findMatches() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val corpus = Corpus(words)
-        val obj = SequenceMonkey(1, Typewriter(), corpus)
-        repeat(100) {
-            val result = obj.findMatches()
-            Qlog.info("result", result)
-        }
-    }
-
     @Test
     fun percentages() {
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
@@ -38,12 +14,9 @@ class WeightFilterTest {
         words.forEach { word ->
             word.forEach { ch -> byChar[ch] = (byChar[ch] ?: 0) + 1 }
         }
-        // Qlog.info("byChar", byChar.toSortedMap())
-        Qlog.info("avg length", words.map { it.length }.average())
-        byChar.toSortedMap().forEach { (ch, count) ->
-            Qlog.info("$ch", count)
-            Qlog.info("$ch %", 100.0 * count / numChars)
-        }
+        assertWithin(7.67, pct(byChar.getValue('a'), numChars), 0.3)
+        assertWithin(8.75, pct(byChar.getValue('t'), numChars), 0.3)
+        assertWithin(0.04, pct(byChar.getValue('z'), numChars), 0.3)
     }
 
     @Test
@@ -51,10 +24,17 @@ class WeightFilterTest {
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
         val obj = WeightFilter(words)
         val results = mutableMapOf<Char, Int>()
-        repeat(10000) {
+        val iterations = 100_000
+        repeat(iterations) {
             val ch = obj.nextCharacter()
             results[ch] = (results[ch] ?: 0) + 1
         }
-        Qlog.info("results", results.toSortedMap())
+        assertWithin(19.74, pct(results.getValue(' '), iterations), 0.3)
+        assertWithin(9.58, pct(results.getValue('e'), iterations), 0.3)
+        assertWithin(0.04, pct(results.getValue('z'), iterations) , 0.3)
+    }
+
+    fun pct(x: Number, y: Number) : Double {
+        return 100.0 * x.toDouble() / y.toDouble()
     }
 }
