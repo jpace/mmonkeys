@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.mky.corpus.sc
 
-class CorpusTraits {
-    fun characterCounts(words: List<String>) : Map<Char, Int> {
+class CorpusTraits(var words: List<String>) {
+    fun characterCounts(): Map<Char, Int> {
         val byChar: MutableMap<Char, Int> = mutableMapOf()
         val numSpaces = words.size - 1
         byChar[' '] = numSpaces

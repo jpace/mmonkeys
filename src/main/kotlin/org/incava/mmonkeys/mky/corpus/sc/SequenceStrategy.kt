@@ -1,33 +1,27 @@
 package org.incava.mmonkeys.mky.corpus.sc
 
+import org.incava.ikdk.io.Qlog
+import org.incava.mmonkeys.mky.corpus.type.TypeStrategy
 import org.incava.mmonkeys.type.Keys
 
-class SequenceStrategy(private val validSequences: Map<Char, List<Char>>, val charProvider: () -> Char) {
-    fun typeWord(): String {
+class SequenceStrategy(private val sequences: Sequences, val initStrategy: () -> Char) : TypeStrategy() {
+    override fun typeCharacter(): Char {
+        TODO("Not yet implemented")
+    }
+
+    override fun typeWord(): String {
         val builder = StringBuilder()
-        var prev: Char? = null
-        while (true) {
-            if (prev == null) {
-                val ch = charProvider()
-                if (ch == Keys.END_CHAR) {
-                    return builder.toString()
-                } else {
-                    builder.append(ch)
-                    prev = ch
-                }
-            } else {
-                // Qlog.info("prev", prev)
-                val possible = validSequences.getValue(prev)
-                // Qlog.info("possible", possible)
-                val ch = possible.random()
-                // Qlog.info("ch", ch)
-                if (ch == Keys.END_CHAR) {
-                    return builder.toString()
-                } else {
-                    builder.append(ch)
-                    prev = ch
-                }
-            }
+        var ch = initStrategy()
+        while (ch != Keys.END_CHAR) {
+            builder.append(ch)
+            ch = getNext(ch)
         }
+        return builder.toString()
+    }
+
+    fun getNext(ch: Char): Char {
+        val possible = sequences.presentTwos.getValue(ch)
+        Qlog.info("possible[$ch]", possible.toSortedSet().joinToString(" "))
+        return possible.random()
     }
 }

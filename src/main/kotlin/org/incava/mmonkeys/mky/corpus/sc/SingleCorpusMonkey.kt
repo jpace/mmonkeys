@@ -9,22 +9,16 @@ import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
 abstract class SingleCorpusMonkey(id: Int, val typewriter: Typewriter, corpus: Corpus) : Monkey(id, corpus) {
-    val rand: RandInt = RandomFactory.getCalculated(typewriter.chars.size)
-
-    // number of keystrokes at which we'll hit the end-of-word character
-    // thus length == 1 means we'll hit at the first invocation, with
-    // an empty string, 8 means we had 7 (hypothetical) characters,
-    // and so on and so forth.
-    fun randomLength() = rand.nextInt()
-
-    fun toWordsMatch(word: String, index: Int, attemptKeyStrokes: Int): Words {
+    fun toWordsMatch(word: String, index: Int): Words {
         val numAttempts = 1
         corpus.setMatched(index)
-        return Words(listOf(Word(word, index)), attemptKeyStrokes.toLong(), numAttempts)
+        // count the space in the attempt:
+        return Words(listOf(Word(word, index)), word.length.toLong() + 1, numAttempts)
     }
 
-    fun toNonMatch(attemptKeyStrokes: Int): Words {
+    fun toNonMatch(word: String): Words {
+        // count the space in the attempt:
         val numAttempts = 1
-        return Words(attemptKeyStrokes.toLong(), numAttempts)
+        return Words(word.length.toLong() + 1, numAttempts)
     }
 }

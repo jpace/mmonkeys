@@ -6,8 +6,10 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
-import org.incava.mmonkeys.mky.corpus.sc.SequenceMonkey
-import org.incava.mmonkeys.mky.corpus.sc.WeightedMonkey
+import org.incava.mmonkeys.mky.corpus.sc.RandomStrategy
+import org.incava.mmonkeys.mky.corpus.sc.Sequences
+import org.incava.mmonkeys.mky.corpus.sc.SequenceStrategy
+import org.incava.mmonkeys.mky.corpus.sc.WeightedStrategy
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
 import org.incava.mmonkeys.type.Typewriter
@@ -17,41 +19,58 @@ import org.incava.time.Durations
 
 private class EqVsDynoProfile {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length > 1 }
-    val matchGoal = 20L
+    val matchGoal = 10L
 
     fun profile() {
         Qlog.info("words.#", words.size)
-        run {
+        var id = 1
+
+        if (false) {
             val corpus = DualCorpus(words)
-            val monkey = DualCorpusMonkey(1, corpus)
+            val monkey = DualCorpusMonkey(id++, corpus)
             matchWords("dual") { monkey.findMatches() }
         }
 
-        run {
+        if (false) {
             val corpus = MapCorpus(words)
-            val monkey = MapGenMonkey(4, Typewriter(), corpus)
+            val monkey = MapGenMonkey(id++, Typewriter(), corpus)
             matchWords("gen map") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
             val typewriter = Typewriter()
-            val monkey = DefaultMonkey(2, typewriter, corpus)
+            val strategy = RandomStrategy(typewriter.chars)
+            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
             matchWords("random") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
             val typewriter = Typewriter()
-            val monkey = SequenceMonkey(3, typewriter, corpus)
-            matchWords("sequence") { monkey.findMatches() }
+            val sequences = Sequences(corpus.words)
+            val initStrategy = RandomStrategy(typewriter.chars)
+            val strategy = SequenceStrategy(sequences, initStrategy::typeCharacter)
+            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
+            matchWords("sequence, from random init") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
             val typewriter = Typewriter()
-            val monkey = WeightedMonkey(5, typewriter, corpus)
+            val strategy = WeightedStrategy(corpus.words)
+            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
             matchWords("weighted") { monkey.findMatches() }
+        }
+
+        run {
+            val corpus = Corpus(words)
+            val typewriter = Typewriter()
+            val sequences = Sequences(corpus.words)
+            val initStrategy = WeightedStrategy(corpus.words)
+            val strategy = SequenceStrategy(sequences, initStrategy::typeCharacter)
+            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
+            matchWords("sequence, from weighted init") { monkey.findMatches() }
         }
     }
 
@@ -65,6 +84,10 @@ private class EqVsDynoProfile {
                 val count = result.words.count { words.contains(it.string) }
                 matches += count
                 attempts += result.numAttempts
+//                if (count != 0) {
+//                    Qlog.info("result", result)
+//                    Qlog.info("attempts", attempts)
+//                }
             }
             Qlog.info("attempts", attempts)
             Qlog.info("matches", matches)

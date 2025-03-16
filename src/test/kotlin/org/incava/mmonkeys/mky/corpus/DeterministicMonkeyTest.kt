@@ -2,6 +2,7 @@ package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
+import org.incava.mmonkeys.mky.corpus.type.TypeStrategy
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -13,32 +14,16 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class DeterministicMonkeyTest {
-    class DeterministicStrategy(val chars: List<Char>) {
+    class DeterministicStrategy(private val chars: List<Char>) : TypeStrategy() {
         private var count = 0
         private val size = chars.size
 
-        fun nextCharacter(): Char {
+        override fun typeCharacter(): Char {
             return chars[count++ % size]
         }
     }
 
-    class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : DefaultMonkey(id, typewriter, corpus) {
-        private val strategy = DeterministicStrategy(typewriter.chars)
-
-        // this is actually random.
-        override fun typeWord(): String {
-            val builder = StringBuilder()
-            while (true) {
-                val ch = strategy.nextCharacter()
-                if (ch == Keys.END_CHAR) {
-                    return builder.toString()
-                } else {
-                    builder.append(ch)
-                }
-            }
-        }
-
-    }
+    class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : DefaultMonkey(id, typewriter, corpus, DeterministicStrategy(typewriter.chars))
 
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =

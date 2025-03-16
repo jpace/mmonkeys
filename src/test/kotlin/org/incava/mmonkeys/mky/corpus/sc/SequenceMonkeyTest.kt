@@ -18,20 +18,4 @@ class SequenceMonkeyTest {
             Qlog.info("result", result)
         }
     }
-
-    @Test
-    fun typeWord() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val corpus = Corpus(words)
-        val obj = SequenceMonkey(1, Typewriter(), corpus)
-        val results = mutableMapOf<Char, Int>()
-        repeat(10000) {
-            val word = obj.typeWord()
-            word.forEach { results[it] = (results[it] ?: 0) + 1 }
-        }
-        Qlog.info("results", results.toSortedMap())
-        results.toSortedMap().forEach { (ch, count) ->
-            Qlog.info("results[$ch]", 100.0 * count / results.values.sum())
-        }
-    }
 }

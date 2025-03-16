@@ -5,7 +5,7 @@ import org.incava.mmonkeys.testutil.assertWithin
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
-class WeightFilterTest {
+class WeightedStrategyTest {
     @Test
     fun percentages() {
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
@@ -20,13 +20,13 @@ class WeightFilterTest {
     }
 
     @Test
-    fun nextCharacter() {
+    fun typeCharacter() {
         val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val obj = WeightFilter(words)
+        val obj = WeightedStrategy(words)
         val results = mutableMapOf<Char, Int>()
         val iterations = 100_000
         repeat(iterations) {
-            val ch = obj.nextCharacter()
+            val ch = obj.typeCharacter()
             results[ch] = (results[ch] ?: 0) + 1
         }
         assertWithin(19.74, pct(results.getValue(' '), iterations), 0.3)

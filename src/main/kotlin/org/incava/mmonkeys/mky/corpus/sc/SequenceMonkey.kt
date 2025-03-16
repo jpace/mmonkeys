@@ -8,11 +8,7 @@ class SequenceMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : DefaultM
     private val randomStrategy = RandomStrategy(typewriter.chars)
 
     init {
-        val finder = SequenceFinder(corpus.words)
-        sequenceStrategy = SequenceStrategy(finder.presentTwos, randomStrategy::nextCharacter)
-    }
-
-    override fun typeWord(): String {
-        return sequenceStrategy.typeWord()
+        val sequences = Sequences(corpus.words)
+        sequenceStrategy = SequenceStrategy(sequences, randomStrategy::typeCharacter)
     }
 }

@@ -2,8 +2,8 @@ package org.incava.mmonkeys.rand
 
 import kotlin.random.Random
 
-class DistributedRandom<T : Comparable<T>, U: Number>(occurrences: Map<T, U>) {
-    val slots: Map<T, Double>
+class DistributedRandom<T, U: Number>(occurrences: Map<T, U>) {
+    private val slots: Map<T, Double>
 
     init {
         val asDoubles = occurrences.mapValues { it.value.toDouble() }
