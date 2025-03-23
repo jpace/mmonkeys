@@ -15,7 +15,6 @@ import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations
 import java.time.Duration
 
@@ -44,12 +43,11 @@ class CorpusTrial(
 
     fun run() {
         var id = 1
-        runMonkey("gen eq", EqMonkey(id++, Typewriter(), Corpus(words)))
-        runMonkey("gen map", MapGenMonkey(id++, Typewriter(), MapCorpus(words)))
-        val numWords = words.filter { it.length <= 13 }
-        runMonkey("len longs", NumbersMonkey(id++, Typewriter(), NumberedCorpus(words)))
-        runMonkey("len map", MapMonkey(id++, Typewriter(), MapCorpus(words)))
-        runMonkey("dual", DualCorpusMonkey(id++, DualCorpus(words)))
+        runMonkey("gen eq", EqMonkey(id++, Corpus(words)))
+        runMonkey("gen map", MapGenMonkey(id++, MapCorpus(words)))
+        runMonkey("len longs", NumbersMonkey(id++, NumberedCorpus(words)))
+        runMonkey("len map", MapMonkey(id++, MapCorpus(words)))
+        runMonkey("dual", DualCorpusMonkey(id, DualCorpus(words)))
     }
 
     fun showResults() {

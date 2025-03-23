@@ -6,14 +6,11 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.rand.DistributedRandom
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
-import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
-class SequencesTest {
+class SequencesTrial {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
     // val words = listOf("this", "is", "a", "test")
 
-    @Test
     fun presentTwos() {
         val obj = Sequences(words)
         val result = obj.presentTwos
@@ -24,7 +21,6 @@ class SequencesTest {
         }
     }
 
-    @Test
     fun presentTwosCounted() {
         val obj = Sequences(words)
         val result = obj.presentTwosCounted
@@ -33,9 +29,16 @@ class SequencesTest {
                 Console.info("$a$b: $count")
             }
         }
+        val countToString = result.map { (a, bs) ->
+            bs.map { (b, count) ->
+                count to "$a$b"
+            }
+        }.flatten()
+        countToString.sortedBy { it.first }.forEach { (count, str) ->
+            Console.info("$count: $str")
+        }
     }
 
-    @Test
     fun presentTwosCountedRandom() {
         val obj = Sequences(words)
         val result = obj.presentTwosCounted
@@ -67,8 +70,6 @@ class SequencesTest {
 
     }
 
-    @Ignore
-    @Test
     fun presentThrees() {
         val obj = Sequences(words)
         obj.presentThrees.forEach { (a, bs) ->
@@ -80,7 +81,6 @@ class SequencesTest {
         }
     }
 
-    @Test
     fun presentThreesCounted() {
         val obj = Sequences(words)
         val result = obj.presentThreesCounted
@@ -91,31 +91,50 @@ class SequencesTest {
                 }
             }
         }
+        val countToString = result.map { (a, bs) ->
+            bs.map { (b, cs) ->
+                cs.map { (c, count) ->
+                    count to "$a$b$c"
+                }
+            }
+        }.flatten().flatten()
+        countToString.sortedBy { it.first }.forEach { (count, str) ->
+            Console.info("$count: $str")
+        }
     }
 
-    @Test
     fun getNext() {
         val sequences = Sequences(words)
-        val weighted = WeightedStrategy(words)
-        Qlog.info("weighted", weighted)
+        val weightedStrategy = StrategyFactory.weighted(words)
+        Qlog.info("weighted", weightedStrategy)
         repeat(10) {
-            val word = weighted.typeWord()
+            val word = weightedStrategy()
             Qlog.info("word", word)
         }
 
-        val sequenceStrategy1 = SequenceStrategy(sequences, weighted::typeCharacter)
+        val twosStrategy = StrategyFactory.twoRandom(sequences)
+        val sequenceStrategy1 = ContextStrategy(weightedStrategy, twosStrategy)
         Qlog.info("sequence (weighted)", sequenceStrategy1)
         repeat(10) {
             val word = sequenceStrategy1.typeWord()
             Qlog.info("word", word)
         }
 
-        val randomStrategy = RandomStrategy(Keys.fullList())
-        val sequenceStrategy2 = SequenceStrategy(sequences, randomStrategy::typeCharacter)
+        val randomStrategy = StrategyFactory.random(Keys.fullList())
+        val sequenceStrategy2 = ContextStrategy(randomStrategy, twosStrategy)
         Qlog.info("sequence (random)", sequenceStrategy2)
         repeat(10) {
             val word = sequenceStrategy2.typeWord()
             Qlog.info("word", word)
         }
     }
+}
+
+fun main() {
+    val obj = SequencesTrial()
+//    obj.presentTwos()
+    obj.presentTwosCounted()
+//    obj.presentThrees()
+    obj.presentThreesCounted()
+//    obj.getNext()
 }

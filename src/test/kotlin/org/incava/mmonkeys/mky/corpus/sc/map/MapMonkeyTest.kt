@@ -2,7 +2,6 @@ package org.incava.mmonkeys.mky.corpus.sc.map
 
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -10,8 +9,7 @@ import org.junit.jupiter.api.Test
 
 internal class MapMonkeyTest {
     private fun createMapMonkey(id: Int, corpus: MapCorpus): Monkey {
-        val typewriter = Typewriter()
-        return MapMonkey(id, typewriter, corpus)
+        return MapMonkey(id, corpus)
     }
     @Test
     fun sharedCorpus() {

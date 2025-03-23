@@ -2,7 +2,8 @@ package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
-import org.incava.mmonkeys.mky.corpus.type.TypeStrategy
+import org.incava.mmonkeys.mky.mind.Context
+import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -18,12 +19,21 @@ internal class DeterministicMonkeyTest {
         private var count = 0
         private val size = chars.size
 
-        override fun typeCharacter(): Char {
-            return chars[count++ % size]
+        override fun typeWord(): String {
+            val builder = StringBuilder()
+            while (true) {
+                val ch = chars[count++ % size]
+                if (ch == Keys.END_CHAR) {
+                    return builder.toString()
+                } else {
+                    builder.append(ch)
+                }
+            }
         }
+
     }
 
-    class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : DefaultMonkey(id, typewriter, corpus, DeterministicStrategy(typewriter.chars))
+    class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : DefaultMonkey(id, corpus, DeterministicStrategy(typewriter.chars))
 
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =

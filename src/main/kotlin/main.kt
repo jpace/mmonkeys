@@ -13,8 +13,7 @@ import java.lang.Thread.sleep
 
 fun <T : Corpus> runSimulation(toChar: Char, type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
     val charList = Keys.keyList(toChar)
-    val typewriterSupplier: (List<Char>) -> Typewriter = { Typewriter(charList) }
-    val monkeyFactory = MonkeyFactory(typewriterSupplier, monkeyCtor)
+    val monkeyFactory = MonkeyFactory(monkeyCtor)
     // I don't make monkeys; I just train them!
     val numMonkeys = 10
     val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }

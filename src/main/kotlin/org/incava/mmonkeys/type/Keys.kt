@@ -11,8 +11,4 @@ object Keys {
     fun fullList(toChar: Char = LAST_CHAR): List<Char> {
         return keyList(toChar)
     }
-
-    fun alphaList(toChar: Char = LAST_CHAR): List<Char> {
-        return ('a'..toChar).toList()
-    }
 }

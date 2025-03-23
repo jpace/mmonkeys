@@ -1,12 +1,14 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
-import org.incava.mmonkeys.mky.corpus.sc.RandomStrategy
+import org.incava.mmonkeys.mky.corpus.sc.ContextStrategy
 import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.mky.corpus.sc.StrategyFactory
+import org.incava.mmonkeys.mky.mind.Context
 import org.incava.mmonkeys.words.Words
 
-class MapMonkey(id: Int, typewriter: Typewriter, override val corpus: MapCorpus) : SingleCorpusMonkey(id, typewriter, corpus) {
-    private val strategy = RandomStrategy(typewriter.chars)
+class MapMonkey(id: Int, override val corpus: MapCorpus) : SingleCorpusMonkey(id, corpus) {
+    private val random1 = StrategyFactory.random()
+    private val strategy = ContextStrategy(random1::invoke) { random1() }
 
     override fun findMatches(): Words {
         val word = strategy.typeWord()

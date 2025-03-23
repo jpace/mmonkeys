@@ -8,7 +8,7 @@ import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
-abstract class SingleCorpusMonkey(id: Int, val typewriter: Typewriter, corpus: Corpus) : Monkey(id, corpus) {
+abstract class SingleCorpusMonkey(id: Int, corpus: Corpus) : Monkey(id, corpus) {
     fun toWordsMatch(word: String, index: Int): Words {
         val numAttempts = 1
         corpus.setMatched(index)

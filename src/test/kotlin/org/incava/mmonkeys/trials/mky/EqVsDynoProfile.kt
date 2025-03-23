@@ -5,14 +5,12 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.sc.ContextStrategy
 import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
-import org.incava.mmonkeys.mky.corpus.sc.RandomStrategy
 import org.incava.mmonkeys.mky.corpus.sc.Sequences
-import org.incava.mmonkeys.mky.corpus.sc.SequenceStrategy
-import org.incava.mmonkeys.mky.corpus.sc.WeightedStrategy
+import org.incava.mmonkeys.mky.corpus.sc.StrategyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Words
 import org.incava.time.Durations
@@ -33,43 +31,41 @@ private class EqVsDynoProfile {
 
         if (false) {
             val corpus = MapCorpus(words)
-            val monkey = MapGenMonkey(id++, Typewriter(), corpus)
+            val monkey = MapGenMonkey(id++, corpus)
             matchWords("gen map") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
-            val typewriter = Typewriter()
-            val strategy = RandomStrategy(typewriter.chars)
-            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
+            val strategy = StrategyFactory.fullRandom()
+            val monkey = DefaultMonkey(id++, corpus, strategy)
             matchWords("random") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
-            val typewriter = Typewriter()
             val sequences = Sequences(corpus.words)
-            val initStrategy = RandomStrategy(typewriter.chars)
-            val strategy = SequenceStrategy(sequences, initStrategy::typeCharacter)
-            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
+            val initStrategy = StrategyFactory.random()
+            val twos = StrategyFactory.twoRandom(sequences)
+            val strategy = ContextStrategy(initStrategy, twos)
+            val monkey = DefaultMonkey(id++, corpus, strategy)
             matchWords("sequence, from random init") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
-            val typewriter = Typewriter()
-            val strategy = WeightedStrategy(corpus.words)
-            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
+            val strategy = StrategyFactory.weightedStrategy(corpus.words)
+            val monkey = DefaultMonkey(id++, corpus, strategy)
             matchWords("weighted") { monkey.findMatches() }
         }
 
         run {
             val corpus = Corpus(words)
-            val typewriter = Typewriter()
             val sequences = Sequences(corpus.words)
-            val initStrategy = WeightedStrategy(corpus.words)
-            val strategy = SequenceStrategy(sequences, initStrategy::typeCharacter)
-            val monkey = DefaultMonkey(id++, typewriter, corpus, strategy)
+            val initStrategy = StrategyFactory.weighted(words)
+            val withContext = StrategyFactory.twoRandom(sequences)
+            val strategy = ContextStrategy(initStrategy, withContext)
+            val monkey = DefaultMonkey(id++, corpus, strategy)
             matchWords("sequence, from weighted init") { monkey.findMatches() }
         }
     }

@@ -2,12 +2,13 @@ package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.rand.RandomFactory
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
-class NumbersMonkey(id: Int, typewriter: Typewriter, override val corpus: NumberedCorpus) : SingleCorpusMonkey(id, typewriter, corpus) {
-    val rand: RandInt = RandomFactory.getCalculated(typewriter.chars.size)
+class NumbersMonkey(id: Int, override val corpus: NumberedCorpus) : SingleCorpusMonkey(id, corpus) {
+    val rand: RandInt = RandomFactory.getCalculated(Keys.fullList().size)
 
     override fun findMatches(): Words {
         // number of keystrokes at which we'll hit the end-of-word character

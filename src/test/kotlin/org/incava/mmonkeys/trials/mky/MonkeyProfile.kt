@@ -3,19 +3,21 @@ package org.incava.mmonkeys.trials.mky
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
+import org.incava.mmonkeys.mky.corpus.sc.Sequences
+import org.incava.mmonkeys.mky.corpus.sc.StrategyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.sc.SequenceMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 
 private class MonkeyProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
@@ -36,15 +38,19 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         if (false) {
             val corpus = Corpus(words)
-            val monkey = EqMonkey(2, Typewriter(), corpus)
+            val monkey = EqMonkey(2, corpus)
             profiler.add("eq") {
                 matchWords { monkey.findMatches() }
             }
         }
 
-        if (false) {
+        if (true) {
             val corpus = Corpus(words)
-            val monkey = SequenceMonkey(2, Typewriter(), corpus)
+            val sequences = Sequences(words)
+            val randomStrategy = StrategyFactory.random(Keys.fullList())
+            val sequenceStrategy = StrategyFactory.twoRandom(sequences)
+            val strategy = StrategyFactory.createStrategy(randomStrategy, sequenceStrategy)
+            val monkey = DefaultMonkey(2, corpus, strategy)
             profiler.add("dyno") {
                 matchWords { monkey.findMatches() }
             }
@@ -52,7 +58,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         if (true) {
             val corpus = MapCorpus(words)
-            val monkey = MapGenMonkey(2, Typewriter(), corpus)
+            val monkey = MapGenMonkey(2, corpus)
             profiler.add("gen map") {
                 matchWords { monkey.findMatches() }
             }
@@ -60,7 +66,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         run {
             val corpus = NumberedCorpus(words)
-            val monkey = NumbersMonkey(3, Typewriter(), corpus)
+            val monkey = NumbersMonkey(3, corpus)
             profiler.add("numbers") {
                 matchWords { monkey.findMatches() }
             }
@@ -68,7 +74,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         run {
             val corpus = MapCorpus(words)
-            val monkey = MapMonkey(4, Typewriter(), corpus)
+            val monkey = MapMonkey(4, corpus)
             profiler.add("map") {
                 matchWords { monkey.findMatches() }
             }
