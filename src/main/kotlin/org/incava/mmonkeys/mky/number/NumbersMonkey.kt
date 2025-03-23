@@ -1,13 +1,16 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
 import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
-class NumbersMonkey(id: Int, override val corpus: NumberedCorpus) : SingleCorpusMonkey(id, corpus) {
+class NumbersMonkey(id: Int, override val corpus: NumberedCorpus) : Monkey(id, corpus) {
     val rand: RandInt = RandomFactory.getCalculated(Keys.fullList().size)
 
     override fun findMatches(): Words {
@@ -30,5 +33,12 @@ class NumbersMonkey(id: Int, override val corpus: NumberedCorpus) : SingleCorpus
         }
         val numAttempts = 1
         return Words(length.toLong(), numAttempts)
+    }
+
+    fun toWordsMatch(word: String, index: Int): Words {
+        val numAttempts = 1
+        corpus.setMatched(index)
+        // count the space in the attempt:
+        return Words(listOf(Word(word, index)), word.length.toLong() + 1, numAttempts)
     }
 }

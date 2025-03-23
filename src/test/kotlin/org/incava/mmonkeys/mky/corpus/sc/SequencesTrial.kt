@@ -132,9 +132,9 @@ class SequencesTrial {
 
 fun main() {
     val obj = SequencesTrial()
-//    obj.presentTwos()
+    obj.presentTwos()
     obj.presentTwosCounted()
-//    obj.presentThrees()
+    obj.presentThrees()
     obj.presentThreesCounted()
-//    obj.getNext()
+    obj.getNext()
 }

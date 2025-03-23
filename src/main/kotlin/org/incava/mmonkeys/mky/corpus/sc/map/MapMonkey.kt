@@ -1,17 +1,14 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
-import org.incava.mmonkeys.mky.corpus.sc.ContextStrategy
 import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.StrategyFactory
-import org.incava.mmonkeys.mky.mind.Context
 import org.incava.mmonkeys.words.Words
 
 class MapMonkey(id: Int, override val corpus: MapCorpus) : SingleCorpusMonkey(id, corpus) {
-    private val random1 = StrategyFactory.random()
-    private val strategy = ContextStrategy(random1::invoke) { random1() }
+    override val strategy = StrategyFactory.fullRandom()
 
     override fun findMatches(): Words {
-        val word = strategy.typeWord()
+        val word = typeWord()
         val forLength = corpus.forLength(word.length) ?: return toNonMatch(word)
         val indices = forLength[word]
         return if (indices == null) {
