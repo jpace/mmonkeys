@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.corpus.sc
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.testutil.assertWithin
 import org.incava.mmonkeys.util.ResourceUtil

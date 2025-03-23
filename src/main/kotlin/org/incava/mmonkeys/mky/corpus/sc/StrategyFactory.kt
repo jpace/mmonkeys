@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.mky.corpus.sc
 
 import org.incava.mmonkeys.mky.mind.Context
+import org.incava.mmonkeys.mky.mind.ThreesStrategyFactory
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.rand.DistributedRandom
 import org.incava.mmonkeys.type.Keys
@@ -34,6 +35,10 @@ object StrategyFactory {
         return { context ->
             randomByChar.getValue(context.currentChars.last()).nextRandom()
         }
+    }
+
+    fun threesRandom(sequences: Sequences): (Context) -> Char {
+        return ThreesStrategyFactory.threesRandom(sequences)
     }
 
     fun random(chars: List<Char> = Keys.fullList()): () -> Char {

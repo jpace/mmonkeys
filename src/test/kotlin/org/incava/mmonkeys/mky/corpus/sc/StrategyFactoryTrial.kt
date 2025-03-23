@@ -3,7 +3,6 @@ package org.incava.mmonkeys.mky.corpus.sc
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
-import org.junit.jupiter.api.Test
 
 class StrategyFactoryTrial {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
@@ -49,12 +48,21 @@ class StrategyFactoryTrial {
         val obj = StrategyFactory.createStrategy(init, withContext)
         return { obj.typeWord() }
     }
+
+    fun randomToThreeRandom(): () -> String {
+        val randomStrategy = StrategyFactory.random()
+        val sequences = Sequences(words)
+        val sequenceStrategy = StrategyFactory.threesRandom(sequences)
+        val obj = StrategyFactory.createStrategy(randomStrategy, sequenceStrategy)
+        return { obj.typeWord() }
+    }
 }
 
 fun main() {
     val obj = StrategyFactoryTrial()
-    obj.runIt("randomToTwoRandom", obj.randomToTwoRandom())
-    obj.runIt("randomtoTwosDistributed", obj.randomtoTwosDistributed())
-    obj.runIt("weightedToTwosRandom", obj.weightedToTwosRandom())
-    obj.runIt("weightedToTwosDistributed", obj.weightedToTwosDistributed())
+    obj.runIt("random, twoRandom", obj.randomToTwoRandom())
+    obj.runIt("random, twosDistributed", obj.randomtoTwosDistributed())
+    obj.runIt("weighted, twosRandom", obj.weightedToTwosRandom())
+    obj.runIt("weighted, twosDistributed", obj.weightedToTwosDistributed())
+    obj.runIt("random, threeRandom", obj.randomToThreeRandom())
 }

@@ -1,11 +1,8 @@
 package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
-import org.incava.mmonkeys.mky.corpus.sc.SingleCorpusMonkey
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt

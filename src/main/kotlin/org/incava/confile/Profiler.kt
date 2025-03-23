@@ -25,7 +25,7 @@ open class Profiler(val numInvokes: Long, val numTrials: Int) {
         repeat(numTrials) { trial ->
             print("$trial / $numTrials")
             indexed.entries.shuffled().forEach { (index, name) ->
-                print(" . $index")
+                print(" . $index ($name)")
                 val simulation = simulations.getValue(name)
                 val block = simulation.function
                 val duration = measureDuration { (0 until numInvokes).forEach { _ -> block() } }
