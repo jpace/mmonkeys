@@ -11,18 +11,7 @@ object CorpusFactory {
 
     fun readFileWords(file: File, lineFilter: (Int) -> Boolean = { true }, wordFilter: (String) -> Boolean = { true }): List<String> {
         val lines = file.readLines()
-
-        // I forgot numbers.
-        return lines
-            .withIndex()
-            .filter { lineFilter(it.index) }
-            .map { it.value }
-            .map { it.trim() }
-            .map(String::lowercase)
-            .map { it.replace(Regex("[^a-z+]"), " ") }
-            .flatMap { it.split(Regex("\\s+")) }
-            .filterNot { it.isBlank() }
-            .filter(wordFilter)
+        return readFileWords(lines, lineFilter, wordFilter)
     }
 
     fun readFileWords(lines: List<String>, lineFilter: (Int) -> Boolean = { true }, wordFilter: (String) -> Boolean = { true }): List<String> {
@@ -32,6 +21,7 @@ object CorpusFactory {
             .map { it.value }
             .map { it.trim() }
             .map(String::lowercase)
+            // I forgot numbers.
             .map { it.replace(Regex("[^a-z+]"), " ") }
             .flatMap { it.split(Regex("\\s+")) }
             .filterNot { it.isBlank() }

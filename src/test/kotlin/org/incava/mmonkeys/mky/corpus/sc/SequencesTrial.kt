@@ -3,27 +3,17 @@ package org.incava.mmonkeys.mky.corpus.sc
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
+import org.incava.mmonkeys.mky.mind.WeightedStrategy
 import org.incava.mmonkeys.rand.DistributedRandom
-import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 
 class SequencesTrial {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-    // val words = listOf("this", "is", "a", "test")
 
-    fun presentTwos() {
+    fun twos() {
         val obj = Sequences(words)
-        val result = obj.presentTwos
-        result.forEach { (a, bs) ->
-            bs.forEach { b ->
-                Console.info("$a$b")
-            }
-        }
-    }
-
-    fun presentTwosCounted() {
-        val obj = Sequences(words)
-        val result = obj.presentTwosCounted
+        val result = obj.twos
         result.toSortedMap().forEach { (a, bs) ->
             bs.toSortedMap().forEach { (b, count) ->
                 Console.info("$a$b: $count")
@@ -41,11 +31,7 @@ class SequencesTrial {
 
     fun presentTwosCountedRandom() {
         val obj = Sequences(words)
-        val result = obj.presentTwosCounted
-        val paired = result.map { a -> a.value.map { b -> (a.key to b.key) to b.value } }.flatten().toMap()
-//        paired.mapKeys { it.key.first.toString() + it.key.second }.toSortedMap().forEach { (chars, count) ->
-//            Console.info("'$chars'", count)
-//        }
+        val result = obj.twos
         result.keys.toSortedSet().forEach { first ->
             Qlog.info("first: '$first'", first)
             result.getValue(first).toSortedMap().forEach { (second, count) ->
@@ -65,25 +51,11 @@ class SequencesTrial {
             Console.info("firstToCount[$ch]", count)
             Console.info("firstToCount[$ch]", pct)
         }
-
-        val random = DistributedRandom(paired)
-
-    }
-
-    fun presentThrees() {
-        val obj = Sequences(words)
-        obj.presentThrees.forEach { (a, bs) ->
-            bs.forEach { (b, cs) ->
-                cs.forEach { c ->
-                    Console.info("$a$b$c")
-                }
-            }
-        }
     }
 
     fun presentThreesCounted() {
         val obj = Sequences(words)
-        val result = obj.presentThreesCounted
+        val result = obj.threes
         result.toSortedMap().forEach { (a, bs) ->
             bs.toSortedMap().forEach { (b, cs) ->
                 cs.toSortedMap().forEach { (c, count) ->
@@ -105,26 +77,17 @@ class SequencesTrial {
 
     fun getNext() {
         val sequences = Sequences(words)
-        val weightedStrategy = StrategyFactory.weighted(words)
+        val weightedStrategy = WeightedStrategy(words)
         Qlog.info("weighted", weightedStrategy)
         repeat(10) {
-            val word = weightedStrategy()
+            val word = weightedStrategy.typeWord()
             Qlog.info("word", word)
         }
 
-        val twosStrategy = StrategyFactory.twoRandom(sequences)
-        val sequenceStrategy1 = ContextStrategy(weightedStrategy, twosStrategy)
-        Qlog.info("sequence (weighted)", sequenceStrategy1)
+        val sequenceStrategy1 = TwosRandomStrategy(sequences)
+        Qlog.info("sequence", sequenceStrategy1)
         repeat(10) {
             val word = sequenceStrategy1.typeWord()
-            Qlog.info("word", word)
-        }
-
-        val randomStrategy = StrategyFactory.random(Keys.fullList())
-        val sequenceStrategy2 = ContextStrategy(randomStrategy, twosStrategy)
-        Qlog.info("sequence (random)", sequenceStrategy2)
-        repeat(10) {
-            val word = sequenceStrategy2.typeWord()
             Qlog.info("word", word)
         }
     }
@@ -132,9 +95,8 @@ class SequencesTrial {
 
 fun main() {
     val obj = SequencesTrial()
-    obj.presentTwos()
-    obj.presentTwosCounted()
-    obj.presentThrees()
+    obj.presentTwosCountedRandom()
+    obj.twos()
     obj.presentThreesCounted()
     obj.getNext()
 }

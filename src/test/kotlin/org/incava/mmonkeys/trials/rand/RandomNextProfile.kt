@@ -15,7 +15,6 @@ class RandomNextProfile(private val intMax: Int, private val longMax: Long, numI
     private val ktRandom = Random.Default
     private val jdkRandom = java.util.Random()
 
-
     fun run() {
         val xorRand = Random(System.currentTimeMillis())
         Console.info("xorRand.class", xorRand.javaClass)

@@ -10,13 +10,12 @@ import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.Sequences
-import org.incava.mmonkeys.mky.corpus.sc.StrategyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
+import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
-import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Words
 
@@ -47,9 +46,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         if (true) {
             val corpus = Corpus(words)
             val sequences = Sequences(words)
-            val randomStrategy = StrategyFactory.random(Keys.fullList())
-            val sequenceStrategy = StrategyFactory.twoRandom(sequences)
-            val strategy = StrategyFactory.createStrategy(randomStrategy, sequenceStrategy)
+            val strategy = TwosRandomStrategy(sequences)
             val monkey = CorpusMonkey(2, corpus, strategy)
             profiler.add("dyno") {
                 matchWords { monkey.findMatches() }

@@ -18,18 +18,9 @@ internal class DeterministicMonkeyTest {
         private var count = 0
         private val size = chars.size
 
-        override fun typeWord(): String {
-            val builder = StringBuilder()
-            while (true) {
-                val ch = chars[count++ % size]
-                if (ch == Keys.END_CHAR) {
-                    return builder.toString()
-                } else {
-                    builder.append(ch)
-                }
-            }
+        override fun getChar(): Char {
+            return chars[count++ % size]
         }
-
     }
 
     class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : CorpusMonkey(id, corpus, DeterministicStrategy(typewriter.chars))
