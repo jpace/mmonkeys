@@ -18,7 +18,7 @@ internal class DeterministicMonkeyTest {
         private var count = 0
         private val size = chars.size
 
-        override fun getChar(): Char {
+        override fun getNextChar(): Char {
             return chars[count++ % size]
         }
     }

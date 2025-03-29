@@ -4,6 +4,8 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Duration
+import java.time.ZonedDateTime
 
 class SequencesTest {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
@@ -34,9 +36,13 @@ class SequencesTest {
 
     @Test
     fun threesCounts() {
+        val start = ZonedDateTime.now()
         val obj = Sequences(words)
         val result = obj.threes
         assertEquals(mapOf('e' to 1909, 'i' to 1146, 'a' to 626, 'o' to 251, 'y' to 5, ' ' to 4), result.getValue('q').getValue('u'))
         assertEquals(mapOf('g' to 9, 'l' to 3, 'n' to 1), result.getValue('j').getValue('i'))
+        val done = ZonedDateTime.now()
+        val duration = Duration.between(start, done)
+        println("duration: $duration")
     }
 }

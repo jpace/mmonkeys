@@ -18,7 +18,7 @@ class Sequences(words: List<String>) {
             val prev = chars[index - 1]
             val curr = chars[index]
             addToMap(twos, prev, curr)
-            if (index > 1) {
+           if (index > 1) {
                 val prevPrev = chars[index - 2]
                 threes.computeIfAbsent(prevPrev) { mutableMapOf() }
                     .also { seconds ->

@@ -5,13 +5,13 @@ import org.incava.mmonkeys.mky.corpus.sc.Sequences
 class TwosRandomStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     constructor(words: List<String>) : this(Sequences(words))
 
-    private val twos = sequences.twos
+    private val twos = SequencesTwo(sequences)
 
     override fun getChar(firstChar: Char): Char {
-        return twos.getValue(firstChar).keys.random()
+        return twos.getRandomChar(firstChar)
     }
 
-    override fun getFirstChar(): Char {
-        return twos.keys.random()
+    override fun getChar(): Char {
+        return twos.getRandomChar()
     }
 }

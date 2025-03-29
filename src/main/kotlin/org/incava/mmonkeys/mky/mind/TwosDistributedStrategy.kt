@@ -10,15 +10,10 @@ class TwosDistributedStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     private val seconds: Map<Char, DistributedRandom<Char, Int>>
 
     init {
-        val twos = sequences.twos
-        firsts = twos.mapValues { (_, second) ->
-            DistributedStrategy.sumOfValues(second)
-        }.let { DistributedRandom(it) }
-        seconds = twos.mapValues { (_, second) ->
-            DistributedRandom(second)
-        }
+        firsts = DistributedStrategy.createFirsts2(sequences.twos)
+        seconds = DistributedStrategy.createSeconds2(sequences.twos)
     }
 
     override fun getChar(firstChar: Char): Char = DistributedStrategy.getChar(seconds, firstChar)
-    override fun getFirstChar(): Char = DistributedStrategy.getFirstChar(firsts)
+    override fun getChar(): Char = DistributedStrategy.getChar(firsts)
 }

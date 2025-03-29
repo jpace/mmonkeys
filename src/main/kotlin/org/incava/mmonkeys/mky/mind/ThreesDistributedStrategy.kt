@@ -11,28 +11,15 @@ class ThreesDistributedStrategy(sequences: Sequences) : ThreesStrategy(sequences
     private val thirds: Map<Char, Map<Char, DistributedRandom<Char, Int>>>
 
     init {
-        val threes = sequences.threes
-        firsts = threes.mapValues { (_, second) ->
-            second.values.sumOf { thirds ->
-                DistributedStrategy.sumOfValues(thirds)
-            }
-        }.let { DistributedRandom(it) }
-        seconds = threes.mapValues { (_, second) ->
-            second.mapValues { (_, thirds) ->
-                DistributedStrategy.sumOfValues(thirds)
-            }.let { DistributedRandom(it) }
-        }
-        thirds = threes.mapValues { (_, second) ->
-            second.mapValues { (_, thirds) ->
-                DistributedRandom(thirds)
-            }
-        }
+        firsts = DistributedStrategy.createFirsts3(sequences.threes)
+        seconds = DistributedStrategy.createSeconds3(sequences.threes)
+        thirds = DistributedStrategy.createThirds3(sequences.threes)
     }
 
     override fun getChar(firstChar: Char, secondChar: Char): Char {
-        return thirds.getValue(firstChar).getValue(secondChar).nextRandom()
+        return DistributedStrategy.getChar(thirds, firstChar, secondChar)
     }
 
     override fun getChar(firstChar: Char): Char = DistributedStrategy.getChar(seconds, firstChar)
-    override fun getFirstChar(): Char = DistributedStrategy.getFirstChar(firsts)
+    override fun getChar(): Char = DistributedStrategy.getChar(firsts)
 }

@@ -3,14 +3,14 @@ package org.incava.mmonkeys.mky.mind
 import org.incava.mmonkeys.type.Keys
 
 abstract class TypeStrategy {
-    abstract fun getChar(): Char
+    abstract fun getNextChar(): Char
 
-    open fun typeWord(): String {
+    fun typeWord(): String {
         val sb = StringBuilder()
-        var char = getChar()
+        var char = getNextChar()
         while (char != Keys.END_CHAR) {
             sb.append(char)
-            char = getChar()
+            char = getNextChar()
         }
         return sb.toString()
     }

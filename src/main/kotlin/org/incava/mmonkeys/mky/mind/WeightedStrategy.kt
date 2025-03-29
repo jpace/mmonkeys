@@ -11,7 +11,7 @@ class WeightedStrategy(words: List<String>) : TypeStrategy() {
         chars = DistributedRandom(byChar)
     }
 
-    override fun getChar(): Char {
+    override fun getNextChar(): Char {
         return chars.nextRandom()
     }
 }

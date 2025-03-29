@@ -3,7 +3,6 @@ package org.incava.mmonkeys.mky.corpus.sc
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.mind.TypeStrategy
-import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 
 open class CorpusMonkey(id: Int, corpus: Corpus, private val strategy: TypeStrategy) : Monkey(id, corpus) {

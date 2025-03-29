@@ -18,7 +18,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 
 private class StrategiesProfile {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length > 3 }
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length > 2 }
     val matchGoal = 10L
 
     fun addMonkey2(
