@@ -5,7 +5,7 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.words.Words
 
-open class CorpusMonkey(id: Int, corpus: Corpus, private val strategy: TypeStrategy) : Monkey(id, corpus) {
+open class CorpusMonkey(id: Int, val corpus: Corpus, private val strategy: TypeStrategy) : Monkey(id) {
     fun typeWord(): String {
         return strategy.typeWord()
     }
@@ -13,11 +13,11 @@ open class CorpusMonkey(id: Int, corpus: Corpus, private val strategy: TypeStrat
     override fun findMatches(): Words {
         val word = typeWord()
         val match = corpus.findMatch(word)
-        if (match == null) {
-            return MatchResults.toNonMatch(word)
+        return if (match == null) {
+            MatchResults.toNonMatch(word)
         } else {
             // keystrokes here are only through the word, not the trailing space
-            return MatchResults.toWordsMatch(corpus, word, match)
+            MatchResults.toWordsMatch(corpus, word, match)
         }
     }
 }

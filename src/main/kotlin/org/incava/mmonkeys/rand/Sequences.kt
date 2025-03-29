@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus.sc
+package org.incava.mmonkeys.rand
 
 import org.incava.ikdk.util.MapUtil
 

@@ -1,20 +1,19 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.map.MapGenMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
-import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
+import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 import java.time.Duration
 
@@ -32,8 +31,8 @@ class CorpusTrial(
         Console.info("sought.#", words.size)
     }
 
-    private fun runMonkey(name: String, monkey: Monkey): PerfResults {
-        val runner = MonkeyRunner(monkey.corpus, monkey, timeLimit, outputInterval)
+    private fun runMonkey(name: String, monkey: Monkey, corpus: Corpus): PerfResults {
+        val runner = MonkeyRunner(corpus, monkey, timeLimit, outputInterval)
         val results = runner.run()
         Thread.sleep(100L)
         Console.info(name, results.durations.average())
@@ -41,13 +40,17 @@ class CorpusTrial(
         return results
     }
 
+    fun <T: Corpus> runMonkey(name: String, id: Int, corpus: T, ctor: (Int, T) -> Monkey) {
+        val monkey = ctor(id, corpus)
+        runMonkey(name, monkey, corpus)
+    }
+
     fun run() {
         var id = 1
-        runMonkey("gen eq", EqMonkey(id++, Corpus(words)))
-        runMonkey("gen map", MapGenMonkey(id++, MapCorpus(words)))
-        runMonkey("len longs", NumbersMonkey(id++, NumberedCorpus(words)))
-        runMonkey("len map", MapMonkey(id++, MapCorpus(words)))
-        runMonkey("dual", DualCorpusMonkey(id, DualCorpus(words)))
+        runMonkey("gen eq", id++, Corpus(words), ::EqMonkey)
+        runMonkey("map", id++, MapCorpus(words), ::MapMonkey)
+        runMonkey("len longs", id++, NumberedCorpus(words), ::NumbersMonkey)
+        runMonkey("dual", id, DualCorpus(words), ::DualCorpusMonkey)
     }
 
     fun showResults() {

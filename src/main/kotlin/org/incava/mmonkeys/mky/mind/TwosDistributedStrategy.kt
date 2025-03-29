@@ -1,19 +1,20 @@
 package org.incava.mmonkeys.mky.mind
 
-import org.incava.mmonkeys.mky.corpus.sc.Sequences
-import org.incava.mmonkeys.rand.DistributedRandom
+import org.incava.mmonkeys.rand.Sequences
+import org.incava.mmonkeys.rand.CharDistRandom
+import org.incava.mmonkeys.rand.CharRandom
 
 class TwosDistributedStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     constructor(words: List<String>) : this(Sequences(words))
 
-    private val firsts: DistributedRandom<Char, Int>
-    private val seconds: Map<Char, DistributedRandom<Char, Int>>
+    private val firsts: CharDistRandom
+    private val seconds: Map<Char, CharDistRandom>
 
     init {
-        firsts = DistributedStrategy.createFirsts2(sequences.twos)
-        seconds = DistributedStrategy.createSeconds2(sequences.twos)
+        firsts = CharRandom.createFirsts2(sequences.twos)
+        seconds = CharRandom.createSeconds2(sequences.twos)
     }
 
-    override fun getChar(firstChar: Char): Char = DistributedStrategy.getChar(seconds, firstChar)
-    override fun getChar(): Char = DistributedStrategy.getChar(firsts)
+    override fun getChar(firstChar: Char): Char = CharRandom.getChar(seconds, firstChar)
+    override fun getChar(): Char = CharRandom.getChar(firsts)
 }

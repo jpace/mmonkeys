@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.mky.mind
 
-import org.incava.mmonkeys.mky.corpus.sc.Sequences
+import org.incava.mmonkeys.rand.Sequences
 
 abstract class ThreesStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     private val context = Context(2)

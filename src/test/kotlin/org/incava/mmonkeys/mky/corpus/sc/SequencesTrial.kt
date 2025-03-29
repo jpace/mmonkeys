@@ -6,6 +6,7 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.WeightedStrategy
 import org.incava.mmonkeys.rand.DistributedRandom
+import org.incava.mmonkeys.rand.Sequences
 import org.incava.mmonkeys.util.ResourceUtil
 
 class SequencesTrial {

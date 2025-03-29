@@ -1,9 +1,8 @@
 package org.incava.mmonkeys.mky
 
-import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.words.Words
 
-abstract class Monkey(val id: Int, open val corpus: Corpus) {
+abstract class Monkey(val id: Int) {
     val monitors = mutableListOf<MonkeyMonitor>()
     val matchesByLength = mutableMapOf<Int, Int>()
     var totalKeystrokes = 0L
