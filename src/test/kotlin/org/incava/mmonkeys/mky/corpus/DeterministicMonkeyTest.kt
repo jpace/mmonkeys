@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.testutil.MonkeyUtils
@@ -22,8 +23,6 @@ internal class DeterministicMonkeyTest {
             return chars[count++ % size]
         }
     }
-
-    class DeterministicMonkey(id: Int, typewriter: Typewriter, corpus: Corpus) : CorpusMonkey(id, corpus, DeterministicStrategy(typewriter.chars))
 
     @TestFactory
     fun `given a deterministic typewriter, the iteration should match`() =
@@ -54,6 +53,9 @@ internal class DeterministicMonkeyTest {
 
     private fun createMonkey(words: List<String>, toChar: Char): Monkey {
         val typewriter = Typewriter(Keys.keyList(toChar))
-        return DeterministicMonkey(1, typewriter, Corpus(words))
+        val corpus = Corpus(words)
+        val checker = WordChecker(corpus)
+        val strategy = DeterministicStrategy(typewriter.chars)
+        return CorpusMonkey(1, checker, strategy)
     }
 }

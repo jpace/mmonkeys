@@ -1,12 +1,13 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
+import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.MatchResults
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.words.Words
 
-class MapMonkey(id: Int, corpus: MapCorpus) : CorpusMonkey(id, corpus, RandomStrategy(Keys.fullList())) {
+class MapMonkey(id: Int, corpus: MapCorpus) : CorpusMonkey(id, WordChecker(corpus), RandomStrategy(Keys.fullList())) {
     val mapCorpus = corpus
 
     override fun findMatches(): Words {

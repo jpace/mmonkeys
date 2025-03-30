@@ -6,6 +6,7 @@ import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.mky.corpus.Corpus
 
 class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(corpus, verbose) {
@@ -26,13 +27,13 @@ class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(cor
         table.writeHeader()
     }
 
-    override fun showResult(monkey: Monkey, result: Int?) {
+    override fun showResult(monkey: Monkey, manager: MonkeyMonitor, result: Int?) {
         val values = listOf(
             result != null,
             corpus.matched.size,
             corpus.words.size,
             corpus.isEmpty(),
-            if (monkey.manager == null) -1 else monkey.manager!!.attemptCount()
+            manager.attemptCount()
         ) + if (result == null) {
             listOf("n/a", -1, -1, "")
         } else {

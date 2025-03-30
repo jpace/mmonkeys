@@ -15,7 +15,7 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
     init {
         val manager = Manager(corpus)
         monkeys = (0 until numMonkeys).map { id ->
-            WordsGeneratorMonkeyFactory.createMonkey(id, corpus).also { it.manager = manager }
+            WordsGeneratorMonkeyFactory.createMonkey(id, corpus).also { it.setManager(manager) }
         }
     }
 

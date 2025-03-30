@@ -43,17 +43,17 @@ internal class MonkeyMonitorTest {
         }
         val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE)
         val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus)
-        monkey.manager = monitor
+        monkey.setManager(monitor)
         val words1 = listOf("this" to 3, "is" to 17, "a" to 9, "test" to 6)
             .map { Word(it.first, it.second) }
             .let { Words(it, 100, 10) }
         assertEquals(0L, monitor.totalKeystrokes)
-        monkey.manager?.update(monkey, words1)
+        monitor.update(monkey, words1)
         assertEquals(100L, monitor.totalKeystrokes)
         val words2 = listOf("also" to 4, "this" to 1, "instance" to 9)
             .map { Word(it.first, it.second) }
             .let { Words(it, 42, 10) }
         assertEquals(100L, monitor.totalKeystrokes)
-        monkey.manager?.update(monkey, words2)
+        monitor.update(monkey, words2)
     }
 }

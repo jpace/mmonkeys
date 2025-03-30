@@ -6,13 +6,10 @@ import org.incava.mmonkeys.mky.corpus.MonkeyCtor
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
-import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 
 fun <T : Corpus> runSimulation(toChar: Char, type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
-    val charList = Keys.keyList(toChar)
     val monkeyFactory = MonkeyFactory(monkeyCtor)
     // I don't make monkeys; I just train them!
     val numMonkeys = 10

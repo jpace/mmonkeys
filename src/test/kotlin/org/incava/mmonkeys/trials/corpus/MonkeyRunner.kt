@@ -33,7 +33,7 @@ class MonkeyRunner<T : Corpus>(
     init {
         val table = CorpusSummaryTable(corpus)
         table.show()
-        monkey.manager = manager
+        monkey.setManager(manager)
     }
 
     fun run(): PerfResults {
@@ -44,7 +44,7 @@ class MonkeyRunner<T : Corpus>(
                 runMonkey()
             }
             val monkeyTable = MonkeyTable(7)
-            monkeyTable.write(monkey)
+            monkeyTable.write(monkey, manager)
         }
         return PerfResults(corpus, totalDuration.second, durations, iterations, matchCount)
     }
@@ -59,7 +59,7 @@ class MonkeyRunner<T : Corpus>(
                 result = monkey.findMatches()
 
             } while (!result.hasMatch() && iteration < maxAttempts && corpus.hasUnmatched())
-            result.words.forEach { view.show(monkey, it.index) }
+            result.words.forEach { view.show(monkey, manager, it.index) }
             matchCount += result.words.size
             iterations += iteration
             val now = ZonedDateTime.now()

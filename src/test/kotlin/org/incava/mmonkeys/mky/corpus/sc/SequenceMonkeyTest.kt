@@ -15,7 +15,7 @@ class SequenceMonkeyTest {
         val corpus = Corpus(words)
         val sequences = Sequences(words)
         val strategy = TwosRandomStrategy(sequences)
-        val obj = CorpusMonkey(1, corpus, strategy)
+        val obj = CorpusMonkeyFactory.create(1, corpus, strategy)
         repeat(100) {
             val result = obj.findMatches()
             Qlog.info("result", result)
