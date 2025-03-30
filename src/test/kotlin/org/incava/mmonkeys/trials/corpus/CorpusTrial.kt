@@ -5,7 +5,7 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
@@ -50,7 +50,7 @@ class CorpusTrial(
         runMonkey("gen eq", id++, Corpus(words), ::EqMonkey)
         runMonkey("map", id++, MapCorpus(words), ::MapMonkey)
         runMonkey("len longs", id++, NumberedCorpus(words), ::NumbersMonkey)
-        runMonkey("dual", id, DualCorpus(words), ::DualCorpusMonkey)
+        runMonkey("dual", id, DualCorpus(words), WordsGeneratorMonkeyFactory::createMonkey)
     }
 
     fun showResults() {

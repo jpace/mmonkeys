@@ -33,7 +33,7 @@ class MonkeyRunner<T : Corpus>(
     init {
         val table = CorpusSummaryTable(corpus)
         table.show()
-        monkey.monitors += manager
+        monkey.manager = manager
     }
 
     fun run(): PerfResults {

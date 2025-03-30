@@ -19,15 +19,16 @@ class MonkeyTable(private val maxWordLength: Int) : Table(
     fun write(monkey: Monkey) {
         // this requires that a monkey have a monitor
         writeHeader()
-        val monitor = monkey.monitors.first()
-        val numMatches = monitor.matchCount()
+        val monitor = monkey.manager
+        val numMatches = monitor!!.matchCount()
+        val matchesByLength = monitor!!.matchesByLength()
         val values = listOf(
             monkey.id,
             StringUtil.camelCaseToWords(monkey.javaClass.simpleName),
             monitor.attemptCount(),
             monitor.keystrokesCount(),
             numMatches
-        ) + (1..maxWordLength).map { monkey.matchesByLength[it] ?: 0 }
+        ) + (1..maxWordLength).map { matchesByLength[it] ?: 0 }
         writeRow(values)
         writeBreak('-')
         println()

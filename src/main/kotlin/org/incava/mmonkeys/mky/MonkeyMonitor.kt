@@ -12,5 +12,7 @@ interface MonkeyMonitor {
     fun matchCount(): Int
 
     fun keystrokesCount(): Long
+
+    fun matchesByLength(): Map<Int, Int>
 }
 

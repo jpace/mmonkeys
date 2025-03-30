@@ -5,7 +5,7 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 
 class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch: Int) {
@@ -15,7 +15,7 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
     init {
         val manager = Manager(corpus)
         monkeys = (0 until numMonkeys).map { id ->
-            DualCorpusMonkey(id, corpus).also { it.monitors += manager }
+            WordsGeneratorMonkeyFactory.createMonkey(id, corpus).also { it.manager = manager }
         }
     }
 

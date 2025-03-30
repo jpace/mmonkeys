@@ -48,13 +48,13 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     fun update(monkey: Monkey, index: Int, matchCount: Int, totalKeystrokes: Long) {
         // seconds to when monkey did this match (the start of it), not cumulative
         // seconds to when monkey completed this word:
-        val doneAt = monkey.totalKeystrokes + corpus.words[index].length
+        val doneAt = totalKeystrokes + corpus.words[index].length
 
         // @todo - use start time instead of done time?
         //  val simTime = startTime.plusSeconds(monkey.totalKeystrokes)
         val doneTime = startTime.plusSeconds(doneAt)
         updates.computeIfAbsent(doneTime) { mutableListOf() }
-            .also { it += SimUpdate(monkey.id, monkey.totalKeystrokes, index, matchCount) }
+            .also { it += SimUpdate(monkey.id, totalKeystrokes, index, matchCount) }
         val times = clock.pushTime(doneTime)
         times.forEach { time ->
             val updates = updates.remove(time)

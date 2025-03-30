@@ -12,6 +12,12 @@ open class CorpusMonkey(id: Int, val corpus: Corpus, private val strategy: TypeS
 
     override fun findMatches(): Words {
         val word = typeWord()
+        val words = toWords(word)
+        recordWords(words)
+        return words
+    }
+
+    fun toWords(word: String): Words {
         val match = corpus.findMatch(word)
         return if (match == null) {
             MatchResults.toNonMatch(word)

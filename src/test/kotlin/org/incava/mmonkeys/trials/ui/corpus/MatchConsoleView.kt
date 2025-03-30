@@ -10,7 +10,7 @@ class MatchConsoleView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(c
         Console.info("sought.matched.#", corpus.matched.size)
         Console.info("sought.words.#", corpus.words.size)
         Console.info("sought.unmatched?", corpus.hasUnmatched())
-        monkey.monitors.forEach { it.summarize() }
+        monkey.manager?.summarize()
         if (result != null) {
             Console.info("monkey.class", monkey.javaClass)
             Console.info("result.keystrokes", corpus.words[result].length)

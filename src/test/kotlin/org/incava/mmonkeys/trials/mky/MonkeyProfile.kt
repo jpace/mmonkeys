@@ -6,7 +6,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpusMonkey
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.rand.Sequences
@@ -28,7 +28,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         val profiler = Profiler(numInvokes, numTrials)
         run {
             val corpus = DualCorpus(words)
-            val monkey = DualCorpusMonkey(1, corpus)
+            val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus)
             profiler.add("dual") {
                 matchWords { monkey.findMatches() }
             }

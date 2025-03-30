@@ -16,6 +16,7 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
     private val managerView: ManagerView
     private val statsView: CorpusStatsView
     private val perfView: SimPerfView
+    val matchesByLength = mutableMapOf<Int, Int>()
 
     init {
         val simOut = PrintStream(File("/tmp/simulation.out"))
@@ -35,6 +36,7 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
         words.words.forEach { word ->
             ++matchCount
             managerView.addMatch(monkey, word.index, matchCount, totalKeystrokes)
+            matchesByLength.merge(word.string.length, 1) { prev, _ -> prev + 1 }
         }
         if (words.hasMatch()) {
             statsView.update(matchCount, totalKeystrokes)
@@ -52,4 +54,6 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
     override fun matchCount(): Int = matchCount
 
     override fun keystrokesCount() = totalKeystrokes
+
+    override fun matchesByLength(): Map<Int, Int> = matchesByLength
 }

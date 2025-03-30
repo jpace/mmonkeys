@@ -32,7 +32,7 @@ class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(cor
             corpus.matched.size,
             corpus.words.size,
             corpus.isEmpty(),
-            if (monkey.monitors.isEmpty()) -1 else monkey.monitors.first().attemptCount()
+            if (monkey.manager == null) -1 else monkey.manager!!.attemptCount()
         ) + if (result == null) {
             listOf("n/a", -1, -1, "")
         } else {
