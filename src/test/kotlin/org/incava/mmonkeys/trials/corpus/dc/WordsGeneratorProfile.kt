@@ -8,6 +8,7 @@ import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
+import org.incava.mmonkeys.words.Words
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 3..17 }
@@ -27,7 +28,7 @@ private class WordsGeneratorProfile(private val numInvokes: Long, private val nu
         profiler.showResults(SortType.BY_DURATION)
     }
 
-    fun matchWords(generator: () -> Attempt) {
+    fun matchWords(generator: () -> Words) {
         runToMatchCount(matchGoal) {
             val result = generator()
             result.words.count { words.contains(it.string) }

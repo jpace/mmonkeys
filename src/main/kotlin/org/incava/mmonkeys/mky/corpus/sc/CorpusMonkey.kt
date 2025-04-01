@@ -6,9 +6,7 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.words.Words
 
-open class CorpusMonkey(id: Int, private val checker: WordChecker, private val strategy: TypeStrategy) : Monkey(id) {
-    constructor(id: Int, corpus: Corpus, strategy: TypeStrategy) : this(id, WordChecker(corpus), strategy)
-
+open class CorpusMonkey(id: Int, val checker: WordChecker, private val strategy: TypeStrategy) : Monkey(id) {
     fun typeWord(): String {
         return strategy.typeWord()
     }

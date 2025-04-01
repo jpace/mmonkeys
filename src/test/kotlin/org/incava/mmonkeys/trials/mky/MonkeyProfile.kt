@@ -9,8 +9,8 @@ import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
@@ -62,7 +62,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         run {
             val corpus = MapCorpus(words)
-            val monkey = MapMonkey(4, corpus)
+            val monkey = MapMonkeyFactory.create(4, corpus)
             profiler.add("map") {
                 matchWords { monkey.findMatches() }
             }

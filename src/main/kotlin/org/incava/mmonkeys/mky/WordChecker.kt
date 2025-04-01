@@ -4,8 +4,8 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.sc.MatchResults
 import org.incava.mmonkeys.words.Words
 
-class WordChecker(val corpus: Corpus) {
-    fun processWord(word: String): Words {
+open class WordChecker(open val corpus: Corpus) {
+    open fun processWord(word: String): Words {
         val match = corpus.findMatch(word)
         return if (match == null) {
             MatchResults.toNonMatch(word)

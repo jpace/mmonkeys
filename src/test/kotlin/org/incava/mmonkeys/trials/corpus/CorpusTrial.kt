@@ -7,8 +7,8 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.trials.base.PerfResults
@@ -48,7 +48,7 @@ class CorpusTrial(
     fun run() {
         var id = 1
         runMonkey("gen eq", id++, Corpus(words), ::EqMonkey)
-        runMonkey("map", id++, MapCorpus(words), ::MapMonkey)
+        runMonkey("map", id++, MapCorpus(words), MapMonkeyFactory::create)
         runMonkey("len longs", id++, NumberedCorpus(words), ::NumbersMonkey)
         runMonkey("dual", id, DualCorpus(words), WordsGeneratorMonkeyFactory::createMonkey)
     }

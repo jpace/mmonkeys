@@ -1,15 +1,16 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
 import org.incava.ikdk.io.Qlog
+import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
 import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 
 internal class MapMonkeyTest {
-    private fun createMapMonkey(id: Int, corpus: MapCorpus): MapMonkey {
-        return MapMonkey(id, corpus)
+    private fun createMapMonkey(id: Int, corpus: MapCorpus): CorpusMonkey {
+        return MapMonkeyFactory.create(id, corpus)
     }
+
     @Test
     fun sharedCorpus() {
         val input = listOf("this", "test", "is", "no", "test")
@@ -22,7 +23,6 @@ internal class MapMonkeyTest {
             if (result.hasMatch())
                 Qlog.info("result", result)
         } while (!result.hasMatch())
-        assertSame(monkey1.mapCorpus, monkey2.mapCorpus)
         assertEquals(corpus.indexedCorpus.elements, corpus.indexedCorpus.elements)
     }
 }

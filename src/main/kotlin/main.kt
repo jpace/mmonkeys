@@ -5,11 +5,11 @@ import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.MonkeyCtor
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkey
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 
-fun <T : Corpus> runSimulation(toChar: Char, type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
+fun <T : Corpus> runSimulation(type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
     val monkeyFactory = MonkeyFactory(monkeyCtor)
     // I don't make monkeys; I just train them!
     val numMonkeys = 10
@@ -28,10 +28,10 @@ fun runCorpusTest(toChar: Char) {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
     val x = "equal" to ::EqMonkey
-    val y = "map" to ::MapMonkey
+    val y = "map" to MapMonkeyFactory::create
     val m = x
     val corpus = Corpus(sought)
-    runSimulation(toChar, m.first, corpus, m.second)
+    runSimulation(m.first, corpus, m.second)
 }
 
 fun main(args: Array<String>) {
