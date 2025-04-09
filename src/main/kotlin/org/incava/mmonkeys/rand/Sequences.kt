@@ -2,23 +2,18 @@ package org.incava.mmonkeys.rand
 
 import org.incava.ikdk.util.MapUtil
 
-class Sequences(words: List<String>) {
+class Sequences(chars: List<Char>) {
     val twos: Map<Char, MutableMap<Char, Int>>
     val threes: Map<Char, MutableMap<Char, MutableMap<Char, Int>>>
 
     init {
-        val chars = mutableListOf<Char>()
-        words.forEach { word ->
-            word.forEach { chars += it.lowercaseChar() }
-            chars += ' '
-        }
         twos = mutableMapOf()
         threes = mutableMapOf()
         (1 until chars.size).forEach { index ->
             val prev = chars[index - 1]
             val curr = chars[index]
             addToMap(twos, prev, curr)
-           if (index > 1) {
+            if (index > 1) {
                 val prevPrev = chars[index - 2]
                 threes.computeIfAbsent(prevPrev) { mutableMapOf() }
                     .also { seconds ->

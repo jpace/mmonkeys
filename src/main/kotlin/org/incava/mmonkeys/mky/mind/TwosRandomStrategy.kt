@@ -1,9 +1,10 @@
 package org.incava.mmonkeys.mky.mind
 
 import org.incava.mmonkeys.rand.Sequences
+import org.incava.mmonkeys.rand.SequencesFactory
 
 class TwosRandomStrategy(sequences: Sequences) : TwosStrategy(sequences) {
-    constructor(words: List<String>) : this(Sequences(words))
+    constructor(words: List<String>) : this(SequencesFactory.createFromWords(words))
 
     private val twos = SequencesTwo(sequences)
 

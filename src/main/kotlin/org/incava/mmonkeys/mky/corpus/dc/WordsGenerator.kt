@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
+import org.incava.mmonkeys.mky.corpus.sc.MatchResults
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandIntsFactory
@@ -32,6 +33,6 @@ class WordsGenerator(
             }
             keystrokes += toSpace
         }
-        return Words(matches, keystrokes, slotIndices.size)
+        return MatchResults.toWords(matches, keystrokes, slotIndices.size)
     }
 }

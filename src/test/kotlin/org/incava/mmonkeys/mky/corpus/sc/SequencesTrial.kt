@@ -7,13 +7,14 @@ import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.WeightedStrategy
 import org.incava.mmonkeys.rand.DistributedRandom
 import org.incava.mmonkeys.rand.Sequences
+import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 
 class SequencesTrial {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
 
     fun twos() {
-        val obj = Sequences(words)
+        val obj = SequencesFactory.createFromWords(words)
         val result = obj.twos
         result.toSortedMap().forEach { (a, bs) ->
             bs.toSortedMap().forEach { (b, count) ->
@@ -31,7 +32,7 @@ class SequencesTrial {
     }
 
     fun presentTwosCountedRandom() {
-        val obj = Sequences(words)
+        val obj = SequencesFactory.createFromWords(words)
         val result = obj.twos
         result.keys.toSortedSet().forEach { first ->
             Qlog.info("first: '$first'", first)
@@ -55,7 +56,7 @@ class SequencesTrial {
     }
 
     fun presentThreesCounted() {
-        val obj = Sequences(words)
+        val obj = SequencesFactory.createFromWords(words)
         val result = obj.threes
         result.toSortedMap().forEach { (a, bs) ->
             bs.toSortedMap().forEach { (b, cs) ->
@@ -77,7 +78,7 @@ class SequencesTrial {
     }
 
     fun getNext() {
-        val sequences = Sequences(words)
+        val sequences = SequencesFactory.createFromWords(words)
         val weightedStrategy = WeightedStrategy(words)
         Qlog.info("weighted", weightedStrategy)
         repeat(10) {

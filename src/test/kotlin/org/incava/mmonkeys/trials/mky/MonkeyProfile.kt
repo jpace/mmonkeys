@@ -15,6 +15,7 @@ import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.rand.Sequences
+import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Words
 
@@ -44,7 +45,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         if (true) {
             val corpus = Corpus(words)
-            val sequences = Sequences(words)
+            val sequences = SequencesFactory.createFromWords(corpus.words)
             val strategy = TwosRandomStrategy(sequences)
             val monkey = CorpusMonkeyFactory.create(2, corpus, strategy)
             profiler.add("dyno") {

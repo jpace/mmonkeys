@@ -5,7 +5,7 @@ import org.incava.mmonkeys.mky.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
-class CharRandomTest {
+class Char3RandomTest {
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).subList(0, 100)
 
     @Test
@@ -16,5 +16,19 @@ class CharRandomTest {
         val obj = CharRandom.toDistributedRandom(counted)
         Qlog.info("obj", obj)
         Qlog.info("obj.nextRandom()", obj.nextRandom())
+    }
+
+    @Test
+    fun countOfFirsts() {
+        val sequences = SequencesFactory.createFromWords(words)
+        val result = Char3Random.countOfFirsts3(sequences.threes)
+        Qlog.info("result", result.toSortedMap())
+    }
+
+    @Test
+    fun countOfSeconds() {
+        val sequences = SequencesFactory.createFromWords(words)
+        val result = Char3Random.countOfSeconds3(sequences.threes)
+        Qlog.info("result", result.toSortedMap())
     }
 }

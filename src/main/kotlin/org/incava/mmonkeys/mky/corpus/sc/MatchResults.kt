@@ -5,6 +5,10 @@ import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 
 object MatchResults {
+    fun toWords(words: List<Word>, keystrokes: Long, numAttempts: Int): Words {
+        return Words(words, keystrokes, numAttempts)
+    }
+
     fun toWordsMatch(corpus: Corpus, word: String, index: Int): Words {
         val numAttempts = 1
         corpus.setMatched(index)
