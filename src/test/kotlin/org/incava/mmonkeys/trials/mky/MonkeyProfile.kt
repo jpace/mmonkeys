@@ -3,18 +3,17 @@ package org.incava.mmonkeys.trials.mky
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
-import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkeyFactory
-import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
+import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
-import org.incava.mmonkeys.rand.Sequences
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Words
@@ -22,7 +21,7 @@ import org.incava.mmonkeys.words.Words
 private class MonkeyProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     // limiting to 13 for numbers monkey
     val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 3..13 }
-    val matchGoal = 1000L
+    val matchGoal = 20L
 
     fun profile() {
         Console.info("words.#", words.size)
@@ -37,18 +36,18 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         if (false) {
             val corpus = Corpus(words)
-            val monkey = EqMonkey(2, corpus)
-            profiler.add("eq") {
+            val monkey = MonkeyFactory.createMonkeyRandom(2, corpus)
+            profiler.add("random") {
                 matchWords { monkey.findMatches() }
             }
         }
 
-        if (true) {
+        if (false) {
             val corpus = Corpus(words)
             val sequences = SequencesFactory.createFromWords(corpus.words)
             val strategy = TwosRandomStrategy(sequences)
-            val monkey = CorpusMonkeyFactory.create(2, corpus, strategy)
-            profiler.add("dyno") {
+            val monkey = MonkeyFactory.createMonkey(2, corpus, strategy)
+            profiler.add("twos random") {
                 matchWords { monkey.findMatches() }
             }
         }

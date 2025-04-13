@@ -5,26 +5,22 @@ import org.incava.ikdk.io.Qlog.printf
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
-import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.WeightedStrategy
-import org.incava.mmonkeys.rand.Sequences
-import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 
-private class StrategiesProfile {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length > 2 }
-    val matchGoal = 5L
+private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length >= minLength }
 
-    fun addMonkey2(
-        scenarios: MutableList<Pair<String, () -> Unit>>, name: String, monkey: CorpusMonkey) {
+    fun addScenario(
+        scenarios: MutableList<Pair<String, () -> Unit>>, name: String, monkey: Monkey) {
         scenarios.add(Pair(name) { matchWords(monkey) })
     }
 
@@ -37,57 +33,49 @@ private class StrategiesProfile {
         run {
             val corpus = Corpus(words)
             val strategy = RandomStrategy(Keys.fullList())
-            val monkey = CorpusMonkeyFactory.create(id++, corpus, strategy)
-            addMonkey2(scenarios, "random", monkey)
+            val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+            addScenario(scenarios, "random", monkey)
         }
 
         run {
             val corpus = Corpus(words)
             val strategy = WeightedStrategy(corpus.words)
-            val monkey = CorpusMonkeyFactory.create(id++, corpus, strategy)
-            addMonkey2(scenarios, "weighted", monkey)
+            val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+            addScenario(scenarios, "weighted", monkey)
         }
 
         run {
             val corpus = Corpus(words)
-            val sequences = createSequences(corpus)
-            val strategy = TwosRandomStrategy(sequences)
-            val monkey = CorpusMonkeyFactory.create(id++, corpus, strategy)
-            addMonkey2(scenarios, "2s random", monkey)
+            val strategy = TwosRandomStrategy(words)
+            val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+            addScenario(scenarios, "2s random", monkey)
         }
 
         run {
             val corpus = Corpus(words)
-            val sequences = createSequences(corpus)
-            val strategy = TwosDistributedStrategy(sequences)
-            val monkey = CorpusMonkeyFactory.create(id++, corpus, strategy)
-            addMonkey2(scenarios, "2s distributed", monkey)
+            val strategy = TwosDistributedStrategy(words)
+            val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+            addScenario(scenarios, "2s distributed", monkey)
         }
 
         run {
             val corpus = Corpus(words)
-            val sequences = createSequences(corpus)
-            val strategy = ThreesRandomStrategy(sequences)
-            val monkey = CorpusMonkeyFactory.create(id++, corpus, strategy)
-            addMonkey2(scenarios, "3s random", monkey)
+            val strategy = ThreesRandomStrategy(words)
+            val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+            addScenario(scenarios, "3s random", monkey)
         }
 
         run {
             val corpus = Corpus(words)
-            val sequences = createSequences(corpus)
-            val strategy = ThreesDistributedStrategy(sequences)
-            val monkey = CorpusMonkeyFactory.create(id++, corpus, strategy)
-            addMonkey2(scenarios, "3s distributed", monkey)
+            val strategy = ThreesDistributedStrategy(words)
+            val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+            addScenario(scenarios, "3s distributed", monkey)
         }
 
         scenarios.forEach { (name, block) ->
             println(name)
             block()
         }
-    }
-
-    fun createSequences(corpus: Corpus) : Sequences {
-        return SequencesFactory.createFromWords(corpus.words)
     }
 
     fun matchWords(monkey: Monkey) {
@@ -100,10 +88,10 @@ private class StrategiesProfile {
                 matches += count
                 attempts += result.numAttempts
                 if (count != 0) {
-                    printf("%5d - %s", attempts, result.words.map { it.string })
+                    printf("%,d - %s", attempts, result.words.map { it.string })
                 }
             }
-            println("attempts: $attempts")
+            printf("attempts: %,d", attempts)
             println("matches: $matches")
         }
         println("duration: ${Durations.formatted(duration.second)}")
@@ -112,6 +100,6 @@ private class StrategiesProfile {
 }
 
 fun main() {
-    val obj = StrategiesProfile()
+    val obj = StrategiesProfile(minLength = 3, matchGoal = 5L)
     obj.profile()
 }

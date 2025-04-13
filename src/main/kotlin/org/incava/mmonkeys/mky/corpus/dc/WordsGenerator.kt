@@ -33,6 +33,7 @@ class WordsGenerator(
             }
             keystrokes += toSpace
         }
+        // @todo - fix to return an empty attempt if matches.isEmpty()
         return MatchResults.toWords(matches, keystrokes, slotIndices.size)
     }
 }

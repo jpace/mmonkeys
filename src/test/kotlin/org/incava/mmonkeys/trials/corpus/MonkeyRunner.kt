@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusSummaryTable
@@ -33,6 +34,8 @@ class MonkeyRunner<T : Corpus>(
     init {
         val table = CorpusSummaryTable(corpus)
         table.show()
+        Qlog.info("monkey", monkey)
+        Qlog.info("manager", manager)
         monkey.setManager(manager)
     }
 

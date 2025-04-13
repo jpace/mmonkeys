@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 internal class MapMonkeyTest {
     @Test
     fun sharedCorpus() {
+        // @todo - fix this -- monkeys no longer have a corpus:
         val input = listOf("this", "test", "is", "no", "test")
         val corpus = MapCorpus(input)
         val monkey1 = MapMonkeyFactory.create(1, corpus)

@@ -5,6 +5,7 @@ import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
+import org.incava.mmonkeys.words.WordsFactory
 import org.incava.rando.RandInt
 
 class NumbersMonkey(id: Int, corpus: NumberedCorpus) : Monkey(id) {
@@ -26,17 +27,15 @@ class NumbersMonkey(id: Int, corpus: NumberedCorpus) : Monkey(id) {
             if (!forEncoded.isNullOrEmpty()) {
                 val index = forEncoded.removeAt(0)
                 val word = numberedCorpus.words[index]
-                return toWordsMatch(word, index)
+                return toWordsMatch(word, index).also { recordWords(it) }
             }
         }
         val numAttempts = 1
-        return Words(length.toLong(), numAttempts)
+        return WordsFactory.toWordsNonMatch(length.toLong(), numAttempts)
     }
 
     private fun toWordsMatch(word: String, index: Int): Words {
-        val numAttempts = 1
         numberedCorpus.setMatched(index)
-        // count the space in the attempt:
-        return Words(listOf(Word(word, index)), word.length.toLong() + 1, numAttempts)
+        return WordsFactory.toWordsMatch(word, index)
     }
 }

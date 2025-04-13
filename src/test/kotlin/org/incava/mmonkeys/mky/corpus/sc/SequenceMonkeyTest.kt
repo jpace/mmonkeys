@@ -3,6 +3,7 @@ package org.incava.mmonkeys.mky.corpus.sc
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.rand.Sequences
 import org.incava.mmonkeys.rand.SequencesFactory
@@ -16,7 +17,7 @@ class SequenceMonkeyTest {
         val corpus = Corpus(words)
         val sequences = SequencesFactory.createFromWords(words)
         val strategy = TwosRandomStrategy(sequences)
-        val obj = CorpusMonkeyFactory.create(1, corpus, strategy)
+        val obj = MonkeyFactory.createMonkey(1, corpus, strategy)
         repeat(100) {
             val result = obj.findMatches()
             Qlog.info("result", result)

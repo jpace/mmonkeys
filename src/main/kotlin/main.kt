@@ -1,19 +1,17 @@
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CorpusSimulationFactory
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.MonkeyCtor
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
-import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 
-fun <T : Corpus> runSimulation(type: String, sought: T, monkeyCtor: MonkeyCtor<T>) {
-    val monkeyFactory = MonkeyFactory(monkeyCtor)
+fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: (id: Int, sought: T) -> Monkey) {
     // I don't make monkeys; I just train them!
     val numMonkeys = 10
-    val monkeys = (0 until numMonkeys).map { monkeyFactory.createMonkey(sought, it) }
+    val monkeys = (0 until numMonkeys).map { id -> monkeySupplier(id, sought) }
     Console.info("monkeys.#", monkeys.size)
     val simulation = CoroutineSimulation(sought, monkeys, 10, true)
     Console.info("type", type)
@@ -27,7 +25,7 @@ fun <T : Corpus> runSimulation(type: String, sought: T, monkeyCtor: MonkeyCtor<T
 fun runCorpusTest(toChar: Char) {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
-    val x = "equal" to ::EqMonkey
+    val x = "equal" to MonkeyFactory::createMonkeyRandom
     val y = "map" to MapMonkeyFactory::create
     val m = x
     val corpus = Corpus(sought)

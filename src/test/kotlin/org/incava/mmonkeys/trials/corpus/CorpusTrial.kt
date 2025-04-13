@@ -4,9 +4,9 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
-import org.incava.mmonkeys.mky.corpus.sc.EqMonkey
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
@@ -47,9 +47,9 @@ class CorpusTrial(
 
     fun run() {
         var id = 1
-        runMonkey("gen eq", id++, Corpus(words), ::EqMonkey)
+        runMonkey("random", id++, Corpus(words), MonkeyFactory::createMonkeyRandom)
         runMonkey("map", id++, MapCorpus(words), MapMonkeyFactory::create)
-        runMonkey("len longs", id++, NumberedCorpus(words), ::NumbersMonkey)
+        runMonkey("numbers", id++, NumberedCorpus(words), ::NumbersMonkey)
         runMonkey("dual", id, DualCorpus(words), WordsGeneratorMonkeyFactory::createMonkey)
     }
 

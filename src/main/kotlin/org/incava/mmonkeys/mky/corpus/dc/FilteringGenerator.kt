@@ -16,7 +16,7 @@ class FilteringGenerator(val corpus: DualCorpus) {
             if (!valid) {
                 return null
             }
-            bytes[index] = ch.toByte()
+            bytes[index] = ch.code.toByte()
         }
         val string = String(bytes)
         val index = corpus.setMatched(string, numChars)

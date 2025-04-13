@@ -2,7 +2,7 @@ package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.WordChecker
-import org.incava.mmonkeys.mky.corpus.sc.CorpusMonkey
+import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
@@ -56,6 +56,6 @@ internal class DeterministicMonkeyTest {
         val corpus = Corpus(words)
         val checker = WordChecker(corpus)
         val strategy = DeterministicStrategy(typewriter.chars)
-        return CorpusMonkey(1, checker, strategy)
+        return DefaultMonkey(1, checker, strategy)
     }
 }

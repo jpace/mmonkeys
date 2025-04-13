@@ -1,16 +1,23 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.WordChecker
+import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
+import org.incava.mmonkeys.mky.mind.RandomStrategy
+import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 
-typealias MonkeyCtor<T> = (id: Int, sought: T) -> Monkey
+object MonkeyFactory {
+    fun createMonkeyRandom(id: Int, corpus: Corpus): Monkey {
+        return createMonkey(id, corpus, RandomStrategy(Keys.fullList()))
+    }
 
-class MonkeyFactory<T : Corpus>(val monkeyCtor: MonkeyCtor<T>) {
-    private var id: Int = 1
-    val chars: List<Char> = Keys.fullList()
+    fun createMonkey(id: Int, corpus: Corpus, strategy: TypeStrategy): Monkey {
+        val checker = WordChecker(corpus)
+        return createMonkey(id, checker, strategy)
+    }
 
-    fun createMonkey(corpus: T, id: Int = this.id++): Monkey {
-        return monkeyCtor(id, corpus)
+    fun createMonkey(id: Int, checker: WordChecker, strategy: TypeStrategy): Monkey {
+        return DefaultMonkey(id, checker, strategy)
     }
 }
