@@ -1,7 +1,5 @@
-package org.incava.mmonkeys.mky.corpus.sc
+package org.incava.mmonkeys.mky
 
-import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.words.Words
 

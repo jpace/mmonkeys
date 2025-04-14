@@ -3,7 +3,7 @@ package org.incava.mmonkeys.mky.corpus
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.WordChecker
-import org.incava.mmonkeys.mky.corpus.sc.DefaultMonkey
+import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.Keys

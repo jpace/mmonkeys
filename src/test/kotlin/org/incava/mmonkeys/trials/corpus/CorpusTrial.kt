@@ -40,17 +40,20 @@ class CorpusTrial(
         return results
     }
 
-    fun <T: Corpus> runMonkey(name: String, id: Int, corpus: T, ctor: (Int, T) -> Monkey) {
-        val monkey = ctor(id, corpus)
+    private fun <T: Corpus> runMonkey(name: String, corpus: T, monkey: Monkey) {
         runMonkey(name, monkey, corpus)
     }
 
     fun run() {
         var id = 1
-        runMonkey("random", id++, Corpus(words), MonkeyFactory::createMonkeyRandom)
-        runMonkey("map", id++, MapCorpus(words), MapMonkeyFactory::create)
-        runMonkey("numbers", id++, NumberedCorpus(words), ::NumbersMonkey)
-        runMonkey("dual", id, DualCorpus(words), WordsGeneratorMonkeyFactory::createMonkey)
+        val corpus = Corpus(words)
+        runMonkey("random", corpus, MonkeyFactory.createMonkeyRandom(id++, corpus))
+        val mapCorpus = MapCorpus(words)
+        runMonkey("map", mapCorpus, MapMonkeyFactory.create(id++, mapCorpus))
+        val numberedCorpus = NumberedCorpus(words)
+        runMonkey("numbers", numberedCorpus, NumbersMonkey(id++, numberedCorpus))
+        val dualCorpus = DualCorpus(words)
+        runMonkey("dual", dualCorpus, WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus))
     }
 
     fun showResults() {

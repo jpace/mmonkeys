@@ -1,5 +1,11 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
+import org.incava.ikdk.io.Qlog
+import org.incava.mmonkeys.mky.corpus.MonkeyFactory
+import org.incava.mmonkeys.mky.mind.RandomStrategy
+import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.words.Words
+import org.junit.jupiter.api.Assertions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -32,5 +38,22 @@ internal class MapCorpusTest {
         obj.setMatched("cd", 2)
         assertEquals(setOf(0, 1), obj.matched)
         assertNull(obj.forLength(2))
+    }
+
+    @Test
+    fun sharedCorpus() {
+        val input = listOf("this", "test", "is", "no", "test")
+        val corpus = MapCorpus(input)
+        val strategy1 = RandomStrategy(Keys.fullList())
+        val checker1 = MapWordChecker(corpus)
+        val checker2 = MapWordChecker(corpus)
+        val monkey1 = MonkeyFactory.createMonkey(1, checker1, strategy1)
+        var result: Words
+        do {
+            result = monkey1.findMatches()
+            if (result.hasMatch())
+                Qlog.info("result", result)
+        } while (!result.hasMatch())
+        Assertions.assertEquals(checker1.corpus.indexedCorpus.elements, checker2.corpus.indexedCorpus.elements)
     }
 }

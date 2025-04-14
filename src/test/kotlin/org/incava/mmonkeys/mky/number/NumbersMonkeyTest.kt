@@ -27,7 +27,7 @@ internal class NumbersMonkeyTest {
             )
         )
         val obj = makeMonkey(input)
-        val result = obj.numberedCorpus.indexedCorpus.elements
+        val result = obj.corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
@@ -50,11 +50,11 @@ internal class NumbersMonkeyTest {
             )
         )
         val obj = makeMonkey(input)
-        val result = obj.numberedCorpus.indexedCorpus.elements
+        val result = obj.corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
-    @Disabled("need to set matched in the actual sought, not the local representation for NumberLongsMonkey")
+    @Disabled("need to set matched in the actual sought, not the local representation for NumbersMonkey")
     @Test
     fun hasUnmatched() {
         val words = listOf("this", "is", "a", "test")
@@ -74,6 +74,6 @@ internal class NumbersMonkeyTest {
         do {
             result = monkey1.findMatches()
         } while (!result.hasMatch())
-        assertEquals(monkey1.numberedCorpus.indexedCorpus.elements, monkey2.numberedCorpus.indexedCorpus.elements)
+        assertEquals(monkey1.corpus.indexedCorpus.elements, monkey2.corpus.indexedCorpus.elements)
     }
 }

@@ -1,9 +1,8 @@
 package org.incava.mmonkeys.mky.mind
 
-import org.incava.ikdk.io.Qlog
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class ContextTest {
 
