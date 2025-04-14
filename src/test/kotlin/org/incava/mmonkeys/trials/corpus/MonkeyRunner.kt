@@ -3,8 +3,8 @@ package org.incava.mmonkeys.trials.corpus
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusSummaryTable
+import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.corpus.CorpusSummaryTable
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.ViewType

@@ -1,13 +1,12 @@
 package org.incava.mmonkeys.rand
 
 import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.sc.CorpusTraits
+import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusTraits
 import org.incava.mmonkeys.testutil.assertWithin
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class DistributedRandomTest {
     @Test

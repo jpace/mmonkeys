@@ -3,8 +3,8 @@ package org.incava.mmonkeys.trials.mky
 import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.io.Qlog.printf
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
@@ -99,7 +99,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
     }
 }
 
-fun main() {
+private fun main() {
     val obj = StrategiesProfile(minLength = 3, matchGoal = 5L)
     obj.profile()
 }

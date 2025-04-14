@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.rand
 
 import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 

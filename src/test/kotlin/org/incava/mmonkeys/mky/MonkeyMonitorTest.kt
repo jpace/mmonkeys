@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.mky
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Word

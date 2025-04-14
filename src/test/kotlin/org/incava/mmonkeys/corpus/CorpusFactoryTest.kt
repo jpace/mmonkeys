@@ -1,5 +1,6 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.corpus
 
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

@@ -1,13 +1,12 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.IndexedCorpus
+import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
 
 class DualCorpus(words: List<String>) : Corpus(words) {
-    val stringCorpus: IndexedCorpus<String> = IndexedCorpus { it }
-    val encodedCorpus: IndexedCorpus<Long> = IndexedCorpus(StringEncoder::encodeToLong)
+    private val stringCorpus: IndexedCorpus<String> = IndexedCorpus { it }
+    private val encodedCorpus: IndexedCorpus<Long> = IndexedCorpus(StringEncoder::encodeToLong)
 
     // @todo - make this based on words (words.max ...), and dynamic
     val maxLength = 27 // "honorificabilitudinitatibus"

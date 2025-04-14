@@ -1,7 +1,6 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.corpus
 
 import org.incava.mesa.Column
-import org.incava.mesa.DoubleColumn
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.Table

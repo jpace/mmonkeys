@@ -7,7 +7,7 @@ import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 
 class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(corpus, verbose) {
     private val columns: List<Column> = listOf(

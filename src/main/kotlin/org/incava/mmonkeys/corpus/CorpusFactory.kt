@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.corpus
 
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import java.io.File

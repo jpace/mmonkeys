@@ -3,13 +3,13 @@ package org.incava.mmonkeys.trials.rand
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Console.printf
 import org.incava.ikdk.util.MapUtil
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class CorpusMatchesView(val corpus: Corpus) {
-    val fullPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-    val ymdPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    private val fullPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+    private val ymdPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
     fun showWordsAsList(onlyMatched: Boolean) {
         corpus.words.withIndex().forEach { (index, word) ->

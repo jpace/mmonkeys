@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicLong
 

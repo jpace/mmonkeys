@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.corpus.dc
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

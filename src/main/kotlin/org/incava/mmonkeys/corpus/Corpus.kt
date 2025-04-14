@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.corpus
 
 open class Corpus(val words: List<String>) {
     val matched = mutableSetOf<Int>()

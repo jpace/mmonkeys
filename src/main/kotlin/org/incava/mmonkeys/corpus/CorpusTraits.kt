@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus.sc
+package org.incava.mmonkeys.corpus
 
 class CorpusTraits(var words: List<String>) {
     fun characterCounts(): Map<Char, Int> {

@@ -2,7 +2,7 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CorpusSimulationFactory
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.MonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.time.Durations

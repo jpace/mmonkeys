@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.mky
 
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.corpus.sc.MatchResults
 import org.incava.mmonkeys.words.Words
 

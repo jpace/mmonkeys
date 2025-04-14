@@ -2,7 +2,7 @@ package org.incava.mmonkeys.exec
 
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 import java.io.BufferedReader

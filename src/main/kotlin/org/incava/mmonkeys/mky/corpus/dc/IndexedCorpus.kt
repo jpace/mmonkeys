@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.corpus.dc
 
 // indexed by length:
 class IndexedCorpus<T>(val indexSupplier: (String) -> T) {

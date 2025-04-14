@@ -3,8 +3,8 @@ package org.incava.mmonkeys.mky.mgr
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
-import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusStatsView
+import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.corpus.CorpusStatsView
 import org.incava.mmonkeys.words.Words
 import java.io.File
 import java.io.PrintStream
@@ -25,7 +25,7 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
         val statsOut = PrintStream(File("/tmp/corpus-stats.out"))
         statsView = CorpusStatsView(corpus, 100, statsOut)
         val perfOut = PrintStream(File("/tmp/monkeys-stats.out"))
-        perfView = SimPerfView(corpus, 100_000, perfOut)
+        perfView = SimPerfView(corpus, 1_000, perfOut)
     }
 
     override fun update(monkey: Monkey, words: Words) {

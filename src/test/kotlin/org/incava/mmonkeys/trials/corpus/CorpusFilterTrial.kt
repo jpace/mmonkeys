@@ -2,7 +2,7 @@ package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.math.Maths
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import java.math.BigInteger
 import kotlin.math.pow

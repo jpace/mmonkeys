@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.trials.base
 
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 import java.time.Duration
 
 data class PerfResults(

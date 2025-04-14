@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.mky.number
 
-import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.IndexedCorpus
+import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.corpus.dc.IndexedCorpus
 
 class NumberedCorpus(words: List<String>) : Corpus(words) {
     val indexedCorpus: IndexedCorpus<Long> = IndexedCorpus(words, StringEncoder::encodeToLong)

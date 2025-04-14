@@ -3,7 +3,7 @@ package org.incava.mmonkeys.trials.ui.corpus
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
-import org.incava.mmonkeys.mky.corpus.Corpus
+import org.incava.mmonkeys.corpus.Corpus
 
 class MatchConsoleView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(corpus, verbose) {
     override fun showResult(monkey: Monkey, manager: MonkeyMonitor, result: Int?) {

@@ -1,7 +1,7 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console.printf
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import java.math.BigInteger
 

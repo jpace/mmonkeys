@@ -2,8 +2,8 @@ package org.incava.mmonkeys.trials.corpus.dc
 
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.util.MapUtil
-import org.incava.mmonkeys.mky.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.WordsGenerator
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.util.ResourceUtil

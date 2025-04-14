@@ -3,11 +3,10 @@ package org.incava.mmonkeys.trials.corpus.dc
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.util.ResourceUtil
-import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Words
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
