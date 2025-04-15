@@ -14,8 +14,4 @@ object MatchResults {
         corpus.setMatched(index)
         return WordsFactory.toWordsMatch(word, index)
     }
-
-    fun toNonMatch(word: String): Words {
-        return WordsFactory.toWordsNonMatch(word)
-    }
 }

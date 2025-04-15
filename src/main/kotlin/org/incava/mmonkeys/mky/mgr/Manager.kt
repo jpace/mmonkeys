@@ -25,7 +25,7 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
         val statsOut = PrintStream(File("/tmp/corpus-stats.out"))
         statsView = CorpusStatsView(corpus, 100, statsOut)
         val perfOut = PrintStream(File("/tmp/monkeys-stats.out"))
-        perfView = SimPerfView(corpus, 1_000, perfOut)
+        perfView = SimPerfView(corpus, perfOut)
     }
 
     override fun update(monkey: Monkey, words: Words) {

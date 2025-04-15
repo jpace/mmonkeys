@@ -3,8 +3,9 @@ package org.incava.mmonkeys.mky.corpus.dc
 import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.Word
 
-class FilteringGenerator(val corpus: DualCorpus) {
-    fun getWord(numChars: Int, filter: LengthFilter): Word? {
+class FilteringGenerator(val corpus: DualCorpus, val filterSupplier: (Int) -> LengthFilter) {
+    fun getWord(numChars: Int): Word? {
+        val filter = filterSupplier(numChars)
         if (!filter.hasCandidates()) {
             return null
         }

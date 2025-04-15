@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.corpus
 
-import org.incava.mmonkeys.corpus.Corpus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

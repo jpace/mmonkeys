@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.mgr
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mesa.DoubleColumn
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
@@ -10,12 +11,14 @@ import java.io.PrintStream
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
-class SimPerfView(val corpus: Corpus, private val outputInterval: Int, out: PrintStream = System.out) {
+class SimPerfView(val corpus: Corpus, out: PrintStream = System.out) {
     private val startTime: ZonedDateTime = ZonedDateTime.now()
     private val pattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
     private val table: Table
     private val numWords = corpus.words.size
+    private var lastWrite: ZonedDateTime? = null
 
     init {
         table = Table(
@@ -30,13 +33,15 @@ class SimPerfView(val corpus: Corpus, private val outputInterval: Int, out: Prin
                 LongColumn("keys/sec", 12),
             )
         )
+        table.writeHeader()
     }
 
     private fun formatTime(dateTime: ZonedDateTime): String = dateTime.format(pattern)
 
     fun update(matchCount: Int, totalKeystrokes: Long) {
-        if (matchCount % outputInterval == 0) {
+        if (lastWrite == null || lastWrite?.plus(10, ChronoUnit.SECONDS)!! < ZonedDateTime.now()) {
             writeMatch(matchCount, totalKeystrokes)
+            lastWrite = ZonedDateTime.now()
         }
     }
 

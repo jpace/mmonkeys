@@ -1,10 +1,9 @@
-package org.incava.mmonkeys.mky.corpus
+package org.incava.mmonkeys.mky.mind
 
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -15,7 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class DeterministicMonkeyTest {
+internal class TypeStrategyTest {
     class DeterministicStrategy(private val chars: List<Char>) : TypeStrategy() {
         private var count = 0
         private val size = chars.size
