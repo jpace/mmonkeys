@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.CorpusTraits
 import org.incava.mmonkeys.testutil.assertWithin
@@ -9,79 +8,43 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
 class DistributedRandomTest {
-    @Test
-    fun nextRandom() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val charToCount = CorpusTraits(words).characterCounts().toSortedMap()
-        val obj = DistributedRandom(charToCount)
-        Qlog.info("obj.slots", obj.slots)
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val counts = CorpusTraits(words).characterCounts()
+    val iterations = 1_000_000
+
+    fun getRandoms(random: DistributedRandom<Char, Int>): Map<Char, Int> {
         val results = mutableMapOf<Char, Int>()
-        val numChars = words.sumOf { it.length } + words.size
-        val charToPct = charToCount.entries.associate {
-            it.key to 100.0 * it.value / numChars
-        }
-        repeat(1_000_000) {
-            val ch = obj.nextRandom()
+        repeat(iterations) {
+            val ch = random.nextRandom()
             results[ch] = (results[ch] ?: 0) + 1
         }
+        return results
+    }
+
+    @Test
+    fun nextRandomWeighted() {
+        val obj = DistributedRandom(counts)
+        val numChars = words.sumOf { it.length } + words.size
+        val charToPct = counts.entries.associate {
+            it.key to 100.0 * it.value / numChars
+        }
+        val results = getRandoms(obj)
         results.toSortedMap().forEach { (ch, count) ->
             val pct = 100.0 * count / results.values.sum()
-            Qlog.info("results[$ch]", count)
-            Qlog.info("results[$ch]", pct)
             assertWithin(charToPct.getValue(ch), pct, 0.1)
         }
     }
 
     @Test
-    fun slotsFromUnsorted() {
-        Qlog.info("from unsorted")
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length > 5 }
-        val charToCount = CorpusTraits(words).characterCounts()
-        Qlog.info("charToCount", charToCount)
-        val obj = DistributedRandom(charToCount)
-        Qlog.info("obj.slots", obj.slots)
-    }
-
-    @Test
-    fun slotsFromSorted() {
-        Qlog.info("from sorted")
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length > 5 }
-        val charToCount = CorpusTraits(words).characterCounts().toSortedMap()
-        Qlog.info("charToCount", charToCount)
-        val obj = DistributedRandom(charToCount)
-        Qlog.info("obj.slots", obj.slots)
-    }
-
-    @Test
-    fun evenWeighting() {
-        Qlog.info("from sorted")
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length > 5 }
-        val charToCount = CorpusTraits(words).characterCounts().toSortedMap().mapValues { 1 }
-        Qlog.info("charToCount", charToCount)
-        val obj = DistributedRandom(charToCount)
-        Qlog.info("obj.slots", obj.slots)
-    }
-
-    @Test
     fun nextRandomEven() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
-        val charToCount = CorpusTraits(words).characterCounts().toSortedMap().mapValues { 1 }
-        val obj = DistributedRandom(charToCount)
-        Qlog.info("obj.slots", obj.slots)
-        val results = mutableMapOf<Char, Int>()
-        val charToPct = charToCount.entries.associate {
-            it.key to 100.0 / (Keys.fullList().size)
+        val flatDistribution = counts.mapValues { 1 }
+        val obj = DistributedRandom(flatDistribution)
+        val charToPct = flatDistribution.entries.associate {
+            it.key to 100.0 / Keys.fullList().size
         }
-        Qlog.info("charToCount", charToCount)
-        Qlog.info("charToPct", charToPct)
-        repeat(1_000_000) {
-            val ch = obj.nextRandom()
-            results[ch] = (results[ch] ?: 0) + 1
-        }
+        val results = getRandoms(obj)
         results.toSortedMap().forEach { (ch, count) ->
             val pct = 100.0 * count / results.values.sum()
-            Qlog.info("results[$ch]", count)
-            Qlog.info("results[$ch]", pct)
             assertWithin(charToPct.getValue(ch), pct, 0.1)
         }
     }

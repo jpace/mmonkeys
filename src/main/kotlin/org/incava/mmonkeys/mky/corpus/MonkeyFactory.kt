@@ -7,6 +7,7 @@ import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 
 object MonkeyFactory {
     fun createMonkeyRandom(id: Int, corpus: Corpus): Monkey {
@@ -19,6 +20,7 @@ object MonkeyFactory {
     }
 
     fun createMonkey(id: Int, checker: WordChecker, strategy: TypeStrategy): Monkey {
-        return DefaultMonkey(id, checker, strategy)
+        val typewriter = Typewriter(Keys.fullList())
+        return DefaultMonkey(id, checker, strategy, typewriter)
     }
 }

@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.mky.mind
 
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.WordChecker
-import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -52,10 +52,10 @@ internal class TypeStrategyTest {
     }
 
     private fun createMonkey(words: List<String>, toChar: Char): Monkey {
-        val typewriter = Typewriter(Keys.keyList(toChar))
         val corpus = Corpus(words)
         val checker = WordChecker(corpus)
-        val strategy = DeterministicStrategy(typewriter.chars)
-        return DefaultMonkey(1, checker, strategy)
+        val strategy = DeterministicStrategy(Keys.keyList(toChar))
+        val typewriter = Typewriter(Keys.fullList())
+        return DefaultMonkey(1, checker, strategy, typewriter)
     }
 }

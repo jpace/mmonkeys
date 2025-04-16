@@ -3,11 +3,12 @@ package org.incava.mmonkeys.mky.number
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
+import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 import org.incava.mmonkeys.words.WordsFactory
 import org.incava.rando.RandInt
 
-class NumbersMonkey(id: Int, val corpus: NumberedCorpus) : Monkey(id) {
+class NumbersMonkey(id: Int, val corpus: NumberedCorpus, typewriter: Typewriter) : Monkey(id, typewriter) {
     val rand: RandInt = RandomFactory.getCalculated(Keys.fullList().size)
 
     override fun findMatches(): Words {

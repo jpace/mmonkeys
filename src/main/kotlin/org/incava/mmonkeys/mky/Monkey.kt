@@ -1,8 +1,9 @@
 package org.incava.mmonkeys.mky
 
+import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Words
 
-abstract class Monkey(val id: Int) {
+abstract class Monkey(val id: Int, val typewriter: Typewriter) {
     private var manager: MonkeyMonitor? = null
 
     override fun toString(): String = "Monkey(id=$id)"
