@@ -11,7 +11,6 @@ open class WordChecker(open val corpus: Corpus) {
         return if (match == null) {
             WordsFactory.toWordsNonMatch(word)
         } else {
-            // keystrokes here are only through the word, not the trailing space
             MatchResults.toWordsMatch(corpus, word, match)
         }
     }

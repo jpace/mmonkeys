@@ -20,17 +20,25 @@ class NumbersMonkey(id: Int, val corpus: NumberedCorpus, typewriter: Typewriter)
         val numChars = length - 1
         val forLength = corpus.longsForLength(numChars)
         // if null, we must be called with the wrong (> 13) length:
-        if (forLength != null) {
-            val encoded = RandEncoded.random(numChars)
-            val forEncoded = forLength[encoded]
-            if (!forEncoded.isNullOrEmpty()) {
-                val index = forEncoded.removeAt(0)
-                val word = corpus.words[index]
-                return toWordsMatch(word, index).also { recordWords(it) }
-            }
+        return if (forLength == null) {
+            WordsFactory.toWordsNonMatch(length.toLong(), 1)
+        } else {
+            typeWord(numChars)
         }
-        val numAttempts = 1
-        return WordsFactory.toWordsNonMatch(length.toLong(), numAttempts)
+    }
+
+    fun typeWord(numChars: Int) : Words {
+        val encoded = RandEncoded.random(numChars)
+        val forLength = corpus.longsForLength(numChars)!!
+        val forEncoded = forLength[encoded]
+        if (forEncoded.isNullOrEmpty()) {
+            // keystrokes is through the space
+            return WordsFactory.toWordsNonMatch(numChars + 1L, 1)
+        } else {
+            val index = corpus.setMatched(encoded, numChars)
+            val word = StringEncoder.decode(encoded)
+            return toWordsMatch(word, index).also { recordWords(it) }
+        }
     }
 
     private fun toWordsMatch(word: String, index: Int): Words {

@@ -23,12 +23,12 @@ class DualCorpus(words: List<String>) : Corpus(words) {
         }
     }
 
-    fun stringsForLength(length: Int): MutableMap<String, MutableList<Int>>? {
-        return stringCorpus.elements[length]
+    fun stringsForLength(length: Int): Map<String, List<Int>>? {
+        return stringCorpus.elementsForLength(length)
     }
 
-    fun longsForLength(length: Int): MutableMap<Long, MutableList<Int>>? {
-        return encodedCorpus.elements[length]
+    fun longsForLength(length: Int): Map<Long, List<Int>>? {
+        return encodedCorpus.elementsForLength(length)
     }
 
     fun setMatched(word: String, length: Int): Int {

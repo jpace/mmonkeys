@@ -10,7 +10,7 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
         return indexedCorpus.setMatched(number, length).also { index -> super.setMatched(index) }
     }
 
-    fun longsForLength(length: Int) : MutableMap<Long, MutableList<Int>>? {
-        return indexedCorpus.elements[length]
+    fun longsForLength(length: Int) : Map<Long, List<Int>>? {
+        return indexedCorpus.elementsForLength(length)
     }
 }

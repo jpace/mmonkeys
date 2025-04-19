@@ -15,6 +15,10 @@ class IndexedCorpus<T>(val indexSupplier: (String) -> T) {
             .computeIfAbsent(index) { mutableListOf() }.also { it.add(wordIndex) }
     }
 
+    fun elementsForLength(length: Int) : Map<T, List<Int>>? {
+        return elements[length]
+    }
+
     fun setMatched(item: T, length: Int): Int {
         val forLength: MutableMap<T, MutableList<Int>> = elements[length] ?: return -1
         val forEncoded: MutableList<Int> = forLength[item] ?: return -1
