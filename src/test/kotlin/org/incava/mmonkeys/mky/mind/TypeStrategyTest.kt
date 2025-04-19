@@ -7,6 +7,7 @@ import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.type.TypewriterFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -55,7 +56,7 @@ internal class TypeStrategyTest {
         val corpus = Corpus(words)
         val checker = WordChecker(corpus)
         val strategy = DeterministicStrategy(Keys.keyList(toChar))
-        val typewriter = Typewriter(Keys.fullList())
+        val typewriter = TypewriterFactory.create()
         return DefaultMonkey(1, checker, strategy, typewriter)
     }
 }

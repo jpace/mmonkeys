@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.mky.number
 
-import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.type.TypewriterFactory
 import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class NumbersMonkeyTest {
     private fun makeMonkeys(corpus: NumberedCorpus, count: Int): List<NumbersMonkey> {
         return (0 until count).map {
-            val typewriter = Typewriter(Keys.fullList())
+            val typewriter = TypewriterFactory.create()
             NumbersMonkey(it, corpus, typewriter)
         }
     }

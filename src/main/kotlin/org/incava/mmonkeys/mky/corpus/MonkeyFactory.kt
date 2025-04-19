@@ -1,13 +1,13 @@
 package org.incava.mmonkeys.mky.corpus
 
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.WordChecker
-import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.type.TypewriterFactory
 
 object MonkeyFactory {
     fun createMonkeyRandom(id: Int, corpus: Corpus): Monkey {
@@ -20,7 +20,7 @@ object MonkeyFactory {
     }
 
     fun createMonkey(id: Int, checker: WordChecker, strategy: TypeStrategy): Monkey {
-        val typewriter = Typewriter(Keys.fullList())
+        val typewriter = TypewriterFactory.create()
         return DefaultMonkey(id, checker, strategy, typewriter)
     }
 }

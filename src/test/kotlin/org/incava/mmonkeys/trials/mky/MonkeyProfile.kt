@@ -16,6 +16,7 @@ import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.type.TypewriterFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Words
 
@@ -55,7 +56,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         run {
             val corpus = NumberedCorpus(words)
-            val typewriter = Typewriter(Keys.fullList())
+            val typewriter = TypewriterFactory.create()
             val monkey = NumbersMonkey(3, corpus, typewriter)
             profiler.add("numbers") {
                 matchWords { monkey.findMatches() }

@@ -15,6 +15,7 @@ import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
+import org.incava.mmonkeys.type.TypewriterFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 import java.time.Duration
@@ -53,7 +54,7 @@ class CorpusTrial(
         val mapCorpus = MapCorpus(words)
         runMonkey("map", mapCorpus, MapMonkeyFactory.create(id++, mapCorpus))
         val numberedCorpus = NumberedCorpus(words)
-        val typewriter = Typewriter(Keys.fullList())
+        val typewriter = TypewriterFactory.create()
         runMonkey("numbers", numberedCorpus, NumbersMonkey(id++, numberedCorpus, typewriter))
         val dualCorpus = DualCorpus(words)
         runMonkey("dual", dualCorpus, WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus))
