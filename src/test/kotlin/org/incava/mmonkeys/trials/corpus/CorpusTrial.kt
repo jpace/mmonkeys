@@ -9,6 +9,7 @@ import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.trials.base.PerfResults
@@ -35,7 +36,7 @@ class CorpusTrial(
     }
 
     private fun runMonkey(name: String, monkey: Monkey, corpus: Corpus): PerfResults {
-        val runner = MonkeyRunner(corpus, monkey, timeLimit, outputInterval)
+        val runner = MonkeyRunner(corpus, monkey, timeLimit)
         val results = runner.run()
         Thread.sleep(100L)
         Console.info(name, results.durations.average())
@@ -43,21 +44,18 @@ class CorpusTrial(
         return results
     }
 
-    private fun <T: Corpus> runMonkey(name: String, corpus: T, monkey: Monkey) {
-        runMonkey(name, monkey, corpus)
-    }
-
     fun run() {
         var id = 1
         val corpus = Corpus(words)
-        runMonkey("random", corpus, MonkeyFactory.createMonkeyRandom(id++, corpus))
+        runMonkey("random", MonkeyFactory.createMonkeyRandom(id++, corpus), corpus)
         val mapCorpus = MapCorpus(words)
-        runMonkey("map", mapCorpus, MapMonkeyFactory.create(id++, mapCorpus))
+        runMonkey("map", MapMonkeyFactory.create(id++, mapCorpus), mapCorpus)
         val numberedCorpus = NumberedCorpus(words)
         val typewriter = TypewriterFactory.create()
-        runMonkey("numbers", numberedCorpus, NumbersMonkey(id++, numberedCorpus, typewriter))
+        val numberMonkeyManager = Manager(numberedCorpus, outputInterval)
+        runMonkey("numbers", NumbersMonkey(id++, numberedCorpus, typewriter, numberMonkeyManager), numberedCorpus)
         val dualCorpus = DualCorpus(words)
-        runMonkey("dual", dualCorpus, WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus))
+        runMonkey("dual", WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus), dualCorpus)
     }
 
     fun showResults() {

@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.type.TypewriterFactory
 import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -9,9 +10,10 @@ import org.junit.jupiter.api.Test
 
 internal class NumbersMonkeyTest {
     private fun makeMonkeys(corpus: NumberedCorpus, count: Int): List<NumbersMonkey> {
+        val manager = Manager(corpus)
         return (0 until count).map {
             val typewriter = TypewriterFactory.create()
-            NumbersMonkey(it, corpus, typewriter)
+            NumbersMonkey(it, corpus, typewriter, manager)
         }
     }
 

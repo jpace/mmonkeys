@@ -1,6 +1,8 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.mmonkeys.mky.CorpusUpdater
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.rand.RandomFactory
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.type.Typewriter
@@ -8,8 +10,9 @@ import org.incava.mmonkeys.words.Words
 import org.incava.mmonkeys.words.WordsFactory
 import org.incava.rando.RandInt
 
-class NumbersMonkey(id: Int, val corpus: NumberedCorpus, typewriter: Typewriter) : Monkey(id, typewriter) {
+class NumbersMonkey(id: Int, val corpus: NumberedCorpus, typewriter: Typewriter, manager: Manager) : Monkey(id, typewriter, manager) {
     val rand: RandInt = RandomFactory.getCalculated(Keys.fullList().size)
+    val updater = CorpusUpdater(corpus)
 
     override fun findMatches(): Words {
         // number of keystrokes at which we'll hit the end-of-word character
@@ -23,13 +26,12 @@ class NumbersMonkey(id: Int, val corpus: NumberedCorpus, typewriter: Typewriter)
         return if (forLength == null) {
             WordsFactory.toWordsNonMatch(length.toLong(), 1)
         } else {
-            typeWord(numChars)
+            typeWord(numChars, forLength)
         }
     }
 
-    fun typeWord(numChars: Int) : Words {
+    fun typeWord(numChars: Int, forLength: Map<Long, List<Int>>) : Words {
         val encoded = RandEncoded.random(numChars)
-        val forLength = corpus.longsForLength(numChars)!!
         val forEncoded = forLength[encoded]
         if (forEncoded.isNullOrEmpty()) {
             // keystrokes is through the space
@@ -42,7 +44,7 @@ class NumbersMonkey(id: Int, val corpus: NumberedCorpus, typewriter: Typewriter)
     }
 
     private fun toWordsMatch(word: String, index: Int): Words {
-        corpus.setMatched(index)
+        updater.indexMatched(index)
         return WordsFactory.toWordsMatch(word, index)
     }
 }

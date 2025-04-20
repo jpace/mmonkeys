@@ -16,7 +16,7 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
     private val managerView: ManagerView
     private val statsView: CorpusStatsView
     private val perfView: SimPerfView
-    val matchesByLength = mutableMapOf<Int, Int>()
+    private val matchesByLength = mutableMapOf<Int, Int>()
 
     init {
         val simOut = PrintStream(File("/tmp/simulation.out"))

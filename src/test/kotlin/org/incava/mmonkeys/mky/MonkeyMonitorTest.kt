@@ -3,6 +3,7 @@ package org.incava.mmonkeys.mky
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
@@ -42,8 +43,8 @@ internal class MonkeyMonitorTest {
             }
         }
         val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE)
-        val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus)
-        monkey.setManager(monitor)
+        val manager = Manager(corpus)
+        val monkey = WordsGeneratorMonkeyFactory.createMonkey(manager, 1, corpus)
         val words1 = listOf("this" to 3, "is" to 17, "a" to 9, "test" to 6)
             .map { Word(it.first, it.second) }
             .let { Words(it, 100, 10) }

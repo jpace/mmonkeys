@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.mmonkeys.mky.corpus.sc.MatchResults
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import org.incava.mmonkeys.words.WordsFactory
@@ -37,7 +36,7 @@ class WordsGenerator(
         return if (matches.isEmpty()) {
             WordsFactory.toWordsNonMatch(keystrokes, slotIndices.size)
         } else {
-            MatchResults.toWords(matches, keystrokes, slotIndices.size)
+            Words(matches, keystrokes, slotIndices.size)
         }
     }
 }
