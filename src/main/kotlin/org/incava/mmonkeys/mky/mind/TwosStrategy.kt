@@ -10,10 +10,10 @@ abstract class TwosStrategy(val sequences: Sequences) : TypeStrategy() {
 
     override fun getNextChar(): Char {
         return if (context.size > 0) {
-            val firstChar = context.charAt(-1)
+            val firstChar = context.charAt(0)
             getChar(firstChar)
         } else {
             getChar()
-        }
+        }.also { context.add(it) }
     }
 }

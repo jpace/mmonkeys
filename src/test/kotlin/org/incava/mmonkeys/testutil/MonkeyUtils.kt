@@ -1,12 +1,12 @@
 package org.incava.mmonkeys.testutil
 
-import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.DefaultMonkey
 
 object MonkeyUtils {
-    fun runTest(monkey: Monkey, maxAttempts: Long = 100_000_000_000_000L): Long {
+    fun runTest(monkey: DefaultMonkey, maxAttempts: Long = 100_000_000_000_000L): Long {
         var iteration = 0L
         while (iteration < maxAttempts) {
-            val result = monkey.findMatches()
+            val result = monkey.runAttempt()
             if (result.hasMatch()) {
                 return iteration
             }

@@ -1,17 +1,19 @@
 package org.incava.mmonkeys.mky
 
 import org.incava.mmonkeys.corpus.Corpus
-import org.incava.mmonkeys.words.Words
-import org.incava.mmonkeys.words.WordsFactory
+import org.incava.mmonkeys.words.Attempt
+import org.incava.mmonkeys.words.AttemptFactory
+import org.incava.mmonkeys.words.Word
 
 open class WordChecker(open val corpus: Corpus, private val corpusUpdater: CorpusUpdater = CorpusUpdater(corpus)) {
-    open fun processWord(word: String): Words {
-        val match = corpus.findMatch(word)
+    open fun processAttempt(str: String): Attempt {
+        val match = corpus.findMatch(str)
         return if (match == null) {
-            WordsFactory.toWordsNonMatch(word)
+            AttemptFactory.failed(str)
         } else {
             corpusUpdater.indexMatched(match)
-            WordsFactory.toWordsMatch(word, match)
+            val word = Word(str, match)
+            AttemptFactory.succeeded(word)
         }
     }
 }

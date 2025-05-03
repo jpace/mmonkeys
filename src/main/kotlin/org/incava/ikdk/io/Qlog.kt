@@ -24,6 +24,8 @@ object Qlog {
             info(msg, obj)
         } else if (obj is Collection<*>) {
             info(msg, obj)
+        } else if (obj is Map<*,*>) {
+            info(msg, obj)
         } else {
             println(ConsoleFormat.format(msg, obj))
         }

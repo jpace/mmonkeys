@@ -2,23 +2,12 @@ package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.type.TypewriterFactory
-import org.incava.mmonkeys.words.Words
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class NumbersMonkeyTest {
-    private fun makeMonkeys(corpus: NumberedCorpus, count: Int): List<NumbersMonkey> {
-        val manager = Manager(corpus)
-        return (0 until count).map {
-            val typewriter = TypewriterFactory.create()
-            NumbersMonkey(it, corpus, typewriter, manager)
-        }
-    }
-
-    private fun makeMonkey(words: List<String>) = makeMonkeys(NumberedCorpus(words), 1).first()
-
     @Test
     fun numbers() {
         val input = listOf("this", "is", "a", "test")
@@ -30,8 +19,8 @@ internal class NumbersMonkeyTest {
                 355_413L to listOf(3)
             )
         )
-        val obj = makeMonkey(input)
-        val result = obj.corpus.indexedCorpus.elements
+        val corpus = NumberedCorpus(input)
+        val result = corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
@@ -53,8 +42,8 @@ internal class NumbersMonkeyTest {
                 23L to mutableListOf(7)
             )
         )
-        val obj = makeMonkey(input)
-        val result = obj.corpus.indexedCorpus.elements
+        val corpus = NumberedCorpus(input)
+        val result = corpus.indexedCorpus.elements
         assertEquals(expected, result)
     }
 
@@ -63,21 +52,11 @@ internal class NumbersMonkeyTest {
     fun hasUnmatched() {
         val words = listOf("this", "is", "a", "test")
         val corpus = NumberedCorpus(words)
-        val obj = makeMonkeys(corpus, 1).first()
-        repeat(1000000) { obj.findMatches() }
+        val typewriter = TypewriterFactory.create()
+        val manager = Manager(corpus)
+        val obj = NumbersMonkeyFactory.createMonkey(1, corpus, typewriter).also { it.manager = manager }
+        repeat(1000000) { obj.runAttempt() }
         val result = corpus.hasUnmatched()
         assertFalse(result, "corpus.words: ${corpus.words}, matched: ${corpus.matched}")
-    }
-
-    @Test
-    fun sharedCorpus() {
-        val words = listOf("this", "test", "is", "no", "test")
-        val corpus = NumberedCorpus(words)
-        val (monkey1, monkey2) = makeMonkeys(corpus, 2)
-        var result: Words
-        do {
-            result = monkey1.findMatches()
-        } while (!result.hasMatch())
-        assertEquals(monkey1.corpus.indexedCorpus.elements, monkey2.corpus.indexedCorpus.elements)
     }
 }

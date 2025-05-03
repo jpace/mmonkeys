@@ -16,7 +16,7 @@ internal class WordsGeneratorTest {
         var foundMatch = false
         var attempt = 0
         while (!foundMatch && attempt++ < 1000) {
-            val result = obj.attemptMatch()
+            val result = obj.runAttempts()
             Console.info("result", result)
             foundMatch = result.words.isNotEmpty()
         }

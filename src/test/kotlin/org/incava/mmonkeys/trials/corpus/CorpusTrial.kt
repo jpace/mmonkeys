@@ -1,21 +1,24 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.MonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkey
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkey
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
+import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.type.TypewriterFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
@@ -35,8 +38,7 @@ class CorpusTrial(
         Console.info("sought.#", words.size)
     }
 
-    private fun runMonkey(name: String, monkey: Monkey, corpus: Corpus): PerfResults {
-        val runner = MonkeyRunner(corpus, monkey, timeLimit)
+    private fun <T : Corpus> runMonkey(name: String, runner: MonkeyRunner<T>): PerfResults {
         val results = runner.run()
         Thread.sleep(100L)
         Console.info(name, results.durations.average())
@@ -44,18 +46,39 @@ class CorpusTrial(
         return results
     }
 
+    private fun runMonkey(name: String, monkey: DefaultMonkey, corpus: Corpus): PerfResults {
+        val runner = MonkeyRunner(corpus, monkey, timeLimit)
+        return runMonkey(name, runner)
+    }
+
+    private fun runMonkey(name: String, monkey: NumbersMonkey, corpus: Corpus): PerfResults {
+        val runner = MonkeyRunner(corpus, monkey, timeLimit)
+        return runMonkey(name, runner)
+    }
+
+    private fun runMonkey(name: String, monkey: WordsGeneratorMonkey, corpus: Corpus): PerfResults {
+        val runner = MonkeyRunner(corpus, monkey, timeLimit)
+        return runMonkey(name, runner)
+    }
+
     fun run() {
         var id = 1
         val corpus = Corpus(words)
-        runMonkey("random", MonkeyFactory.createMonkeyRandom(id++, corpus), corpus)
+        val manager1 = Manager(corpus, outputInterval)
+        val checker1 = WordChecker(corpus)
+        runMonkey("random", DefaultMonkeyFactory.createMonkey(id++, checker1, RandomStrategy(Keys.fullList())).also { it.manager = manager1 }, corpus)
+
         val mapCorpus = MapCorpus(words)
-        runMonkey("map", MapMonkeyFactory.create(id++, mapCorpus), mapCorpus)
+        val manager2 = Manager(corpus, outputInterval)
+        runMonkey("map", MapMonkeyFactory.create(id++, mapCorpus).also { it.manager = manager2 }, mapCorpus)
+
         val numberedCorpus = NumberedCorpus(words)
         val typewriter = TypewriterFactory.create()
-        val numberMonkeyManager = Manager(numberedCorpus, outputInterval)
-        runMonkey("numbers", NumbersMonkey(id++, numberedCorpus, typewriter, numberMonkeyManager), numberedCorpus)
+        val manager3 = Manager(numberedCorpus, outputInterval)
+        runMonkey("numbers", NumbersMonkeyFactory.createMonkey(id++, numberedCorpus, typewriter).also { it.manager = manager3 }, numberedCorpus)
         val dualCorpus = DualCorpus(words)
-        runMonkey("dual", WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus), dualCorpus)
+        val manager4 = Manager(corpus)
+        runMonkey("words gen", WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus).also { it.manager = manager4 }, dualCorpus)
     }
 
     fun showResults() {

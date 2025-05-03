@@ -30,7 +30,7 @@ class WordsGeneratorTrial {
         Console.info("total", bySize.values.sum())
         val duration = measureDuration {
             while (longerMatched < numToMatch && corpus.hasUnmatched()) {
-                val result = wordsGenerator.attemptMatch()
+                val result = wordsGenerator.runAttempts()
                 keystrokes += result.totalKeyStrokes
                 result.words.forEach { word ->
                     MapUtil.increment(matchedByLength, word.string.length)

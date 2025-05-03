@@ -1,10 +1,11 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
 import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.mky.corpus.MonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkey
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.words.Words
+import org.incava.mmonkeys.words.Attempt
 import org.junit.jupiter.api.Assertions
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,10 +48,10 @@ internal class MapCorpusTest {
         val strategy1 = RandomStrategy(Keys.fullList())
         val checker1 = MapWordChecker(corpus)
         val checker2 = MapWordChecker(corpus)
-        val monkey1 = MonkeyFactory.createMonkey(1, checker1, strategy1)
-        var result: Words
+        val monkey1 = DefaultMonkeyFactory.createMonkey(1, checker1, strategy1) as DefaultMonkey
+        var result: Attempt
         do {
-            result = monkey1.findMatches()
+            result = monkey1.runAttempt()
             if (result.hasMatch())
                 Qlog.info("result", result)
         } while (!result.hasMatch())

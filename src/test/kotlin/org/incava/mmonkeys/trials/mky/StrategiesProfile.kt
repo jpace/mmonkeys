@@ -5,7 +5,8 @@ import org.incava.ikdk.io.Qlog.printf
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.MonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkey
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -24,15 +25,13 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 
     fun addScenario(name: String, strategy: TypeStrategy) {
         val corpus = Corpus(words)
-        val monkey = MonkeyFactory.createMonkey(id++, corpus, strategy)
+        val monkey = DefaultMonkeyFactory.createMonkey(id++, corpus, strategy)
         scenarios.add(Pair(name) { matchWords(monkey) })
     }
 
     fun profile() {
         Qlog.info("words.#", words.size)
         var id = 1
-
-        val scenarios = mutableListOf<Pair<String, () -> Unit>>()
 
         run {
             addScenario("random", RandomStrategy(Keys.fullList()))
@@ -58,18 +57,21 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
             addScenario("3s distributed", ThreesDistributedStrategy(words))
         }
 
+        Qlog.info("scenarios", scenarios)
+
         scenarios.forEach { (name, block) ->
             println(name)
             block()
         }
     }
 
-    fun matchWords(monkey: Monkey) {
+    fun matchWords(monkey: DefaultMonkey) {
+        Qlog.info("monkey", monkey)
         val duration = Durations.measureDuration {
             var matches = 0L
             var attempts = 0L
             while (matches < matchGoal) {
-                val result = monkey.findMatches()
+                val result = monkey.runAttempt()
                 val count = result.words.count { words.contains(it.string) }
                 matches += count
                 attempts += result.numAttempts
@@ -86,6 +88,6 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 }
 
 private fun main() {
-    val obj = StrategiesProfile(minLength = 3, matchGoal = 5L)
+    val obj = StrategiesProfile(minLength = 5, matchGoal = 20L)
     obj.profile()
 }

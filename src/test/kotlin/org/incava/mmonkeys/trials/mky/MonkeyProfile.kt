@@ -5,7 +5,8 @@ import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.MonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkey
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
@@ -13,17 +14,16 @@ import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.mky.number.NumbersMonkey
+import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
 import org.incava.mmonkeys.rand.SequencesFactory
-import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.type.TypewriterFactory
 import org.incava.mmonkeys.util.ResourceUtil
-import org.incava.mmonkeys.words.Words
+import org.incava.mmonkeys.words.Attempt
+import org.incava.mmonkeys.words.Attempts
 
 private class MonkeyProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     // limiting to 13 for numbers monkey
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 3..13 }
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 4..13 }
     val matchGoal = 20L
 
     fun profile() {
@@ -31,17 +31,18 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         val profiler = Profiler(numInvokes, numTrials)
         run {
             val corpus = DualCorpus(words)
-            val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus)
-            profiler.add("dual") {
-                matchWords { monkey.findMatches() }
+            val manager = Manager(corpus)
+            val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus).also { it.manager = manager }
+            profiler.add("words gen") {
+                matchWords2 { monkey.runAttempts() }
             }
         }
 
         if (false) {
             val corpus = Corpus(words)
-            val monkey = MonkeyFactory.createMonkeyRandom(2, corpus)
+            val monkey = DefaultMonkeyFactory.createMonkeyRandom(2, corpus)
             profiler.add("random") {
-                matchWords { monkey.findMatches() }
+                matchWords { monkey.runAttempt() }
             }
         }
 
@@ -49,9 +50,9 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
             val corpus = Corpus(words)
             val sequences = SequencesFactory.createFromWords(corpus.words)
             val strategy = TwosRandomStrategy(sequences)
-            val monkey = MonkeyFactory.createMonkey(2, corpus, strategy)
+            val monkey = DefaultMonkeyFactory.createMonkey(2, corpus, strategy)
             profiler.add("twos random") {
-                matchWords { monkey.findMatches() }
+                matchWords { monkey.runAttempt() }
             }
         }
 
@@ -59,9 +60,9 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
             val corpus = NumberedCorpus(words)
             val manager = Manager(corpus)
             val typewriter = TypewriterFactory.create()
-            val monkey = NumbersMonkey(3, corpus, typewriter, manager)
+            val monkey = NumbersMonkeyFactory.createMonkey(3, corpus, typewriter).also { it.manager = manager }
             profiler.add("numbers") {
-                matchWords { monkey.findMatches() }
+                matchWords { monkey.runAttempt() }
             }
         }
 
@@ -69,7 +70,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
             val corpus = MapCorpus(words)
             val monkey = MapMonkeyFactory.create(4, corpus)
             profiler.add("map") {
-                matchWords { monkey.findMatches() }
+                matchWords { monkey.runAttempt() }
             }
         }
 
@@ -81,7 +82,14 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         showdown.showResults(SortType.BY_DURATION)
     }
 
-    fun matchWords(generator: () -> Words) {
+    fun matchWords(generator: () -> Attempt) {
+        runToMatchCount(matchGoal) {
+            val result = generator()
+            result.words.count { words.contains(it.string) }
+        }
+    }
+
+    fun matchWords2(generator: () -> Attempts) {
         runToMatchCount(matchGoal) {
             val result = generator()
             result.words.count { words.contains(it.string) }

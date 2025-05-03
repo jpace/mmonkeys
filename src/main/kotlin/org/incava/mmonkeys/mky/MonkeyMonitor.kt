@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.mky
 
-import org.incava.mmonkeys.words.Words
+import org.incava.mmonkeys.words.Attempt
 
 interface MonkeyMonitor {
-    fun update(monkey: Monkey, words: Words)
+    fun update(monkey: Monkey, words: Attempt)
 
     fun summarize()
 

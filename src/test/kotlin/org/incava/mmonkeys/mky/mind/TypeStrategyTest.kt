@@ -41,18 +41,18 @@ internal class TypeStrategyTest {
     @Test
     fun testRunIterationNoMatch() {
         val obj = createMonkey(listOf("xyz"), 'e')
-        val result = obj.findMatches()
+        val result = obj.runAttempt()
         assertFalse(result.hasMatch())
     }
 
     @Test
     fun testRunIterationMatch() {
         val obj = createMonkey(listOf("abcde"), 'e')
-        val result = obj.findMatches()
+        val result = obj.runAttempt()
         assertTrue(result.hasMatch())
     }
 
-    private fun createMonkey(words: List<String>, toChar: Char): Monkey {
+    private fun createMonkey(words: List<String>, toChar: Char): DefaultMonkey {
         val corpus = Corpus(words)
         val checker = WordChecker(corpus)
         val strategy = DeterministicStrategy(Keys.keyList(toChar))

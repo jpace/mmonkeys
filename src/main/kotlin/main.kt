@@ -3,7 +3,7 @@ import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CorpusSimulationFactory
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.MonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.time.Durations
 import java.lang.Thread.sleep
@@ -25,7 +25,7 @@ fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: (id: Int
 fun runCorpusTest(toChar: Char) {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
-    val x = "equal" to MonkeyFactory::createMonkeyRandom
+    val x = "equal" to DefaultMonkeyFactory::createMonkeyRandom
     val y = "map" to MapMonkeyFactory::create
     val m = x
     val corpus = Corpus(sought)

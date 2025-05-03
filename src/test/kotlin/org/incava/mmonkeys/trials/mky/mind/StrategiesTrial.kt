@@ -2,11 +2,13 @@ package org.incava.mmonkeys.trials.mky.mind
 
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 
 class StrategiesTrial {
@@ -22,6 +24,11 @@ class StrategiesTrial {
             Qlog.info("word", result)
         }
         println()
+    }
+
+    fun random() {
+        val obj = RandomStrategy(Keys.fullList())
+        runIt("random", obj)
     }
 
     fun twosDistributed() {
@@ -47,6 +54,7 @@ class StrategiesTrial {
 
 fun main() {
     val obj = StrategiesTrial()
+    obj.random()
     obj.twosDistributed()
     obj.twosRandom()
     obj.threesDistributed()

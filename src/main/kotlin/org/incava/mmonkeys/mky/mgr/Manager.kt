@@ -5,7 +5,7 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusStatsView
-import org.incava.mmonkeys.words.Words
+import org.incava.mmonkeys.words.Attempt
 import java.io.File
 import java.io.PrintStream
 
@@ -28,17 +28,17 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
         perfView = SimPerfView(corpus, perfOut)
     }
 
-    override fun update(monkey: Monkey, words: Words) {
+    override fun update(monkey: Monkey, attempt: Attempt) {
         // this includes spaces
-        totalKeystrokes += words.totalKeyStrokes
+        totalKeystrokes += attempt.totalKeyStrokes
         // @todo - reintroduce the number of attempts (count of all words, not just matches):
         count++
-        words.words.forEach { word ->
+        attempt.words.forEach { word ->
             ++matchCount
             managerView.addMatch(monkey, word.index, matchCount, totalKeystrokes)
             matchesByLength.merge(word.string.length, 1) { prev, _ -> prev + 1 }
         }
-        if (words.hasMatch()) {
+        if (attempt.hasMatch()) {
             statsView.update(matchCount, totalKeystrokes)
         }
         perfView.update(matchCount, totalKeystrokes)

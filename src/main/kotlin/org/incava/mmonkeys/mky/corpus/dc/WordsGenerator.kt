@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
+import org.incava.mmonkeys.words.AttemptFactory
+import org.incava.mmonkeys.words.Attempts
 import org.incava.mmonkeys.words.Word
-import org.incava.mmonkeys.words.Words
-import org.incava.mmonkeys.words.WordsFactory
 import org.incava.rando.RandIntsFactory
 import org.incava.rando.RndSlots
 
@@ -17,7 +17,7 @@ class WordsGenerator(
     private val minToSpace = 2
     private val wordGenerator = WordGenerator(corpus, filterSupplier)
 
-    fun attemptMatch(): Words {
+    fun runAttempts(): Attempts {
         val slotIndices = indicesSupplier(intsFactory)
         val matches = mutableListOf<Word>()
         var keystrokes = 0L
@@ -34,9 +34,9 @@ class WordsGenerator(
             keystrokes += toSpace
         }
         return if (matches.isEmpty()) {
-            WordsFactory.toWordsNonMatch(keystrokes, slotIndices.size)
+            AttemptFactory.failed(keystrokes, slotIndices.size)
         } else {
-            Words(matches, keystrokes, slotIndices.size)
+            AttemptFactory.succeeded(matches, keystrokes, slotIndices.size)
         }
     }
 }

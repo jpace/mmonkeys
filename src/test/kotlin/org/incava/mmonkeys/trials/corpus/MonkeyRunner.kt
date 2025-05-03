@@ -56,8 +56,12 @@ class MonkeyRunner<T : Corpus>(
                 ++iteration
                 result = monkey.findMatches()
 
-            } while (!result.hasMatch() && iteration < maxAttempts && corpus.hasUnmatched())
-            result.words.forEach { view.show(monkey, monkey.manager!!, it.index) }
+            } while (!result.hasMatch() &&
+                iteration < maxAttempts &&
+                corpus.hasUnmatched())
+            result.words.forEach {
+                view.show(monkey, monkey.manager!!, it.index)
+            }
             matchCount += result.words.size
             iterations += iteration
             val now = ZonedDateTime.now()

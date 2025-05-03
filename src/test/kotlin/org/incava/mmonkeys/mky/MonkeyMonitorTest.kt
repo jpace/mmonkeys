@@ -5,6 +5,7 @@ import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.util.ResourceUtil
+import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Word
 import org.incava.mmonkeys.words.Words
 import kotlin.test.Test
@@ -16,10 +17,10 @@ internal class MonkeyMonitorTest {
         val monitor = object : MonkeyMonitor {
             var totalKeystrokes = 0L
 
-            override fun update(monkey: Monkey, words: Words) {
+            override fun update(monkey: Monkey, attempt: Attempt) {
                 Console.info("monkey", monkey)
-                Console.info("words", words)
-                totalKeystrokes += words.totalKeyStrokes
+                Console.info("words", attempt)
+                totalKeystrokes += attempt.totalKeyStrokes
             }
 
             override fun summarize() {
@@ -44,7 +45,7 @@ internal class MonkeyMonitorTest {
         }
         val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE)
         val manager = Manager(corpus)
-        val monkey = WordsGeneratorMonkeyFactory.createMonkey(manager, 1, corpus)
+        val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus).also { it.manager = manager }
         val words1 = listOf("this" to 3, "is" to 17, "a" to 9, "test" to 6)
             .map { Word(it.first, it.second) }
             .let { Words(it, 100, 10) }
