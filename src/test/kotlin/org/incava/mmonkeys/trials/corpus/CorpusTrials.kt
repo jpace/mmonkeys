@@ -1,16 +1,22 @@
 package org.incava.mmonkeys.trials.corpus
 
+import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
+import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations.measureDuration
 import java.time.Duration.ofSeconds
 
 fun main() {
+    val limit = 7
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 1..7 }
+    val view = CorpusTrialView(words.size, limit)
     val trials = listOf(
         // NumberLongsMonkey can only support up through word crpxnlskvljfhh
 //            CorpusTrial(4, 500, ofSeconds(3L), 1000),
 //           CorpusTrial(4, 10, ofSeconds(30L), 1),
 
 //            CorpusTrial(7, 5000, ofSeconds(5L), 1000),
-            CorpusTrial(1 .. 7, 50000, ofSeconds(20L), outputInterval = 10),
+            CorpusTrial(words, ofSeconds(20L), view, outputInterval = 10),
             //CorpusTrial(50, 5000, ofMinutes(1L), 1000),
 //            CorpusTrial(7, 5000, ofMinutes(3L), 10000),
 //            CorpusTrial(7, 5000, ofMinutes(7L), 10000),

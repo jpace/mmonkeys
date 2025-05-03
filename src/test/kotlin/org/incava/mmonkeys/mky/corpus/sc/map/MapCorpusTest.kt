@@ -48,7 +48,7 @@ internal class MapCorpusTest {
         val strategy1 = RandomStrategy(Keys.fullList())
         val checker1 = MapWordChecker(corpus)
         val checker2 = MapWordChecker(corpus)
-        val monkey1 = DefaultMonkeyFactory.createMonkey(1, checker1, strategy1) as DefaultMonkey
+        val monkey1 = DefaultMonkeyFactory.createMonkey(1, checker1, strategy1)
         var result: Attempt
         do {
             result = monkey1.runAttempt()

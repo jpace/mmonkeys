@@ -1,13 +1,11 @@
 package org.incava.mmonkeys.corpus
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import java.io.File
 
 object CorpusFactory {
-    fun readFileWords(file: File, numLines: Int): List<String> {
-        val lineFilter: (Int) -> Boolean = { numLines < 0 || it < numLines }
-        return readFileWords(file, lineFilter = lineFilter, wordFilter = { true })
-    }
+    val filesToWords: MutableMap<File, List<String>> = mutableMapOf()
 
     fun readFileWords(file: File, lineFilter: (Int) -> Boolean = { true }, wordFilter: (String) -> Boolean = { true }): List<String> {
         val lines = file.readLines()
@@ -28,7 +26,9 @@ object CorpusFactory {
             .filter(wordFilter)
     }
 
-    fun readFileWords(file: File): List<String> = readFileWords(file, lineFilter = { true }, wordFilter = { true })
+    fun readFileWords(file: File): List<String> {
+        return filesToWords.computeIfAbsent(file) { Qlog.info("file", file); readFileWords(file, lineFilter = { true }, wordFilter = { true }) }
+    }
 
     fun readFileWords(file: File, wordFilter: (String) -> Boolean): List<String> {
         return readFileWords(file, lineFilter = { true }, wordFilter = wordFilter)

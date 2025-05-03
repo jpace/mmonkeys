@@ -24,19 +24,8 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 import java.time.Duration
 
-class CorpusTrial(
-    private val lengthRange: IntRange,
-    numLines: Int,
-    private val timeLimit: Duration,
-    private val outputInterval: Int = 1,
-) {
-    private val words: List<String>
+class CorpusTrial(val words: List<String>, private val timeLimit: Duration, val view: CorpusTrialView, private val outputInterval: Int = 1) {
     private val results = mutableMapOf<String, PerfResults>()
-
-    init {
-        words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE, numLines).filter { it.length in lengthRange }
-        Console.info("sought.#", words.size)
-    }
 
     private fun <T : Corpus> runMonkey(name: String, runner: MonkeyRunner<T>): PerfResults {
         val results = runner.run()
@@ -82,7 +71,6 @@ class CorpusTrial(
     }
 
     fun showResults() {
-        val view = CorpusTrialView(words.size, lengthRange.last)
         view.show(results)
     }
 }
@@ -90,7 +78,9 @@ class CorpusTrial(
 fun main() {
     // NumberLongsMonkey can only support up through words of length 13
     val limit = 13
-    val obj = CorpusTrial(3..limit, 10000, Duration.ofSeconds(10L))
+    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 3..limit }
+    val view = CorpusTrialView(words.size, 13)
+    val obj = CorpusTrial(words, Duration.ofSeconds(10L), view)
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

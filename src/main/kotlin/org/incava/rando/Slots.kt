@@ -1,6 +1,5 @@
 package org.incava.rando
 
-import org.incava.ikdk.io.Console
 import kotlin.math.pow
 
 object Slots {
@@ -14,10 +13,8 @@ object Slots {
      * Converts the input map of keys 0 .. N into a map of 0 .. 99.
      */
     fun reduceSlots(entries: Map<Int, Int>, slotSize: Int = entries.size / 100): Map<Int, List<Int>> {
-        Console.info("entries.#", entries.size)
-        Console.info("slotSize", slotSize)
         val numSlots = 100
-        val reduced = (0 until numSlots).map { it to mutableListOf<Int>() }.toMap()
+        val reduced = (0 until numSlots).associateWith { mutableListOf<Int>() }
         entries.forEach { (key, value) ->
             val idx = key / slotSize
             reduced[idx]?.plusAssign(value)

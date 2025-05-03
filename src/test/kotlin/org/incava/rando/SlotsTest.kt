@@ -1,6 +1,5 @@
 package org.incava.rando
 
-import org.incava.ikdk.io.Console
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import kotlin.test.assertEquals
@@ -14,7 +13,6 @@ internal class SlotsTest {
             it / slotSize
         }
         val result = Slots.reduceSlots(inputs, inputs.size / slotSize)
-        Console.info("result", result)
         assertAll(
             { assertEquals(100, result.size) },
             { assertEquals(0, result.keys.first()) },
@@ -25,40 +23,35 @@ internal class SlotsTest {
     }
 
     @Test
-    fun calculate() {
+    fun calculateFew() {
         val numSlots = 1000
         val result = Slots.calculate(27, numSlots)
-        Console.info("result", result)
         assertEquals(numSlots, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
         }
         val reduced = Slots.reduceSlots(result)
-        Console.info("reduced", reduced)
         val slots = reduced.mapValues { it.value.average().toInt() }
-        Console.info("slots", slots)
+        assertEquals(143, slots[99])
     }
 
     @Test
     fun calculateMany() {
         val numSlots = 100_000
         val result = Slots.calculate(27, numSlots)
-        Console.info("result.#", result.size)
         assertEquals(numSlots, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
         }
         val reduced = Slots.reduceSlots(result)
-        Console.info("reduced", reduced)
         val slots = reduced.mapValues { it.value.average().toInt() }
-        Console.info("slots", slots)
+        assertEquals(148, slots[99])
     }
 
     @Test
     fun calculateAndReduce() {
         val numSlots = 100
         val result = Slots.calculateAndReduce(27, numSlots)
-        Console.info("result", result)
         assertEquals(numSlots, result.size)
         (1 until result.size).forEach {
             assert(result[it]!! >= result[it - 1]!!) { "${result[it]} >= ${result[it - 1]}" }
