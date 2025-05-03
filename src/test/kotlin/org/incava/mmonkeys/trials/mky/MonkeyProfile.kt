@@ -5,7 +5,6 @@ import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
@@ -23,7 +22,7 @@ import org.incava.mmonkeys.words.Attempts
 
 private class MonkeyProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     // limiting to 13 for numbers monkey
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 4..13 }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in 4..13 }
     val matchGoal = 20L
 
     fun profile() {
@@ -101,7 +100,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         while (matches < matchGoal) {
             val result = generator()
             matches += result
-            if (false && result > 0 && matches % (matchGoal / 10) == 0L) {
+            if (result > 0 && matches % (matchGoal / 10) == 0L) {
                 print(" ($matches)")
             }
         }

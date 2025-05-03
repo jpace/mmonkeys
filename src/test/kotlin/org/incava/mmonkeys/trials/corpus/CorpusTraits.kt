@@ -7,7 +7,7 @@ import java.math.BigInteger
 
 object CorpusTraits {
     fun showEstimateMatchTimes() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         printf("word: %,d (%s)", words.size, "total")
         printf("word: %,d (%s)", words.toSet().size, "unique")
         val bySize = words.groupBy { it.length }
@@ -33,7 +33,7 @@ object CorpusTraits {
     }
 
     fun showDuplicatedChars() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
             .distinct()
             .map(String::toLowerCase)
             .sorted()
@@ -48,7 +48,7 @@ object CorpusTraits {
     }
 
     fun showByLength() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         printf("word: %,d (%s)", words.size, "total")
         val bySize = words.groupBy { it.length }
         bySize.toSortedMap().forEach { (length, words) ->

@@ -3,16 +3,12 @@ package org.incava.mmonkeys.rand
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
 class SequencesProfile {
     val sequences: Sequences
 
     init {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         sequences = SequencesFactory.createFromWords(words)
     }
 

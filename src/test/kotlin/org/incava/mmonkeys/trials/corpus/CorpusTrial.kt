@@ -78,7 +78,7 @@ class CorpusTrial(val words: List<String>, private val timeLimit: Duration, val 
 fun main() {
     // NumberLongsMonkey can only support up through words of length 13
     val limit = 13
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 3..limit }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in 3..limit }
     val view = CorpusTrialView(words.size, 13)
     val obj = CorpusTrial(words, Duration.ofSeconds(10L), view)
     val trialDuration = Durations.measureDuration {

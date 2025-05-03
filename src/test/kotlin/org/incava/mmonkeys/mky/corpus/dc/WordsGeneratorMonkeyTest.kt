@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class WordsGeneratorMonkeyTest {
     @Test
     fun runAttempts() {
-        val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE) { it.length < 5 }
+        val corpus = DualCorpus(CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length < 5 })
         val manager = Manager(corpus)
         val obj = WordsGeneratorMonkeyFactory.createMonkey(1, corpus).also { it.manager = manager }
         repeat(100) {

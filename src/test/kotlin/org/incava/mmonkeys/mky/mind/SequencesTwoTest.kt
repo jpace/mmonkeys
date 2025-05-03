@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class SequencesTwoTest {
     @Test
     fun getRandomChar() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val sequences = SequencesFactory.createFromWords(words)
         val obj = SequencesTwo(sequences)
         val result = obj.getRandomChar()
@@ -18,7 +18,7 @@ class SequencesTwoTest {
 
     @Test
     fun testGetRandomChar() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val sequences = SequencesFactory.createFromWords(words)
         val obj = SequencesTwo(sequences)
         val result = obj.getRandomChar('t')

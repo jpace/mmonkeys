@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 class SequenceMonkeyTest {
     @Test
     fun findMatches() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val corpus = Corpus(words)
         val sequences = SequencesFactory.createFromWords(words)
         val strategy = TwosRandomStrategy(sequences)

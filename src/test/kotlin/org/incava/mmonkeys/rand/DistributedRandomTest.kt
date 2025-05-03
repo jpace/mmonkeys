@@ -8,7 +8,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
 class DistributedRandomTest {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
     val counts = CorpusTraits(words).characterCounts()
     val iterations = 1_000_000
 

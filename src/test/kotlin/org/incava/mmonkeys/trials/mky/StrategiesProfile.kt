@@ -2,7 +2,6 @@ package org.incava.mmonkeys.trials.mky
 
 import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.io.Qlog.printf
-import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.DefaultMonkey
@@ -19,7 +18,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 
 private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length >= minLength }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length >= minLength }
     val scenarios = mutableListOf<Pair<String, () -> Unit>>()
     var id = 1
 
@@ -88,6 +87,6 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 }
 
 private fun main() {
-    val obj = StrategiesProfile(minLength = 5, matchGoal = 20L)
+    val obj = StrategiesProfile(minLength = 3, matchGoal = 10L)
     obj.profile()
 }

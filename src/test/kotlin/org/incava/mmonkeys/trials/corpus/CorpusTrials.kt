@@ -8,7 +8,7 @@ import java.time.Duration.ofSeconds
 
 fun main() {
     val limit = 7
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length in 1..7 }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in 1..7 }
     val view = CorpusTrialView(words.size, limit)
     val trials = listOf(
         // NumberLongsMonkey can only support up through word crpxnlskvljfhh

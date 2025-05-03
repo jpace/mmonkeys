@@ -10,7 +10,7 @@ import kotlin.test.assertNotNull
 class ThreesDistributedStrategyTest {
     @Test
     fun typeWord() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val obj = ThreesDistributedStrategy(words)
         val result = obj.typeWord()
         assertNotNull(result)
@@ -18,7 +18,7 @@ class ThreesDistributedStrategyTest {
 
     @Test
     fun typeWordProfile() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val obj = ThreesDistributedStrategy(words)
         val results = mutableListOf<String>()
         repeat(1000) {

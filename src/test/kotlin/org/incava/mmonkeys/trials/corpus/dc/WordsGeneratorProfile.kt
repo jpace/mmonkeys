@@ -10,7 +10,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempts
 
 private class WordsGeneratorProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE) { it.length in 3..17 }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in 3..17 }
     val matchGoal = 1000L
 
     fun profile() {

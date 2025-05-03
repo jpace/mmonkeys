@@ -7,7 +7,7 @@ import org.incava.mmonkeys.rand.DistributedRandom
 import org.incava.mmonkeys.util.ResourceUtil
 
 class DistributedRandomTrial {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).filter { it.length > 5 }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length > 5 }
     val counts = CorpusTraits(words).characterCounts()
 
     fun counts() {

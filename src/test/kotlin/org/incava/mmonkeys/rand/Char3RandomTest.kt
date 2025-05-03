@@ -6,7 +6,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
 class Char3RandomTest {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).subList(0, 100)
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).subList(0, 100)
 
     @Test
     fun mapping() {

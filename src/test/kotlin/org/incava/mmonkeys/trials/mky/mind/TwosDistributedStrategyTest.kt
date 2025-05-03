@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 class TwosDistributedStrategyTest {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
 
     @Test
     fun typeWord() {

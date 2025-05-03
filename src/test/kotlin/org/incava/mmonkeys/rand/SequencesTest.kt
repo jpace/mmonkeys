@@ -13,7 +13,7 @@ class SequencesTest {
 
     @BeforeAll
     fun setup() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         obj = SequencesFactory.createFromWords(words)
     }
 

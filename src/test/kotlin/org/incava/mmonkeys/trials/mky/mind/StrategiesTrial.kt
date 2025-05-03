@@ -12,7 +12,7 @@ import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 
 class StrategiesTrial {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
 
     fun runIt(name: String, strategy: TypeStrategy) {
         Qlog.info("name", name)

@@ -4,6 +4,7 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGenerator
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
 import org.incava.mmonkeys.util.ResourceUtil
@@ -73,7 +74,7 @@ class WordsGeneratorTrial {
 }
 
 fun main() {
-    val corpus = CorpusFactory.dualCorpusOf(ResourceUtil.FULL_FILE)
+    val corpus = DualCorpus(CorpusFactory.fileToWords(ResourceUtil.FULL_FILE))
     val obj = WordsGeneratorTrial()
     val wordsGenerator = WordsGeneratorFactory.createWithDefaults(corpus)
     obj.runTest(corpus, wordsGenerator)

@@ -5,8 +5,6 @@ import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 class SequencesFactoryTest {
 
     @Test
@@ -15,7 +13,7 @@ class SequencesFactoryTest {
 
     @Test
     fun toCharsList() {
-        val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE).subList(0, 10000)
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).subList(0, 10000)
         val obj = SequencesFactory.toCharsList(words)
         val matches = mutableSetOf<Triple<Char?, Char, Char?>>()
         obj.indices.forEach {

@@ -10,7 +10,7 @@ import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 
 class SequencesTrial {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
 
     fun twos() {
         val obj = SequencesFactory.createFromWords(words)
@@ -72,7 +72,7 @@ class SequencesTrial {
             }
         }.flatten().flatten()
         countToString.sortedBy { it.first }.forEach { (count, str) ->
-            Console.info("$count: $str")
+            Console.info("$count: <$str>")
         }
     }
 

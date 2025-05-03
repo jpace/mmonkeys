@@ -8,7 +8,7 @@ import java.math.BigInteger
 import kotlin.math.pow
 
 class CorpusFilterTrial {
-    val words = CorpusFactory.readFileWords(ResourceUtil.FULL_FILE)
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
 
     fun duplicates() {
         val obj = CorpusFilter(words)
