@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.number
 
+import org.incava.mmonkeys.mky.corpus.dc.AttemptedTypewriter
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.type.TypewriterFactory
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -52,9 +53,9 @@ internal class NumbersMonkeyTest {
     fun hasUnmatched() {
         val words = listOf("this", "is", "a", "test")
         val corpus = NumberedCorpus(words)
-        val typewriter = TypewriterFactory.create()
         val manager = Manager(corpus)
-        val obj = NumbersMonkeyFactory.createMonkey(1, corpus, typewriter).also { it.manager = manager }
+        val numbersMonkeyManager = NumbersMonkeyManager(corpus)
+        val obj = numbersMonkeyManager.createMonkey().also { it.manager = manager }
         repeat(1000000) { obj.runAttempt() }
         val result = corpus.hasUnmatched()
         assertFalse(result, "corpus.words: ${corpus.words}, matched: ${corpus.matched}")

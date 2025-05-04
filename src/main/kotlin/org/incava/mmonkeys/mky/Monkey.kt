@@ -6,20 +6,16 @@ import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Attempts
 import org.incava.mmonkeys.words.Words
 
-abstract class Monkey(val id: Int, val typewriter: Typewriter, var manager: Manager? = null) {
-    override fun toString(): String = "Monkey(id=$id)"
-
+abstract class Monkey(val id: Int, open val typewriter: Typewriter, var manager: Manager? = null) {
     abstract fun findMatches(): Words
 
-    fun processAttempts(attempts: Attempts) : Words {
-        val words = attempts.asWords()
-        manager?.update(this, words)
-        return words
+    fun processAttempts(attempts: Attempts): Words {
+        manager?.update(this, attempts)
+        return Words(attempts.words)
     }
 
-    fun processAttempt(attempt: Attempt) : Words {
-        val words = attempt.toWords()
-        manager?.update(this, words)
-        return words
+    fun processAttempt(attempt: Attempt): Words {
+        manager?.update(this, attempt)
+        return Words(attempt.words)
     }
 }

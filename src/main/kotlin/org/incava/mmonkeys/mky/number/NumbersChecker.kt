@@ -5,11 +5,10 @@ import org.incava.mmonkeys.words.AttemptFactory
 import org.incava.mmonkeys.words.Word
 
 class NumbersChecker(val corpus: NumberedCorpus, private val updater: NumberedCorpusUpdater) {
-    fun getForLength(numChars: Int): Map<Long, List<Int>>? {
-        return corpus.longsForLength(numChars)
-    }
+    fun hasForLength(numChars: Int) = corpus.hasForLength(numChars)
 
-    fun processAttempt(numChars: Int, encoded: Long, forLength: Map<Long, List<Int>>): Attempt {
+    fun toAttempt(numChars: Int, encoded: Long): Attempt {
+        val forLength = corpus.longsForLength(numChars)!!
         val forEncoded = forLength[encoded]
         return if (forEncoded.isNullOrEmpty()) {
             // keystrokes is through the space

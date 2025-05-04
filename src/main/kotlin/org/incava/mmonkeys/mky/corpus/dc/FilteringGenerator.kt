@@ -1,10 +1,9 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
 import org.incava.mmonkeys.type.Chars
-import org.incava.mmonkeys.words.Word
 
-class FilteringGenerator(val corpus: DualCorpus, val filterSupplier: (Int) -> LengthFilter) {
-    fun getWord(numChars: Int): Word? {
+class FilteringGenerator(val filterSupplier: (Int) -> LengthFilter) {
+    fun getRandomString(numChars: Int): String? {
         val filter = filterSupplier(numChars)
         if (!filter.hasCandidates()) {
             return null
@@ -19,8 +18,6 @@ class FilteringGenerator(val corpus: DualCorpus, val filterSupplier: (Int) -> Le
             }
             bytes[index] = ch.code.toByte()
         }
-        val string = String(bytes)
-        val index = corpus.setMatched(string, numChars)
-        return Word(string, index)
+        return String(bytes)
     }
 }

@@ -1,9 +1,12 @@
 package org.incava.mmonkeys.corpus
 
+import org.incava.mmonkeys.util.ResourceUtil
 import java.io.File
 
 object CorpusFactory {
     private val filesToWords: MutableMap<File, List<String>> = mutableMapOf()
+
+    val DEFAULT_CORPUS = Corpus(fileToWords(ResourceUtil.FULL_FILE))
 
     fun fileToWords(file: File): List<String> {
         val lines = file.readLines()

@@ -56,7 +56,7 @@ class MonkeyRunner<T : Corpus>(
                 ++iteration
                 result = monkey.findMatches()
 
-            } while (!result.hasMatch() &&
+            } while (result.words.isEmpty() &&
                 iteration < maxAttempts &&
                 corpus.hasUnmatched())
             result.words.forEach {

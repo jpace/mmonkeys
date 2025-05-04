@@ -5,13 +5,13 @@ import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.AttemptFactory
 import org.incava.mmonkeys.words.Word
 
-class MapWordChecker(override val corpus: MapCorpus, private val corpusUpdater: MapCorpusUpdater = MapCorpusUpdater(corpus)) : WordChecker(corpus) {
+class MapWordChecker(override val corpus: MapCorpus) : WordChecker(corpus) {
     override fun processAttempt(str: String): Attempt {
         val indices = corpus.forLength(str.length)?.get(str)
         return if (indices == null) {
             AttemptFactory.failed(str)
         } else {
-            val index = corpusUpdater.wordMatched(str, str.length)
+            val index = corpus.setMatched(str)
             val word = Word(str, index)
             AttemptFactory.succeeded(word)
         }

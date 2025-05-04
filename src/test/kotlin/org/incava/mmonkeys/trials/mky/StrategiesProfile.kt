@@ -5,7 +5,7 @@ import org.incava.ikdk.io.Qlog.printf
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -20,11 +20,11 @@ import org.incava.time.Durations
 private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length >= minLength }
     val scenarios = mutableListOf<Pair<String, () -> Unit>>()
-    var id = 1
 
     fun addScenario(name: String, strategy: TypeStrategy) {
         val corpus = Corpus(words)
-        val monkey = DefaultMonkeyFactory.createMonkey(id++, corpus, strategy)
+        val mgr = DefaultMonkeyManager(corpus)
+        val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(monkey) })
     }
 

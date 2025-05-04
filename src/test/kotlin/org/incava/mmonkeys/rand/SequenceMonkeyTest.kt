@@ -4,7 +4,7 @@ import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
@@ -16,7 +16,8 @@ class SequenceMonkeyTest {
         val corpus = Corpus(words)
         val sequences = SequencesFactory.createFromWords(words)
         val strategy = TwosRandomStrategy(sequences)
-        val obj = DefaultMonkeyFactory.createMonkey(1, corpus, strategy) as DefaultMonkey
+        val mgr = DefaultMonkeyManager(corpus)
+        val obj = mgr.createMonkey(strategy) as DefaultMonkey
         repeat(100) {
             val result = obj.runAttempt()
             Qlog.info("result", result)

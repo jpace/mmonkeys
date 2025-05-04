@@ -19,6 +19,10 @@ class IndexedCorpus<T>(val indexSupplier: (String) -> T) {
         return elements[length]
     }
 
+    fun hasForLength(length: Int) : Boolean {
+        return elements.containsKey(length)
+    }
+
     fun setMatched(item: T, length: Int): Int {
         val forLength: MutableMap<T, MutableList<Int>> = elements[length] ?: return -1
         val forEncoded: MutableList<Int> = forLength[item] ?: return -1

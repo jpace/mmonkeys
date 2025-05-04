@@ -79,7 +79,7 @@ class CoroutineSimulation(
     private suspend fun checkMonkey(monkey: Monkey): Boolean {
         iterations.incrementAndGet()
         val words = monkey.findMatches()
-        if (words.hasMatch()) {
+        if (words.words.isNotEmpty()) {
             matches.addAll(words.words.map { it.index })
             numFound += words.words.size
             if (verbose) {

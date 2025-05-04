@@ -6,6 +6,8 @@ import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusStatsView
 import org.incava.mmonkeys.words.Attempt
+import org.incava.mmonkeys.words.Attempts
+import org.incava.mmonkeys.words.Word
 import java.io.File
 import java.io.PrintStream
 
@@ -29,16 +31,24 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
     }
 
     override fun update(monkey: Monkey, attempt: Attempt) {
+        update(monkey, attempt.words, attempt.totalKeyStrokes)
+    }
+
+    override fun update(monkey: Monkey, attempts: Attempts) {
+        update(monkey, attempts.words, attempts.totalKeyStrokes)
+    }
+
+    private fun update(monkey: Monkey, words: List<Word>, totalKeystrokes: Long) {
         // this includes spaces
-        totalKeystrokes += attempt.totalKeyStrokes
+        this.totalKeystrokes += totalKeystrokes
         // @todo - reintroduce the number of attempts (count of all words, not just matches):
         count++
-        attempt.words.forEach { word ->
+        words.forEach { word ->
             ++matchCount
             managerView.addMatch(monkey, word.index, matchCount, totalKeystrokes)
             matchesByLength.merge(word.string.length, 1) { prev, _ -> prev + 1 }
         }
-        if (attempt.hasMatch()) {
+        if (words.isNotEmpty()) {
             statsView.update(matchCount, totalKeystrokes)
         }
         perfView.update(matchCount, totalKeystrokes)

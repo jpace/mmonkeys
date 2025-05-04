@@ -7,8 +7,8 @@ import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
+import org.incava.mmonkeys.words.Attempts
 import org.incava.mmonkeys.words.Word
-import org.incava.mmonkeys.words.Words
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,8 +20,14 @@ internal class MonkeyMonitorTest {
 
             override fun update(monkey: Monkey, attempt: Attempt) {
                 Console.info("monkey", monkey)
-                Console.info("words", attempt)
+                Console.info("attempt", attempt)
                 totalKeystrokes += attempt.totalKeyStrokes
+            }
+
+            override fun update(monkey: Monkey, attempts: Attempts) {
+                Console.info("monkey", monkey)
+                Console.info("attempts", attempts)
+                totalKeystrokes += attempts.totalKeyStrokes
             }
 
             override fun summarize() {
@@ -47,16 +53,17 @@ internal class MonkeyMonitorTest {
         val corpus = DualCorpus(CorpusFactory.fileToWords(ResourceUtil.FULL_FILE))
         val manager = Manager(corpus)
         val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus).also { it.manager = manager }
-        val words1 = listOf("this" to 3, "is" to 17, "a" to 9, "test" to 6)
+        val attempts1 = listOf("this" to 3, "is" to 17, "a" to 9, "test" to 6)
             .map { Word(it.first, it.second) }
-            .let { Words(it, 100, 10) }
+            .let { Attempts(it, 1, 2) }
         assertEquals(0L, monitor.totalKeystrokes)
-        monitor.update(monkey, words1)
-        assertEquals(100L, monitor.totalKeystrokes)
-        val words2 = listOf("also" to 4, "this" to 1, "instance" to 9)
+        monitor.update(monkey, attempts1)
+        assertEquals(1L, monitor.totalKeystrokes)
+        val attempts2 = listOf("also" to 4, "this" to 1, "instance" to 9)
             .map { Word(it.first, it.second) }
-            .let { Words(it, 42, 10) }
-        assertEquals(100L, monitor.totalKeystrokes)
-        monitor.update(monkey, words2)
+            .let { Attempts(it, 4, 6) }
+        assertEquals(1L, monitor.totalKeystrokes)
+        monitor.update(monkey, attempts2)
+        assertEquals(5L, monitor.totalKeystrokes)
     }
 }

@@ -3,8 +3,8 @@ import org.incava.mmonkeys.exec.CoroutineSimulation
 import org.incava.mmonkeys.exec.CorpusSimulationFactory
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.Corpus
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 
@@ -22,14 +22,29 @@ fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: (id: Int
     println()
 }
 
-fun runCorpusTest(toChar: Char) {
+fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: () -> Monkey) {
+    // I don't make monkeys; I just train them!
+    val numMonkeys = 10
+    val monkeys = (0 until numMonkeys).map { id -> monkeySupplier() }
+    Console.info("monkeys.#", monkeys.size)
+    val simulation = CoroutineSimulation(sought, monkeys, 10, true)
+    Console.info("type", type)
+    Console.info("# monkeys", numMonkeys)
+    Console.info("main", "simulation")
+    Console.info("type", type)
+    simulation.run()
+    println()
+}
+
+fun runCorpusTest() {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
-    val x = "equal" to DefaultMonkeyFactory::createMonkeyRandom
-    val y = "map" to MapMonkeyFactory::create
-    val m = x
     val corpus = Corpus(sought)
-    runSimulation(m.first, corpus, m.second)
+    val mgr1 = DefaultMonkeyManager(corpus)
+    val mapCorpus = MapCorpus(sought)
+    val mgr2 = DefaultMonkeyManager(mapCorpus)
+    runSimulation("equal", corpus, mgr1::createMonkeyRandom)
+    runSimulation("map", mapCorpus, mgr2::createMonkeyRandom)
 }
 
 fun main(args: Array<String>) {

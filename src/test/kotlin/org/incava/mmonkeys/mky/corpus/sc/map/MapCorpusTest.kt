@@ -1,9 +1,9 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
 import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.mky.mind.RandomStrategy
+import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.words.Attempt
 import org.junit.jupiter.api.Assertions
@@ -31,12 +31,12 @@ internal class MapCorpusTest {
     fun matched() {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = MapCorpus(input)
-        obj.setMatched("ab", 2)
+        obj.setMatched("ab")
         assertEquals(setOf(0), obj.matched)
         val expectedMap = mapOf("cd" to listOf(1))
         val resultMap = obj.forLength(2) as Map<String, List<Int>>
         assertEquals(expectedMap, resultMap)
-        obj.setMatched("cd", 2)
+        obj.setMatched("cd")
         assertEquals(setOf(0, 1), obj.matched)
         assertNull(obj.forLength(2))
     }
@@ -48,7 +48,8 @@ internal class MapCorpusTest {
         val strategy1 = RandomStrategy(Keys.fullList())
         val checker1 = MapWordChecker(corpus)
         val checker2 = MapWordChecker(corpus)
-        val monkey1 = DefaultMonkeyFactory.createMonkey(1, checker1, strategy1)
+        val mgr1 = DefaultMonkeyManager(corpus)
+        val monkey1 = mgr1.createMonkey(strategy1)
         var result: Attempt
         do {
             result = monkey1.runAttempt()

@@ -5,17 +5,17 @@ import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
-import org.incava.mmonkeys.mky.corpus.sc.map.MapMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
+import org.incava.mmonkeys.mky.number.NumbersMonkeyManager
 import org.incava.mmonkeys.rand.SequencesFactory
-import org.incava.mmonkeys.type.TypewriterFactory
+import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Attempts
@@ -39,7 +39,8 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         if (false) {
             val corpus = Corpus(words)
-            val monkey = DefaultMonkeyFactory.createMonkeyRandom(2, corpus)
+            val mgr = DefaultMonkeyManager(corpus)
+            val monkey = mgr.createMonkeyRandom()
             profiler.add("random") {
                 matchWords { monkey.runAttempt() }
             }
@@ -49,7 +50,8 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
             val corpus = Corpus(words)
             val sequences = SequencesFactory.createFromWords(corpus.words)
             val strategy = TwosRandomStrategy(sequences)
-            val monkey = DefaultMonkeyFactory.createMonkey(2, corpus, strategy)
+            val mgr = DefaultMonkeyManager(corpus)
+            val monkey = mgr.createMonkey(strategy)
             profiler.add("twos random") {
                 matchWords { monkey.runAttempt() }
             }
@@ -58,8 +60,8 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         run {
             val corpus = NumberedCorpus(words)
             val manager = Manager(corpus)
-            val typewriter = TypewriterFactory.create()
-            val monkey = NumbersMonkeyFactory.createMonkey(3, corpus, typewriter).also { it.manager = manager }
+            val mgr = NumbersMonkeyManager(corpus)
+            val monkey = mgr.createMonkey().also { it.manager = manager }
             profiler.add("numbers") {
                 matchWords { monkey.runAttempt() }
             }
@@ -67,7 +69,8 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
 
         run {
             val corpus = MapCorpus(words)
-            val monkey = MapMonkeyFactory.create(4, corpus)
+            val mgr = DefaultMonkeyManager(corpus)
+            val monkey = mgr.createMonkeyRandom()
             profiler.add("map") {
                 matchWords { monkey.runAttempt() }
             }
@@ -82,20 +85,20 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
     }
 
     fun matchWords(generator: () -> Attempt) {
-        runToMatchCount(matchGoal) {
+        runToMatchCount() {
             val result = generator()
             result.words.count { words.contains(it.string) }
         }
     }
 
     fun matchWords2(generator: () -> Attempts) {
-        runToMatchCount(matchGoal) {
+        runToMatchCount() {
             val result = generator()
             result.words.count { words.contains(it.string) }
         }
     }
 
-    fun runToMatchCount(matchGoal: Long, generator: () -> Int) {
+    fun runToMatchCount(generator: () -> Int) {
         var matches = 0L
         while (matches < matchGoal) {
             val result = generator()

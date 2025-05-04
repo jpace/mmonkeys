@@ -13,4 +13,6 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
     fun longsForLength(length: Int) : Map<Long, List<Int>>? {
         return indexedCorpus.elementsForLength(length)
     }
+
+    fun hasForLength(length: Int) = indexedCorpus.hasForLength(length)
 }
