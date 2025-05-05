@@ -11,7 +11,7 @@ open class Corpus(val words: List<String>) {
 
     fun isEmpty(): Boolean = !hasUnmatched()
 
-    fun findMatch(word: String): Int? {
+    open fun findMatch(word: String): Int? {
         return words.indices.find { index ->
             words[index] == word && !matched.contains(index)
         }

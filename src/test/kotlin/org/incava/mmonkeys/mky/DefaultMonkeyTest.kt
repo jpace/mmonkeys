@@ -16,6 +16,6 @@ class DefaultMonkeyTest {
         val obj = mgr.createMonkey(strategy)
         val result = obj.runAttempt()
         Qlog.info("result", result)
-        Qlog.info("result.words", result.words)
+        Qlog.info("result.word", result.word)
     }
 }

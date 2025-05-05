@@ -30,8 +30,6 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 
     fun profile() {
         Qlog.info("words.#", words.size)
-        var id = 1
-
         run {
             addScenario("random", RandomStrategy(Keys.fullList()))
         }
@@ -71,11 +69,11 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
             var attempts = 0L
             while (matches < matchGoal) {
                 val result = monkey.runAttempt()
-                val count = result.words.count { words.contains(it.string) }
-                matches += count
-                attempts += result.numAttempts
-                if (count != 0) {
-                    printf("%,d - %s", attempts, result.words.map { it.string })
+                val word = result.word
+                ++attempts
+                if (word != null && words.contains(word.string)) {
+                    ++matches
+                    printf("%,d - %s", attempts, word.string)
                 }
             }
             printf("attempts: %,d", attempts)
@@ -87,6 +85,6 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 }
 
 private fun main() {
-    val obj = StrategiesProfile(minLength = 3, matchGoal = 10L)
+    val obj = StrategiesProfile(minLength = 3, matchGoal = 5L)
     obj.profile()
 }

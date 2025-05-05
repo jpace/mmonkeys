@@ -25,7 +25,7 @@ fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: (id: Int
 fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: () -> Monkey) {
     // I don't make monkeys; I just train them!
     val numMonkeys = 10
-    val monkeys = (0 until numMonkeys).map { id -> monkeySupplier() }
+    val monkeys = (0 until numMonkeys).map { monkeySupplier() }
     Console.info("monkeys.#", monkeys.size)
     val simulation = CoroutineSimulation(sought, monkeys, 10, true)
     Console.info("type", type)

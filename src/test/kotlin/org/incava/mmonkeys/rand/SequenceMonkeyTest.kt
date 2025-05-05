@@ -17,7 +17,7 @@ class SequenceMonkeyTest {
         val sequences = SequencesFactory.createFromWords(words)
         val strategy = TwosRandomStrategy(sequences)
         val mgr = DefaultMonkeyManager(corpus)
-        val obj = mgr.createMonkey(strategy) as DefaultMonkey
+        val obj = mgr.createMonkey(strategy)
         repeat(100) {
             val result = obj.runAttempt()
             Qlog.info("result", result)

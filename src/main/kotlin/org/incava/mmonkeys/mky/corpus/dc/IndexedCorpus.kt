@@ -23,12 +23,19 @@ class IndexedCorpus<T>(val indexSupplier: (String) -> T) {
         return elements.containsKey(length)
     }
 
-    fun setMatched(item: T, length: Int): Int {
+    fun getIndex(item: T, length: Int): Int {
         val forLength: MutableMap<T, MutableList<Int>> = elements[length] ?: return -1
         val forEncoded: MutableList<Int> = forLength[item] ?: return -1
         // this is the index into the corpus words
-        val index = forEncoded.removeAt(0)
-        if (forEncoded.isEmpty()) {
+        return forEncoded[0]
+    }
+
+    fun setMatched(item: T, length: Int): Int {
+        val forLength: MutableMap<T, MutableList<Int>> = elements[length] ?: return -1
+        val forItem: MutableList<Int> = forLength[item] ?: return -1
+        // this is the index into the corpus words
+        val index = forItem.removeAt(0)
+        if (forItem.isEmpty()) {
             forLength.remove(item)
         }
         if (forLength.isEmpty()) {

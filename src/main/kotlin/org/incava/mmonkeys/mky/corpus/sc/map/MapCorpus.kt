@@ -10,5 +10,7 @@ class MapCorpus(words: List<String>) : Corpus(words) {
         return indexedCorpus.setMatched(word, word.length).also { index -> super.setMatched(index) }
     }
 
-    fun forLength(length: Int) = indexedCorpus.elementsForLength(length)
+    override fun findMatch(word: String): Int? {
+        return indexedCorpus.elementsForLength(word.length)?.get(word)?.get(0)
+    }
 }

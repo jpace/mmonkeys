@@ -5,15 +5,15 @@ import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.AttemptFactory
 import org.incava.mmonkeys.words.Word
 
-open class WordChecker(open val corpus: Corpus) {
-    open fun processAttempt(str: String): Attempt {
-        val match = corpus.findMatch(str)
-        return if (match == null) {
-            AttemptFactory.failed(str)
+class WordChecker(val corpus: Corpus, private val observer: AttemptObserver) {
+    fun processAttempt(str: String): Attempt {
+        val index = corpus.findMatch(str)
+        return if (index == null) {
+            AttemptFactory.failed(str).also { observer.onFailed(str) }
         } else {
-            corpus.setMatched(match)
-            val word = Word(str, match)
-            AttemptFactory.succeeded(word)
+            corpus.setMatched(index)
+            val word = Word(str, index)
+            AttemptFactory.succeeded(word).also { observer.onSuccess(it) }
         }
     }
 }

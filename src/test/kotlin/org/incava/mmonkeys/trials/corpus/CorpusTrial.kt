@@ -5,9 +5,10 @@ import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkey
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.number.NumberedCorpus
@@ -30,30 +31,19 @@ class CorpusTrial(val words: List<String>, private val timeLimit: Duration, val 
         return results
     }
 
-    private fun runMonkey(name: String, monkey: DefaultMonkey, corpus: Corpus): PerfResults {
-        val runner = MonkeyRunner(corpus, monkey, timeLimit)
-        return runMonkey(name, runner)
-    }
-
-    private fun runMonkey(name: String, monkey: NumbersMonkey, corpus: Corpus): PerfResults {
-        val runner = MonkeyRunner(corpus, monkey, timeLimit)
-        return runMonkey(name, runner)
-    }
-
-    private fun runMonkey(name: String, monkey: WordsGeneratorMonkey, corpus: Corpus): PerfResults {
+    private fun runMonkey(name: String, monkey: Monkey, corpus: Corpus): PerfResults {
         val runner = MonkeyRunner(corpus, monkey, timeLimit)
         return runMonkey(name, runner)
     }
 
     fun run() {
-        var id = 1
         val corpus = Corpus(words)
         val manager1 = Manager(corpus, outputInterval)
         val mgr1 = DefaultMonkeyManager(corpus)
         runMonkey("random", mgr1.createMonkeyRandom().also { it.manager = manager1 }, corpus)
 
         val mapCorpus = MapCorpus(words)
-        val manager2 = Manager(corpus, outputInterval)
+        val manager2 = Manager(mapCorpus, outputInterval)
         val mgr2 = DefaultMonkeyManager(mapCorpus)
         runMonkey("map", mgr2.createMonkeyRandom().also { it.manager = manager2 }, mapCorpus)
 
@@ -63,8 +53,9 @@ class CorpusTrial(val words: List<String>, private val timeLimit: Duration, val 
         runMonkey("numbers", mgr3.createMonkey().also { it.manager = manager3 }, numberedCorpus)
 
         val dualCorpus = DualCorpus(words)
-        val manager4 = Manager(corpus)
-        runMonkey("words gen", WordsGeneratorMonkeyFactory.createMonkey(id, dualCorpus).also { it.manager = manager4 }, dualCorpus)
+        val manager4 = Manager(dualCorpus, outputInterval)
+        val mgr4 = WordsGeneratorMonkeyManager(dualCorpus)
+        runMonkey("words gen", mgr4.createMonkey().also { it.manager = manager4 }, dualCorpus)
     }
 
     fun showResults() {

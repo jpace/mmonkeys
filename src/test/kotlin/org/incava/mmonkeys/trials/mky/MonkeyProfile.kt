@@ -6,16 +6,14 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
-import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
 import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkeyManager
 import org.incava.mmonkeys.rand.SequencesFactory
-import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Attempts
@@ -31,7 +29,8 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         run {
             val corpus = DualCorpus(words)
             val manager = Manager(corpus)
-            val monkey = WordsGeneratorMonkeyFactory.createMonkey(1, corpus).also { it.manager = manager }
+            val mgr = WordsGeneratorMonkeyManager(corpus)
+            val monkey = mgr.createMonkey().also { it.manager = manager }
             profiler.add("words gen") {
                 matchWords2 { monkey.runAttempts() }
             }
@@ -85,14 +84,15 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
     }
 
     fun matchWords(generator: () -> Attempt) {
-        runToMatchCount() {
+        runToMatchCount {
             val result = generator()
-            result.words.count { words.contains(it.string) }
+            val word = result.word
+            if (word == null || !words.contains(word.string)) 0 else 1
         }
     }
 
     fun matchWords2(generator: () -> Attempts) {
-        runToMatchCount() {
+        runToMatchCount {
             val result = generator()
             result.words.count { words.contains(it.string) }
         }

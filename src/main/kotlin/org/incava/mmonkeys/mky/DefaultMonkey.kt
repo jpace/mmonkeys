@@ -2,25 +2,22 @@ package org.incava.mmonkeys.mky
 
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.DefaultTypewriter
-import org.incava.mmonkeys.type.Typewriter
 import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Words
 
-open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, typewriter: DefaultTypewriter) : Monkey(id, typewriter) {
-    private val defaultTypewriter = typewriter
-
+open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, private val typewriter: DefaultTypewriter) : Monkey(id) {
     private fun typeWord(): String {
         return strategy.typeWord()
     }
 
     override fun findMatches(): Words {
         val attempt = runAttempt()
-        return Words(attempt.words)
+        return if (attempt.word == null) Words(emptyList()) else Words(listOf(attempt.word))
     }
 
     fun runAttempt(): Attempt {
         val word = typeWord()
-        val attempt = defaultTypewriter.toAttempt(word)
+        val attempt = typewriter.toAttempt(word)
         processAttempt(attempt)
         return attempt
     }

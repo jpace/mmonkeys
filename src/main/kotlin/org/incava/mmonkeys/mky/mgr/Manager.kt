@@ -31,7 +31,8 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
     }
 
     override fun update(monkey: Monkey, attempt: Attempt) {
-        update(monkey, attempt.words, attempt.totalKeyStrokes)
+        val words = if (attempt.word == null) emptyList() else listOf(attempt.word)
+        update(monkey, words, attempt.totalKeyStrokes)
     }
 
     override fun update(monkey: Monkey, attempts: Attempts) {
