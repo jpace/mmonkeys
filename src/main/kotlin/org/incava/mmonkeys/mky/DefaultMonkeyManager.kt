@@ -1,18 +1,17 @@
 package org.incava.mmonkeys.mky
 
-import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.words.Attempt
 
-class DefaultMonkeyManager(val corpus: Corpus) {
+class DefaultMonkeyManager(val corpus: WordCorpus) {
     var id = 1
     val observer = object : AttemptObserver {
         override fun onSuccess(attempt: Attempt) {
-            Qlog.info("attempt", attempt)
+            // Qlog.info("attempt", attempt)
         }
 
         override fun onFailed(string: String) {

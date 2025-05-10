@@ -26,7 +26,7 @@ class CorpusMatchTable(private val wordSizeLimit: Int, val results: Map<String, 
         results.forEach { (name, res) ->
             val matchesByLength = mutableMapOf<Int, Int>()
             val wordsByLength = mutableMapOf<Int, Int>()
-            res.corpus.words.withIndex().forEach { (index, word) ->
+            res.corpus.words().withIndex().forEach { (index, word) ->
                 val wordLength = word.length
                 if (res.corpus.isMatched(index)) {
                     matchesByLength[wordLength] = (matchesByLength[wordLength] ?: 0) + 1

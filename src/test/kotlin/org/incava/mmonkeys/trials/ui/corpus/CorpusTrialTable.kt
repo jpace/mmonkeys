@@ -18,6 +18,7 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
         LongColumn("iterations.#", 12),
         DoubleColumn("matches/sec", 12, precision = 1),
         DoubleColumn("iters/sec", 12, precision = 1),
+        DoubleColumn("iters/match", 12, precision = 1),
         DoubleColumn("match %", 12, precision = 1),
     )
 ) {
@@ -31,10 +32,11 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
                 wordSizeLimit,
                 res.duration,
                 res.matches,
-                res.iterations.size,
+                res.iterations.sum(),
                 velocity(res.matches, durSecs),
                 velocity(res.iterations.size, durSecs),
-                100 * res.corpus.matched.size.toDouble() / res.corpus.words.size
+                if (res.matches == 0) 0.0 else res.iterations.sum().toDouble() / res.matches,
+                100 * res.corpus.matches().size.toDouble() / res.corpus.numWords()
             )
             writeRow(cells)
         }

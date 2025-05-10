@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.corpus.sc.map
 
+import org.incava.mmonkeys.corpus.impl.MapCorpus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -16,7 +17,7 @@ internal class MapCorpusTest {
             4 to mapOf("defg" to listOf(3)),
             5 to mapOf("lmnop" to listOf(5)),
         )
-        val result = obj.indexedCorpus.elements
+        val result = obj.itemIndices.elements
         assertEquals(expected, result)
     }
 
@@ -24,12 +25,12 @@ internal class MapCorpusTest {
     fun findMatchSetMatched() {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
         val obj = MapCorpus(input)
-        obj.setMatched("ab")
-        assertEquals(setOf(0), obj.matched)
+        obj.setMatched(0, "ab")
+        assertEquals(setOf(0), obj.matches())
         val result = obj.findMatch("cd")
         assertEquals(1, result)
-        obj.setMatched("cd")
-        assertEquals(setOf(0, 1), obj.matched)
+        obj.setMatched(1, "cd")
+        assertEquals(setOf(0, 1), obj.matches())
         assertNull(obj.findMatch("cd"))
     }
 }

@@ -46,28 +46,24 @@ class WordsGenerator(
         return if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
             // use long/encoded, convert back to string
             val encoded = encodedGenerator.getRandomEncoded(numChars)
-            processEncoded(numChars, encoded)
+            val forLength = corpus.longsForLength(numChars) ?: return null
+            val match = forLength[encoded]
+            return if (match.isNullOrEmpty()) {
+                null
+            } else {
+                val string = StringEncoder.decode(encoded)
+                val index = corpus.setMatched(encoded, numChars)
+                return Word(string, index)
+            }
         } else {
             // use "legacy"
             val string = filteringGenerator.getRandomString(numChars)
-            if (string == null) null else processString(numChars, string)
+            if (string == null)
+                null
+            else {
+                val index = corpus.setMatched(string, numChars)
+                Word(string, index)
+            }
         }
-    }
-
-    fun processEncoded(numChars: Int, encoded: Long): Word? {
-        val forLength = corpus.longsForLength(numChars) ?: return null
-        val match = forLength[encoded]
-        return if (match.isNullOrEmpty()) {
-            null
-        } else {
-            val string = StringEncoder.decode(encoded)
-            val index = corpus.setMatched(encoded, numChars)
-            return Word(string, index)
-        }
-    }
-
-    fun processString(numChars: Int, string: String): Word? {
-        val index = corpus.setMatched(string, numChars)
-        return Word(string, index)
     }
 }

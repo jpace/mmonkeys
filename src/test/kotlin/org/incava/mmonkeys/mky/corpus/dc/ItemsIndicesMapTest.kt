@@ -4,11 +4,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-internal class IndexedCorpusTest {
+internal class ItemsIndicesMapTest {
     @Test
     fun lengthToStringsToIndices() {
         val input = listOf("ab", "cd", "def", "defg", "ghi", "lmnop")
-        val obj = IndexedCorpus(input) { it }
+        val obj = ItemsIndicesMap<String>()
+        input.withIndex().forEach { obj.add(it.value.length, it.value, it.index) }
         val expected = mapOf(
             2 to mapOf("ab" to listOf(0), "cd" to listOf(1)),
             3 to mapOf("def" to listOf(2), "ghi" to listOf(4)),
@@ -23,12 +24,13 @@ internal class IndexedCorpusTest {
     @Test
     fun matched() {
         val input = listOf("ab", "cd", "def", "defg", "ghi")
-        val obj = IndexedCorpus(input) { it }
-        obj.setMatched("ab", 2)
+        val obj = ItemsIndicesMap<String>()
+        input.withIndex().forEach { obj.add(it.value.length, it.value, it.index) }
+        obj.removeItem("ab", 2)
         val expectedMap = mapOf("cd" to listOf(1))
         val resultMap = obj.elements[2] as Map<String, List<Int>>
         assertEquals(expectedMap, resultMap)
-        obj.setMatched("cd", 2)
+        obj.removeItem("cd", 2)
         assertNull(obj.elements[2])
     }
 }

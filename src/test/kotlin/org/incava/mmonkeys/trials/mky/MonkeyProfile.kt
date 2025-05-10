@@ -5,10 +5,11 @@ import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
-import org.incava.mmonkeys.mky.corpus.sc.map.MapCorpus
+import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
@@ -37,7 +38,7 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         }
 
         if (false) {
-            val corpus = Corpus(words)
+            val corpus = ListCorpus(words)
             val mgr = DefaultMonkeyManager(corpus)
             val monkey = mgr.createMonkeyRandom()
             profiler.add("random") {
@@ -46,8 +47,8 @@ private class MonkeyProfile(private val numInvokes: Long, private val numTrials:
         }
 
         if (false) {
-            val corpus = Corpus(words)
-            val sequences = SequencesFactory.createFromWords(corpus.words)
+            val corpus = ListCorpus(words)
+            val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosRandomStrategy(sequences)
             val mgr = DefaultMonkeyManager(corpus)
             val monkey = mgr.createMonkey(strategy)

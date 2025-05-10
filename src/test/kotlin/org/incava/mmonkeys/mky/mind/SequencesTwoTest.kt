@@ -18,7 +18,7 @@ class SequencesTwoTest {
 
     @Test
     fun testGetRandomChar() {
-        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
+        val words = CorpusFactory.defaultWords()
         val sequences = SequencesFactory.createFromWords(words)
         val obj = SequencesTwo(sequences)
         val result = obj.getRandomChar('t')

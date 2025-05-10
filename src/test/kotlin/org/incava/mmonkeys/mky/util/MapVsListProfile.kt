@@ -5,14 +5,14 @@ import org.incava.confile.SortType
 import java.util.*
 import kotlin.random.Random
 
-class MapVsListProfile(private val numInvokes: Long, private val trialInvokes: Int = 5) {
+class MapVsListProfile(private val numInvokes: Long, private val numTrials: Int = 5) {
     fun profile() {
         val arrayList = generate(27, 100)
         val linkedHashMap = arrayList.associateByTo(linkedMapOf()) { it }
         val hashMap = arrayList.associateByTo(hashMapOf()) { it }
         val treeMap = arrayList.associateByTo(TreeMap()) { it }
 
-        val profiler = Profiler(numInvokes, trialInvokes)
+        val profiler = Profiler(numInvokes, numTrials)
 
         profiler.add("array list") {
             val index = Random.Default.nextInt(100)

@@ -4,8 +4,10 @@ import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.io.Qlog.printf
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -21,8 +23,15 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length >= minLength }
     val scenarios = mutableListOf<Pair<String, () -> Unit>>()
 
-    fun addScenario(name: String, strategy: TypeStrategy) {
-        val corpus = Corpus(words)
+    fun addScenarioList(name: String, strategy: TypeStrategy) {
+        val corpus = ListCorpus(words)
+        val mgr = DefaultMonkeyManager(corpus)
+        val monkey = mgr.createMonkey(strategy)
+        scenarios.add(Pair(name) { matchWords(monkey) })
+    }
+
+    fun addScenarioMap(name: String, strategy: TypeStrategy) {
+        val corpus = MapCorpus(words)
         val mgr = DefaultMonkeyManager(corpus)
         val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(monkey) })
@@ -31,27 +40,33 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
     fun profile() {
         Qlog.info("words.#", words.size)
         run {
-            addScenario("random", RandomStrategy(Keys.fullList()))
+            addScenarioList("random list", RandomStrategy(Keys.fullList()))
+            addScenarioMap("random map", RandomStrategy(Keys.fullList()))
         }
 
         run {
-            addScenario("weighted", WeightedStrategy(words))
+            addScenarioList("weighted list", WeightedStrategy(words))
+            addScenarioMap("weighted map", WeightedStrategy(words))
         }
 
         run {
-            addScenario("2s random", TwosRandomStrategy(words))
+            addScenarioList("2s random list", TwosRandomStrategy(words))
+            addScenarioMap("2s random map", TwosRandomStrategy(words))
         }
 
         run {
-            addScenario("2s distributed", TwosDistributedStrategy(words))
+            addScenarioList("2s distributed list", TwosDistributedStrategy(words))
+            addScenarioMap("2s distributed map", TwosDistributedStrategy(words))
         }
 
         run {
-            addScenario("3s random", ThreesRandomStrategy(words))
+            addScenarioList("3s random list", ThreesRandomStrategy(words))
+            addScenarioMap("3s random map", ThreesRandomStrategy(words))
         }
 
         run {
-            addScenario("3s distributed", ThreesDistributedStrategy(words))
+            addScenarioList("3s distributed list", ThreesDistributedStrategy(words))
+            addScenarioMap("3s distributed map", ThreesDistributedStrategy(words))
         }
 
         Qlog.info("scenarios", scenarios)
@@ -85,6 +100,6 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 }
 
 private fun main() {
-    val obj = StrategiesProfile(minLength = 3, matchGoal = 5L)
+    val obj = StrategiesProfile(minLength = 4, matchGoal = 10L)
     obj.profile()
 }

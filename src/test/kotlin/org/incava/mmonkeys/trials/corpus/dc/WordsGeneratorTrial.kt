@@ -26,7 +26,7 @@ class WordsGeneratorTrial {
         val minLength = 4
         var longerMatched = 0
         val matchedByLength = sortedMapOf<Int, Int>()
-        val bySize = corpus.words.groupBy { it.length }.mapValues { it.value.size }
+        val bySize = corpus.words().groupBy { it.length }.mapValues { it.value.size }
         Console.info("by size", bySize.toSortedMap())
         Console.info("total", bySize.values.sum())
         val duration = measureDuration {
@@ -67,7 +67,7 @@ class WordsGeneratorTrial {
     fun showCorpus(corpus: Corpus) {
         val now = ZonedDateTime.now()
         println(now.format(pattern))
-        corpus.words.withIndex().forEach { (index, word) ->
+        corpus.words().withIndex().forEach { (index, word) ->
             println("$index - $word - ${corpus.isMatched(index)}")
         }
     }

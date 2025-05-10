@@ -30,14 +30,14 @@ class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(cor
     override fun showResult(monkey: Monkey, manager: MonkeyMonitor, result: Int?) {
         val values = listOf(
             result != null,
-            corpus.matched.size,
-            corpus.words.size,
+            corpus.matches().size,
+            corpus.numWords(),
             corpus.isEmpty(),
             manager.attemptCount()
         ) + if (result == null) {
             listOf("n/a", -1, -1, "")
         } else {
-            val word = corpus.words[result]
+            val word = corpus.wordAtIndex(result)
             val length = word.length
             listOf(monkey.javaClass, length, result, word)
         }

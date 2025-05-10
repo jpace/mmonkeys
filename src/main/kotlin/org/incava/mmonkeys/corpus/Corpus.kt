@@ -1,19 +1,25 @@
 package org.incava.mmonkeys.corpus
 
-open class Corpus(val words: List<String>) {
-    val matched = mutableSetOf<Int>()
+abstract class Corpus(private val words: List<String>) {
+    val matches = Matches()
 
-    fun isMatched(index: Int) = matched.contains(index)
+    fun words() = words
 
-    fun setMatched(index: Int) = matched.add(index)
+    fun numWords() = words.size
 
-    fun hasUnmatched(): Boolean = matched.size < words.size
+    fun matches(): Set<Int> = matches.indices
+
+    fun isMatched(index: Int) = matches.isMatched(index)
+
+    open fun setMatched(index: Int, word: String) {
+        matches.setMatched(index)
+    }
+
+    fun hasUnmatched(): Boolean = matches.indices.size < numWords()
 
     fun isEmpty(): Boolean = !hasUnmatched()
 
-    open fun findMatch(word: String): Int? {
-        return words.indices.find { index ->
-            words[index] == word && !matched.contains(index)
-        }
-    }
+    fun wordAtIndex(index: Int) = words[index]
+
+    fun lengthAtIndex(index: Int) = wordAtIndex(index).length
 }

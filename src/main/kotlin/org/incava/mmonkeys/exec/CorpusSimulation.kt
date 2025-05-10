@@ -24,21 +24,22 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
         val simulation = CoroutineSimulation(corpus, monkeys, toMatch, false)
         simulation.run()
         Console.info("simulation.matches.#", simulation.matches.size)
-        Console.info("corpus.matched.size", corpus.matched.size)
-        Console.info("corpus.words.size", corpus.words.size)
+        val matches = corpus.matches()
+        Console.info("corpus.matched.size", corpus.matches().size)
+        Console.info("corpus.words.#", corpus.numWords())
         Console.info("corpus.unmatched?", corpus.hasUnmatched())
-        val numMatched = corpus.matched.size
-        Console.info("corpus.match %", 100.0 * numMatched / corpus.words.size)
+        val numMatched = corpus.matches().size
+        Console.info("corpus.match %", 100.0 * numMatched / corpus.numWords())
     }
 
     fun showResults() {
-        val lengthToCount = corpus.words
+        val lengthToCount = corpus.words()
             .groupBy { it.length }
             .map { it.key to it.value.size }
             .toMap()
             .toSortedMap()
         val lengthToMatches = lengthToCount.keys
-            .associateWith { length -> corpus.matched.count { corpus.words[it].length == length } }
+            .associateWith { length -> corpus.matches().count { corpus.lengthAtIndex(it) == length } }
             .toSortedMap()
         Console.info("lengthToMatches", lengthToMatches)
         val columns = lengthToCount.keys.map { IntColumn("length: $it", 10) }

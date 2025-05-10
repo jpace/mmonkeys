@@ -18,12 +18,13 @@ class CorpusSummaryTable(val corpus: Corpus) {
     fun show() {
         val table = Table(columns)
         table.writeHeader('=')
-        val byLength = corpus.words.groupingBy { it.length }.eachCount()
+        val words = corpus.words()
+        val byLength = words.groupingBy { it.length }.eachCount()
         byLength.toSortedMap().forEach { (length, count) ->
             table.writeRow(listOf("length $length", count))
         }
-        table.writeRow(listOf("unique", corpus.words.toSet().size))
-        table.writeRow(listOf("total", corpus.words.size))
+        table.writeRow(listOf("unique", words.toSet().size))
+        table.writeRow(listOf("total", corpus.numWords()))
         table.writeBreak('=')
         println()
     }

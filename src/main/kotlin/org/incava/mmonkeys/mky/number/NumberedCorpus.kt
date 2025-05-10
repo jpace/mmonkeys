@@ -1,18 +1,25 @@
 package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.dc.IndexedCorpus
+import org.incava.mmonkeys.mky.corpus.dc.ItemsIndicesMap
 
 class NumberedCorpus(words: List<String>) : Corpus(words) {
-    val indexedCorpus: IndexedCorpus<Long> = IndexedCorpus(words, StringEncoder::encodeToLong)
+    val indexed: ItemsIndicesMap<Long> = ItemsIndicesMap()
+
+    init {
+        words.withIndex().forEach { indexed.add(it.value.length, StringEncoder.encodeToLong(it.value), it.index) }
+    }
 
     fun setMatched(number: Long, length: Int): Int {
-        return indexedCorpus.setMatched(number, length).also { index -> super.setMatched(index) }
+        val index = indexed.getIndex(number, length)
+        indexed.removeItem(number, length)
+        matches.setMatched(index)
+        return index
     }
 
-    fun longsForLength(length: Int) : Map<Long, List<Int>>? {
-        return indexedCorpus.elementsForLength(length)
+    fun longsForLength(length: Int): Map<Long, List<Int>>? {
+        return indexed.itemsForLength(length)
     }
 
-    fun hasForLength(length: Int) = indexedCorpus.hasForLength(length)
+    fun hasForLength(length: Int) = indexed.hasForLength(length)
 }

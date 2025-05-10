@@ -5,8 +5,8 @@ import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
 
 class DualCorpus(words: List<String>) : Corpus(words) {
-    private val stringCorpus: IndexedCorpus<String> = IndexedCorpus { it }
-    private val encodedCorpus: IndexedCorpus<Long> = IndexedCorpus(StringEncoder::encodeToLong)
+    private val stringItems: ItemsIndicesMap<String> = ItemsIndicesMap()
+    private val encodedItems: ItemsIndicesMap<Long> = ItemsIndicesMap()
 
     // @todo - make this based on words (words.max ...), and dynamic
     val maxLength = 27 // "honorificabilitudinitatibus"
@@ -14,28 +14,35 @@ class DualCorpus(words: List<String>) : Corpus(words) {
     init {
         words.withIndex().forEach { (index, word) ->
             // oh, the delicious irony that long words remain strings, and short words become longs.
-            val corpus = if (word.length > RandEncoded.Constants.MAX_ENCODED_CHARS) {
-                stringCorpus
+            if (word.length > RandEncoded.Constants.MAX_ENCODED_CHARS) {
+                stringItems.add(word.length, word, index)
             } else {
-                encodedCorpus
+                val encoded = StringEncoder.encodeToLong(word)
+                encodedItems.add(word.length, encoded, index)
             }
-            corpus.add(word, index)
         }
     }
 
-    fun stringsForLength(length: Int): Map<String, List<Int>>? {
-        return stringCorpus.elementsForLength(length)
-    }
+    fun stringsForLength(length: Int): Map<String, List<Int>>? = forLength(stringItems, length)
 
-    fun longsForLength(length: Int): Map<Long, List<Int>>? {
-        return encodedCorpus.elementsForLength(length)
+    fun longsForLength(length: Int): Map<Long, List<Int>>? = forLength(encodedItems, length)
+
+    private fun <T> forLength(items: ItemsIndicesMap<T>, length: Int): Map<T, List<Int>>? {
+        return items.itemsForLength(length)
     }
 
     fun setMatched(word: String, length: Int): Int {
-        return stringCorpus.setMatched(word, length).also { index -> setMatched(index) }
+        return setMatched(stringItems, word, length)
     }
 
     fun setMatched(encoded: Long, length: Int): Int {
-        return encodedCorpus.setMatched(encoded, length).also { index -> setMatched(index) }
+        return setMatched(encodedItems, encoded, length)
+    }
+
+    fun <T> setMatched(items: ItemsIndicesMap<T>, item: T, length: Int): Int {
+        val index = items.getIndex(item, length)
+        items.removeItem(item, length)
+        matches.setMatched(index)
+        return index
     }
 }

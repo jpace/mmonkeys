@@ -4,20 +4,18 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.time.WindowedClock
 import java.io.PrintStream
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-data class SimUpdate(val id: Int, val totalKeystrokes: Long, val index: Int, val matchCount: Int)
-
 class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private val out: PrintStream = System.out) {
     private val startTime: ZonedDateTime = ZonedDateTime.of(0, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"))
     private val pattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-    private val numWords = corpus.words.size
+    private val numWords = corpus.numWords()
     private val table: Table
     private var linesUntilHeader: Int = 0
     private val clock = WindowedClock(1000)
@@ -48,7 +46,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     fun update(monkey: Monkey, index: Int, matchCount: Int, totalKeystrokes: Long) {
         // seconds to when monkey did this match (the start of it), not cumulative
         // seconds to when monkey completed this word:
-        val doneAt = totalKeystrokes + corpus.words[index].length
+        val doneAt = totalKeystrokes + corpus.lengthAtIndex(index)
 
         // @todo - use start time instead of done time?
         //  val simTime = startTime.plusSeconds(monkey.totalKeystrokes)
@@ -66,9 +64,9 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
         if (update.matchCount % outputInterval != 0) {
             return
         }
-        val word = corpus.words[update.index]
+        val word = corpus.wordAtIndex(update.index)
         val wordCount = (0 until numWords).filter {
-            corpus.words[it] == word
+            corpus.wordAtIndex(it) == word
         }
         val numWordMatches = wordCount.filter {
             corpus.isMatched(it)
@@ -84,7 +82,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
             formatTime(ZonedDateTime.now()),
             formatTime(simTime),
             update.id,
-            update.totalKeystrokes + corpus.words[update.index].length,
+            update.totalKeystrokes + corpus.lengthAtIndex(update.index),
             word,
             word.length,
             update.index,

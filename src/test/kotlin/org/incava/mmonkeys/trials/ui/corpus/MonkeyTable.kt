@@ -18,7 +18,6 @@ class MonkeyTable(private val maxWordLength: Int) : Table(
     ) + (1..maxWordLength).map { LongColumn("match $it", 8) }
 ) {
     fun write(monkey: Monkey, manager: Manager) {
-        // this requires that a monkey have a monitor
         writeHeader()
         val numMatches = manager.matchCount()
         val matchesByLength = manager.matchesByLength()

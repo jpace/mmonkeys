@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.mgr
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mesa.DoubleColumn
 import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
@@ -17,7 +16,6 @@ class SimPerfView(val corpus: Corpus, out: PrintStream = System.out) {
     private val startTime: ZonedDateTime = ZonedDateTime.now()
     private val pattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
     private val table: Table
-    private val numWords = corpus.words.size
     private var lastWrite: ZonedDateTime? = null
 
     init {
@@ -48,7 +46,7 @@ class SimPerfView(val corpus: Corpus, out: PrintStream = System.out) {
     fun writeMatch(matchCount: Int, totalKeystrokes: Long) {
         val now = ZonedDateTime.now()
         val elapsed = Duration.between(startTime, now)
-        val pct = 100 * matchCount / numWords
+        val pct = 100 * matchCount / corpus.numWords()
         val seconds = elapsed.toSeconds()
         val matchVelocity = if (seconds > 0) matchCount.toDouble() / seconds else -1.0
         val keysVelocity = if (seconds > 0) totalKeystrokes / seconds else -1L

@@ -7,10 +7,10 @@ import org.incava.mmonkeys.words.Attempts
 
 class AttemptedTypewriter : Typewriter() {
     fun addAttempt(attempt: Attempt) {
-        Qlog.info("attempt", attempt)
+        // Qlog.info("attempt", attempt)
     }
 
     fun addAttempts(attempts: Attempts) {
-        Qlog.info("attempts", attempts)
+        // Qlog.info("attempts", attempts)
     }
 }

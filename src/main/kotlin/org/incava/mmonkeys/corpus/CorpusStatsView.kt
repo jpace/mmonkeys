@@ -28,10 +28,11 @@ class CorpusStatsView(val corpus: Corpus, private val outputInterval: Int, val o
     fun show() {
         out.print("\u001b[H\u001b[2J")
         table.writeHeader('=')
-        val countByLength = corpus.words.groupingBy { it.length }.eachCount()
+        val words = corpus.words()
+        val countByLength = words.groupingBy { it.length }.eachCount()
         val matchedByLength = mutableMapOf<Int, Int>()
-        corpus.words.withIndex().forEach { (index, word) ->
-            if (corpus.matched.contains(index)) {
+        words.withIndex().forEach { (index, word) ->
+            if (corpus.isMatched(index)) {
                 val len = word.length
                 matchedByLength[len] = (matchedByLength[len] ?: 0) + 1
             }

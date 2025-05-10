@@ -12,7 +12,7 @@ class CorpusMatchesView(val corpus: Corpus) {
     private val ymdPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
     fun showWordsAsList(onlyMatched: Boolean) {
-        corpus.words.withIndex().forEach { (index, word) ->
+        corpus.words().withIndex().forEach { (index, word) ->
             val matched = corpus.isMatched(index)
             if (!onlyMatched || matched) {
                 printf("%1s %3d - %s", if (matched) "+" else "", index, word)
@@ -21,15 +21,16 @@ class CorpusMatchesView(val corpus: Corpus) {
     }
 
     fun showMatchesByLength() {
+        val words = corpus.words()
         val matchedByLength = sortedMapOf<Int, Int>()
-        corpus.words.indices
+        words.indices
             .filter { index -> corpus.isMatched(index) }
-            .map { corpus.words[it].length }
+            .map { corpus.lengthAtIndex(it) }
             .forEach {
                 MapUtil.increment(matchedByLength, it)
             }
         printf("%5s | %8s | %8s", "total", "words.#", "matched.#")
-        val lengthToCount = corpus.words.groupBy { it.length }.mapValues { it.value.size }
+        val lengthToCount = words.groupBy { it.length }.mapValues { it.value.size }
         lengthToCount.toSortedMap().forEach { (length, count) ->
             printf("%5d | %,8d | %,8d", length, count, matchedByLength.getOrDefault(length, 0))
         }
