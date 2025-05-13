@@ -1,12 +1,9 @@
 package org.incava.mmonkeys.mky.mind
 
-import org.incava.mmonkeys.corpus.Corpus
-import org.incava.mmonkeys.corpus.impl.ListCorpus
+import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
-import org.incava.mmonkeys.mky.WordChecker
 import org.incava.mmonkeys.testutil.MonkeyUtils
-import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
@@ -53,7 +50,7 @@ internal class TypeStrategyTest {
     }
 
     private fun createMonkey(words: List<String>, toChar: Char): DefaultMonkey {
-        val corpus = ListCorpus(words)
+        val corpus = MapCorpus(words)
         val strategy = DeterministicStrategy(Keys.keyList(toChar))
         val mgr = DefaultMonkeyManager(corpus)
         return mgr.createMonkey(strategy)

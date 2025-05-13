@@ -17,8 +17,7 @@ class CorpusMatchView(private val wordSizeLimit: Int, private val results: Map<S
     }
 
     fun summarize() {
-        table.writeHeader()
-        table.writeBreak('=')
+        table.writeHeader('=')
         (1..wordSizeLimit).forEach { length ->
             val matchCells = mutableListOf<Any>("match $length")
             results.forEach { (_, res) ->
@@ -32,6 +31,6 @@ class CorpusMatchView(private val wordSizeLimit: Int, private val results: Map<S
     }
 
     private fun matchesForLength(results: PerfResults, length: Int): Int {
-        return results.corpus.matches().filter { results.corpus.lengthAtIndex(it) == length }.size
+        return results.corpus.matches.indices.filter { results.corpus.lengthAtIndex(it) == length }.size
     }
 }

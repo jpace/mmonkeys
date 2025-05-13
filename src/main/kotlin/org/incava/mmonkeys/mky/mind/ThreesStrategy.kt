@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.mind
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.rand.Sequences
 
 abstract class ThreesStrategy(sequences: Sequences) : TwosStrategy(sequences) {

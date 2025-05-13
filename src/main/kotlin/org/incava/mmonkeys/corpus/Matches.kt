@@ -6,4 +6,6 @@ class Matches {
     fun isMatched(index: Int) = indices.contains(index)
 
     fun setMatched(index: Int) = indices.add(index)
+
+    fun count() = indices.size
 }

@@ -11,9 +11,9 @@ import org.incava.mmonkeys.mky.mgr.Manager
 class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch: Int) {
     private val corpus = DualCorpus(words)
     private val monkeys: List<Monkey>
+    private val manager = Manager(corpus)
 
     init {
-        val manager = Manager(corpus)
         val wordMonkeyManager = WordsGeneratorMonkeyManager(corpus)
         monkeys = (0 until numMonkeys).map { _ ->
             wordMonkeyManager.createMonkey().also { it.manager = manager }
@@ -24,11 +24,10 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
         val simulation = CoroutineSimulation(corpus, monkeys, toMatch, false)
         simulation.run()
         Console.info("simulation.matches.#", simulation.matches.size)
-        val matches = corpus.matches()
-        Console.info("corpus.matched.size", corpus.matches().size)
+        Console.info("corpus.matched.size", corpus.matches.count())
         Console.info("corpus.words.#", corpus.numWords())
-        Console.info("corpus.unmatched?", corpus.hasUnmatched())
-        val numMatched = corpus.matches().size
+        Console.info("corpus.unmatched?", manager.hasUnmatched())
+        val numMatched = corpus.matches.count()
         Console.info("corpus.match %", 100.0 * numMatched / corpus.numWords())
     }
 
@@ -39,7 +38,7 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
             .toMap()
             .toSortedMap()
         val lengthToMatches = lengthToCount.keys
-            .associateWith { length -> corpus.matches().count { corpus.lengthAtIndex(it) == length } }
+            .associateWith { length -> corpus.matches.indices.count { corpus.lengthAtIndex(it) == length } }
             .toSortedMap()
         Console.info("lengthToMatches", lengthToMatches)
         val columns = lengthToCount.keys.map { IntColumn("length: $it", 10) }

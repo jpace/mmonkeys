@@ -13,7 +13,7 @@ class CorpusMatchesView(val corpus: Corpus) {
 
     fun showWordsAsList(onlyMatched: Boolean) {
         corpus.words().withIndex().forEach { (index, word) ->
-            val matched = corpus.isMatched(index)
+            val matched = corpus.matches.isMatched(index)
             if (!onlyMatched || matched) {
                 printf("%1s %3d - %s", if (matched) "+" else "", index, word)
             }
@@ -24,7 +24,7 @@ class CorpusMatchesView(val corpus: Corpus) {
         val words = corpus.words()
         val matchedByLength = sortedMapOf<Int, Int>()
         words.indices
-            .filter { index -> corpus.isMatched(index) }
+            .filter { index -> corpus.matches.isMatched(index) }
             .map { corpus.lengthAtIndex(it) }
             .forEach {
                 MapUtil.increment(matchedByLength, it)

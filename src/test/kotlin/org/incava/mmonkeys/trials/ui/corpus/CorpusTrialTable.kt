@@ -36,7 +36,7 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
                 velocity(res.matches, durSecs),
                 velocity(res.iterations.size, durSecs),
                 if (res.matches == 0) 0.0 else res.iterations.sum().toDouble() / res.matches,
-                100 * res.corpus.matches().size.toDouble() / res.corpus.numWords()
+                100 * res.corpus.matches.count().toDouble() / res.corpus.numWords()
             )
             writeRow(cells)
         }

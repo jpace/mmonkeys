@@ -32,7 +32,7 @@ class CorpusStatsView(val corpus: Corpus, private val outputInterval: Int, val o
         val countByLength = words.groupingBy { it.length }.eachCount()
         val matchedByLength = mutableMapOf<Int, Int>()
         words.withIndex().forEach { (index, word) ->
-            if (corpus.isMatched(index)) {
+            if (corpus.matches.isMatched(index)) {
                 val len = word.length
                 matchedByLength[len] = (matchedByLength[len] ?: 0) + 1
             }

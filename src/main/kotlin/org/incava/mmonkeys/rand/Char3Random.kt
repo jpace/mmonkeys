@@ -9,7 +9,7 @@ object Char3Random {
     fun countOfFirsts3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, Int> {
         return threes.mapValues { (_, second) ->
             second.values.sumOf { thirds ->
-                CharRandom.sumOfValues(thirds)
+                thirds.values.sum()
             }
         }
     }

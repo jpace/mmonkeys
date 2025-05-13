@@ -3,6 +3,7 @@ package org.incava.mmonkeys.mky.corpus.dc
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
+import org.incava.mmonkeys.words.Word
 
 class DualCorpus(words: List<String>) : Corpus(words) {
     private val stringItems: ItemsIndicesMap<String> = ItemsIndicesMap()
@@ -14,11 +15,40 @@ class DualCorpus(words: List<String>) : Corpus(words) {
     init {
         words.withIndex().forEach { (index, word) ->
             // oh, the delicious irony that long words remain strings, and short words become longs.
-            if (word.length > RandEncoded.Constants.MAX_ENCODED_CHARS) {
+            if (isEncoded(word)) {
                 stringItems.add(word.length, word, index)
             } else {
                 val encoded = StringEncoder.encodeToLong(word)
                 encodedItems.add(word.length, encoded, index)
+            }
+        }
+    }
+
+    fun isEncoded(string: String) = string.length > RandEncoded.Constants.MAX_ENCODED_CHARS
+
+    fun findWord(word: String): Int? {
+        return if (isEncoded(word)) {
+            findWord(stringItems, word, word.length)
+        } else {
+            val encoded = StringEncoder.encodeToLong(word)
+            findWord(encodedItems, encoded, word.length)
+        }
+    }
+
+    fun findWord(encoded: Long, length: Int): Int? {
+        return findWord(encodedItems, encoded, length)
+    }
+
+    fun <T> findWord(items: ItemsIndicesMap<T>, item: T, length: Int): Int? {
+        val forLength = forLength(items, length)
+        return if (forLength.isNullOrEmpty()) {
+            null
+        } else {
+            val forItem = forLength[item]
+            if (forItem == null) {
+                null
+            } else {
+                forItem[0]
             }
         }
     }

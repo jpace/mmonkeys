@@ -30,6 +30,10 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
         perfView = SimPerfView(corpus, perfOut)
     }
 
+    fun hasUnmatched(): Boolean {
+        return corpus.matches.count() < corpus.numWords()
+    }
+
     override fun update(monkey: Monkey, attempt: Attempt) {
         val words = if (attempt.word == null) emptyList() else listOf(attempt.word)
         update(monkey, words, attempt.totalKeyStrokes)

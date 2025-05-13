@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
-import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
@@ -53,7 +52,7 @@ class CorpusTrial(
         }
 
         run {
-            val corpus = ListCorpus(words)
+            val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
             val mgr = DefaultMonkeyManager(corpus)
             val sequences = SequencesFactory.createFromWords(words)
@@ -62,7 +61,7 @@ class CorpusTrial(
         }
 
         run {
-            val corpus = ListCorpus(words)
+            val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
             val mgr = DefaultMonkeyManager(corpus)
             val sequences = SequencesFactory.createFromWords(words)
@@ -71,7 +70,7 @@ class CorpusTrial(
         }
 
         run {
-            val corpus = ListCorpus(words)
+            val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
             val mgr = DefaultMonkeyManager(corpus)
             val sequences = SequencesFactory.createFromWords(words)
@@ -80,7 +79,7 @@ class CorpusTrial(
         }
 
         run {
-            val corpus = ListCorpus(words)
+            val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
             val mgr = DefaultMonkeyManager(corpus)
             val sequences = SequencesFactory.createFromWords(words)
@@ -89,23 +88,23 @@ class CorpusTrial(
         }
 
         run {
-            val mapCorpus = MapCorpus(words)
-            val manager = Manager(mapCorpus, outputInterval)
-            val mgr = DefaultMonkeyManager(mapCorpus)
+            val corpus = MapCorpus(words)
+            val manager = Manager(corpus, outputInterval)
+            val mgr = DefaultMonkeyManager(corpus)
             runMonkey("rand map", manager, mgr.createMonkeyRandom().also { it.manager = manager })
         }
 
         run {
-            val numberedCorpus = NumberedCorpus(words)
-            val manager = Manager(numberedCorpus, outputInterval)
-            val mgr = NumbersMonkeyManager(numberedCorpus)
+            val corpus = NumberedCorpus(words)
+            val manager = Manager(corpus, outputInterval)
+            val mgr = NumbersMonkeyManager(corpus)
             runMonkey("numbers", manager, mgr.createMonkey().also { it.manager = manager })
         }
 
         run {
-            val dualCorpus = DualCorpus(words)
-            val manager = Manager(dualCorpus, outputInterval)
-            val mgr = WordsGeneratorMonkeyManager(dualCorpus)
+            val corpus = DualCorpus(words)
+            val manager = Manager(corpus, outputInterval)
+            val mgr = WordsGeneratorMonkeyManager(corpus)
             runMonkey("words gen", manager, mgr.createMonkey().also { it.manager = manager })
         }
     }
@@ -120,7 +119,7 @@ fun main() {
     val limit = 13
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in 3..limit }
     val view = CorpusTrialView(words.size, 13)
-    val obj = CorpusTrial(words, Duration.ofSeconds(10L), view)
+    val obj = CorpusTrial(words, Duration.ofSeconds(5L), view)
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

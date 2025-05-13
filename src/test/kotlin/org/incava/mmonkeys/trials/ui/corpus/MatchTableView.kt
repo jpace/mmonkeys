@@ -8,6 +8,7 @@ import org.incava.mesa.Table
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.mgr.Manager
 
 class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(corpus, verbose) {
     private val columns: List<Column> = listOf(
@@ -27,12 +28,12 @@ class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(cor
         table.writeHeader()
     }
 
-    override fun showResult(monkey: Monkey, manager: MonkeyMonitor, result: Int?) {
+    override fun showResult(monkey: Monkey, manager: Manager, result: Int?) {
         val values = listOf(
             result != null,
-            corpus.matches().size,
+            corpus.matches.count(),
             corpus.numWords(),
-            corpus.isEmpty(),
+            !manager.hasUnmatched(),
             manager.attemptCount()
         ) + if (result == null) {
             listOf("n/a", -1, -1, "")

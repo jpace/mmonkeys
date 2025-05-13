@@ -51,7 +51,7 @@ class CoroutineSimulation(
         }
     }
 
-    private fun isComplete(): Boolean = numFound >= toFind || corpus.isEmpty()
+    private fun isComplete(): Boolean = numFound >= toFind || corpus.matches.count() == corpus.numWords()
 
     private fun CoroutineScope.launchTimer(memory: Memory): Job {
         return launch {

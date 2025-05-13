@@ -3,6 +3,7 @@ package org.incava.mmonkeys.trials.ui.corpus
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.trials.ui.ViewType
 
 abstract class MatchView<T : Corpus>(val corpus: T, private val verbose: Boolean) {
@@ -17,7 +18,7 @@ abstract class MatchView<T : Corpus>(val corpus: T, private val verbose: Boolean
 
     open fun showStart() {}
 
-    abstract fun showResult(monkey: Monkey, manager: MonkeyMonitor, result: Int?)
+    abstract fun showResult(monkey: Monkey, manager: Manager, result: Int?)
 
     fun init() {
         if (verbose) {
@@ -25,7 +26,7 @@ abstract class MatchView<T : Corpus>(val corpus: T, private val verbose: Boolean
         }
     }
 
-    fun show(monkey: Monkey, manager: MonkeyMonitor, result: Int?) {
+    fun show(monkey: Monkey, manager: Manager, result: Int?) {
         if (verbose) {
             showResult(monkey, manager, result)
         }

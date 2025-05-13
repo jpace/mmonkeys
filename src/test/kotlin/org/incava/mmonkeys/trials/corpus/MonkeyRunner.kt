@@ -19,11 +19,7 @@ import kotlin.system.measureTimeMillis
 
 // this used to take the factory to see the overhead in monkey initialization,
 // but that's minimal, since it only happens once
-class MonkeyRunner(
-    private val manager: Manager,
-    private val monkey: Monkey,
-    private val timeLimit: Duration,
-) {
+class MonkeyRunner(private val manager: Manager, private val monkey: Monkey, private val timeLimit: Duration) {
     private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
@@ -46,21 +42,17 @@ class MonkeyRunner(
             val monkeyTable = MonkeyTable(7)
             monkeyTable.write(monkey, manager)
         }
-        Qlog.info("durations", durations)
         return PerfResults(manager.corpus, totalDuration.second, durations, iterations, matchCount)
     }
 
     private fun runMonkey() {
-        Console.info("monkey.class", monkey.javaClass.name)
-        while (manager.corpus.hasUnmatched()) {
+        while (manager.hasUnmatched()) {
             var iteration = 0L
             var result: Words
             do {
                 ++iteration
                 result = monkey.findMatches()
-            } while (result.words.isEmpty() &&
-                iteration < maxAttempts &&
-                manager.corpus.hasUnmatched())
+            } while (result.words.isEmpty() && manager.hasUnmatched())
             processAttempt(result.words, iteration)
             val now = ZonedDateTime.now()
             val elapsed = Duration.between(start, now)

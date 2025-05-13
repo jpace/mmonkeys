@@ -29,8 +29,9 @@ class WordsGeneratorTrial {
         val bySize = corpus.words().groupBy { it.length }.mapValues { it.value.size }
         Console.info("by size", bySize.toSortedMap())
         Console.info("total", bySize.values.sum())
+        val matches = corpus.matches
         val duration = measureDuration {
-            while (longerMatched < numToMatch && corpus.hasUnmatched()) {
+            while (longerMatched < numToMatch && matches.count() < corpus.numWords()) {
                 val result = wordsGenerator.runAttempts()
                 keystrokes += result.totalKeyStrokes
                 result.words.forEach { word ->
@@ -68,7 +69,7 @@ class WordsGeneratorTrial {
         val now = ZonedDateTime.now()
         println(now.format(pattern))
         corpus.words().withIndex().forEach { (index, word) ->
-            println("$index - $word - ${corpus.isMatched(index)}")
+            println("$index - $word - ${corpus.matches.isMatched(index)}")
         }
     }
 }

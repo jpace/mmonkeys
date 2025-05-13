@@ -69,7 +69,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
             corpus.wordAtIndex(it) == word
         }
         val numWordMatches = wordCount.filter {
-            corpus.isMatched(it)
+            corpus.matches.isMatched(it)
         }.size
         if (linesUntilHeader == 0) {
             out.println()

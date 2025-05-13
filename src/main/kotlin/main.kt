@@ -9,20 +9,6 @@ import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 
-fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: (id: Int, sought: T) -> Monkey) {
-    // I don't make monkeys; I just train them!
-    val numMonkeys = 10
-    val monkeys = (0 until numMonkeys).map { id -> monkeySupplier(id, sought) }
-    Console.info("monkeys.#", monkeys.size)
-    val simulation = CoroutineSimulation(sought, monkeys, 10, true)
-    Console.info("type", type)
-    Console.info("# monkeys", numMonkeys)
-    Console.info("main", "simulation")
-    Console.info("type", type)
-    simulation.run()
-    println()
-}
-
 fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: () -> Monkey) {
     // I don't make monkeys; I just train them!
     val numMonkeys = 10
@@ -40,7 +26,7 @@ fun <T : Corpus> runSimulation(type: String, sought: T, monkeySupplier: () -> Mo
 fun runCorpusTest() {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
-    val corpus = ListCorpus(sought)
+    val corpus = MapCorpus(sought)
     val mgr1 = DefaultMonkeyManager(corpus)
     val mapCorpus = MapCorpus(sought)
     val mgr2 = DefaultMonkeyManager(mapCorpus)
