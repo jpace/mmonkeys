@@ -3,6 +3,7 @@ package org.incava.mmonkeys.mky.mind
 import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.DynamicTest
@@ -52,7 +53,8 @@ internal class TypeStrategyTest {
     private fun createMonkey(words: List<String>, toChar: Char): DefaultMonkey {
         val corpus = MapCorpus(words)
         val strategy = DeterministicStrategy(Keys.keyList(toChar))
-        val mgr = DefaultMonkeyManager(corpus)
+        val manager = Manager(corpus, 1)
+        val mgr = DefaultMonkeyManager(manager, corpus)
         return mgr.createMonkey(strategy)
     }
 }

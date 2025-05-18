@@ -47,65 +47,65 @@ class CorpusTrial(
         run {
             val corpus = ListCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(corpus)
-            runMonkey("rand list", manager, mgr.createMonkeyRandom().also { it.manager = manager })
+            val mgr = DefaultMonkeyManager(manager, corpus)
+            runMonkey("rand list", manager, mgr.createMonkeyRandom())
         }
 
         run {
             val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(corpus)
+            val mgr = DefaultMonkeyManager(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosRandomStrategy(sequences)
-            runMonkey("random 2", manager, mgr.createMonkey(strategy).also { it.manager = manager })
+            runMonkey("random 2", manager, mgr.createMonkey(strategy))
         }
 
         run {
             val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(corpus)
+            val mgr = DefaultMonkeyManager(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosDistributedStrategy(sequences)
-            runMonkey("dist 2", manager, mgr.createMonkey(strategy).also { it.manager = manager })
+            runMonkey("dist 2", manager, mgr.createMonkey(strategy))
         }
 
         run {
             val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(corpus)
+            val mgr = DefaultMonkeyManager(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = ThreesRandomStrategy(sequences)
-            runMonkey("random 3", manager, mgr.createMonkey(strategy).also { it.manager = manager })
+            runMonkey("random 3", manager, mgr.createMonkey(strategy))
         }
 
         run {
             val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(corpus)
+            val mgr = DefaultMonkeyManager(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = ThreesDistributedStrategy(sequences)
-            runMonkey("dist 3", manager, mgr.createMonkey(strategy).also { it.manager = manager })
+            runMonkey("dist 3", manager, mgr.createMonkey(strategy))
         }
 
         run {
             val corpus = MapCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(corpus)
-            runMonkey("rand map", manager, mgr.createMonkeyRandom().also { it.manager = manager })
+            val mgr = DefaultMonkeyManager(manager, corpus)
+            runMonkey("rand map", manager, mgr.createMonkeyRandom())
         }
 
         run {
             val corpus = NumberedCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = NumbersMonkeyManager(corpus)
-            runMonkey("numbers", manager, mgr.createMonkey().also { it.manager = manager })
+            val mgr = NumbersMonkeyManager(manager, corpus)
+            runMonkey("numbers", manager, mgr.createMonkey())
         }
 
         run {
             val corpus = DualCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = WordsGeneratorMonkeyManager(corpus)
-            runMonkey("words gen", manager, mgr.createMonkey().also { it.manager = manager })
+            val mgr = WordsGeneratorMonkeyManager(manager, corpus)
+            runMonkey("words gen", manager, mgr.createMonkey())
         }
     }
 
@@ -119,7 +119,7 @@ fun main() {
     val limit = 13
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in 3..limit }
     val view = CorpusTrialView(words.size, 13)
-    val obj = CorpusTrial(words, Duration.ofSeconds(5L), view)
+    val obj = CorpusTrial(words, Duration.ofSeconds(60L), view)
     val trialDuration = Durations.measureDuration {
         obj.run()
         obj.showResults()

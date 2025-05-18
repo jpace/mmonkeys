@@ -5,14 +5,14 @@ import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Attempts
 import org.incava.mmonkeys.words.Words
 
-abstract class Monkey(val id: Int, var manager: Manager? = null) {
+abstract class Monkey(val id: Int, val manager: Manager) {
     abstract fun findMatches(): Words
 
     fun processAttempts(attempts: Attempts) {
-        manager?.update(this, attempts)
+        manager.update(this, attempts)
     }
 
     fun processAttempt(attempt: Attempt) {
-        manager?.update(this, attempt)
+        manager.update(this, attempt)
     }
 }

@@ -50,8 +50,7 @@ class DagCorpus(words: List<String>) {
 
     private fun toWords(node: Node): Map<Int, String> {
         val words = node.children.fold(mutableMapOf<Int, String>()) { acc, n ->
-            acc += toWords(n)
-            acc
+            acc.also { it += toWords(n) }
         }
         if (node.indices.isNotEmpty()) {
             val word = node.toWord()

@@ -1,7 +1,5 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.ikdk.io.Qlog
-
 object SequencesFactory {
     fun createFromWords(words: List<String>): Sequences {
         val chars = words.map(String::lowercase)
@@ -9,8 +7,7 @@ object SequencesFactory {
                 if (acc.isNotEmpty()) {
                     acc += ' ';
                 }
-                acc.addAll(char.toCharArray().toList())
-                acc
+                acc.also { it.addAll(char.toCharArray().toList()) }
             }
         return Sequences(chars)
     }
@@ -19,11 +16,9 @@ object SequencesFactory {
         return words.map(String::lowercase)
             .fold(mutableListOf()) { acc, char ->
                 if (acc.isNotEmpty()) {
-                    // Qlog.info("char", char)
                     acc += ' ';
                 }
-                acc.addAll(char.toCharArray().toList())
-                acc
+                acc.also { it.addAll(char.toCharArray().toList()) }
             }
     }
 }

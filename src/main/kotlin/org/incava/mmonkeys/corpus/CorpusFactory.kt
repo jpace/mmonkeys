@@ -1,13 +1,13 @@
 package org.incava.mmonkeys.corpus
 
-import org.incava.mmonkeys.corpus.impl.ListCorpus
+import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.util.ResourceUtil
 import java.io.File
 
 object CorpusFactory {
     private val filesToWords: MutableMap<File, List<String>> = mutableMapOf()
 
-    fun defaultCorpus() = ListCorpus(fileToWords(ResourceUtil.FULL_FILE))
+    fun defaultCorpus() = MapCorpus(fileToWords(ResourceUtil.FULL_FILE))
 
     fun defaultWords() = fileToWords(ResourceUtil.FULL_FILE)
 

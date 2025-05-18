@@ -52,8 +52,8 @@ internal class MonkeyMonitorTest {
         }
         val corpus = DualCorpus(CorpusFactory.fileToWords(ResourceUtil.FULL_FILE))
         val manager = Manager(corpus)
-        val wordMonkeyManager = WordsGeneratorMonkeyManager(corpus)
-        val monkey = wordMonkeyManager.createMonkey().also { it.manager = manager }
+        val wordMonkeyManager = WordsGeneratorMonkeyManager(manager, corpus)
+        val monkey = wordMonkeyManager.createMonkey()
         val attempts1 = listOf("this" to 3, "is" to 17, "a" to 9, "test" to 6)
             .map { Word(it.first, it.second) }
             .let { Attempts(it, 1, 2) }

@@ -9,8 +9,9 @@ import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
 import kotlin.random.Random
+import kotlin.test.assertTrue
 
-class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, val includeList: Boolean = false) {
+class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, private val includeList: Boolean) {
     val chars = ('a'..'z').toList()
     val words = CorpusFactory.defaultWords()
 
@@ -20,9 +21,8 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, va
         return (0..numTotal).fold(mutableListOf<String>()) { list, _ ->
             val length = Random.Default.nextInt(maxLength)
             val word = (0..length).fold(StringBuilder()) { sb, _ -> sb.append(chars.random()) }.toString()
-            list += word
-            list
-        } + (0..numValid).fold(mutableListOf()) { list, _ -> list += words.random(); list }
+            list.also { it += word }
+        } + (0..numValid).fold(mutableListOf()) { list, _ -> list.also { it += words.random() } }
     }
 
     fun getRandomsEncoded(maxLength: Int): List<Pair<Long, Int>> {
@@ -124,7 +124,7 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, va
 }
 
 fun main() {
-    val obj = CorpusProfile(10_000_000L, 3)
+    val obj = CorpusProfile(10_000_000L, 3, true)
     obj.find()
 //    obj.findWord()
 }

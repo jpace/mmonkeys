@@ -8,6 +8,7 @@ import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.corpus.impl.MapCorpus
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -25,14 +26,16 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 
     fun addScenarioList(name: String, strategy: TypeStrategy) {
         val corpus = ListCorpus(words)
-        val mgr = DefaultMonkeyManager(corpus)
+        val manager = Manager(corpus)
+        val mgr = DefaultMonkeyManager(manager, corpus)
         val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(monkey) })
     }
 
     fun addScenarioMap(name: String, strategy: TypeStrategy) {
         val corpus = MapCorpus(words)
-        val mgr = DefaultMonkeyManager(corpus)
+        val manager = Manager(corpus)
+        val mgr = DefaultMonkeyManager(manager, corpus)
         val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(monkey) })
     }
@@ -69,7 +72,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
             addScenarioMap("3s distributed map", ThreesDistributedStrategy(words))
         }
 
-        Qlog.info("scenarios", scenarios)
+        Qlog.info("scenarios", scenarios.toMap().keys)
 
         scenarios.forEach { (name, block) ->
             println(name)
@@ -78,7 +81,6 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
     }
 
     fun matchWords(monkey: DefaultMonkey) {
-        Qlog.info("monkey", monkey)
         val duration = Durations.measureDuration {
             var matches = 0L
             var attempts = 0L
@@ -92,9 +94,9 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
                 }
             }
             printf("attempts: %,d", attempts)
-            println("matches: $matches")
+            println("matches : $matches")
         }
-        println("duration: ${Durations.formatted(duration.second)}")
+        printf("duration: %,d ms\n", duration.second.toMillis())
         println()
     }
 }

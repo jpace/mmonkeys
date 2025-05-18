@@ -6,6 +6,7 @@ import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.corpus.impl.MapCorpus
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.time.Durations
 import java.lang.Thread.sleep
 
@@ -27,9 +28,11 @@ fun runCorpusTest() {
     Console.info("corpus test")
     val sought = listOf("abc", "abs", "ace", "aid", "all", "amp", "any", "ape", "art", "asp", "ate", "ava", "awe")
     val corpus = MapCorpus(sought)
-    val mgr1 = DefaultMonkeyManager(corpus)
+    val manager1 = Manager(corpus)
+    val mgr1 = DefaultMonkeyManager(manager1, corpus)
     val mapCorpus = MapCorpus(sought)
-    val mgr2 = DefaultMonkeyManager(mapCorpus)
+    val manager2 = Manager(mapCorpus)
+    val mgr2 = DefaultMonkeyManager(manager2, mapCorpus)
     runSimulation("equal", corpus, mgr1::createMonkeyRandom)
     runSimulation("map", mapCorpus, mgr2::createMonkeyRandom)
 }
