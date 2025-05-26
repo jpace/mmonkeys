@@ -4,173 +4,54 @@ import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
-import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.corpus.impl.ListCorpus
+import org.incava.mmonkeys.corpus.impl.MapCorpus
+import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkey
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
-import org.incava.mmonkeys.corpus.impl.MapCorpus
-import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
+import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
+import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.mky.number.NumbersMonkeyManager
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Attempts
-import kotlin.math.min
 
-data class ProfileParams(val numInvokes: Long, val matchGoal: Int, val minLength: Int, val maxLength: Int, val numTrials: Int, val includeLists: Boolean)
+data class ProfileParams(
+    val numInvokes: Long,
+    val matchGoal: Int,
+    val minLength: Int,
+    val maxLength: Int,
+    val numTrials: Int,
+    val includeLists: Boolean,
+)
 
-private class MonkeyProfile(private val params: ProfileParams) {
-    // limiting to 13 for numbers monkey
-    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in params.minLength .. params.maxLength }
+class ProfileScenario(val name: String, val words: List<String>, val monitor: CountingMonitor, val matchGoal: Int) {
+    fun addTo(profiler: Profiler, monkey: WordsGeneratorMonkey) {
+        profiler.add(name) {
+            matchWords2 { monkey.runAttempts() }
+        }
+    }
 
-    fun profile() {
-        Console.info("words.#", words.size)
-        val profiler = Profiler(params.numInvokes, params.numTrials)
-        run {
-            val corpus = DualCorpus(words)
-            val manager = Manager(corpus)
-            val mgr = WordsGeneratorMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey()
-            profiler.add("words gen") {
-                matchWords2 { monkey.runAttempts() }
-            }
+    fun addTo(profiler: Profiler, monkey: DefaultMonkey) {
+        profiler.add(name) {
+            matchWords { monkey.runAttempt() }
         }
+    }
 
-        if (params.includeLists) {
-            val corpus = ListCorpus(words)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkeyRandom()
-            profiler.add("random list") {
-                matchWords { monkey.runAttempt() }
-            }
+    fun addTo(profiler: Profiler, monkey: NumbersMonkey) {
+        profiler.add(name) {
+            matchWords { monkey.runAttempt() }
         }
-
-        if (params.includeLists) {
-            val corpus = ListCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = TwosRandomStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("twos random list") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-        run {
-            val corpus = MapCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = TwosRandomStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("twos random map") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-
-        if (params.includeLists) {
-            val corpus = ListCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = ThreesRandomStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("threes random list") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-        run {
-            val corpus = MapCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = ThreesRandomStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("threes random map") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-
-        if (params.includeLists) {
-            val corpus = ListCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = TwosDistributedStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("twos distributed list") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-        run {
-            val corpus = MapCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = TwosDistributedStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("twos distributed map") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-
-        if (params.includeLists) {
-            val corpus = ListCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = ThreesDistributedStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("threes distributed list") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-        run {
-            val corpus = MapCorpus(words)
-            val sequences = SequencesFactory.createFromWords(words)
-            val strategy = ThreesDistributedStrategy(sequences)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey(strategy)
-            profiler.add("threes distributed map") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-
-        run {
-            val corpus = NumberedCorpus(words)
-            val manager = Manager(corpus)
-            val mgr = NumbersMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkey()
-            profiler.add("numbers") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-
-        run {
-            val corpus = MapCorpus(words)
-            val manager = Manager(corpus)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            val monkey = mgr.createMonkeyRandom()
-            profiler.add("map random") {
-                matchWords { monkey.runAttempt() }
-            }
-        }
-
-        profiler.runAll()
-        profiler.showResults(SortType.BY_DURATION)
-
-        val showdown = profiler.spawn()
-        showdown.runAll()
-        showdown.showResults(SortType.BY_DURATION)
     }
 
     fun matchWords(generator: () -> Attempt) {
@@ -190,7 +71,7 @@ private class MonkeyProfile(private val params: ProfileParams) {
 
     fun runToMatchCount(generator: () -> Int) {
         var matches = 0L
-        while (matches < params.matchGoal) {
+        while (matches < matchGoal) {
             val result = generator()
             matches += result
         }
@@ -198,8 +79,127 @@ private class MonkeyProfile(private val params: ProfileParams) {
     }
 }
 
+private class MonkeyProfile(private val params: ProfileParams) {
+    // limiting to 13 for numbers monkey
+    val words =
+        CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in params.minLength..params.maxLength }
+    val profiler = Profiler(params.numInvokes, params.numTrials)
+    val scenarios = mutableMapOf<String, ProfileScenario>()
+
+    fun createManager() = CountingMonitor()
+
+    fun dualCorpus() = DualCorpus(words)
+    fun mapCorpus() = MapCorpus(words)
+    fun numberedCorpus() = NumberedCorpus(words)
+    fun sequences() = SequencesFactory.createFromWords(words)
+    fun defaultMonkeyManager(corpus: WordCorpus, manager: CountingMonitor): DefaultMonkeyManager {
+        return DefaultMonkeyManager(manager, corpus)
+    }
+
+    fun addWordGeneratorScenario() {
+        val corpus = dualCorpus()
+        val manager = createManager()
+        val mgr = WordsGeneratorMonkeyManager(manager, corpus)
+        val monkey = mgr.createMonkey()
+        val scenario = ProfileScenario("words gen", words, manager, params.matchGoal)
+        addScenario(scenario, monkey)
+    }
+
+    fun addScenario(scenario: ProfileScenario, monkey: DefaultMonkey) {
+        scenario.addTo(profiler, monkey)
+        scenarios[scenario.name] = scenario
+    }
+
+    fun addScenario(scenario: ProfileScenario, monkey: NumbersMonkey) {
+        scenario.addTo(profiler, monkey)
+        scenarios[scenario.name] = scenario
+    }
+
+    fun addScenario(scenario: ProfileScenario, monkey: WordsGeneratorMonkey) {
+        scenario.addTo(profiler, monkey)
+        scenarios[scenario.name] = scenario
+    }
+
+    fun addMapSequenceScenario() {
+        val sequences = sequences()
+        val strategy = TwosRandomStrategy(sequences)
+        addMapSequenceScenario("twos random map", strategy)
+    }
+
+    fun addMapThreesSequencesScenario() {
+        val sequences = sequences()
+        val strategy = ThreesRandomStrategy(sequences)
+        addMapSequenceScenario("threes random map", strategy)
+    }
+
+    fun addMapSequenceScenario2() {
+        val sequences = sequences()
+        val strategy = TwosDistributedStrategy(sequences)
+        addMapSequenceScenario("twos distributed map", strategy)
+    }
+
+    fun addMapSequenceScenario(name: String, strategy: TypeStrategy) {
+        val corpus = mapCorpus()
+        val manager = createManager()
+        val mgr = defaultMonkeyManager(corpus, manager)
+        val monkey = mgr.createMonkey(strategy)
+        val scenario = ProfileScenario(name, words, manager, params.matchGoal)
+        addScenario(scenario, monkey)
+    }
+
+    fun addMapSequenceScenario3() {
+        val sequences = sequences()
+        val strategy = ThreesDistributedStrategy(sequences)
+        addMapSequenceScenario("threes distributed map", strategy)
+    }
+
+    fun addNumberedScenario() {
+        val corpus = numberedCorpus()
+        val manager = createManager()
+        val mgr = NumbersMonkeyManager(manager, corpus)
+        val monkey = mgr.createMonkey()
+        val scenario = ProfileScenario("numbers", words, manager, params.matchGoal)
+        addScenario(scenario, monkey)
+    }
+
+    fun addMapRandom() {
+        val corpus = mapCorpus()
+        val manager = createManager()
+        val mgr = defaultMonkeyManager(corpus, manager)
+        val monkey = mgr.createMonkeyRandom()
+        val scenario = ProfileScenario("map random", words, manager, params.matchGoal)
+        addScenario(scenario, monkey)
+    }
+
+    fun profile() {
+        Console.info("words.#", words.size)
+
+        addWordGeneratorScenario()
+        addMapSequenceScenario()
+        addMapThreesSequencesScenario()
+        addMapSequenceScenario2()
+        addMapSequenceScenario3()
+        addNumberedScenario()
+        addMapRandom()
+
+        profiler.runAll()
+        profiler.showResults(SortType.BY_DURATION)
+        scenarios.forEach { (name, scenario) ->
+            Qlog.info("name", name)
+            Qlog.info("monitor.attempts.#", scenario.monitor.attempts)
+            Qlog.info("monitor.matches.#", scenario.monitor.matches)
+//            Qlog.info("monitor.keystrokes", scenario.monitor.byKeystrokes.toSortedMap())
+        }
+
+//        val showdown = profiler.spawn()
+//        showdown.runAll()
+//        profiler.showResults(SortType.BY_DURATION)
+//        showdown.showResults(SortType.BY_DURATION)
+    }
+}
+
 fun main() {
-    val params = ProfileParams(1L, 1_000, 3, 13, 3, true)
+    val params = ProfileParams(1L, 100, 3, 13, 1, true)
     val obj = MonkeyProfile(params)
     obj.profile()
 }

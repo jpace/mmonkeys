@@ -40,10 +40,6 @@ class DagCorpus(words: List<String>) {
         return indexed
     }
 
-    fun findNode_orig(string: String): Node? {
-        return findNode(string, nodes)
-    }
-
     fun findNode(string: String): Node? {
         return findNode(string.toCharArray(), nodes)
     }
@@ -57,17 +53,6 @@ class DagCorpus(words: List<String>) {
             words += node.indices.map { index -> index to word }
         }
         return words
-    }
-
-    private fun findNode(string: String, subnodes: List<Node>): Node? {
-        val firstChar = string[0]
-        val n = subnodes.find { it.char == firstChar } ?: return null
-        return if (string.length > 1) {
-            val nextChars = string.substring(1)
-            findNode(nextChars, n.children)
-        } else {
-            n
-        }
     }
 
     private fun findNode(chars: CharArray, subnodes: List<Node>): Node? {

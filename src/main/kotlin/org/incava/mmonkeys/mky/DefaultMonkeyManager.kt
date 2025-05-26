@@ -8,7 +8,7 @@ import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.words.Attempt
 
-class DefaultMonkeyManager(val manager: Manager, val corpus: WordCorpus) {
+class DefaultMonkeyManager(val manager: MonkeyMonitor, val corpus: WordCorpus) {
     var id = 1
     val observer = object : AttemptObserver {
         override fun onSuccess(attempt: Attempt) {

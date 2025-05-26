@@ -2,9 +2,7 @@ package org.incava.mmonkeys.trials.mky
 
 import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.io.Qlog.printf
-import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.corpus.impl.MapCorpus
@@ -24,15 +22,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length >= minLength }
     val scenarios = mutableListOf<Pair<String, () -> Unit>>()
 
-    fun addScenarioList(name: String, strategy: TypeStrategy) {
-        val corpus = ListCorpus(words)
-        val manager = Manager(corpus)
-        val mgr = DefaultMonkeyManager(manager, corpus)
-        val monkey = mgr.createMonkey(strategy)
-        scenarios.add(Pair(name) { matchWords(monkey) })
-    }
-
-    fun addScenarioMap(name: String, strategy: TypeStrategy) {
+    fun addScenario(name: String, strategy: TypeStrategy) {
         val corpus = MapCorpus(words)
         val manager = Manager(corpus)
         val mgr = DefaultMonkeyManager(manager, corpus)
@@ -42,38 +32,12 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
 
     fun profile() {
         Qlog.info("words.#", words.size)
-        run {
-            addScenarioList("random list", RandomStrategy(Keys.fullList()))
-            addScenarioMap("random map", RandomStrategy(Keys.fullList()))
-        }
-
-        run {
-            addScenarioList("weighted list", WeightedStrategy(words))
-            addScenarioMap("weighted map", WeightedStrategy(words))
-        }
-
-        run {
-            addScenarioList("2s random list", TwosRandomStrategy(words))
-            addScenarioMap("2s random map", TwosRandomStrategy(words))
-        }
-
-        run {
-            addScenarioList("2s distributed list", TwosDistributedStrategy(words))
-            addScenarioMap("2s distributed map", TwosDistributedStrategy(words))
-        }
-
-        run {
-            addScenarioList("3s random list", ThreesRandomStrategy(words))
-            addScenarioMap("3s random map", ThreesRandomStrategy(words))
-        }
-
-        run {
-            addScenarioList("3s distributed list", ThreesDistributedStrategy(words))
-            addScenarioMap("3s distributed map", ThreesDistributedStrategy(words))
-        }
-
-        Qlog.info("scenarios", scenarios.toMap().keys)
-
+        addScenario("random", RandomStrategy(Keys.fullList()))
+        addScenario("weighted", WeightedStrategy(words))
+        addScenario("2s random", TwosRandomStrategy(words))
+        addScenario("2s distributed", TwosDistributedStrategy(words))
+        addScenario("3s random", ThreesRandomStrategy(words))
+        addScenario("3s distributed", ThreesDistributedStrategy(words))
         scenarios.forEach { (name, block) ->
             println(name)
             block()
@@ -96,7 +60,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
             printf("attempts: %,d", attempts)
             println("matches : $matches")
         }
-        printf("duration: %,d ms\n", duration.second.toMillis())
+        printf("duration: %,d ms", duration.second.toMillis())
         println()
     }
 }

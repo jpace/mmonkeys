@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.mky.corpus.dc.AttemptedTypewriter
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.rand.RandomFactory
@@ -10,7 +11,7 @@ import org.incava.mmonkeys.words.AttemptFactory
 import org.incava.mmonkeys.words.Words
 import org.incava.rando.RandInt
 
-class NumbersMonkey(id: Int, private val checker: NumbersChecker, private val typewriter: AttemptedTypewriter, manager: Manager) : Monkey(id, manager) {
+class NumbersMonkey(id: Int, private val checker: NumbersChecker, private val typewriter: AttemptedTypewriter, manager: MonkeyMonitor) : Monkey(id, manager) {
     val rand: RandInt = RandomFactory.getCalculated(Keys.fullList().size)
 
     override fun findMatches(): Words {
@@ -32,6 +33,7 @@ class NumbersMonkey(id: Int, private val checker: NumbersChecker, private val ty
             checker.toAttempt(numChars, encoded)
         } else {
             AttemptFactory.failed(length + 1)
-        }.also { typewriter.addAttempt(it) }
+        // }.also { typewriter.addAttempt(it) }
+        }.also { processAttempt(it) }
     }
 }

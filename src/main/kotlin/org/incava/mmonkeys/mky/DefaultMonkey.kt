@@ -1,12 +1,11 @@
 package org.incava.mmonkeys.mky
 
-import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Words
 
-open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, private val typewriter: DefaultTypewriter, manager: Manager) : Monkey(id, manager) {
+open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, private val typewriter: DefaultTypewriter, manager: MonkeyMonitor) : Monkey(id, manager) {
     private fun typeWord(): String {
         return strategy.typeWord()
     }

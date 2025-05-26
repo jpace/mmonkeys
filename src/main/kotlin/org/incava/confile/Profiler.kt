@@ -1,10 +1,9 @@
 package org.incava.confile
 
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.io.Qlog.printf
 import org.incava.time.Durations.measureDuration
 import java.time.Duration
-
-data class ProfileSimulation(val function: () -> Unit, val durations: MutableList<Duration>)
 
 open class Profiler(val numInvokes: Long, val numTrials: Int) {
     val simulations = LinkedHashMap<String, ProfileSimulation>()
@@ -17,7 +16,9 @@ open class Profiler(val numInvokes: Long, val numTrials: Int) {
         return simulations.keys.withIndex().associate { it.index to it.value }
     }
 
-    fun runAll() {
+    fun runAll(): ProfileStats {
+        println("trials#: $numTrials")
+        printf("invokes#: %,d", numInvokes)
         val indexed = indexedKeys()
         indexed.forEach { (index, name) ->
             println("$index - $name")
@@ -37,6 +38,7 @@ open class Profiler(val numInvokes: Long, val numTrials: Int) {
             }
             println(".")
         }
+        return ProfileStats(simulations.mapValues { (_, value) -> value.getAverageTime() })
     }
 
     fun spawn(): Profiler {

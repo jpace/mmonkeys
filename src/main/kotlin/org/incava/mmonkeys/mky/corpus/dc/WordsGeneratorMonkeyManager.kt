@@ -1,8 +1,8 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.MonkeyMonitor
 
-class WordsGeneratorMonkeyManager(val manager: Manager, val corpus: DualCorpus) {
+class WordsGeneratorMonkeyManager(val manager: MonkeyMonitor, val corpus: DualCorpus) {
     var id = 1
 
     fun createMonkey(): WordsGeneratorMonkey {
