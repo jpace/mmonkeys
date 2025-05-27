@@ -5,7 +5,7 @@ import org.incava.mmonkeys.type.DefaultTypewriter
 import org.incava.mmonkeys.words.Attempt
 import org.incava.mmonkeys.words.Words
 
-open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, private val typewriter: DefaultTypewriter, manager: MonkeyMonitor) : Monkey(id, manager) {
+open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, private val typewriter: DefaultTypewriter) : Monkey(id) {
     private fun typeWord(): String {
         return strategy.typeWord()
     }
@@ -17,8 +17,6 @@ open class DefaultMonkey(id: Int, private val strategy: TypeStrategy, private va
 
     fun runAttempt(): Attempt {
         val word = typeWord()
-        val attempt = typewriter.toAttempt(word)
-        processAttempt(attempt)
-        return attempt
+        return typewriter.addAttempt(this, word)
     }
 }

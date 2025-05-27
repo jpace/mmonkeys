@@ -8,7 +8,7 @@ class NumbersMonkeyManager(val manager: MonkeyMonitor, val corpus: NumberedCorpu
 
     fun createMonkey() : NumbersMonkey {
         val checker = NumbersChecker(corpus)
-        val typewriter = AttemptedTypewriter()
-        return NumbersMonkey(id++, checker, typewriter, manager)
+        val typewriter = AttemptedTypewriter(manager)
+        return NumbersMonkey(id++, checker, typewriter)
     }
 }

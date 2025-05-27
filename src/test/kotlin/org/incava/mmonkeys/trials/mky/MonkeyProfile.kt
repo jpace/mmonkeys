@@ -6,7 +6,6 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.corpus.impl.ListCorpus
 import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
@@ -21,6 +20,7 @@ import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
 import org.incava.mmonkeys.mky.number.NumbersMonkeyManager
+import org.incava.mmonkeys.rand.Sequences
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.words.Attempt
@@ -35,7 +35,7 @@ data class ProfileParams(
     val includeLists: Boolean,
 )
 
-class ProfileScenario(val name: String, val words: List<String>, val monitor: CountingMonitor, val matchGoal: Int) {
+class ProfileScenario(val name: String, val words: List<String>, val monitor: CountingMonitor, private val matchGoal: Int) {
     fun addTo(profiler: Profiler, monkey: WordsGeneratorMonkey) {
         profiler.add(name) {
             matchWords2 { monkey.runAttempts() }
@@ -120,25 +120,9 @@ private class MonkeyProfile(private val params: ProfileParams) {
         scenarios[scenario.name] = scenario
     }
 
-    fun addMapSequenceScenario() {
+    fun addSequenceScenario(name: String, supplier: (Sequences) -> TypeStrategy) {
         val sequences = sequences()
-        val strategy = TwosRandomStrategy(sequences)
-        addMapSequenceScenario("twos random map", strategy)
-    }
-
-    fun addMapThreesSequencesScenario() {
-        val sequences = sequences()
-        val strategy = ThreesRandomStrategy(sequences)
-        addMapSequenceScenario("threes random map", strategy)
-    }
-
-    fun addMapSequenceScenario2() {
-        val sequences = sequences()
-        val strategy = TwosDistributedStrategy(sequences)
-        addMapSequenceScenario("twos distributed map", strategy)
-    }
-
-    fun addMapSequenceScenario(name: String, strategy: TypeStrategy) {
+        val strategy = supplier(sequences)
         val corpus = mapCorpus()
         val manager = createManager()
         val mgr = defaultMonkeyManager(corpus, manager)
@@ -147,13 +131,7 @@ private class MonkeyProfile(private val params: ProfileParams) {
         addScenario(scenario, monkey)
     }
 
-    fun addMapSequenceScenario3() {
-        val sequences = sequences()
-        val strategy = ThreesDistributedStrategy(sequences)
-        addMapSequenceScenario("threes distributed map", strategy)
-    }
-
-    fun addNumberedScenario() {
+    fun addNumbered() {
         val corpus = numberedCorpus()
         val manager = createManager()
         val mgr = NumbersMonkeyManager(manager, corpus)
@@ -162,12 +140,12 @@ private class MonkeyProfile(private val params: ProfileParams) {
         addScenario(scenario, monkey)
     }
 
-    fun addMapRandom() {
+    fun addRandom() {
         val corpus = mapCorpus()
         val manager = createManager()
         val mgr = defaultMonkeyManager(corpus, manager)
         val monkey = mgr.createMonkeyRandom()
-        val scenario = ProfileScenario("map random", words, manager, params.matchGoal)
+        val scenario = ProfileScenario("random", words, manager, params.matchGoal)
         addScenario(scenario, monkey)
     }
 
@@ -175,12 +153,12 @@ private class MonkeyProfile(private val params: ProfileParams) {
         Console.info("words.#", words.size)
 
         addWordGeneratorScenario()
-        addMapSequenceScenario()
-        addMapThreesSequencesScenario()
-        addMapSequenceScenario2()
-        addMapSequenceScenario3()
-        addNumberedScenario()
-        addMapRandom()
+        addSequenceScenario("twos random", ::TwosRandomStrategy)
+        addSequenceScenario("threes random", ::ThreesRandomStrategy)
+        addSequenceScenario("twos distributed", ::TwosDistributedStrategy)
+        addSequenceScenario("threes distributed", ::ThreesDistributedStrategy)
+        addNumbered()
+        addRandom()
 
         profiler.runAll()
         profiler.showResults(SortType.BY_DURATION)
@@ -188,18 +166,18 @@ private class MonkeyProfile(private val params: ProfileParams) {
             Qlog.info("name", name)
             Qlog.info("monitor.attempts.#", scenario.monitor.attempts)
             Qlog.info("monitor.matches.#", scenario.monitor.matches)
-//            Qlog.info("monitor.keystrokes", scenario.monitor.byKeystrokes.toSortedMap())
+            Qlog.info("monitor.keystrokes", scenario.monitor.byKeystrokes.toSortedMap())
         }
 
-//        val showdown = profiler.spawn()
-//        showdown.runAll()
-//        profiler.showResults(SortType.BY_DURATION)
-//        showdown.showResults(SortType.BY_DURATION)
+        val showdown = profiler.spawn()
+        showdown.runAll()
+        profiler.showResults(SortType.BY_DURATION)
+        showdown.showResults(SortType.BY_DURATION)
     }
 }
 
 fun main() {
-    val params = ProfileParams(1L, 100, 3, 13, 1, true)
+    val params = ProfileParams(1L, 1000, 4, 13, 1, true)
     val obj = MonkeyProfile(params)
     obj.profile()
 }

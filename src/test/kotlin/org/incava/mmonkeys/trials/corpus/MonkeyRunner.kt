@@ -20,7 +20,6 @@ import kotlin.system.measureTimeMillis
 // this used to take the factory to see the overhead in monkey initialization,
 // but that's minimal, since it only happens once
 class MonkeyRunner(private val manager: Manager, private val monkey: Monkey, private val timeLimit: Duration) {
-    private val maxAttempts = 100_000_000_000_000L
     private val iterations = mutableListOf<Long>()
     private val start = ZonedDateTime.now()
     private var matchCount = 0

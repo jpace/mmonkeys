@@ -7,7 +7,7 @@ class WordsGeneratorMonkeyManager(val manager: MonkeyMonitor, val corpus: DualCo
 
     fun createMonkey(): WordsGeneratorMonkey {
         val generator = WordsGeneratorFactory.createWithDefaults(corpus)
-        val typewriter = AttemptedTypewriter()
-        return WordsGeneratorMonkey(id++, generator, typewriter, manager)
+        val typewriter = AttemptedTypewriter(manager)
+        return WordsGeneratorMonkey(id++, generator, typewriter)
     }
 }

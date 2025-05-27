@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.mky
 
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.type.DefaultTypewriter
@@ -23,12 +22,12 @@ class DefaultMonkeyManager(val manager: MonkeyMonitor, val corpus: WordCorpus) {
 
     fun createMonkeyRandom(): DefaultMonkey {
         val strategy = RandomStrategy(Keys.fullList())
-        val typewriter = DefaultTypewriter(checker)
-        return DefaultMonkey(id++, strategy, typewriter, manager)
+        val typewriter = DefaultTypewriter(checker, manager)
+        return DefaultMonkey(id++, strategy, typewriter)
     }
 
     fun createMonkey(strategy: TypeStrategy): DefaultMonkey {
-        val typewriter = DefaultTypewriter(checker)
-        return DefaultMonkey(id++, strategy, typewriter, manager)
+        val typewriter = DefaultTypewriter(checker, manager)
+        return DefaultMonkey(id++, strategy, typewriter)
     }
 }
