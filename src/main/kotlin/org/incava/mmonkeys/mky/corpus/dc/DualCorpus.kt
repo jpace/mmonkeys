@@ -3,7 +3,6 @@ package org.incava.mmonkeys.mky.corpus.dc
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
-import org.incava.mmonkeys.words.Word
 
 class DualCorpus(words: List<String>) : Corpus(words) {
     private val stringItems: ItemsIndicesMap<String> = ItemsIndicesMap()
@@ -26,20 +25,20 @@ class DualCorpus(words: List<String>) : Corpus(words) {
 
     fun isEncoded(string: String) = string.length > RandEncoded.Constants.MAX_ENCODED_CHARS
 
-    fun findWord(word: String): Int? {
+    override fun findMatch(word: String): Int? {
         return if (isEncoded(word)) {
-            findWord(stringItems, word, word.length)
+            findMatch(stringItems, word, word.length)
         } else {
             val encoded = StringEncoder.encodeToLong(word)
-            findWord(encodedItems, encoded, word.length)
+            findMatch(encodedItems, encoded, word.length)
         }
     }
 
-    fun findWord(encoded: Long, length: Int): Int? {
-        return findWord(encodedItems, encoded, length)
+    fun findMatch(encoded: Long, length: Int): Int? {
+        return findMatch(encodedItems, encoded, length)
     }
 
-    fun <T> findWord(items: ItemsIndicesMap<T>, item: T, length: Int): Int? {
+    private fun <T> findMatch(items: ItemsIndicesMap<T>, item: T, length: Int): Int? {
         val forLength = forLength(items, length)
         return if (forLength.isNullOrEmpty()) {
             null

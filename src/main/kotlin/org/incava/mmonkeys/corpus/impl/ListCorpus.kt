@@ -9,9 +9,4 @@ open class ListCorpus(words: List<String>) : WordCorpus(words) {
         }
     }
 
-    override fun findWord(word: String): Int? {
-        return words().indices.find { index ->
-            wordAtIndex(index) == word
-        }
-    }
 }

@@ -18,8 +18,4 @@ class MapCorpus(words: List<String>) : WordCorpus(words) {
     override fun findMatch(word: String): Int? {
         return itemIndices.itemsForLength(word.length)?.get(word)?.get(0)
     }
-
-    override fun findWord(word: String): Int? {
-        return itemIndices.itemsForLength(word.length)?.get(word)?.get(0)
-    }
 }

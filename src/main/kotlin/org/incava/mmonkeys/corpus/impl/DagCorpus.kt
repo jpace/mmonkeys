@@ -1,5 +1,7 @@
 package org.incava.mmonkeys.corpus.impl
 
+import org.incava.mmonkeys.corpus.Corpus
+
 data class Node(val char: Char, val parent: Node?, val children: MutableList<Node>, val indices: MutableList<Int>) {
     override fun toString(): String {
         return "Node(char=$char, parent.char=${parent?.char}, children=$children, indices=$indices)"
@@ -11,7 +13,7 @@ data class Node(val char: Char, val parent: Node?, val children: MutableList<Nod
     }
 }
 
-class DagCorpus(words: List<String>) {
+class DagCorpus(words: List<String>): Corpus(words) {
     val nodes: MutableList<Node> = mutableListOf()
 
     init {
@@ -42,6 +44,11 @@ class DagCorpus(words: List<String>) {
 
     fun findNode(string: String): Node? {
         return findNode(string.toCharArray(), nodes)
+    }
+
+    override fun findMatch(string: String): Int? {
+        val node = findNode(string) ?: return null
+        return node.indices.find { !matches.isMatched(it) }
     }
 
     private fun toWords(node: Node): Map<Int, String> {

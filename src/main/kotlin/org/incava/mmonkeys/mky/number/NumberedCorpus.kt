@@ -24,7 +24,11 @@ class NumberedCorpus(words: List<String>) : Corpus(words) {
         indexed.removeItem(number, length)
     }
 
-    fun findWord(number: Long, length: Int) : Int? {
+    override fun findMatch(word: String): Int? {
+        TODO("Not yet implemented")
+    }
+
+    fun findMatch(number: Long, length: Int) : Int? {
         val forLength = indexed.itemsForLength(length) ?: return null
         val forEncoded = forLength[number]
         return if (forEncoded.isNullOrEmpty()) {

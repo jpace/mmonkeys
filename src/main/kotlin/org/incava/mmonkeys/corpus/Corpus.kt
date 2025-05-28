@@ -15,4 +15,5 @@ abstract class Corpus(private val words: List<String>) {
     fun wordAtIndex(index: Int) = words[index]
 
     fun lengthAtIndex(index: Int) = wordAtIndex(index).length
+    abstract fun findMatch(word: String): Int?
 }
