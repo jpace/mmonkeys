@@ -2,6 +2,10 @@ package org.incava.mmonkeys.trials.mky
 
 import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.io.Qlog.printf
+import org.incava.mesa.DurationColumn
+import org.incava.mesa.LongColumn
+import org.incava.mesa.StringColumn
+import org.incava.mesa.Table
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
@@ -17,10 +21,13 @@ import org.incava.mmonkeys.mky.mind.WeightedStrategy
 import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
+import java.time.Duration
 
-private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
+data class StrategiesProfileResult(val attempts: Long, val matches: Long, val duration: Duration)
+
+private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose: Boolean = false) {
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length >= minLength }
-    val scenarios = mutableListOf<Pair<String, () -> Unit>>()
+    val scenarios = mutableListOf<Pair<String, () -> StrategiesProfileResult>>()
 
     fun addScenario(name: String, strategy: TypeStrategy) {
         val corpus = MapCorpus(words)
@@ -38,34 +45,54 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long) {
         addScenario("2s distributed", TwosDistributedStrategy(words))
         addScenario("3s random", ThreesRandomStrategy(words))
         addScenario("3s distributed", ThreesDistributedStrategy(words))
-        scenarios.forEach { (name, block) ->
+        val results = scenarios.associate { (name, block) ->
             println(name)
-            block()
+            val result = block()
+            name to result
+        }
+        val table = Table(
+            listOf(
+                StringColumn("type", 16, true),
+                LongColumn("attempts", 12),
+                LongColumn("matches", 8),
+                DurationColumn("duration", 8)
+            )
+        )
+        table.writeHeader()
+        results.forEach { (name, result) ->
+            table.writeRow(name, result.attempts, result.matches, result.duration)
         }
     }
 
-    fun matchWords(monkey: DefaultMonkey) {
+    fun matchWords(monkey: DefaultMonkey): StrategiesProfileResult {
+        var matches = 0L
+        var attempts = 0L
         val duration = Durations.measureDuration {
-            var matches = 0L
-            var attempts = 0L
             while (matches < matchGoal) {
                 val result = monkey.runAttempt()
                 val word = result.word
                 ++attempts
                 if (word != null && words.contains(word.string)) {
                     ++matches
-                    printf("%,d - %s", attempts, word.string)
+                    if (verbose) {
+                        printf("%,d - %s", attempts, word.string)
+                    }
                 }
             }
-            printf("attempts: %,d", attempts)
-            println("matches : $matches")
+            if (verbose) {
+                printf("attempts: %,d", attempts)
+                println("matches : $matches")
+            }
         }
-        printf("duration: %,d ms", duration.second.toMillis())
-        println()
+        if (verbose) {
+            printf("duration: %,d ms", duration.second.toMillis())
+            println()
+        }
+        return StrategiesProfileResult(attempts, matches, duration.second)
     }
 }
 
 private fun main() {
-    val obj = StrategiesProfile(minLength = 4, matchGoal = 10L)
+    val obj = StrategiesProfile(minLength = 5, matchGoal = 100L)
     obj.profile()
 }

@@ -3,10 +3,6 @@ package org.incava.mmonkeys.rand
 typealias CharDistRandom = DistributedRandom<Char, Int>
 
 object CharRandom {
-    fun toDistributedRandom(chars: Map<Char, Int>): CharDistRandom {
-        return DistributedRandom(chars)
-    }
-
     fun getChar(firsts: CharDistRandom): Char {
         return firsts.nextRandom()
     }

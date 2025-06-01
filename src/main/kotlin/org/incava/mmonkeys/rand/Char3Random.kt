@@ -27,13 +27,15 @@ object Char3Random {
 
     fun createSeconds3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, CharDistRandom> {
         val counts = countOfSeconds3(threes)
-        return counts.mapValues { (_, seconds) -> DistributedRandom(seconds) }
+        return counts.mapValues { (_, seconds) ->
+            DistributedRandom(seconds)
+        }
     }
 
     fun createThirds3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, Map<Char, CharDistRandom>> {
         return threes.mapValues { (_, second) ->
             second.mapValues { (_, thirds) ->
-                CharRandom.toDistributedRandom(thirds)
+                DistributedRandom(thirds)
             }
         }
     }
