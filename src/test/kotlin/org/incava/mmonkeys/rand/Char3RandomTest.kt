@@ -19,16 +19,23 @@ class Char3RandomTest {
     }
 
     @Test
-    fun countOfFirsts() {
+    fun createFirsts3() {
         val sequences = SequencesFactory.createFromWords(words)
-        val result = Char3Random.countOfFirsts3(sequences.threes)
+        val result = Char3Random.createFirsts3(sequences.threes)
+        Qlog.info("result", result.slots.toSortedMap())
+    }
+
+    @Test
+    fun createSeconds3() {
+        val sequences = SequencesFactory.createFromWords(words)
+        val result = Char3Random.createSeconds3(sequences.threes)
         Qlog.info("result", result.toSortedMap())
     }
 
     @Test
-    fun countOfSeconds() {
+    fun createThirds3() {
         val sequences = SequencesFactory.createFromWords(words)
-        val result = Char3Random.countOfSeconds3(sequences.threes)
+        val result = Char3Random.createThirds3(sequences.threes)
         Qlog.info("result", result.toSortedMap())
     }
 }

@@ -70,7 +70,6 @@ class CorpusFilterTrial {
 
     fun showStats(length: Int, totalCount: Int, uniqueCount: Int) {
         val possible = Maths.powerBigRepeat(BigInteger.valueOf(26), length).toBigDecimal()
-        val uniqPct = uniqueCount.toBigDecimal() / possible
         System.out.printf(
             "%-3d | %,12d | %,12d | %16.10f | %16.10f | %16.10f | %32s\n",
             length, uniqueCount, totalCount,

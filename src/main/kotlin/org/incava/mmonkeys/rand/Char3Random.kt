@@ -6,33 +6,21 @@ object Char3Random {
         return CharRandom.getChar(forFirst, secondChar)
     }
 
-    fun countOfFirsts3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, Int> {
+    fun createFirsts3(threes: Map3<Char, Int>): CharDistRandom {
         return threes.mapValues { (_, second) ->
             second.values.sumOf { thirds ->
                 thirds.values.sum()
             }
-        }
+        }.let { DistributedRandom(it) }
     }
 
-    fun countOfSeconds3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, Map<Char, Int>> {
+    fun createSeconds3(threes: Map3<Char, Int>): Map<Char, CharDistRandom> {
         return threes.mapValues { (_, second) ->
-            CharRandom.countOfFirsts2(second)
+            CharRandom.createFirsts2(second)
         }
     }
 
-    fun createFirsts3(threes: Map<Char, Map<Char, Map<Char, Int>>>): CharDistRandom {
-        val counts = countOfFirsts3(threes)
-        return DistributedRandom(counts)
-    }
-
-    fun createSeconds3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, CharDistRandom> {
-        val counts = countOfSeconds3(threes)
-        return counts.mapValues { (_, seconds) ->
-            DistributedRandom(seconds)
-        }
-    }
-
-    fun createThirds3(threes: Map<Char, Map<Char, Map<Char, Int>>>): Map<Char, Map<Char, CharDistRandom>> {
+    fun createThirds3(threes: Map3<Char, Int>): Map<Char, Map<Char, CharDistRandom>> {
         return threes.mapValues { (_, second) ->
             second.mapValues { (_, thirds) ->
                 DistributedRandom(thirds)

@@ -46,8 +46,8 @@ class DagCorpus(words: List<String>): Corpus(words) {
         return findNode(string.toCharArray(), nodes)
     }
 
-    override fun findMatch(string: String): Int? {
-        val node = findNode(string) ?: return null
+    override fun findMatch(word: String): Int? {
+        val node = findNode(word) ?: return null
         return node.indices.find { !matches.isMatched(it) }
     }
 

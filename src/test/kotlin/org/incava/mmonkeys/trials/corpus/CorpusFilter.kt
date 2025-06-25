@@ -1,5 +1,7 @@
 package org.incava.mmonkeys.trials.corpus
 
+import org.incava.ikdk.util.MapUtil
+
 class CorpusFilter(words: Collection<String>) {
     val missingTwos: MutableMap<Char, MutableSet<Char>> = mutableMapOf()
     val missingThrees: MutableMap<Char, MutableMap<Char, MutableSet<Char>>> = mutableMapOf()
@@ -18,9 +20,7 @@ class CorpusFilter(words: Collection<String>) {
                     val str3 = str2 + third
                     val match3 = downers.find { it.contains(str3) }
                     if (match3 == null) {
-                        missingThrees.computeIfAbsent(first) {
-                            mutableMapOf()
-                        }.computeIfAbsent(second) { mutableSetOf() }.also { it.add(third) }
+                        MapUtil.ensureMap(missingThrees, first).computeIfAbsent(second) { mutableSetOf() }.also { it.add(third) }
                     }
                 }
             }

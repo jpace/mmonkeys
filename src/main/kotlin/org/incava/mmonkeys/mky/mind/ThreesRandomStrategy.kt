@@ -17,6 +17,6 @@ class ThreesRandomStrategy(sequences: Sequences) : ThreesStrategy(sequences) {
     }
 
     override fun getChar(): Char {
-        return SequencesStrategy.getRandomChar(threes)
+        return threes.getRandomKey()
     }
 }

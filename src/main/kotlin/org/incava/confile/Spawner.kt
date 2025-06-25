@@ -8,7 +8,7 @@ import kotlin.math.sqrt
 
 object Spawner {
     fun spawn(current: Profiler): Profiler {
-        val durations = current.simulations.mapValues { (key, value) -> value.getAverageTime() }
+        val durations = current.simulations.mapValues { (_, value) -> value.getAverageTime() }
         val stats = ProfileStats(durations)
 
         // @todo - rerun with more trials and iterations if variance is too high

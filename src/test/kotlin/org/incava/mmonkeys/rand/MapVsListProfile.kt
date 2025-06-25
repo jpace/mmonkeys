@@ -3,45 +3,59 @@ package org.incava.mmonkeys.rand
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.ikdk.io.Qlog
+import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.type.Keys
 import kotlin.random.Random
 
-class Map2 : LinkedHashMap<Char, MutableMap<Char, Int>>() {
-    fun lookup(chars: List<Char>): Int? {
-        return this[chars[0]]?.get(chars[1])
+class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
+    class Map2 : LinkedHashMap<Char, MutableMap<Char, Int>>() {
+        fun lookup(chars: List<Char>): Int? {
+            return this[chars[0]]?.get(chars[1])
+        }
     }
-}
 
-class Map3 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, Int>>>() {
-    fun lookup(chars: List<Char>): Int? {
-        return this[chars[0]]?.get(chars[1])?.get(chars[2])
+    class Map3 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, Int>>>() {
+        fun lookup(chars: List<Char>): Int? {
+            return this[chars[0]]?.get(chars[1])?.get(chars[2])
+        }
     }
-}
 
-class Map4 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>>() {
-    fun lookup(chars: List<Char>): Int? {
-        return this[chars[0]]?.get(chars[1])?.get(chars[2])?.get(chars[3])
+    class Map4 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>>() {
+        fun lookup(chars: List<Char>): Int? {
+            return this[chars[0]]?.get(chars[1])?.get(chars[2])?.get(chars[3])
+        }
     }
-}
 
-class ListMap : LinkedHashMap<List<Char>, Int>() {
-    fun lookup(chars: List<Char>): Int? {
-        return this[chars]
+    class ListMap : LinkedHashMap<List<Char>, Int>() {
+        fun lookup(chars: List<Char>): Int? {
+            return this[chars]
+        }
     }
-}
 
-class MapVsListProfile(val numInvokes: Long, val numTrials: Int = 5) {
+    class PairMap : LinkedHashMap<Pair<Char, Char>, Int>() {
+        fun lookup(chars: List<Char>): Int? {
+            val pair = Pair(chars.first(), chars.last())
+            return this[pair]
+        }
+    }
+
     fun addToMap(map: MutableMap<Char, Int>, char: Char, number: Int) {
         map[char] = number
     }
 
     fun addToMap(map: MutableMap<Char, MutableMap<Char, Int>>, x: Char, y: Char, number: Int) {
-        map.computeIfAbsent(x) { mutableMapOf() }
+        MapUtil.ensureMap(map, x)
             .also { map1 -> addToMap(map1, y, number) }
     }
 
-    fun addToMap(map: MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>, x: Char, y: Char, z: Char, number: Int) {
-        map.computeIfAbsent(x) { mutableMapOf() }
+    fun addToMap(
+        map: MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>,
+        x: Char,
+        y: Char,
+        z: Char,
+        number: Int,
+    ) {
+        MapUtil.ensureMap(map, x)
             .also { map1 -> addToMap(map1, y, z, number) }
     }
 
@@ -94,7 +108,7 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int = 5) {
                         val ch4 = Keys.fullList().random()
                         val idx = Random.Default.nextInt()
                         list[listOf(ch1, ch2, ch3)] = idx
-                        map.computeIfAbsent(ch1) { mutableMapOf() }
+                        MapUtil.ensureMap(map, ch1)
                             .also { map1 ->
                                 addToMap(map1, ch2, ch3, ch4, idx)
                             }
@@ -126,14 +140,14 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int = 5) {
     fun profile(numChars: Int, listLookup: ((List<Char>) -> Int?), mapLookup: ((List<Char>) -> Int?)) {
         val profiler = Profiler(numInvokes, numTrials)
 
-        profiler.add("map $numChars") {
-            val chars = (0 until numChars).map { Keys.fullList().random() }
-            val result = mapLookup(chars)
-        }
-
         profiler.add("list $numChars") {
             val chars = (0 until numChars).map { Keys.fullList().random() }
             val result = listLookup(chars)
+        }
+
+        profiler.add("map $numChars") {
+            val chars = (0 until numChars).map { Keys.fullList().random() }
+            val result = mapLookup(chars)
         }
 
         profiler.runAll()
@@ -145,7 +159,7 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int = 5) {
     }
 }
 
-;fun main() {
+fun main() {
     val obj = MapVsListProfile(1_000_000L, 2)
     obj.profile2()
     obj.profile3()

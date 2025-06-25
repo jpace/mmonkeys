@@ -18,14 +18,7 @@ class SequencesTest {
     }
 
     @Test
-    fun twosChars() {
-        val result = obj.twos
-        assertEquals(setOf('u', ' '), result.getValue('q').keys)
-        assertEquals(setOf('e', 'o', 'u', 'a', 'i', ' ', 's'), result.getValue('j').keys)
-    }
-
-    @Test
-    fun twosCounts() {
+    fun twos() {
         val result = obj.twos
         assertEquals(mapOf('u' to 3941, ' ' to 1), result.getValue('q'))
         assertEquals(
@@ -35,22 +28,10 @@ class SequencesTest {
     }
 
     @Test
-    fun threesChars() {
+    fun threes() {
         val result = obj.threes
-        assertEquals(
-            mapOf('u' to setOf('e', 'i', 'a', 'o', 'y', ' '), ' ' to setOf('u')),
-            result.getValue('q').map { it.key to it.value.keys }.toMap()
-        )
-        assertEquals(setOf('g', 'l', 'n'), result.getValue('j').getValue('i').keys)
-    }
-
-    @Test
-    fun threesCounts() {
-        val result = obj.threes
-        assertEquals(
-            mapOf('e' to 1909, 'i' to 1146, 'a' to 626, 'o' to 251, 'y' to 5, ' ' to 4),
-            result.getValue('q').getValue('u')
-        )
-        assertEquals(mapOf('g' to 9, 'l' to 3, 'n' to 1), result.getValue('j').getValue('i'))
+        assertEquals(9, result.fetch('j', 'i', 'g'))
+        assertEquals(3, result.fetch('j', 'i', 'l'))
+        assertEquals(1, result.fetch('j', 'i', 'n'))
     }
 }

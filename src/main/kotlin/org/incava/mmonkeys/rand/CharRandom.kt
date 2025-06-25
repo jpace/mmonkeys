@@ -12,19 +12,10 @@ object CharRandom {
         return getChar(forFirst)
     }
 
-    fun <T> sumOfValues(map: Map<T, Int>): Int {
-        return map.values.sum()
-    }
-
-    fun countOfFirsts2(twos: Map<Char, Map<Char, Int>>): Map<Char, Int> {
+    fun createFirsts2(twos: Map<Char, Map<Char, Int>>): DistributedRandom<Char, Int> {
         return twos.mapValues { (_, second) ->
-            sumOfValues(second)
-        }
-    }
-
-    fun createFirsts2(twos: Map<Char, Map<Char, Int>>): CharDistRandom {
-        val counts = countOfFirsts2(twos)
-        return DistributedRandom(counts)
+            second.values.sum()
+        }.let { DistributedRandom(it) }
     }
 
     fun createSeconds2(twos: Map<Char, Map<Char, Int>>): Map<Char, CharDistRandom> {
