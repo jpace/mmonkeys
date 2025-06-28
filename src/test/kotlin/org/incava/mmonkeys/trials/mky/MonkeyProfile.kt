@@ -9,9 +9,11 @@ import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkey
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
@@ -36,62 +38,28 @@ data class ProfileParams(
 )
 
 class ProfileScenario(val name: String, val words: List<String>, val monitor: CountingMonitor, private val matchGoal: Int) {
-    fun addTo(profiler: Profiler, monkey: WordsGeneratorMonkey) {
+    fun addTo(profiler: Profiler, manager: CountingMonitor, monkey: Monkey) {
         profiler.add(name) {
-            matchWords2 { monkey.runAttempts() }
+            while (manager.matches < matchGoal) {
+                monkey.type()
+            }
         }
-    }
-
-    fun addTo(profiler: Profiler, monkey: DefaultMonkey) {
-        profiler.add(name) {
-            matchWords { monkey.runAttempt() }
-        }
-    }
-
-    fun addTo(profiler: Profiler, monkey: NumbersMonkey) {
-        profiler.add(name) {
-            matchWords { monkey.runAttempt() }
-        }
-    }
-
-    fun matchWords(generator: () -> Attempt) {
-        runToMatchCount {
-            val result = generator()
-            val word = result.word
-            if (word == null || !words.contains(word.string)) 0 else 1
-        }
-    }
-
-    fun matchWords2(generator: () -> Attempts) {
-        runToMatchCount {
-            val result = generator()
-            result.words.count { words.contains(it.string) }
-        }
-    }
-
-    fun runToMatchCount(generator: () -> Int) {
-        var matches = 0L
-        while (matches < matchGoal) {
-            val result = generator()
-            matches += result
-        }
-        Qlog.info("matches.#", matches)
     }
 }
 
 private class MonkeyProfile(private val params: ProfileParams) {
     // limiting to 13 for numbers monkey
-    val words =
-        CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length in params.minLength..params.maxLength }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
+        .filter { it.length in params.minLength..params.maxLength }
     val profiler = Profiler(params.numInvokes, params.numTrials)
     val scenarios = mutableMapOf<String, ProfileScenario>()
 
     fun createManager() = CountingMonitor()
-
     fun dualCorpus() = DualCorpus(words)
     fun mapCorpus() = MapCorpus(words)
     fun numberedCorpus() = NumberedCorpus(words)
     fun sequences() = SequencesFactory.createFromWords(words)
+
     fun defaultMonkeyManager(corpus: WordCorpus, manager: CountingMonitor): DefaultMonkeyManager {
         return DefaultMonkeyManager(manager, corpus)
     }
@@ -102,21 +70,21 @@ private class MonkeyProfile(private val params: ProfileParams) {
         val mgr = WordsGeneratorMonkeyManager(manager, corpus)
         val monkey = mgr.createMonkey()
         val scenario = ProfileScenario("words gen", words, manager, params.matchGoal)
-        addScenario(scenario, monkey)
+        addScenario(scenario, manager, monkey)
     }
 
-    fun addScenario(scenario: ProfileScenario, monkey: DefaultMonkey) {
-        scenario.addTo(profiler, monkey)
+    fun addScenario(scenario: ProfileScenario, manager: CountingMonitor, monkey: DefaultMonkey) {
+        scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
 
-    fun addScenario(scenario: ProfileScenario, monkey: NumbersMonkey) {
-        scenario.addTo(profiler, monkey)
+    fun addScenario(scenario: ProfileScenario, manager: CountingMonitor, monkey: NumbersMonkey) {
+        scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
 
-    fun addScenario(scenario: ProfileScenario, monkey: WordsGeneratorMonkey) {
-        scenario.addTo(profiler, monkey)
+    fun addScenario(scenario: ProfileScenario, manager: CountingMonitor, monkey: WordsGeneratorMonkey) {
+        scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
 
@@ -128,7 +96,7 @@ private class MonkeyProfile(private val params: ProfileParams) {
         val mgr = defaultMonkeyManager(corpus, manager)
         val monkey = mgr.createMonkey(strategy)
         val scenario = ProfileScenario(name, words, manager, params.matchGoal)
-        addScenario(scenario, monkey)
+        addScenario(scenario, manager, monkey)
     }
 
     fun addNumbered() {
@@ -137,7 +105,7 @@ private class MonkeyProfile(private val params: ProfileParams) {
         val mgr = NumbersMonkeyManager(manager, corpus)
         val monkey = mgr.createMonkey()
         val scenario = ProfileScenario("numbers", words, manager, params.matchGoal)
-        addScenario(scenario, monkey)
+        addScenario(scenario, manager, monkey)
     }
 
     fun addRandom() {
@@ -146,7 +114,7 @@ private class MonkeyProfile(private val params: ProfileParams) {
         val mgr = defaultMonkeyManager(corpus, manager)
         val monkey = mgr.createMonkeyRandom()
         val scenario = ProfileScenario("random", words, manager, params.matchGoal)
-        addScenario(scenario, monkey)
+        addScenario(scenario, manager, monkey)
     }
 
     fun profile() {

@@ -18,7 +18,7 @@ class StrategiesTrial {
         Qlog.info("name", name)
         val results = mutableMapOf<String, Int>()
         repeat(10) {
-            val result = strategy.typeWord()
+            val result = strategy.getChars()
             // Qlog.info("result", "<$result>")
             results.compute(result) { _, count -> (count ?: 0) + 1 }
             Qlog.info("word", result)

@@ -81,14 +81,14 @@ class SequencesTrial {
         val weightedStrategy = WeightedStrategy(words)
         Qlog.info("weighted", weightedStrategy)
         repeat(10) {
-            val word = weightedStrategy.typeWord()
+            val word = weightedStrategy.getChars()
             Qlog.info("word", word)
         }
 
         val sequenceStrategy1 = TwosRandomStrategy(sequences)
         Qlog.info("sequence", sequenceStrategy1)
         repeat(10) {
-            val word = sequenceStrategy1.typeWord()
+            val word = sequenceStrategy1.getChars()
             Qlog.info("word", word)
         }
     }

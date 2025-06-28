@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.util.ResourceUtil
@@ -14,8 +13,7 @@ class WordsGeneratorMonkeyTest {
         val mgr = WordsGeneratorMonkeyManager(manager, corpus)
         val obj = mgr.createMonkey()
         repeat(100) {
-            val result = obj.runAttempts()
-            Qlog.info("result", result)
+            obj.type()
         }
     }
 }

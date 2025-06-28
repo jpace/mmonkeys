@@ -6,21 +6,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.util.Memory
 import java.util.concurrent.atomic.AtomicLong
 
 class CoroutineSimulation(
-    private val corpus: Corpus,
     private val monkeys: List<Monkey>,
     private val toFind: Int,
     private val verbose: Boolean,
+    private val manager: Manager,
 ) {
     private val iterations = AtomicLong(0L)
     private val monitorInterval = 10_000L
-    private var numFound = 0L
-    val matches = mutableListOf<Int>()
 
     // @todo = tweak this to get better coroutining
     private val maxAttempts = 100_000_000L
@@ -51,7 +50,7 @@ class CoroutineSimulation(
         }
     }
 
-    private fun isComplete(): Boolean = numFound >= toFind || corpus.matches.count() == corpus.numWords()
+    private fun isComplete(): Boolean = manager.matchCount >= toFind || !manager.hasUnmatched()
 
     private fun CoroutineScope.launchTimer(memory: Memory): Job {
         return launch {
@@ -76,22 +75,10 @@ class CoroutineSimulation(
         }
     }
 
-    private suspend fun checkMonkey(monkey: Monkey): Boolean {
+    private suspend fun checkMonkey(monkey: Monkey) {
         iterations.incrementAndGet()
-        val words = monkey.findMatches()
-        if (words.words.isNotEmpty()) {
-            matches.addAll(words.words.map { it.index })
-            numFound += words.words.size
-            if (verbose) {
-                Console.info("monkey", monkey.id)
-                Console.info("words", words)
-                Console.info("numFound", numFound)
-            }
-            delay(2500L)
-            return true
-        } else {
-            delay(1000L)
-        }
-        return false
+        monkey.type()
+        Qlog.info("monkey", monkey)
+        delay(100L)
     }
 }

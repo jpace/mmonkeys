@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.mky.corpus.dc
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.type.Typewriter

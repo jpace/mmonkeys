@@ -4,14 +4,9 @@ import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyManager
 import org.incava.mmonkeys.mky.mgr.Manager
-import org.incava.mmonkeys.testutil.MonkeyUtils
 import org.incava.mmonkeys.type.Keys
-import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestFactory
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 internal class TypeStrategyTest {
     class DeterministicStrategy(private val chars: List<Char>) : TypeStrategy() {
@@ -23,31 +18,35 @@ internal class TypeStrategyTest {
         }
     }
 
-    @TestFactory
-    fun `given a deterministic typewriter, the iteration should match`() =
-        listOf(
-            ('c' to listOf("abc", "def")) to 0L,
-            ('e' to listOf("abcde", "ghijk")) to 0L,
-        ).map { (inputs, expected) ->
-            DynamicTest.dynamicTest("given $inputs, the monkey should return $expected") {
-                val obj = createMonkey(inputs.second, inputs.first)
-                val result = MonkeyUtils.runTest(obj, 10L)
-                assertEquals(expected, result)
-            }
-        }
-
     @Test
     fun testRunIterationNoMatch() {
-        val obj = createMonkey(listOf("xyz"), 'e')
-        val result = obj.runAttempt()
-        assertFalse(result.hasMatch())
+        val words = listOf("xyz")
+        val toChar = 'e'
+        val corpus = MapCorpus(words)
+        val strategy = DeterministicStrategy(Keys.keyList(toChar))
+        val manager = createManager(words, toChar)
+        val mgr = DefaultMonkeyManager(manager, corpus)
+        val obj = mgr.createMonkey(strategy)
+        obj.type()
+        assertEquals(0, manager.matchCount)
     }
 
     @Test
     fun testRunIterationMatch() {
-        val obj = createMonkey(listOf("abcde"), 'e')
-        val result = obj.runAttempt()
-        assertTrue(result.hasMatch())
+        val words = listOf("abcde")
+        val toChar = 'e'
+        val corpus = MapCorpus(words)
+        val strategy = DeterministicStrategy(Keys.keyList(toChar))
+        val manager = createManager(words, toChar)
+        val mgr = DefaultMonkeyManager(manager, corpus)
+        val obj = mgr.createMonkey(strategy)
+        obj.type()
+        assertEquals(1, manager.matchCount)
+    }
+
+    private fun createManager(words: List<String>, toChar: Char): Manager {
+        val corpus = MapCorpus(words)
+        return Manager(corpus, 1)
     }
 
     private fun createMonkey(words: List<String>, toChar: Char): DefaultMonkey {

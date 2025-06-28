@@ -12,7 +12,7 @@ class TwosDistributedStrategyTest {
     @Test
     fun typeWord() {
         val obj = TwosDistributedStrategy(words)
-        val result = obj.typeWord()
+        val result = obj.getChars()
         assertNotNull(result)
     }
 }

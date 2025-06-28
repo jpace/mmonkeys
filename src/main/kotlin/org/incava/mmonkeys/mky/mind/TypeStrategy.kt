@@ -5,7 +5,7 @@ import org.incava.mmonkeys.type.Keys
 abstract class TypeStrategy {
     abstract fun getNextChar(): Char
 
-    fun typeWord(): String {
+    fun getChars(): String {
         val sb = StringBuilder()
         var char = getNextChar()
         while (char != Keys.END_CHAR) {

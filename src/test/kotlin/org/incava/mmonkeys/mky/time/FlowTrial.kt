@@ -9,13 +9,12 @@ import org.incava.ikdk.io.Qlog
 import java.lang.Thread.sleep
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.test.Test
 import kotlin.concurrent.schedule
 
-class FlowTest {
-    var cancelled = false
+class FlowTrial {
+    private var cancelled = false
 
-    fun CoroutineScope.launchTimer() : Job {
+    private fun CoroutineScope.launchTimer(): Job {
         Qlog.info("(1)")
         return launch {
             Qlog.info("(2)")
@@ -26,7 +25,6 @@ class FlowTest {
         }
     }
 
-    @Test
     fun testCoroutine() {
         runBlocking {
             val job = launchTimer()
@@ -39,7 +37,6 @@ class FlowTest {
         }
     }
 
-    @Test
     fun testTimer() {
         val timer = Timer()
         val x = timer.schedule(200L, 300L) {
@@ -53,4 +50,10 @@ class FlowTest {
     private fun setDateTime(it: LocalDateTime?) {
         TODO("Not yet implemented")
     }
+}
+
+fun main() {
+    val obj = FlowTrial()
+    obj.testTimer()
+    obj.testCoroutine()
 }

@@ -24,13 +24,13 @@ class CorpusMatchView(private val wordSizeLimit: Int, private val results: Map<S
                 matchCells += matchesForLength(res, length)
             }
             // all corpuses have the same number of words
-            matchCells += results.values.first().corpus.words().count { it.length == length }
+            matchCells += results.values.first().manager.corpus.words().count { it.length == length }
             table.writeRow(matchCells)
         }
         table.writeBreak('-')
     }
 
     private fun matchesForLength(results: PerfResults, length: Int): Int {
-        return results.corpus.matches.indices.filter { results.corpus.lengthAtIndex(it) == length }.size
+        return results.manager.corpus.matches.indices.filter { results.manager.corpus.lengthAtIndex(it) == length }.size
     }
 }

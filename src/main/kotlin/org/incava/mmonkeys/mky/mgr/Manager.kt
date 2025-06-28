@@ -12,13 +12,14 @@ import java.io.File
 import java.io.PrintStream
 
 class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
-    private var totalKeystrokes: Long = 0L
-    private var count: Long = 0L
-    private var matchCount = 0
+    var totalKeystrokes: Long = 0L
+    var count: Long = 0L
+    var matchCount = 0
     private val managerView: ManagerView
     private val statsView: CorpusStatsView
     private val perfView: SimPerfView
-    private val matchesByLength = mutableMapOf<Int, Int>()
+    val matchesByLength = mutableMapOf<Int, Int>()
+    var iterations = mutableListOf<Long>()
 
     init {
         val simOut = PrintStream(File("/tmp/simulation.out"))
@@ -46,6 +47,7 @@ class Manager(val corpus: Corpus, outputInterval: Int = 1) : MonkeyMonitor {
     private fun update(monkey: Monkey, words: List<Word>, totalKeystrokes: Long) {
         // this includes spaces
         this.totalKeystrokes += totalKeystrokes
+        iterations += totalKeystrokes
         // @todo - reintroduce the number of attempts (count of all words, not just matches):
         count++
         words.forEach { word ->

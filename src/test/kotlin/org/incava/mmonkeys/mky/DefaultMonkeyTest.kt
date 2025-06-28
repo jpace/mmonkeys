@@ -9,14 +9,17 @@ import org.junit.jupiter.api.Test
 
 class DefaultMonkeyTest {
     @Test
-    fun runAttempt() {
+    fun type() {
         val corpus = CorpusFactory.defaultCorpus()
         val strategy = RandomStrategy(Keys.fullList())
         val manager = Manager(corpus, 1)
         val mgr = DefaultMonkeyManager(manager, corpus)
         val obj = mgr.createMonkey(strategy)
-        val result = obj.runAttempt()
-        Qlog.info("result", result)
-        Qlog.info("result.word", result.word)
+        repeat(100) {
+            obj.type()
+        }
+        Qlog.info("manager.iterations", manager.iterations)
+        Qlog.info("manager.matchesByLength", manager.matchesByLength)
+        Qlog.info("manager.totalKeystrokes", manager.totalKeystrokes)
     }
 }

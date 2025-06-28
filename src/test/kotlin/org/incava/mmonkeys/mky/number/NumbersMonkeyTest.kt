@@ -54,7 +54,7 @@ internal class NumbersMonkeyTest {
         val manager = Manager(corpus)
         val numbersMonkeyManager = NumbersMonkeyManager(manager, corpus)
         val obj = numbersMonkeyManager.createMonkey()
-        repeat(1000000) { obj.runAttempt() }
+        repeat(1000000) { obj.type() }
         val result = manager.hasUnmatched()
         assertFalse(result, "corpus.words: ${corpus.words()}, matched: ${corpus.matches.indices}")
     }

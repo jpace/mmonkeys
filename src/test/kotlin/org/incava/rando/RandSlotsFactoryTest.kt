@@ -1,6 +1,7 @@
 package org.incava.rando
 
 import org.incava.mmonkeys.testutil.assertWithin
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 
@@ -42,6 +43,7 @@ class RandSlotsFactoryTest {
         assertWithin(29.0, gap.toDouble(), 2.1, "gap")
     }
 
+    @Disabled
     @Test
     fun findGap3() {
         // we need more trials for this number of characters

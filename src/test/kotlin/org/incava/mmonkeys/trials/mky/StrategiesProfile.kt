@@ -34,7 +34,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
         val manager = Manager(corpus)
         val mgr = DefaultMonkeyManager(manager, corpus)
         val monkey = mgr.createMonkey(strategy)
-        scenarios.add(Pair(name) { matchWords(monkey) })
+        scenarios.add(Pair(name) { matchWords(manager, monkey) })
     }
 
     fun profile() {
@@ -64,31 +64,21 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
         }
     }
 
-    fun matchWords(monkey: DefaultMonkey): StrategiesProfileResult {
-        var matches = 0L
-        var attempts = 0L
+    fun matchWords(manager: Manager, monkey: DefaultMonkey): StrategiesProfileResult {
         val duration = Durations.measureDuration {
-            while (matches < matchGoal) {
-                val result = monkey.runAttempt()
-                val word = result.word
-                ++attempts
-                if (word != null && words.contains(word.string)) {
-                    ++matches
-                    if (verbose) {
-                        printf("%,d - %s", attempts, word.string)
-                    }
-                }
+            while (manager.matchCount < matchGoal) {
+                monkey.type()
             }
             if (verbose) {
-                printf("attempts: %,d", attempts)
-                println("matches : $matches")
+                printf("attempts: %,d", manager.attemptCount())
+                println("matches : ${manager.matchCount}")
             }
         }
         if (verbose) {
             printf("duration: %,d ms", duration.second.toMillis())
             println()
         }
-        return StrategiesProfileResult(attempts, matches, duration.second)
+        return StrategiesProfileResult(manager.attemptCount(), manager.matchCount.toLong(), duration.second)
     }
 }
 

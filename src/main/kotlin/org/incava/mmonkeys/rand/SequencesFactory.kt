@@ -2,13 +2,7 @@ package org.incava.mmonkeys.rand
 
 object SequencesFactory {
     fun createFromWords(words: List<String>): Sequences {
-        val chars = words.map(String::lowercase)
-            .fold(mutableListOf<Char>()) { acc, char ->
-                if (acc.isNotEmpty()) {
-                    acc += ' ';
-                }
-                acc.also { it.addAll(char.toCharArray().toList()) }
-            }
+        val chars = toCharsList(words)
         return Sequences(chars)
     }
 

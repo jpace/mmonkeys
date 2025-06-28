@@ -1,12 +1,10 @@
 package org.incava.mmonkeys.trials.base
 
-import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.mgr.Manager
 import java.time.Duration
 
 data class PerfResults(
-    val corpus: Corpus,
+    val manager: Manager,
     val duration: Duration,
-    val durations: MutableList<Long>,
-    val iterations: MutableList<Long>,
-    val matches: Int,
+    val durations: MutableList<Long>
 )

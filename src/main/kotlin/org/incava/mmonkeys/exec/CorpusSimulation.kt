@@ -14,17 +14,17 @@ class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch
     private val manager = Manager(corpus)
 
     init {
-        val wordMonkeyManager = WordsGeneratorMonkeyManager(manager, corpus)
+        val mgr = WordsGeneratorMonkeyManager(manager, corpus)
         monkeys = (0 until numMonkeys).map { _ ->
-            wordMonkeyManager.createMonkey()
+            mgr.createMonkey()
         }
     }
 
     fun run() {
-        val simulation = CoroutineSimulation(corpus, monkeys, toMatch, false)
+        val simulation = CoroutineSimulation(monkeys, toMatch, false, manager)
         simulation.run()
-        Console.info("simulation.matches.#", simulation.matches.size)
-        Console.info("corpus.matched.size", corpus.matches.count())
+        Console.info("simulation.matches.#", manager.matchCount)
+        Console.info("corpus.matched.size", manager.corpus.matches.count())
         Console.info("corpus.words.#", corpus.numWords())
         Console.info("corpus.unmatched?", manager.hasUnmatched())
         val numMatched = corpus.matches.count()

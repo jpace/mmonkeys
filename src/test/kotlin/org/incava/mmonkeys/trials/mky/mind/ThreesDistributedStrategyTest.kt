@@ -12,7 +12,7 @@ class ThreesDistributedStrategyTest {
     fun typeWord() {
         val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val obj = ThreesDistributedStrategy(words)
-        val result = obj.typeWord()
+        val result = obj.getChars()
         assertNotNull(result)
     }
 
@@ -22,7 +22,7 @@ class ThreesDistributedStrategyTest {
         val obj = ThreesDistributedStrategy(words)
         val results = mutableListOf<String>()
         repeat(1000) {
-            val result = obj.typeWord()
+            val result = obj.getChars()
             results += result
         }
         Qlog.info("results", results)
