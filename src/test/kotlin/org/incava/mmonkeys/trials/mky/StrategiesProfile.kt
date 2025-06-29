@@ -7,9 +7,9 @@ import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyManager
-import org.incava.mmonkeys.corpus.impl.MapCorpus
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
@@ -30,9 +30,9 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
     val scenarios = mutableListOf<Pair<String, () -> StrategiesProfileResult>>()
 
     fun addScenario(name: String, strategy: TypeStrategy) {
-        val corpus = MapCorpus(words)
+        val corpus = WordCorpus(words)
         val manager = Manager(corpus)
-        val mgr = DefaultMonkeyManager(manager, corpus)
+        val mgr = DefaultMonkeyFactory(manager, corpus)
         val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(manager, monkey) })
     }
@@ -66,19 +66,19 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
 
     fun matchWords(manager: Manager, monkey: DefaultMonkey): StrategiesProfileResult {
         val duration = Durations.measureDuration {
-            while (manager.matchCount < matchGoal) {
+            while (manager.matchCount() < matchGoal) {
                 monkey.type()
             }
             if (verbose) {
                 printf("attempts: %,d", manager.attemptCount())
-                println("matches : ${manager.matchCount}")
+                println("matches : ${manager.matchCount()}")
             }
         }
         if (verbose) {
             printf("duration: %,d ms", duration.second.toMillis())
             println()
         }
-        return StrategiesProfileResult(manager.attemptCount(), manager.matchCount.toLong(), duration.second)
+        return StrategiesProfileResult(manager.attemptCount(), manager.matchCount().toLong(), duration.second)
     }
 }
 

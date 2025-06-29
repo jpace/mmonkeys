@@ -6,14 +6,13 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.corpus.impl.MapCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkey
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
-import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
+import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
@@ -21,12 +20,11 @@ import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 import org.incava.mmonkeys.mky.number.NumbersMonkey
-import org.incava.mmonkeys.mky.number.NumbersMonkeyManager
+import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
 import org.incava.mmonkeys.rand.Sequences
 import org.incava.mmonkeys.rand.SequencesFactory
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
-import org.incava.mmonkeys.words.Attempt
-import org.incava.mmonkeys.words.Attempts
 
 data class ProfileParams(
     val numInvokes: Long,
@@ -56,18 +54,18 @@ private class MonkeyProfile(private val params: ProfileParams) {
 
     fun createManager() = CountingMonitor()
     fun dualCorpus() = DualCorpus(words)
-    fun mapCorpus() = MapCorpus(words)
+    fun WordCorpus() = WordCorpus(words)
     fun numberedCorpus() = NumberedCorpus(words)
     fun sequences() = SequencesFactory.createFromWords(words)
 
-    fun defaultMonkeyManager(corpus: WordCorpus, manager: CountingMonitor): DefaultMonkeyManager {
-        return DefaultMonkeyManager(manager, corpus)
+    fun defaultMonkeyManager(corpus: WordCorpus, manager: CountingMonitor): DefaultMonkeyFactory {
+        return DefaultMonkeyFactory(manager, corpus)
     }
 
     fun addWordGeneratorScenario() {
         val corpus = dualCorpus()
         val manager = createManager()
-        val mgr = WordsGeneratorMonkeyManager(manager, corpus)
+        val mgr = WordsGeneratorMonkeyFactory(manager, corpus)
         val monkey = mgr.createMonkey()
         val scenario = ProfileScenario("words gen", words, manager, params.matchGoal)
         addScenario(scenario, manager, monkey)
@@ -91,7 +89,7 @@ private class MonkeyProfile(private val params: ProfileParams) {
     fun addSequenceScenario(name: String, supplier: (Sequences) -> TypeStrategy) {
         val sequences = sequences()
         val strategy = supplier(sequences)
-        val corpus = mapCorpus()
+        val corpus = WordCorpus()
         val manager = createManager()
         val mgr = defaultMonkeyManager(corpus, manager)
         val monkey = mgr.createMonkey(strategy)
@@ -102,17 +100,18 @@ private class MonkeyProfile(private val params: ProfileParams) {
     fun addNumbered() {
         val corpus = numberedCorpus()
         val manager = createManager()
-        val mgr = NumbersMonkeyManager(manager, corpus)
+        val mgr = NumbersMonkeyFactory(manager, corpus)
         val monkey = mgr.createMonkey()
         val scenario = ProfileScenario("numbers", words, manager, params.matchGoal)
         addScenario(scenario, manager, monkey)
     }
 
     fun addRandom() {
-        val corpus = mapCorpus()
+        val corpus = WordCorpus()
         val manager = createManager()
         val mgr = defaultMonkeyManager(corpus, manager)
-        val monkey = mgr.createMonkeyRandom()
+        val strategy = RandomStrategy(Keys.fullList())
+        val monkey = mgr.createMonkey(strategy)
         val scenario = ProfileScenario("random", words, manager, params.matchGoal)
         addScenario(scenario, manager, monkey)
     }

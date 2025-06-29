@@ -40,13 +40,12 @@ class MonkeyRunner(private val manager: Manager, private val monkey: Monkey, pri
 
     private fun runMonkey() {
         Qlog.info("runner", this)
-        repeat(10) { outer ->
+        repeat(10) {
             repeat(100) {
                 monkey.type()
             }
-            Qlog.info("outer", outer)
             if (!manager.hasUnmatched()) {
-                Qlog.info("manager.matchCount", manager.matchCount)
+                Qlog.info("manager.matchCount", manager.matchCount())
                 return
             }
             val now = ZonedDateTime.now()

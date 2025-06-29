@@ -40,7 +40,7 @@ class CorpusStatsView(val corpus: Corpus, private val outputInterval: Int, val o
         countByLength.toSortedMap().forEach { (length, count) ->
             val numMatches = matchedByLength.getOrDefault(length, 0)
             val pct = (100 * numMatches.toDouble() / count).toInt()
-            table.writeRow(listOf(length, count, numMatches, pct))
+            table.writeRow(listOf(length, numMatches, count, pct))
         }
     }
 }

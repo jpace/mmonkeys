@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus.dc
+package org.incava.mmonkeys.corpus.dc
 
 // indexed by length to item to indices as a word
 class ItemsIndicesMap<T> {

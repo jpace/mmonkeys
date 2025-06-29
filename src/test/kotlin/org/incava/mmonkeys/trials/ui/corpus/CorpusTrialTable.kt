@@ -27,16 +27,17 @@ class CorpusTrialTable(private val numWords: Int, private val wordSizeLimit: Int
         results.forEach { (name, res) ->
             val durSecs = res.durations.sum() / 1000
             val manager = res.manager
+            val numMatches =  manager.matchCount()
             val cells = mutableListOf(
                 name,
                 numWords,
                 wordSizeLimit,
                 res.duration,
-                manager.matchCount,
-                manager.iterations.sum(),
-                velocity(manager.matchCount, durSecs),
-                velocity(manager.iterations.size, durSecs),
-                if (manager.matchCount == 0) 0.0 else manager.iterations.sum().toDouble() / manager.matchCount,
+                numMatches,
+                manager.keystrokesCount(),
+                velocity(numMatches, durSecs),
+                velocity(manager.count().toInt(), durSecs),
+                if (numMatches == 0) 0.0 else manager.keystrokesCount().toDouble() / numMatches,
                 100 * manager.corpus.matches.count().toDouble() / manager.corpus.numWords()
             )
             writeRow(cells)

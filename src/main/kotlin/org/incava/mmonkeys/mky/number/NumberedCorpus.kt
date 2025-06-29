@@ -2,9 +2,7 @@ package org.incava.mmonkeys.mky.number
 
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.Corpus
-import org.incava.mmonkeys.mky.corpus.dc.ItemsIndicesMap
-import org.incava.mmonkeys.words.AttemptFactory
-import org.incava.mmonkeys.words.Word
+import org.incava.mmonkeys.corpus.dc.ItemsIndicesMap
 
 class NumberedCorpus(words: List<String>) : Corpus(words) {
     val indexed: ItemsIndicesMap<Long> = ItemsIndicesMap()

@@ -13,13 +13,13 @@ class DefaultMonkeyTest {
         val corpus = CorpusFactory.defaultCorpus()
         val strategy = RandomStrategy(Keys.fullList())
         val manager = Manager(corpus, 1)
-        val mgr = DefaultMonkeyManager(manager, corpus)
+        val mgr = DefaultMonkeyFactory(manager, corpus)
         val obj = mgr.createMonkey(strategy)
         repeat(100) {
             obj.type()
         }
-        Qlog.info("manager.iterations", manager.iterations)
-        Qlog.info("manager.matchesByLength", manager.matchesByLength)
-        Qlog.info("manager.totalKeystrokes", manager.totalKeystrokes)
+        Qlog.info("manager.iterations", manager.stats.iterations)
+        Qlog.info("manager.matchesByLength", manager.stats.matchesByLength)
+        Qlog.info("manager.totalKeystrokes", manager.stats.totalKeystrokes)
     }
 }

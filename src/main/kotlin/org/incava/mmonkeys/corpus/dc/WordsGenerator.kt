@@ -1,26 +1,25 @@
-package org.incava.mmonkeys.mky.corpus.dc
+package org.incava.mmonkeys.corpus.dc
 
 import org.incava.mmonkeys.mky.number.RandEncoded
 import org.incava.mmonkeys.mky.number.StringEncoder
+import org.incava.mmonkeys.type.Chars
 import org.incava.mmonkeys.words.AttemptFactory
 import org.incava.mmonkeys.words.Attempts
 import org.incava.mmonkeys.words.Word
 import org.incava.rando.RandIntsFactory
+import org.incava.rando.RandSlotsFactory
 import org.incava.rando.RndSlots
 
-class WordsGenerator(
-    val corpus: DualCorpus,
-    private val slots: RndSlots,
-    private val indicesSupplier: (RandIntsFactory) -> IntArray,
-    filterSupplier: (Int) -> LengthFilter,
-) {
-    private val intsFactory = RandIntsFactory()
+class WordsGenerator(val corpus: DualCorpus, val slots: RndSlots) {
     private val validRange = 2..corpus.maxLength + 1
     private val encodedGenerator = EncodedGenerator()
-    private val filteringGenerator = FilteringGenerator(filterSupplier)
+    private val filteringGenerator = FilteringGenerator { length ->
+        corpus.stringsForLength(length)?.keys.let { LengthFilter(it) }
+    }
+    private val indicesFactory = RandIntsFactory()
 
     fun runAttempts(): Attempts {
-        val slotIndices = indicesSupplier(intsFactory)
+        val slotIndices = indicesFactory.nextInts2()
         val matches = mutableListOf<Word>()
         var keystrokes = 0L
         slotIndices.forEach { slotIndex ->
@@ -42,7 +41,7 @@ class WordsGenerator(
         }
     }
 
-    fun runWord(numChars: Int): Word? {
+    private fun runWord(numChars: Int): Word? {
         return if (numChars <= RandEncoded.Constants.MAX_ENCODED_CHARS) {
             // use long/encoded, convert back to string
             val encoded = encodedGenerator.getRandomEncoded(numChars)

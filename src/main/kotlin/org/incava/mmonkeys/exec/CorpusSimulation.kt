@@ -1,29 +1,19 @@
 package org.incava.mmonkeys.exec
 
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.io.Qlog
 import org.incava.mesa.IntColumn
 import org.incava.mesa.Table
+import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
 import org.incava.mmonkeys.mky.mgr.Manager
 
-class CorpusSimulation(words: List<String>, numMonkeys: Int, private val toMatch: Int) {
-    private val corpus = DualCorpus(words)
-    private val monkeys: List<Monkey>
-    private val manager = Manager(corpus)
-
-    init {
-        val mgr = WordsGeneratorMonkeyManager(manager, corpus)
-        monkeys = (0 until numMonkeys).map { _ ->
-            mgr.createMonkey()
-        }
-    }
-
+class CorpusSimulation(val corpus: Corpus, val manager: Manager, private val monkeys: List<Monkey>, private val toMatch: Int) {
     fun run() {
         val simulation = CoroutineSimulation(monkeys, toMatch, false, manager)
+        Qlog.info("simulation", simulation)
         simulation.run()
-        Console.info("simulation.matches.#", manager.matchCount)
+        Console.info("simulation.matches.#", manager.matchCount())
         Console.info("corpus.matched.size", manager.corpus.matches.count())
         Console.info("corpus.words.#", corpus.numWords())
         Console.info("corpus.unmatched?", manager.hasUnmatched())

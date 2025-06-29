@@ -43,16 +43,15 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
 
     private fun formatTime(dateTime: ZonedDateTime): String = dateTime.format(pattern)
 
-    fun update(monkey: Monkey, index: Int, matchCount: Int, totalKeystrokes: Long) {
-        // seconds to when monkey did this match (the start of it), not cumulative
-        // seconds to when monkey completed this word:
-        val doneAt = totalKeystrokes + corpus.lengthAtIndex(index)
+    fun update(monkey: Monkey, matchingIndices: List<Int>, matchCount: Int, totalKeystrokes: Long) {
+        matchingIndices.forEach { update(monkey, it, matchCount, totalKeystrokes, totalKeystrokes + corpus.lengthAtIndex(it)) }
+    }
 
+    fun update(monkey: Monkey, matchingIndex: Int, matchCount: Int, startAtKeystroke: Long, doneAtKeystroke: Long) {
         // @todo - use start time instead of done time?
-        //  val simTime = startTime.plusSeconds(monkey.totalKeystrokes)
-        val doneTime = startTime.plusSeconds(doneAt)
+        val doneTime = startTime.plusSeconds(doneAtKeystroke)
         updates.computeIfAbsent(doneTime) { mutableListOf() }
-            .also { it += SimUpdate(monkey.id, totalKeystrokes, index, matchCount) }
+            .also { it += SimUpdate(monkey.id, startAtKeystroke, matchingIndex, matchCount) }
         val times = clock.pushTime(doneTime)
         times.forEach { time ->
             val updates = updates.remove(time)
@@ -61,9 +60,6 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
     }
 
     private fun update(update: SimUpdate, simTime: ZonedDateTime) {
-        if (update.matchCount % outputInterval != 0) {
-            return
-        }
         val word = corpus.wordAtIndex(update.index)
         val wordCount = (0 until numWords).filter {
             corpus.wordAtIndex(it) == word

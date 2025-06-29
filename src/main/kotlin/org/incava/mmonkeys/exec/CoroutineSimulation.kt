@@ -50,7 +50,7 @@ class CoroutineSimulation(
         }
     }
 
-    private fun isComplete(): Boolean = manager.matchCount >= toFind || !manager.hasUnmatched()
+    private fun isComplete(): Boolean = manager.matchCount() >= toFind || !manager.hasUnmatched()
 
     private fun CoroutineScope.launchTimer(memory: Memory): Job {
         return launch {
@@ -78,7 +78,6 @@ class CoroutineSimulation(
     private suspend fun checkMonkey(monkey: Monkey) {
         iterations.incrementAndGet()
         monkey.type()
-        Qlog.info("monkey", monkey)
         delay(100L)
     }
 }

@@ -3,13 +3,10 @@ package org.incava.mmonkeys.corpus
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
 import org.incava.mmonkeys.corpus.impl.DagCorpus
-import org.incava.mmonkeys.corpus.impl.LinkedHashMapCorpus
-import org.incava.mmonkeys.corpus.impl.ListCorpus
-import org.incava.mmonkeys.corpus.impl.MapCorpus
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
+import org.incava.mmonkeys.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.number.NumberedCorpus
 
-class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, private val includeList: Boolean) {
+class CorpusProfile(private val numInvokes: Long, private val numTrials: Int) {
     val words = CorpusFactory.defaultWords()
     private val randomsProvider = RandomsProvider(words)
 
@@ -23,8 +20,7 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, pr
         val corpus = corpusSupplier(words)
         val blk: (T) -> Unit = {
             val word = randSupplier()
-            val idx = wordFinder(corpus, word)
-            // Qlog.info("idx", idx)
+            wordFinder(corpus, word)
         }
         val blk2 = { blk(corpus) }
         profiler.add(name, blk2)
@@ -48,16 +44,8 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, pr
         val numberFinder: (NumberedCorpus, Pair<Long, Int>) -> Int? =
             { corpus, rnd -> corpus.findMatch(rnd.first, rnd.second) }
 
-        if (includeList) {
-            add(profiler, "list match 27", ::ListCorpus, rand27, finder)
-            add(profiler, "list match 7", ::ListCorpus, rand7, finder)
-        }
-
-        add(profiler, "map match 27", ::MapCorpus, rand27, finder)
-        add(profiler, "map match 7", ::MapCorpus, rand7, finder)
-
-        add(profiler, "hashmap match 27", ::LinkedHashMapCorpus, rand27, finder)
-        add(profiler, "hashmap match 7", ::LinkedHashMapCorpus, rand7, finder)
+        add(profiler, "word match 27", ::WordCorpus, rand27, finder)
+        add(profiler, "word match 7", ::WordCorpus, rand7, finder)
 
         add(profiler, "dual string 27", ::DualCorpus, rand27, finder)
         add(profiler, "dual string 7", ::DualCorpus, rand7, finder)
@@ -77,27 +65,26 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int, pr
         add(profiler, "dag 7", ::DagCorpus, rand7, finder)
 
         profiler.runAll()
-        profiler.showResults(SortType.BY_INSERTION)
+        profiler.showResults(SortType.BY_NAME)
 
         val showdown = profiler.spawn()
         val stats = showdown.runAll()
-        showdown.showResults(SortType.BY_INSERTION)
+        showdown.showResults(SortType.BY_NAME)
 
         if (stats.durations.values.minOf { it } < 1000L) {
             val showdown2 = showdown.spawn()
             showdown2.runAll()
-            profiler.showResults(SortType.BY_INSERTION)
+            profiler.showResults(SortType.BY_NAME)
             println()
-            showdown.showResults(SortType.BY_INSERTION)
+            showdown.showResults(SortType.BY_NAME)
             println()
-            showdown2.showResults(SortType.BY_INSERTION)
+            showdown2.showResults(SortType.BY_NAME)
         }
     }
 }
 
 fun main() {
     val includeList = false
-    val obj = CorpusProfile(if (includeList) 1000 else 100_000, 2, includeList)
+    val obj = CorpusProfile(if (includeList) 1000 else 10_000_000, 2)
     obj.find()
-//    obj.findWord()
 }

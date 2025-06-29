@@ -8,7 +8,7 @@ class CorpusTrialView(
 
     fun show(results: Map<String, PerfResults>) {
         val table = CorpusTrialTable(numWords, wordSizeLimit)
-        table.summarize(results)
+        table.summarize(results.toSortedMap())
         println()
         val matchView = CorpusMatchView(wordSizeLimit, results)
         matchView.summarize()

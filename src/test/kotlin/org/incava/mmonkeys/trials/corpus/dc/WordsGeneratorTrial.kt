@@ -4,11 +4,12 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.WordsGenerator
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorFactory
+import org.incava.mmonkeys.corpus.dc.DualCorpus
+import org.incava.mmonkeys.corpus.dc.WordsGenerator
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.mmonkeys.trials.rand.CorpusMatchesView
+import org.incava.mmonkeys.type.Chars
+import org.incava.rando.RandSlotsFactory
 import org.incava.time.Durations.measureDuration
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -76,7 +77,8 @@ class WordsGeneratorTrial {
 
 fun main() {
     val corpus = DualCorpus(CorpusFactory.fileToWords(ResourceUtil.FULL_FILE))
+    val slots = RandSlotsFactory.calcArray(Chars.NUM_ALL_CHARS, 128, 100_000)
     val obj = WordsGeneratorTrial()
-    val wordsGenerator = WordsGeneratorFactory.createWithDefaults(corpus)
+    val wordsGenerator = WordsGenerator(corpus, slots)
     obj.runTest(corpus, wordsGenerator)
 }

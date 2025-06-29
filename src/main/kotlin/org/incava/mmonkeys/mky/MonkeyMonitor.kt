@@ -17,4 +17,3 @@ interface MonkeyMonitor {
 
     fun matchesByLength(): Map<Int, Int>
 }
-

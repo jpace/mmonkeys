@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus.dc
+package org.incava.mmonkeys.corpus.dc
 
 import kotlin.test.Test
 import kotlin.test.assertFalse

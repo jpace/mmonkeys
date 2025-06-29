@@ -1,9 +1,10 @@
 package org.incava.mmonkeys.type
 
-open class Typewriter {
-    open fun typeChars(chars: List<Char>) {
-    }
+import org.incava.mmonkeys.mky.Monkey
+import org.incava.mmonkeys.mky.WordChecker
 
-    open fun typeChars(numChars: Int) {
+class Typewriter(private val checker: WordChecker) {
+    fun type(monkey: Monkey, string: String) {
+        checker.check(monkey, string)
     }
 }

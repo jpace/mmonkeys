@@ -16,7 +16,7 @@ open class Profiler(val numInvokes: Long, val numTrials: Int) {
         return simulations.keys.withIndex().associate { it.index to it.value }
     }
 
-    fun runAll(): ProfileStats {
+    fun runAll(shuffled: Boolean = true): ProfileStats {
         println("trials#: $numTrials")
         printf("invokes#: %,d", numInvokes)
         val indexed = indexedKeys()
@@ -25,7 +25,8 @@ open class Profiler(val numInvokes: Long, val numTrials: Int) {
         }
         repeat(numTrials) { trial ->
             print("$trial / $numTrials")
-            indexed.entries.shuffled().forEach { (index, name) ->
+            val entries = if (shuffled) indexed.entries.shuffled() else indexed.entries
+            entries.shuffled().forEach { (index, name) ->
                 println(" . $index ($name)")
                 val simulation = simulations.getValue(name)
                 val block = simulation.function

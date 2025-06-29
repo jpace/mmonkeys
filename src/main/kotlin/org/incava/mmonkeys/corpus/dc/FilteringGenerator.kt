@@ -1,4 +1,4 @@
-package org.incava.mmonkeys.mky.corpus.dc
+package org.incava.mmonkeys.corpus.dc
 
 import org.incava.mmonkeys.type.Chars
 

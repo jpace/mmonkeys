@@ -2,22 +2,23 @@ package org.incava.mmonkeys.trials.corpus
 
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.CorpusFactory
-import org.incava.mmonkeys.corpus.impl.ListCorpus
-import org.incava.mmonkeys.mky.DefaultMonkeyManager
+import org.incava.mmonkeys.corpus.WordCorpus
+import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyManager
-import org.incava.mmonkeys.corpus.impl.MapCorpus
+import org.incava.mmonkeys.corpus.dc.DualCorpus
+import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.mky.number.NumbersMonkeyManager
+import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
+import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 import org.incava.time.Durations
 import java.time.Duration
@@ -45,67 +46,61 @@ class CorpusTrial(
 
     fun run() {
         run {
-            val corpus = ListCorpus(words)
+            val corpus = WordCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            runMonkey("rand list", manager, mgr.createMonkeyRandom())
-        }
-
-        run {
-            val corpus = MapCorpus(words)
-            val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(manager, corpus)
+            val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosRandomStrategy(sequences)
-            runMonkey("random 2", manager, mgr.createMonkey(strategy))
+            runMonkey("random 2", manager, factory.createMonkey(strategy))
         }
 
         run {
-            val corpus = MapCorpus(words)
+            val corpus = WordCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(manager, corpus)
+            val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosDistributedStrategy(sequences)
-            runMonkey("dist 2", manager, mgr.createMonkey(strategy))
+            runMonkey("dist 2", manager, factory.createMonkey(strategy))
         }
 
         run {
-            val corpus = MapCorpus(words)
+            val corpus = WordCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(manager, corpus)
+            val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = ThreesRandomStrategy(sequences)
-            runMonkey("random 3", manager, mgr.createMonkey(strategy))
+            runMonkey("random 3", manager, factory.createMonkey(strategy))
         }
 
         run {
-            val corpus = MapCorpus(words)
+            val corpus = WordCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(manager, corpus)
+            val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = ThreesDistributedStrategy(sequences)
-            runMonkey("dist 3", manager, mgr.createMonkey(strategy))
+            runMonkey("dist 3", manager, factory.createMonkey(strategy))
         }
 
         run {
-            val corpus = MapCorpus(words)
+            val corpus = WordCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = DefaultMonkeyManager(manager, corpus)
-            runMonkey("rand map", manager, mgr.createMonkeyRandom())
+            val factory = DefaultMonkeyFactory(manager, corpus)
+            val strategy = RandomStrategy(Keys.fullList())
+            runMonkey("random", manager, factory.createMonkey(strategy))
         }
 
         run {
             val corpus = NumberedCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = NumbersMonkeyManager(manager, corpus)
-            runMonkey("numbers", manager, mgr.createMonkey())
+            val factory = NumbersMonkeyFactory(manager, corpus)
+            runMonkey("numbers", manager, factory.createMonkey())
         }
 
         run {
             val corpus = DualCorpus(words)
             val manager = Manager(corpus, outputInterval)
-            val mgr = WordsGeneratorMonkeyManager(manager, corpus)
-            runMonkey("words gen", manager, mgr.createMonkey())
+            val factory = WordsGeneratorMonkeyFactory(manager, corpus)
+            runMonkey("words gen", manager, factory.createMonkey())
         }
     }
 
