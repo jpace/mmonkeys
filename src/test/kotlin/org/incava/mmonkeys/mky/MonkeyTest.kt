@@ -1,9 +1,25 @@
 package org.incava.mmonkeys.mky
 
+import org.incava.ikdk.io.Qlog
+import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
+import org.incava.mmonkeys.mky.mind.RandomStrategy
+import org.incava.mmonkeys.type.Keys
 import kotlin.test.Test
 
 internal class MonkeyTest {
     @Test
     fun type() {
+        val corpus = CorpusFactory.defaultCorpus()
+        val strategy = RandomStrategy(Keys.fullList())
+        val manager = ManagerFactory.createWithoutView(corpus)
+        val mgr = MonkeyFactory(manager, corpus)
+        val obj = mgr.createMonkey(strategy)
+        repeat(100) {
+            obj.type()
+        }
+        Qlog.info("manager.iterations", manager.stats.iterations)
+        Qlog.info("manager.matchesByLength", manager.stats.matchesByLength)
+        Qlog.info("manager.totalKeystrokes", manager.stats.totalKeystrokes)
     }
 }

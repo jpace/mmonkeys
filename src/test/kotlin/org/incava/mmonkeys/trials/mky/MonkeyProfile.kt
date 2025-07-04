@@ -6,8 +6,7 @@ import org.incava.ikdk.io.Console
 import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.MonkeyFactory
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mgr.ManagerFactory
@@ -52,11 +51,11 @@ private class MonkeyProfile(private val params: ProfileParams) {
     fun WordCorpus() = WordCorpus(words)
     fun sequences() = SequencesFactory.createFromWords(words)
 
-    fun defaultMonkeyManager(corpus: WordCorpus, manager: Manager): DefaultMonkeyFactory {
-        return DefaultMonkeyFactory(manager, corpus)
+    fun defaultMonkeyManager(corpus: WordCorpus, manager: Manager): MonkeyFactory {
+        return MonkeyFactory(manager, corpus)
     }
 
-    fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: DefaultMonkey) {
+    fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: Monkey) {
         scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }

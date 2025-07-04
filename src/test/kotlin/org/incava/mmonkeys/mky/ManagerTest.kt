@@ -16,7 +16,7 @@ internal class ManagerTest {
     fun recordWords() {
         val corpus = WordCorpus(CorpusFactory.fileToWords(ResourceUtil.FULL_FILE))
         val manager = ManagerFactory.createWithoutView(corpus)
-        val factory = DefaultMonkeyFactory(manager, corpus)
+        val factory = MonkeyFactory(manager, corpus)
         val strategy = RandomStrategy(Keys.fullList())
         val monkey = factory.createMonkey(strategy)
         val attempt1 = Attempt(Word("this", 3), 5)

@@ -8,8 +8,8 @@ import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.mky.DefaultMonkey
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.MonkeyFactory
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
@@ -33,7 +33,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
     fun addScenario(name: String, strategy: TypeStrategy) {
         val corpus = WordCorpus(words)
         val manager = ManagerFactory.createWithoutView(corpus)
-        val mgr = DefaultMonkeyFactory(manager, corpus)
+        val mgr = MonkeyFactory(manager, corpus)
         val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(manager, monkey) })
     }
@@ -65,7 +65,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
         }
     }
 
-    fun matchWords(manager: Manager, monkey: DefaultMonkey): StrategiesProfileResult {
+    fun matchWords(manager: Manager, monkey: Monkey): StrategiesProfileResult {
         val duration = Durations.measureDuration {
             while (manager.matchCount() < matchGoal) {
                 monkey.type()

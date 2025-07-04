@@ -3,7 +3,7 @@ package org.incava.mmonkeys.exec
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.mky.DefaultMonkeyFactory
+import org.incava.mmonkeys.mky.MonkeyFactory
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mgr.ManagerFactory
@@ -33,7 +33,7 @@ object CorpusSimulationFactory {
     fun createWithStrategy(strategy: TypeStrategy, toFind: Int): CorpusSimulation {
         val corpus = WordCorpus(words)
         val manager = ManagerFactory.createWithView(corpus, 1)
-        val factory = DefaultMonkeyFactory(manager, corpus)
+        val factory = MonkeyFactory(manager, corpus)
         val monkeys = (0 until numMonkeys).map { _ ->
             factory.createMonkey(strategy)
         }
