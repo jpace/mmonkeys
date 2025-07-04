@@ -16,7 +16,6 @@ fun main(args: Array<String>) {
     simulations["threesRandom"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.threesRandomStrategy, toFind)
     simulations["threesDistributed"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.threesDistributedStrategy, toFind)
     simulations["weighted"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.weightedStrategy, toFind)
-    simulations["wordsGenerator"] = CorpusSimulationFactory.createWithWordsGeneratorMonkeys(toFind)
     simulations.keys.forEach { name ->
         Qlog.info("name", name)
         val simulation = simulations.getValue(name)

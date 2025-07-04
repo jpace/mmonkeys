@@ -1,13 +1,10 @@
 package org.incava.mmonkeys.exec
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
-import org.incava.mmonkeys.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
@@ -39,16 +36,6 @@ object CorpusSimulationFactory {
         val factory = DefaultMonkeyFactory(manager, corpus)
         val monkeys = (0 until numMonkeys).map { _ ->
             factory.createMonkey(strategy)
-        }
-        return create(corpus, manager, monkeys, toFind)
-    }
-
-    fun createWithWordsGeneratorMonkeys(toFind: Int): CorpusSimulation {
-        val corpus = DualCorpus(words)
-        val manager = ManagerFactory.createWithView(corpus, 1)
-        val factory = WordsGeneratorMonkeyFactory(manager, corpus)
-        val monkeys = (0 until numMonkeys).map { _ ->
-            factory.createMonkey()
         }
         return create(corpus, manager, monkeys, toFind)
     }

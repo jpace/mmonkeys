@@ -4,7 +4,6 @@ import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.corpus.Corpus
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.words.Attempt
-import org.incava.mmonkeys.words.Attempts
 import org.incava.mmonkeys.words.Word
 
 class Manager(val corpus: Corpus, private val view: ManagerView?) {
@@ -17,10 +16,6 @@ class Manager(val corpus: Corpus, private val view: ManagerView?) {
     fun update(observed: Monkey, attempt: Attempt) {
         val words = if (attempt.word == null) emptyList() else listOf(attempt.word)
         update(observed, words, attempt.totalKeyStrokes, 1)
-    }
-
-    fun update(monkey: Monkey, attempts: Attempts) {
-        update(monkey, attempts.words, attempts.totalKeyStrokes, attempts.numAttempts)
     }
 
     private fun update(monkey: Monkey, words: List<Word>, totalKeystrokes: Long, numAttempts: Int) {

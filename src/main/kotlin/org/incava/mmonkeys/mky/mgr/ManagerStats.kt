@@ -17,4 +17,18 @@ data class ManagerStats(
         words.forEach { this.matchesByLength.merge(it.string.length, 1) { prev, _ -> prev + 1 } }
         this.matchCount += words.size
     }
+
+    fun updateMatch(word: Word, totalKeystrokes: Long) {
+        this.totalKeystrokes += totalKeystrokes
+        this.iterations += totalKeystrokes
+        this.count++
+        this.matchesByLength.merge(word.string.length, 1) { prev, _ -> prev + 1 }
+        this.matchCount += 1
+    }
+
+    fun updateNoMatch(word: Word, totalKeystrokes: Long) {
+        this.totalKeystrokes += totalKeystrokes
+        this.iterations += totalKeystrokes
+        this.count++
+    }
 }

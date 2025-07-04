@@ -5,8 +5,6 @@ import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.corpus.dc.DualCorpus
-import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
@@ -95,13 +93,6 @@ class CorpusTrial(
             val manager = ManagerFactory.createWithoutView(corpus)
             val factory = NumbersMonkeyFactory(manager, corpus)
             runMonkey("numbers", manager, factory.createMonkey())
-        }
-
-        run {
-            val corpus = DualCorpus(words)
-            val manager = ManagerFactory.createWithoutView(corpus)
-            val factory = WordsGeneratorMonkeyFactory(manager, corpus)
-            runMonkey("words gen", manager, factory.createMonkey())
         }
     }
 
