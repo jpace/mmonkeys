@@ -12,8 +12,6 @@ import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
-import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.trials.base.PerfResults
 import org.incava.mmonkeys.trials.ui.corpus.CorpusTrialView
@@ -86,13 +84,6 @@ class CorpusTrial(
             val factory = DefaultMonkeyFactory(manager, corpus)
             val strategy = RandomStrategy(Keys.fullList())
             runMonkey("random", manager, factory.createMonkey(strategy))
-        }
-
-        run {
-            val corpus = NumberedCorpus(words)
-            val manager = ManagerFactory.createWithoutView(corpus)
-            val factory = NumbersMonkeyFactory(manager, corpus)
-            runMonkey("numbers", manager, factory.createMonkey())
         }
     }
 

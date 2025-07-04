@@ -17,9 +17,6 @@ import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
 import org.incava.mmonkeys.mky.mind.TwosDistributedStrategy
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.TypeStrategy
-import org.incava.mmonkeys.mky.number.NumberedCorpus
-import org.incava.mmonkeys.mky.number.NumbersMonkey
-import org.incava.mmonkeys.mky.number.NumbersMonkeyFactory
 import org.incava.mmonkeys.rand.Sequences
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.type.Keys
@@ -53,7 +50,6 @@ private class MonkeyProfile(private val params: ProfileParams) {
 
     fun createManager() = ManagerFactory.createWithoutView(WordCorpus(words))
     fun WordCorpus() = WordCorpus(words)
-    fun numberedCorpus() = NumberedCorpus(words)
     fun sequences() = SequencesFactory.createFromWords(words)
 
     fun defaultMonkeyManager(corpus: WordCorpus, manager: Manager): DefaultMonkeyFactory {
@@ -61,11 +57,6 @@ private class MonkeyProfile(private val params: ProfileParams) {
     }
 
     fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: DefaultMonkey) {
-        scenario.addTo(profiler, manager, monkey)
-        scenarios[scenario.name] = scenario
-    }
-
-    fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: NumbersMonkey) {
         scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
@@ -78,15 +69,6 @@ private class MonkeyProfile(private val params: ProfileParams) {
         val mgr = defaultMonkeyManager(corpus, manager)
         val monkey = mgr.createMonkey(strategy)
         val scenario = ProfileScenario(name, words, manager, params.matchGoal)
-        addScenario(scenario, manager, monkey)
-    }
-
-    fun addNumbered() {
-        val corpus = numberedCorpus()
-        val manager = createManager()
-        val mgr = NumbersMonkeyFactory(manager, corpus)
-        val monkey = mgr.createMonkey()
-        val scenario = ProfileScenario("numbers", words, manager, params.matchGoal)
         addScenario(scenario, manager, monkey)
     }
 
@@ -107,7 +89,6 @@ private class MonkeyProfile(private val params: ProfileParams) {
         addSequenceScenario("threes random", ::ThreesRandomStrategy)
         addSequenceScenario("twos distributed", ::TwosDistributedStrategy)
         addSequenceScenario("threes distributed", ::ThreesDistributedStrategy)
-        addNumbered()
         addRandom()
 
         profiler.runAll()
