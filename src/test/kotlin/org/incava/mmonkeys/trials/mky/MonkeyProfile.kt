@@ -12,6 +12,8 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkey
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
+import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -35,10 +37,10 @@ data class ProfileParams(
     val includeLists: Boolean,
 )
 
-class ProfileScenario(val name: String, val words: List<String>, val monitor: CountingMonitor, private val matchGoal: Int) {
-    fun addTo(profiler: Profiler, manager: CountingMonitor, monkey: Monkey) {
+class ProfileScenario(val name: String, val words: List<String>, val manager: Manager, private val matchGoal: Int) {
+    fun addTo(profiler: Profiler, manager: Manager, monkey: Monkey) {
         profiler.add(name) {
-            while (manager.matches < matchGoal) {
+            while (manager.matchCount() < matchGoal) {
                 monkey.type()
             }
         }
@@ -52,36 +54,36 @@ private class MonkeyProfile(private val params: ProfileParams) {
     val profiler = Profiler(params.numInvokes, params.numTrials)
     val scenarios = mutableMapOf<String, ProfileScenario>()
 
-    fun createManager() = CountingMonitor()
+    fun createManager() = ManagerFactory.createWithoutView(WordCorpus(words))
     fun dualCorpus() = DualCorpus(words)
     fun WordCorpus() = WordCorpus(words)
     fun numberedCorpus() = NumberedCorpus(words)
     fun sequences() = SequencesFactory.createFromWords(words)
 
-    fun defaultMonkeyManager(corpus: WordCorpus, manager: CountingMonitor): DefaultMonkeyFactory {
+    fun defaultMonkeyManager(corpus: WordCorpus, manager: Manager): DefaultMonkeyFactory {
         return DefaultMonkeyFactory(manager, corpus)
     }
 
     fun addWordGeneratorScenario() {
         val corpus = dualCorpus()
         val manager = createManager()
-        val mgr = WordsGeneratorMonkeyFactory(manager, corpus)
-        val monkey = mgr.createMonkey()
+        val factory = WordsGeneratorMonkeyFactory(manager, corpus)
+        val monkey = factory.createMonkey()
         val scenario = ProfileScenario("words gen", words, manager, params.matchGoal)
         addScenario(scenario, manager, monkey)
     }
 
-    fun addScenario(scenario: ProfileScenario, manager: CountingMonitor, monkey: DefaultMonkey) {
+    fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: DefaultMonkey) {
         scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
 
-    fun addScenario(scenario: ProfileScenario, manager: CountingMonitor, monkey: NumbersMonkey) {
+    fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: NumbersMonkey) {
         scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
 
-    fun addScenario(scenario: ProfileScenario, manager: CountingMonitor, monkey: WordsGeneratorMonkey) {
+    fun addScenario(scenario: ProfileScenario, manager: Manager, monkey: WordsGeneratorMonkey) {
         scenario.addTo(profiler, manager, monkey)
         scenarios[scenario.name] = scenario
     }
@@ -131,20 +133,16 @@ private class MonkeyProfile(private val params: ProfileParams) {
         profiler.showResults(SortType.BY_DURATION)
         scenarios.forEach { (name, scenario) ->
             Qlog.info("name", name)
-            Qlog.info("monitor.attempts.#", scenario.monitor.attempts)
-            Qlog.info("monitor.matches.#", scenario.monitor.matches)
-            Qlog.info("monitor.keystrokes", scenario.monitor.byKeystrokes.toSortedMap())
+            Qlog.info(".attempts.#", scenario.manager.count())
+            Qlog.info(".matches.#", scenario.manager.matchCount())
+            Qlog.info(".keystrokes", scenario.manager.keystrokesCount())
         }
-
-        val showdown = profiler.spawn()
-        showdown.runAll()
         profiler.showResults(SortType.BY_DURATION)
-        showdown.showResults(SortType.BY_DURATION)
     }
 }
 
 fun main() {
-    val params = ProfileParams(1L, 1000, 4, 13, 1, true)
+    val params = ProfileParams(1L, 100_000, 1, 13, 1, true)
     val obj = MonkeyProfile(params)
     obj.profile()
 }

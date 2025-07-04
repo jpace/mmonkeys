@@ -1,6 +1,7 @@
 package org.incava.mmonkeys.mky.number
 
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Disabled
@@ -51,7 +52,7 @@ internal class NumbersMonkeyTest {
     fun hasUnmatched() {
         val words = listOf("this", "is", "a", "test")
         val corpus = NumberedCorpus(words)
-        val manager = Manager(corpus)
+        val manager = ManagerFactory.createWithoutView(corpus)
         val numbersMonkeyFactory = NumbersMonkeyFactory(manager, corpus)
         val obj = numbersMonkeyFactory.createMonkey()
         repeat(1000000) { obj.type() }

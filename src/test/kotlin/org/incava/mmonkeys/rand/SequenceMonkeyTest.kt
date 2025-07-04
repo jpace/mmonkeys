@@ -5,6 +5,7 @@ import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
@@ -16,7 +17,7 @@ class SequenceMonkeyTest {
         val corpus = WordCorpus(words)
         val sequences = SequencesFactory.createFromWords(words)
         val strategy = TwosRandomStrategy(sequences)
-        val manager = Manager(corpus)
+        val manager = ManagerFactory.createWithoutView(corpus)
         val mgr = DefaultMonkeyFactory(manager, corpus)
         val obj = mgr.createMonkey(strategy)
         repeat(100) {

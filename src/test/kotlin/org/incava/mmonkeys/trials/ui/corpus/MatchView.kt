@@ -1,8 +1,7 @@
 package org.incava.mmonkeys.trials.ui.corpus
 
-import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.mgr.Manager
 import org.incava.mmonkeys.trials.ui.ViewType
 

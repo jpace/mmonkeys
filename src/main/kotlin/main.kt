@@ -1,4 +1,6 @@
 import org.incava.ikdk.io.Console
+import org.incava.ikdk.io.Qlog
+import org.incava.mmonkeys.exec.CorpusSimulation
 import org.incava.mmonkeys.exec.CorpusSimulationFactory
 import org.incava.time.Durations
 import java.lang.Thread.sleep
@@ -6,13 +8,25 @@ import java.lang.Thread.sleep
 fun main(args: Array<String>) {
     Console.info("main")
     Console.info("args", args.toList())
-    // runCorpusTest('z')
-    val obj = CorpusSimulationFactory.create()
-    val trialDuration = Durations.measureDuration {
-        obj.run()
-        obj.showResults()
+    val toFind = 1_000
+    val simulations = mutableMapOf<String, CorpusSimulation>()
+    simulations["random"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.randomStrategy, toFind)
+    simulations["twosRandom"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.twosRandomStrategy, toFind)
+    simulations["twosDistributed"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.twosDistributedStrategy, toFind)
+    simulations["threesRandom"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.threesRandomStrategy, toFind)
+    simulations["threesDistributed"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.threesDistributedStrategy, toFind)
+    simulations["weighted"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.weightedStrategy, toFind)
+    simulations["wordsGenerator"] = CorpusSimulationFactory.createWithWordsGeneratorMonkeys(toFind)
+    simulations.keys.forEach { name ->
+        Qlog.info("name", name)
+        val simulation = simulations.getValue(name)
+        val trialDuration = Durations.measureDuration {
+            simulation.run()
+            simulation.showResults()
+        }
+        Console.info("trialDuration", trialDuration.second)
+        println()
     }
-    Console.info("trialDuration", trialDuration)
 }
 
 fun mainCls(args: Array<String>) {

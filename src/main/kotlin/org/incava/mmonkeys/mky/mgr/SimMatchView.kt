@@ -78,7 +78,7 @@ class SimMatchView(val corpus: Corpus, private val outputInterval: Int, private 
             formatTime(ZonedDateTime.now()),
             formatTime(simTime),
             update.id,
-            update.totalKeystrokes + corpus.lengthAtIndex(update.index),
+            update.totalKeystrokes,
             word,
             word.length,
             update.index,

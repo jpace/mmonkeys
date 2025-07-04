@@ -8,6 +8,7 @@ import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.corpus.dc.DualCorpus
 import org.incava.mmonkeys.mky.corpus.dc.WordsGeneratorMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -47,7 +48,7 @@ class CorpusTrial(
     fun run() {
         run {
             val corpus = WordCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosRandomStrategy(sequences)
@@ -56,7 +57,7 @@ class CorpusTrial(
 
         run {
             val corpus = WordCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = TwosDistributedStrategy(sequences)
@@ -65,7 +66,7 @@ class CorpusTrial(
 
         run {
             val corpus = WordCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = ThreesRandomStrategy(sequences)
@@ -74,7 +75,7 @@ class CorpusTrial(
 
         run {
             val corpus = WordCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = DefaultMonkeyFactory(manager, corpus)
             val sequences = SequencesFactory.createFromWords(words)
             val strategy = ThreesDistributedStrategy(sequences)
@@ -83,7 +84,7 @@ class CorpusTrial(
 
         run {
             val corpus = WordCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = DefaultMonkeyFactory(manager, corpus)
             val strategy = RandomStrategy(Keys.fullList())
             runMonkey("random", manager, factory.createMonkey(strategy))
@@ -91,14 +92,14 @@ class CorpusTrial(
 
         run {
             val corpus = NumberedCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = NumbersMonkeyFactory(manager, corpus)
             runMonkey("numbers", manager, factory.createMonkey())
         }
 
         run {
             val corpus = DualCorpus(words)
-            val manager = Manager(corpus, outputInterval)
+            val manager = ManagerFactory.createWithoutView(corpus)
             val factory = WordsGeneratorMonkeyFactory(manager, corpus)
             runMonkey("words gen", manager, factory.createMonkey())
         }

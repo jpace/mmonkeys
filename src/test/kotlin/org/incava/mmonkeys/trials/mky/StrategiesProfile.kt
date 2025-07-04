@@ -11,6 +11,7 @@ import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.mky.mind.RandomStrategy
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.mky.mind.ThreesRandomStrategy
@@ -31,7 +32,7 @@ private class StrategiesProfile(minLength: Int, val matchGoal: Long, val verbose
 
     fun addScenario(name: String, strategy: TypeStrategy) {
         val corpus = WordCorpus(words)
-        val manager = Manager(corpus)
+        val manager = ManagerFactory.createWithoutView(corpus)
         val mgr = DefaultMonkeyFactory(manager, corpus)
         val monkey = mgr.createMonkey(strategy)
         scenarios.add(Pair(name) { matchWords(manager, monkey) })

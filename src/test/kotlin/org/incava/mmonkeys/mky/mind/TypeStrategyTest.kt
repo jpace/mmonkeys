@@ -4,6 +4,7 @@ import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.DefaultMonkey
 import org.incava.mmonkeys.mky.DefaultMonkeyFactory
 import org.incava.mmonkeys.mky.mgr.Manager
+import org.incava.mmonkeys.mky.mgr.ManagerFactory
 import org.incava.mmonkeys.type.Keys
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -46,13 +47,13 @@ internal class TypeStrategyTest {
 
     private fun createManager(words: List<String>, toChar: Char): Manager {
         val corpus = WordCorpus(words)
-        return Manager(corpus, 1)
+        return ManagerFactory.createWithoutView(corpus)
     }
 
     private fun createMonkey(words: List<String>, toChar: Char): DefaultMonkey {
         val corpus = WordCorpus(words)
         val strategy = DeterministicStrategy(Keys.keyList(toChar))
-        val manager = Manager(corpus, 1)
+        val manager = ManagerFactory.createWithoutView(corpus)
         val mgr = DefaultMonkeyFactory(manager, corpus)
         return mgr.createMonkey(strategy)
     }

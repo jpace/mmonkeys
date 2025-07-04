@@ -5,9 +5,8 @@ import org.incava.mesa.IntColumn
 import org.incava.mesa.LongColumn
 import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
-import org.incava.mmonkeys.mky.Monkey
-import org.incava.mmonkeys.mky.MonkeyMonitor
 import org.incava.mmonkeys.corpus.Corpus
+import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.mgr.Manager
 
 class MatchTableView<T : Corpus>(corpus: T, verbose: Boolean) : MatchView<T>(corpus, verbose) {
