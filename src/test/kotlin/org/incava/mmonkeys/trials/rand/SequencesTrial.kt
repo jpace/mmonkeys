@@ -5,7 +5,7 @@ import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.mind.TwosRandomStrategy
 import org.incava.mmonkeys.mky.mind.WeightedStrategy
-import org.incava.mmonkeys.rand.DistributedRandom
+import org.incava.mmonkeys.rand.CharsRandom
 import org.incava.mmonkeys.rand.SequencesFactory
 import org.incava.mmonkeys.util.ResourceUtil
 
@@ -38,11 +38,11 @@ class SequencesTrial {
             result.getValue(first).toSortedMap().forEach { (second, count) ->
                 Console.info("$first -> $second", count)
             }
-            val random = DistributedRandom(result.getValue(first))
-            Qlog.info("random.nextRandom", random.nextRandom())
-            Qlog.info("random.nextRandom", random.nextRandom())
-            Qlog.info("random.nextRandom", random.nextRandom())
-            Qlog.info("random.nextRandom", random.nextRandom())
+            val random = CharsRandom(result.getValue(first))
+            Qlog.info("random.nextRandom", random.nextDistributedRandom())
+            Qlog.info("random.nextRandom", random.nextDistributedRandom())
+            Qlog.info("random.nextRandom", random.nextDistributedRandom())
+            Qlog.info("random.nextRandom", random.nextDistributedRandom())
         }
         // this is probably the same as weighted ... maybe
         val firstToCount = result.mapValues { it.value.values.sum() }
@@ -57,14 +57,14 @@ class SequencesTrial {
     fun presentThreesCounted() {
         val obj = SequencesFactory.createFromWords(words)
         val result = obj.threes
-        result.toSortedMap().forEach { (a, bs) ->
+        result.map.toSortedMap().forEach { (a, bs) ->
             bs.toSortedMap().forEach { (b, cs) ->
                 cs.toSortedMap().forEach { (c, count) ->
                     Console.info("$a$b$c: $count")
                 }
             }
         }
-        val countToString = result.map { (a, bs) ->
+        val countToString = result.map.map { (a, bs) ->
             bs.map { (b, cs) ->
                 cs.map { (c, count) ->
                     count to "$a$b$c"

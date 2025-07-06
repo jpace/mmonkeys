@@ -19,7 +19,7 @@ class SequencesProfile {
     }
 
     fun threes() {
-        Qlog.info("threes", sequences.threes.mapValues { x -> x.value.mapValues { y -> y.value.toSortedMap() }.toSortedMap() }.toSortedMap())
+        Qlog.info("threes", sequences.threes)
     }
 }
 

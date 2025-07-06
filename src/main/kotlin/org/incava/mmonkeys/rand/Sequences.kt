@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.rand
 
+import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.util.MapUtil
 
 class Sequences(chars: List<Char>) {
@@ -7,6 +8,7 @@ class Sequences(chars: List<Char>) {
     val threes = CharIntMap3()
 
     init {
+        Qlog.info("chars.#", chars.size)
         (1 until chars.size).forEach { index ->
             val prev = chars[index - 1]
             val curr = chars[index]

@@ -4,6 +4,7 @@ import org.incava.mmonkeys.rand.Sequences
 
 abstract class ThreesStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     private val context = Context(2)
+    val threes = sequences.threes
 
     abstract fun getChar(firstChar: Char, secondChar: Char): Char
 

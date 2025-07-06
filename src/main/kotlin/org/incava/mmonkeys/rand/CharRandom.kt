@@ -1,26 +1,20 @@
 package org.incava.mmonkeys.rand
 
-typealias CharDistRandom = DistributedRandom<Char, Int>
-
 object CharRandom {
-    fun getChar(firsts: CharDistRandom): Char {
-        return firsts.nextRandom()
-    }
-
-    fun getChar(seconds: Map<Char, CharDistRandom>, firstChar: Char): Char {
+    fun getChar(seconds: Map<Char, CharsRandom>, firstChar: Char): Char {
         val forFirst = seconds.getValue(firstChar)
-        return getChar(forFirst)
+        return forFirst.nextDistributedRandom()
     }
 
-    fun createFirsts2(twos: Map<Char, Map<Char, Int>>): DistributedRandom<Char, Int> {
+    fun createFirsts2(twos: Map<Char, Map<Char, Int>>): CharsRandom {
         return twos.mapValues { (_, second) ->
             second.values.sum()
-        }.let { DistributedRandom(it) }
+        }.let { CharsRandom(it) }
     }
 
-    fun createSeconds2(twos: Map<Char, Map<Char, Int>>): Map<Char, CharDistRandom> {
+    fun createSeconds2(twos: Map<Char, Map<Char, Int>>): Map<Char, CharsRandom> {
         return twos.mapValues { (_, second) ->
-            DistributedRandom(second)
+            CharsRandom(second)
         }
     }
 }

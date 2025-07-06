@@ -7,15 +7,15 @@ import org.incava.mmonkeys.type.Keys
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
-class DistributedRandomTest {
+class CharsRandomTest {
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
     val counts = CorpusTraits(words).characterCounts()
     val iterations = 1_000_000
 
-    fun getRandoms(random: DistributedRandom<Char, Int>): Map<Char, Int> {
+    fun getRandoms(charsRandom: CharsRandom): Map<Char, Int> {
         val results = mutableMapOf<Char, Int>()
         repeat(iterations) {
-            val ch = random.nextRandom()
+            val ch = charsRandom.nextDistributedRandom()
             results[ch] = (results[ch] ?: 0) + 1
         }
         return results
@@ -23,7 +23,7 @@ class DistributedRandomTest {
 
     @Test
     fun nextRandomWeighted() {
-        val obj = DistributedRandom(counts)
+        val obj = CharsRandom(counts)
         val numChars = words.sumOf { it.length } + words.size
         val charToPct = counts.entries.associate {
             it.key to 100.0 * it.value / numChars
@@ -38,7 +38,7 @@ class DistributedRandomTest {
     @Test
     fun nextRandomEven() {
         val flatDistribution = counts.mapValues { 1 }
-        val obj = DistributedRandom(flatDistribution)
+        val obj = CharsRandom(flatDistribution)
         val charToPct = flatDistribution.entries.associate {
             it.key to 100.0 / Keys.fullList().size
         }

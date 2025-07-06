@@ -7,10 +7,10 @@ class ThreesDistributedStrategy(sequences: Sequences) : ThreesStrategy(sequences
     constructor(words: List<String>) : this(SequencesFactory.createFromWords(words))
 
     override fun getChar(firstChar: Char, secondChar: Char): Char {
-        return sequences.threes.dists().getChar(firstChar, secondChar)
+        return threes.nextDistributedChar(firstChar, secondChar)
     }
 
-    override fun getChar(firstChar: Char): Char = sequences.threes.dists().getChar(firstChar)
+    override fun getChar(firstChar: Char): Char = threes.nextDistributedChar(firstChar)
 
-    override fun getChar(): Char = sequences.threes.dists().getChar()
+    override fun getChar(): Char = threes.nextDistributedChar()
 }
