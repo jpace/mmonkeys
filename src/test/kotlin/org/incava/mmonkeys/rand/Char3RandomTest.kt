@@ -21,21 +21,21 @@ class Char3RandomTest {
     @Test
     fun createFirsts3() {
         val sequences = SequencesFactory.createFromWords(words)
-        val result = Char3Random.createFirsts3(sequences.threes)
+        val result = sequences.threes.dists().firsts
         Qlog.info("result", result.slots.toSortedMap())
     }
 
     @Test
     fun createSeconds3() {
         val sequences = SequencesFactory.createFromWords(words)
-        val result = Char3Random.createSeconds3(sequences.threes)
+        val result = sequences.threes.dists().seconds
         Qlog.info("result", result.toSortedMap())
     }
 
     @Test
     fun createThirds3() {
         val sequences = SequencesFactory.createFromWords(words)
-        val result = Char3Random.createThirds3(sequences.threes)
+        val result = sequences.threes.dists().thirds
         Qlog.info("result", result.toSortedMap())
     }
 }

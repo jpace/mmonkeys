@@ -9,14 +9,14 @@ class ThreesRandomStrategy(sequences: Sequences) : ThreesStrategy(sequences) {
     private val threes = sequences.threes
 
     override fun getChar(firstChar: Char, secondChar: Char): Char {
-        return SequencesStrategy.getRandomChar(threes, firstChar, secondChar)
+        return threes.random().getChar(firstChar, secondChar)
     }
 
     override fun getChar(firstChar: Char): Char {
-        return SequencesStrategy.getRandomChar(threes, firstChar)
+        return threes.random().getChar(firstChar)
     }
 
     override fun getChar(): Char {
-        return threes.getRandomKey()
+        return threes.random().getChar()
     }
 }

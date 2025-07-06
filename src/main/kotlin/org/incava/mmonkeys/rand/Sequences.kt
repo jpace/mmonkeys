@@ -4,25 +4,20 @@ import org.incava.ikdk.util.MapUtil
 
 class Sequences(chars: List<Char>) {
     val twos: MutableMap<Char, MutableMap<Char, Int>> = mutableMapOf()
-    val threes = CharMap3<Int>()
+    val threes = CharIntMap3()
 
     init {
         (1 until chars.size).forEach { index ->
             val prev = chars[index - 1]
             val curr = chars[index]
-            addToMap(twos, prev, curr)
+            MapUtil.ensureMap(twos, prev)
+                .also {
+                    MapUtil.increment(it, curr)
+                }
             if (index > 1) {
                 val prevPrev = chars[index - 2]
-                val count = (threes.fetch(prevPrev, prev, curr) ?: 0) + 1
-                threes.add(prevPrev, prev, curr, count)
+                threes.increment(prevPrev, prev, curr)
             }
         }
-    }
-
-    private fun addToMap(map: MutableMap<Char, MutableMap<Char, Int>>, prevChar: Char, currChar: Char) {
-        MapUtil.ensureMap(map, prevChar)
-            .also {
-                MapUtil.increment(it, currChar)
-            }
     }
 }

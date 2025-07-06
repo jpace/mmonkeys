@@ -8,14 +8,14 @@ import java.lang.Thread.sleep
 fun main(args: Array<String>) {
     Console.info("main")
     Console.info("args", args.toList())
-    val toFind = 1_000
+    val toFind = 10_000
     val simulations = mutableMapOf<String, CorpusSimulation>()
-    simulations["random"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.randomStrategy, toFind)
-    simulations["twosRandom"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.twosRandomStrategy, toFind)
-    simulations["twosDistributed"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.twosDistributedStrategy, toFind)
-    simulations["threesRandom"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.threesRandomStrategy, toFind)
-    simulations["threesDistributed"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.threesDistributedStrategy, toFind)
-    simulations["weighted"] = CorpusSimulationFactory.createWithStrategy(CorpusSimulationFactory.weightedStrategy, toFind)
+    simulations["random"] = CorpusSimulationFactory.create(CorpusSimulationFactory.randomStrategy, toFind)
+    simulations["twosRandom"] = CorpusSimulationFactory.create(CorpusSimulationFactory.twosRandomStrategy, toFind)
+    simulations["twosDistributed"] = CorpusSimulationFactory.create(CorpusSimulationFactory.twosDistributedStrategy, toFind)
+    simulations["threesRandom"] = CorpusSimulationFactory.create(CorpusSimulationFactory.threesRandomStrategy, toFind)
+    simulations["threesDistributed"] = CorpusSimulationFactory.create(CorpusSimulationFactory.threesDistributedStrategy, toFind)
+    simulations["weighted"] = CorpusSimulationFactory.create(CorpusSimulationFactory.weightedStrategy, toFind)
     simulations.keys.forEach { name ->
         Qlog.info("name", name)
         val simulation = simulations.getValue(name)

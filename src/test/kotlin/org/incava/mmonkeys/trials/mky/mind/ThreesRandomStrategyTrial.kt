@@ -40,7 +40,7 @@ class ThreesRandomStrategyTrial {
     }
 }
 
-fun main() {
+private fun main() {
     val obj = ThreesRandomStrategyTrial()
     obj.typeWord()
     obj.getChar1()
