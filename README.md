@@ -53,3 +53,7 @@ hope you find it interesting.
 ### disclaimer
 
 No monkeys were harmed in the production of this project.
+
+### notes
+
+This requires Java 17 and Gradle 8.4.

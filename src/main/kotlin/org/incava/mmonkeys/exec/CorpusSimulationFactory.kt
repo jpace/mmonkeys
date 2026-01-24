@@ -18,7 +18,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 
 object CorpusSimulationFactory {
     val numMonkeys = 10_000
-    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length > 1 }
+    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length > 2 }
     val sequences = SequencesFactory.createFromWords(words)
     val randomStrategy = RandomStrategy(Keys.fullList())
     val twosRandomStrategy = TwosRandomStrategy(sequences)
