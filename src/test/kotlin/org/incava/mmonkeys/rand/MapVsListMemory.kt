@@ -8,13 +8,13 @@ import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 
 class MapVsListMemory {
-    private fun addToMap(map: MutableMap<Char, MutableMap<Char, Int>>, ch1: Char, ch2: Char, number: Int) {
+    private fun addToMap(map: MutableMap<Char, MutableMapCharToCount>, ch1: Char, ch2: Char, number: Int) {
         MapUtil.ensureMap(map, ch1)
             .also { map1 -> map1[ch2] = number }
     }
 
     private fun addToMap(
-        map: MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>,
+        map: MutableMap<Char, MutableMap<Char, MutableMapCharToCount>>,
         ch1: Char,
         ch2: Char,
         ch3: Char,
@@ -25,7 +25,7 @@ class MapVsListMemory {
     }
 
     private fun addToMap(
-        map: MutableMap<Char, MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>>,
+        map: MutableMap<Char, MutableMap<Char, MutableMap<Char, MutableMapCharToCount>>>,
         ch1: Char,
         ch2: Char,
         ch3: Char,

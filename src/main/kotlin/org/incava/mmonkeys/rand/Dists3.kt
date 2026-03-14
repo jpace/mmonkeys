@@ -1,6 +1,6 @@
 package org.incava.mmonkeys.rand
 
-class Dists3(from: LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, Int>>>) {
+class Dists3(from: LinkedHashMap<Char, MutableMap<Char, MutableMapCharToCount>>) {
     val firsts: CharsRandom
     val seconds: Map<Char, CharsRandom>
     val thirds: Map<Char, Map<Char, CharsRandom>>

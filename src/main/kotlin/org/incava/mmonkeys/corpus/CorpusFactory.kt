@@ -1,7 +1,11 @@
 package org.incava.mmonkeys.corpus
 
 import org.incava.mmonkeys.util.ResourceUtil
+import java.io.BufferedInputStream
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStream
+import java.io.InputStreamReader
 
 object CorpusFactory {
     private val filesToWords: MutableMap<File, List<String>> = mutableMapOf()
@@ -13,6 +17,12 @@ object CorpusFactory {
     fun fileToWords(file: File): List<String> {
         val lines = file.readLines()
         return filesToWords.computeIfAbsent(file) { linesToWords(lines) }
+    }
+
+    fun toWords(stream: InputStream): List<String> {
+        val lines = ArrayList<String>()
+        BufferedReader(InputStreamReader(stream)).forEachLine { lines.add(it) }
+        return lines
     }
 
     private fun linesToWords(lines: List<String>): List<String> {

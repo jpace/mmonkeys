@@ -4,7 +4,7 @@ import org.incava.ikdk.util.MapUtil
 
 open class CharIntMap3 {
     private var dists3: Dists3? = null
-    val map =  LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, Int>>>()
+    val map =  LinkedHashMap<Char, MutableMap<Char, MutableMapCharToCount>>()
 
     fun fetch(x: Char, y: Char, z: Char): Int? {
         return map[x]?.get(y)?.get(z)

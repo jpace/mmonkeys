@@ -12,7 +12,7 @@ class CharsRandomTest {
     val counts = CorpusTraits(words).characterCounts()
     val iterations = 1_000_000
 
-    fun getRandoms(charsRandom: CharsRandom): Map<Char, Int> {
+    fun getRandoms(charsRandom: CharsRandom): MapCharToCount {
         val results = mutableMapOf<Char, Int>()
         repeat(iterations) {
             val ch = charsRandom.nextDistributedRandom()

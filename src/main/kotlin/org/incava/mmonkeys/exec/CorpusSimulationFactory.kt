@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.exec
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.corpus.WordCorpus
 import org.incava.mmonkeys.mky.MonkeyFactory
@@ -18,7 +19,7 @@ import org.incava.mmonkeys.util.ResourceUtil
 
 object CorpusSimulationFactory {
     val numMonkeys = 10_000
-    val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).filter { it.length > 2 }
+    val words = CorpusFactory.toWords(ResourceUtil.FULL_STREAM).filter { it.length > 2 }
     val sequences = SequencesFactory.createFromWords(words)
     val randomStrategy = RandomStrategy(Keys.fullList())
     val twosRandomStrategy = TwosRandomStrategy(sequences)
@@ -28,6 +29,7 @@ object CorpusSimulationFactory {
     val weightedStrategy = WeightedStrategy(words)
 
     fun create(strategy: TypeStrategy, toFind: Int): CorpusSimulation {
+        Qlog.info("strategy", strategy)
         val corpus = WordCorpus(words)
         val manager = ManagerFactory.createWithView(corpus, 1)
         val factory = MonkeyFactory(manager, corpus)

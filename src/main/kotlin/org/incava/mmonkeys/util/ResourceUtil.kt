@@ -5,6 +5,7 @@ import java.io.InputStream
 
 object ResourceUtil {
     val FULL_FILE = getResourceFile("pg100.txt")
+    val FULL_STREAM = getResourceStream("pg100.txt")
 
     fun getResourceFile(name: String): File {
         val resource = ResourceUtil::class.java.classLoader.getResource(name) ?: throw RuntimeException("no such file: $name")

@@ -2,7 +2,7 @@ package org.incava.mmonkeys.rand
 
 import kotlin.random.Random
 
-class CharsRandom(counts: Map<Char, Int>) {
+class CharsRandom(counts: MapCharToCount) {
     private val slots: Map<Char, Double>
 
     init {

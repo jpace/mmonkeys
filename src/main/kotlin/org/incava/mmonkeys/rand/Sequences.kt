@@ -4,7 +4,7 @@ import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.util.MapUtil
 
 class Sequences(chars: List<Char>) {
-    val twos: MutableMap<Char, MutableMap<Char, Int>> = mutableMapOf()
+    val twos: MutableMap<Char, MutableMapCharToCount> = mutableMapOf()
     val threes = CharIntMap3()
 
     init {
