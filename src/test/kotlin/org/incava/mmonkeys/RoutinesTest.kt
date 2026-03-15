@@ -1,6 +1,6 @@
 package org.incava.mmonkeys
 
-import org.incava.mmonkeys.util.Memory
+import org.incava.mmonkeys.util.MemoryView
 import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.test.assertEquals
@@ -8,9 +8,9 @@ import kotlin.test.assertEquals
 class RoutinesTest {
     @Test
     fun testMemory() {
-        val memory = Memory()
-        memory.showBanner()
-        memory.showCurrent(AtomicLong(0))
+        val memoryView = MemoryView()
+        memoryView.showBanner()
+        memoryView.showCurrent(AtomicLong(0))
     }
 
     @Test

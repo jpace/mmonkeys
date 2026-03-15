@@ -14,6 +14,7 @@ class CorpusStatsView(val corpus: Corpus, private val outputInterval: Int, val o
         IntColumn("matched %", 12),
     )
     private val table: Table = Table(columns, out = out)
+    private val countByLength = corpus.words().groupingBy { it.length }.eachCount()
 
     init {
         show()
@@ -29,7 +30,6 @@ class CorpusStatsView(val corpus: Corpus, private val outputInterval: Int, val o
         out.print("\u001b[H\u001b[2J")
         table.writeHeader('=')
         val words = corpus.words()
-        val countByLength = words.groupingBy { it.length }.eachCount()
         val matchedByLength = mutableMapOf<Int, Int>()
         words.withIndex().forEach { (index, word) ->
             if (corpus.matches.isMatched(index)) {

@@ -7,14 +7,14 @@ class ThreesRandomStrategy(sequences: Sequences) : ThreesStrategy(sequences) {
     constructor(words: List<String>) : this(SequencesFactory.createFromWords(words))
 
     override fun getChar(firstChar: Char, secondChar: Char): Char {
-        return threes.nextRandomChar(firstChar, secondChar)
+        return threes.random.getChar(firstChar, secondChar)
     }
 
     override fun getChar(firstChar: Char): Char {
-        return threes.nextRandomChar(firstChar)
+        return threes.random.getChar(firstChar)
     }
 
     override fun getChar(): Char {
-        return threes.nextRandomChar()
+        return threes.random.getChar()
     }
 }

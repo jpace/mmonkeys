@@ -6,18 +6,16 @@ import org.incava.mesa.StringColumn
 import org.incava.mesa.Table
 import org.incava.time.Durations
 import java.util.concurrent.atomic.AtomicLong
-import kotlin.math.pow
 
-class Memory {
-    private val mb = 2.0.pow(20).toLong()
+class MemoryView {
     private val start = System.currentTimeMillis()
     private val table = Table(
         listOf(
-            StringColumn("elapsed", 7),
+            StringColumn("elapsed", 10),
             LongColumn("number", 14),
-            LongColumn("free", 6),
-            LongColumn("used", 6),
-            LongColumn("total", 6),
+            LongColumn("free", 10),
+            LongColumn("used", 10),
+            LongColumn("total", 10),
         )
     )
 
@@ -27,7 +25,7 @@ class Memory {
 
     fun showCurrent(number: AtomicLong) {
         val (total, free, used) = MemoryUtil.currentMemory()
-        val displayed = Durations.millisToString(System.currentTimeMillis() - start, 6000L, 360L)
+        val displayed = Durations.millisToString(System.currentTimeMillis() - start)
         table.writeRow(displayed, number.get(), free, used, total)
     }
 

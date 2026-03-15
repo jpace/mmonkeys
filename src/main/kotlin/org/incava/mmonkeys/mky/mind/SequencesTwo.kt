@@ -6,10 +6,11 @@ class SequencesTwo(sequences: Sequences) {
     private val twos = sequences.twos
 
     fun getRandomChar(firstChar: Char): Char {
-        return SequencesStrategy.getRandomChar(twos, firstChar)
+        val forChar = twos.getValue(firstChar)
+        return forChar.keys.random()
     }
 
     fun getRandomChar(): Char {
-        return SequencesStrategy.getRandomChar(twos)
+        return twos.keys.random()
     }
 }

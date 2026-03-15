@@ -5,7 +5,7 @@ import org.incava.ikdk.util.MapUtil
 
 class Sequences(chars: List<Char>) {
     val twos: MutableMap<Char, MutableMapCharToCount> = mutableMapOf()
-    val threes = CharIntMap3()
+    val threes = LinkedHashMap<Char, MutableMap<Char, MutableMapCharToCount>>()
 
     init {
         Qlog.info("chars.#", chars.size)
@@ -18,7 +18,13 @@ class Sequences(chars: List<Char>) {
                 }
             if (index > 1) {
                 val prevPrev = chars[index - 2]
-                threes.increment(prevPrev, prev, curr)
+                MapUtil.ensureMap(threes, prevPrev)
+                    .also { map1 ->
+                        MapUtil.ensureMap(map1, prev)
+                            .also { map2 ->
+                                map2.compute(curr) { _, value -> if (value == null) 1 else value + 1 }
+                            }
+                    }
             }
         }
     }

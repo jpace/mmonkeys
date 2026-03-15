@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console
 import org.incava.mmonkeys.mky.Monkey
 import org.incava.mmonkeys.mky.mgr.Manager
-import org.incava.mmonkeys.util.Memory
+import org.incava.mmonkeys.util.MemoryView
 import java.util.concurrent.atomic.AtomicLong
 
 class CoroutineSimulation(
@@ -24,15 +24,15 @@ class CoroutineSimulation(
     private val maxAttempts = 100_000_000L
 
     fun run() {
-        val memory = Memory()
+        val memoryView = MemoryView()
         runBlocking {
-            val timer = launchTimer(memory)
+            val timer = launchTimer(memoryView)
             val jobs = launchMonkeys()
             val watcher = launchWatcher(jobs)
             jobs.forEach { it.join() }
             timer.cancel()
             watcher.cancel()
-            memory.showCurrent(iterations)
+            memoryView.showCurrent(iterations)
         }
         if (verbose) {
             Console.info("complete?", isComplete())
@@ -51,9 +51,9 @@ class CoroutineSimulation(
 
     private fun isComplete(): Boolean = manager.matchCount() >= toFind || !manager.hasUnmatched()
 
-    private fun CoroutineScope.launchTimer(memory: Memory): Job {
+    private fun CoroutineScope.launchTimer(memoryView: MemoryView): Job {
         return launch {
-            memory.monitor(iterations, monitorInterval)
+            memoryView.monitor(iterations, monitorInterval)
         }
     }
 

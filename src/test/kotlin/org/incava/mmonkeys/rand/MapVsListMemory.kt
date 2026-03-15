@@ -3,7 +3,7 @@ package org.incava.mmonkeys.rand
 import org.incava.ikdk.io.Qlog
 import org.incava.ikdk.util.MapUtil
 import org.incava.mmonkeys.type.Keys
-import org.incava.mmonkeys.util.Memory
+import org.incava.mmonkeys.util.MemoryView
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 
@@ -44,7 +44,7 @@ class MapVsListMemory {
             val ch1 = Keys.fullList().random()
             repeat(count) {
                 val ch2 = Keys.fullList().random()
-                val number = Random.Default.nextInt()
+                val number = Random.nextInt()
                 block(ch1, ch2, number)
             }
         }
@@ -58,7 +58,7 @@ class MapVsListMemory {
                 val ch2 = Keys.fullList().random()
                 repeat(count) {
                     val ch3 = Keys.fullList().random()
-                    val number = Random.Default.nextInt()
+                    val number = Random.nextInt()
                     block(ch1, ch2, ch3, number)
                 }
             }
@@ -75,7 +75,7 @@ class MapVsListMemory {
                     val ch3 = Keys.fullList().random()
                     repeat(count) {
                         val ch4 = Keys.fullList().random()
-                        val number = Random.Default.nextInt()
+                        val number = Random.nextInt()
                         block(ch1, ch2, ch3, ch4, number)
                     }
                 }
@@ -135,15 +135,15 @@ class MapVsListMemory {
 
 fun main() {
     Qlog.info("starting")
-    val runList = false
+    val runList = true
     val obj = MapVsListMemory()
-    val memory = Memory()
-    var done = false
+    val memoryView = MemoryView()
+    var quit = false
     val thread = Thread {
-        memory.showBanner()
-        var iteration = AtomicLong()
-        while (!done) {
-            memory.showCurrent(iteration)
+        memoryView.showBanner()
+        val iteration = AtomicLong()
+        while (!quit) {
+            memoryView.showCurrent(iteration)
             iteration.incrementAndGet()
             Thread.sleep(50L)
         }
@@ -155,18 +155,18 @@ fun main() {
     Qlog.info("creating")
     if (runList) {
         obj.createData2List()
-//        obj.createData3List()
-//        obj.createData4List()
+        obj.createData3List()
+        obj.createData4List()
     } else {
         obj.createData2Pair()
-//        obj.createData2Map()
-//        obj.createData3Map()
-//        obj.createData4Map()
+        obj.createData2Map()
+        obj.createData3Map()
+        obj.createData4Map()
     }
     Qlog.info("done creating")
     Qlog.info("sleeping")
     Thread.sleep(5_000L)
     Qlog.info("done sleeping")
-    done = true
+    quit = true
     Qlog.info("ending")
 }

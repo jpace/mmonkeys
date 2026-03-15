@@ -67,7 +67,7 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
             val ch1 = Keys.fullList().random()
             repeat(count) {
                 val ch2 = Keys.fullList().random()
-                val idx = Random.Default.nextInt()
+                val idx = Random.nextInt()
                 list[listOf(ch1, ch2)] = idx
                 addToMap(map, ch1, ch2, idx)
             }
@@ -85,7 +85,7 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
                 val ch2 = Keys.fullList().random()
                 repeat(count) {
                     val ch3 = Keys.fullList().random()
-                    val idx = Random.Default.nextInt()
+                    val idx = Random.nextInt()
                     list[listOf(ch1, ch2, ch3)] = idx
                     addToMap(map, ch1, ch2, ch3, idx)
                 }
@@ -106,7 +106,7 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
                     val ch3 = Keys.fullList().random()
                     repeat(count) {
                         val ch4 = Keys.fullList().random()
-                        val idx = Random.Default.nextInt()
+                        val idx = Random.nextInt()
                         list[listOf(ch1, ch2, ch3)] = idx
                         MapUtil.ensureMap(map, ch1)
                             .also { map1 ->
@@ -142,12 +142,12 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
 
         profiler.add("list $numChars") {
             val chars = (0 until numChars).map { Keys.fullList().random() }
-            val result = listLookup(chars)
+            listLookup(chars)
         }
 
         profiler.add("map $numChars") {
             val chars = (0 until numChars).map { Keys.fullList().random() }
-            val result = mapLookup(chars)
+            mapLookup(chars)
         }
 
         profiler.runAll()

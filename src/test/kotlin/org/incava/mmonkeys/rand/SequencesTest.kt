@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertAll
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SequencesTest {
@@ -29,9 +30,15 @@ class SequencesTest {
 
     @Test
     fun threes() {
-        val result = obj.threes
-        assertEquals(9, result.fetch('j', 'i', 'g'))
-        assertEquals(3, result.fetch('j', 'i', 'l'))
-        assertEquals(1, result.fetch('j', 'i', 'n'))
+        assertAll(
+            { assertEquals(9, fetch(obj, 'j', 'i', 'g')) },
+            { assertEquals(3, fetch(obj, 'j', 'i', 'l')) },
+            { assertEquals(1, fetch(obj, 'j', 'i', 'n')) }
+        )
     }
+
+    private fun fetch(obj: Sequences, x: Char, y: Char, z: Char): Int? {
+        return obj.threes[x]?.get(y)?.get(z)
+    }
+
 }

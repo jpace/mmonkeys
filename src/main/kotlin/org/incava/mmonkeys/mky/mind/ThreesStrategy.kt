@@ -1,10 +1,11 @@
 package org.incava.mmonkeys.mky.mind
 
+import org.incava.mmonkeys.rand.CharIntMap3
 import org.incava.mmonkeys.rand.Sequences
 
 abstract class ThreesStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     private val context = Context(2)
-    val threes = sequences.threes
+    val threes = CharIntMap3(sequences.threes)
 
     abstract fun getChar(firstChar: Char, secondChar: Char): Char
 

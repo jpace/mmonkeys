@@ -10,6 +10,7 @@ fun main(args: Array<String>) {
     Console.info("args", args.toList())
     val toFind = 10_000
     val simulations = mutableMapOf<String, CorpusSimulation>()
+    val includeSlow = false
     simulations["random"] = CorpusSimulationFactory.create(CorpusSimulationFactory.randomStrategy, toFind)
     simulations["twosRandom"] = CorpusSimulationFactory.create(CorpusSimulationFactory.twosRandomStrategy, toFind)
     simulations["twosDistributed"] = CorpusSimulationFactory.create(CorpusSimulationFactory.twosDistributedStrategy, toFind)
@@ -18,6 +19,9 @@ fun main(args: Array<String>) {
     simulations["weighted"] = CorpusSimulationFactory.create(CorpusSimulationFactory.weightedStrategy, toFind)
     simulations.keys.forEach { name ->
         Qlog.info("name", name)
+        if (!includeSlow && name.lowercase().contains("random")) {
+             return@forEach
+        }
         val simulation = simulations.getValue(name)
         val trialDuration = Durations.measureDuration {
             simulation.run()

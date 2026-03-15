@@ -12,37 +12,32 @@ class CharsRandomTest {
     val counts = CorpusTraits(words).characterCounts()
     val iterations = 1_000_000
 
-    fun getRandoms(charsRandom: CharsRandom): MapCharToCount {
-        val results = mutableMapOf<Char, Int>()
-        repeat(iterations) {
-            val ch = charsRandom.nextDistributedRandom()
-            results[ch] = (results[ch] ?: 0) + 1
-        }
-        return results
-    }
-
     @Test
     fun nextRandomWeighted() {
-        val obj = CharsRandom(counts)
+        val obj = CharsSlots(counts)
         val numChars = words.sumOf { it.length } + words.size
         val charToPct = counts.entries.associate {
             it.key to 100.0 * it.value / numChars
         }
-        val results = getRandoms(obj)
-        results.toSortedMap().forEach { (ch, count) ->
-            val pct = 100.0 * count / results.values.sum()
-            assertWithin(charToPct.getValue(ch), pct, 0.1)
-        }
+        assertRandoms(obj, charToPct)
     }
 
     @Test
     fun nextRandomEven() {
         val flatDistribution = counts.mapValues { 1 }
-        val obj = CharsRandom(flatDistribution)
+        val obj = CharsSlots(flatDistribution)
         val charToPct = flatDistribution.entries.associate {
             it.key to 100.0 / Keys.fullList().size
         }
-        val results = getRandoms(obj)
+        assertRandoms(obj, charToPct)
+    }
+
+    private fun assertRandoms(obj: CharsSlots, charToPct: Map<Char, Double>) {
+        val results = mutableMapOf<Char, Int>()
+        repeat(iterations) {
+            val ch = obj.distributed.getChar()
+            results[ch] = (results[ch] ?: 0) + 1
+        }
         results.toSortedMap().forEach { (ch, count) ->
             val pct = 100.0 * count / results.values.sum()
             assertWithin(charToPct.getValue(ch), pct, 0.1)

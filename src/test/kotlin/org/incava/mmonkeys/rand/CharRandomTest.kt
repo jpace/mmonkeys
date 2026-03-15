@@ -13,8 +13,8 @@ class CharRandomTest {
         val chars = words.flatMap { word -> word.map { char -> char } + ' ' }
         val counted = mutableMapOf<Char, Int>()
         chars.forEach { counted[it] = (counted[it] ?: 0) + 1 }
-        val obj = CharsRandom(counted)
+        val obj = CharsSlots(counted)
         Qlog.info("obj", obj)
-        Qlog.info("obj.nextRandom()", obj.nextDistributedRandom())
+        Qlog.info("obj.distributed().getChar()", obj.distributed.getChar())
     }
 }

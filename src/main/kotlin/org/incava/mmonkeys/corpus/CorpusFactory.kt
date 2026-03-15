@@ -1,7 +1,6 @@
 package org.incava.mmonkeys.corpus
 
 import org.incava.mmonkeys.util.ResourceUtil
-import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
@@ -20,20 +19,22 @@ object CorpusFactory {
     }
 
     fun toWords(stream: InputStream): List<String> {
-        val lines = ArrayList<String>()
-        BufferedReader(InputStreamReader(stream)).forEachLine { lines.add(it) }
-        return lines
+        val words = ArrayList<String>()
+        BufferedReader(InputStreamReader(stream)).lines().forEach { words += lineToWords(it) }
+        return words
     }
 
     private fun linesToWords(lines: List<String>): List<String> {
-        return lines
-            .withIndex()
-            .map { it.value }
-            .map { it.trim() }
-            .map(String::lowercase)
-            // I forgot numbers.
-            .map { it.replace(Regex("[^a-z+]"), " ") }
-            .flatMap { it.split(Regex("\\s+")) }
+        return lines.fold(mutableListOf()) { list, line -> list += lineToWords(line); list }
+    }
+
+    private fun lineToWords(line: String): List<String> {
+        // I forgot numbers.
+        return line
+            .trim()
+            .lowercase()
+            .replace(Regex("[^a-z+]"), " ")
+            .split(Regex("\\s+"))
             .filterNot { it.isBlank() }
     }
 }

@@ -4,20 +4,20 @@ typealias MapCharToCount = Map<Char, Int>
 typealias MutableMapCharToCount = MutableMap<Char, Int>
 
 object CharRandom {
-    fun getChar(seconds: Map<Char, CharsRandom>, firstChar: Char): Char {
+    fun getChar(seconds: Map<Char, CharsSlots>, firstChar: Char): Char {
         val forFirst = seconds.getValue(firstChar)
-        return forFirst.nextDistributedRandom()
+        return forFirst.distributed.getChar()
     }
 
-    fun createFirsts2(twos: Map<Char, MapCharToCount>): CharsRandom {
+    fun createFirsts(twos: Map<Char, MapCharToCount>): CharsSlots {
         return twos.mapValues { (_, second) ->
             second.values.sum()
-        }.let { CharsRandom(it) }
+        }.let { CharsSlots(it) }
     }
 
-    fun createSeconds2(twos: Map<Char, MapCharToCount>): Map<Char, CharsRandom> {
+    fun createSeconds(twos: Map<Char, MapCharToCount>): Map<Char, CharsSlots> {
         return twos.mapValues { (_, second) ->
-            CharsRandom(second)
+            CharsSlots(second)
         }
     }
 }

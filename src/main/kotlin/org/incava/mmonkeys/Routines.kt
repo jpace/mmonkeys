@@ -4,19 +4,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.incava.ikdk.io.Console.printf
-import org.incava.mmonkeys.util.Memory
+import org.incava.mmonkeys.util.MemoryView
 import java.util.concurrent.atomic.AtomicLong
 
 class Routines {
     fun memoryTest(count: Int): Long {
         val number = AtomicLong(0)
-        val memory = Memory()
+        val memoryView = MemoryView()
         runBlocking {
-            memory.showBanner()
-            memory.showCurrent(number)
+            memoryView.showBanner()
+            memoryView.showCurrent(number)
             val timer = launch {
                 while (true) {
-                    memory.showCurrent(number)
+                    memoryView.showCurrent(number)
                     delay(500L)
                 }
             }
@@ -31,7 +31,7 @@ class Routines {
             jobs.forEach { it.join() }
             timer.cancel()
             printf("counter: %,d", number.get())
-            memory.showCurrent(number)
+            memoryView.showCurrent(number)
         }
         return number.get()
     }
