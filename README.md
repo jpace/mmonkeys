@@ -56,4 +56,6 @@ No monkeys were harmed in the production of this project.
 
 ### notes
 
-This requires Java 17 and Gradle 8.4.
+This requires Java 17 and Gradle 8.14.3 — there is a
+known issue with Gradle 9, resuling in a build failure regarding
+`org.gradle.util.WrapUtil`.

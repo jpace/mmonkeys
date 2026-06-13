@@ -5,7 +5,7 @@ import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Test
 
-class CharRandomTest {
+class CharSlotsTest {
     val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE).subList(0, 100)
 
     @Test
@@ -15,6 +15,6 @@ class CharRandomTest {
         chars.forEach { counted[it] = (counted[it] ?: 0) + 1 }
         val obj = CharsSlots(counted)
         Qlog.info("obj", obj)
-        Qlog.info("obj.distributed().getChar()", obj.distributed.getChar())
+        Qlog.info("obj.distributed.getChar()", obj.distributed.getChar())
     }
 }

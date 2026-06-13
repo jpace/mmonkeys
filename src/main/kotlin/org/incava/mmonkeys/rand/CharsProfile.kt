@@ -1,24 +1,23 @@
 package org.incava.mmonkeys.rand
 
 class CharsProfile(from: Map<Char, Map<Char, MapCharToCount>>) {
-    val random: CharsRandomProfile
-    val dist: CharsDistProfile
+    val firsts: CharsSlots
+    val seconds: Map<Char, CharsSlots>
+    val thirds: Map<Char, Map<Char, CharsSlots>>
 
     init {
-        val firsts = from.mapValues { (_, second) ->
+        firsts = from.mapValues { (_, second) ->
             second.values.sumOf { thirds ->
                 thirds.values.sum()
             }
         }.let { CharsSlots(it) }
-        val seconds = from.mapValues { (_, second) ->
-            CharRandom.createFirsts(second)
+        seconds = from.mapValues { (_, second) ->
+            CharSlotsFactory.createFirsts(second)
         }
-        val thirds = from.mapValues { (_, second) ->
+        thirds = from.mapValues { (_, second) ->
             second.mapValues { (_, thirds) ->
                 CharsSlots(thirds)
             }
         }
-        random = CharsRandomProfile(firsts, seconds, thirds)
-        dist = CharsDistProfile(firsts, seconds, thirds)
     }
 }

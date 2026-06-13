@@ -5,12 +5,13 @@ import kotlin.random.Random
 class CharsSlots(counts: MapCharToCount) {
     val distributed: CharSupplier1
     val random: CharSupplier1
+    val slots: Map<Char, Double>
 
     init {
         val sums = counts.mapValues { it.value.toDouble() }
         val total = sums.values.sum()
         var current = 0.0
-        val slots = sums.keys.associateWith { value ->
+        slots = sums.keys.associateWith { value ->
             val pct = sums.getValue(value)
             val x = pct / total
             val chPct = current + x

@@ -2,19 +2,14 @@ package org.incava.mmonkeys.corpus
 
 import org.incava.confile.Profiler
 import org.incava.confile.SortType
-import org.incava.mmonkeys.corpus.impl.DagCorpus
+import org.incava.mmonkeys.corpus.dag.DagCorpus
 
-class CorpusProfile(private val numInvokes: Long, private val numTrials: Int) {
-    val words = CorpusFactory.defaultWords()
+class CorpusProfile(numInvokes: Long, numTrials: Int) {
+    private val words = CorpusFactory.defaultWords()
     private val randomsProvider = RandomsProvider(words)
+    private val profiler = Profiler(numInvokes, numTrials)
 
-    private fun <T, U> add(
-        profiler: Profiler,
-        name: String,
-        corpusSupplier: (List<String>) -> T,
-        randSupplier: () -> U,
-        wordFinder: (T, U) -> Any?,
-    ) {
+    private fun <T, U> add(name: String, corpusSupplier: (List<String>) -> T, randSupplier: () -> U, wordFinder: (T, U) -> Any?) {
         val corpus = corpusSupplier(words)
         val blk: (T) -> Unit = {
             val word = randSupplier()
@@ -25,8 +20,6 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int) {
     }
 
     fun find() {
-        val profiler = Profiler(numInvokes, numTrials)
-
         val randoms27 = randomsProvider.getRandoms(27)
         val randoms7 = randomsProvider.getRandoms(7)
 
@@ -34,11 +27,11 @@ class CorpusProfile(private val numInvokes: Long, private val numTrials: Int) {
         val rand7: () -> String = { randoms7.random() }
         val finder: (Corpus, String) -> Int? = { corpus, word -> corpus.findMatch(word) }
 
-        add(profiler, "word match 27", ::WordCorpus, rand27, finder)
-        add(profiler, "word match 7", ::WordCorpus, rand7, finder)
+        add("word match 27", ::WordCorpus, rand27, finder)
+        add("word match 7", ::WordCorpus, rand7, finder)
 
-        add(profiler, "dag 27", ::DagCorpus, rand27, finder)
-        add(profiler, "dag 7", ::DagCorpus, rand7, finder)
+        add("dag 27", ::DagCorpus, rand27, finder)
+        add("dag 7", ::DagCorpus, rand7, finder)
 
         profiler.runAll()
         profiler.showResults(SortType.BY_NAME)

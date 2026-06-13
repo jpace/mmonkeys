@@ -1,33 +1,23 @@
-package org.incava.mmonkeys.corpus.impl
+package org.incava.mmonkeys.corpus.dag
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.Corpus
 
-data class Node(val char: Char, val parent: Node?, val children: MutableList<Node>, val indices: MutableList<Int>) {
-    override fun toString(): String {
-        return "Node(char=$char, parent.char=${parent?.char}, children=$children, indices=$indices)"
-    }
-
-    fun toWord(): String {
-        val str = char.toString()
-        return if (parent == null) str else parent.toWord() + str
-    }
-}
-
-class DagCorpus(words: List<String>): Corpus(words) {
-    val nodes: MutableList<Node> = mutableListOf()
+class DagCorpus(words: List<String>) : Corpus(words) {
+    val nodes: MutableList<DagNode> = mutableListOf()
 
     init {
         words.withIndex().forEach { (index, word) ->
             val firstChar = word[0]
             var current = nodes.find { it.char == firstChar }
             if (current == null) {
-                current = Node(firstChar, null, mutableListOf(), mutableListOf())
+                current = DagNode(firstChar, null, mutableListOf(), mutableListOf())
                 nodes += current
             }
             word.substring(1).forEach { char ->
                 var nextNode = current!!.children.find { node -> node.char == char }
                 if (nextNode == null) {
-                    nextNode = Node(char, current, mutableListOf(), mutableListOf())
+                    nextNode = DagNode(char, current, mutableListOf(), mutableListOf())
                     current!!.children += nextNode
                 }
                 current = nextNode
@@ -38,11 +28,27 @@ class DagCorpus(words: List<String>): Corpus(words) {
 
     fun toWords(): Map<Int, String> {
         val indexed = mutableMapOf<Int, String>()
-        nodes.forEach { indexed += toWords(it) }
+        nodes.forEach { node ->
+            val words = node.toWords()
+            words.forEach { (word, indices) ->
+                indices.forEach { index -> indexed[index] = word }
+            }
+        }
         return indexed
     }
 
-    fun findNode(string: String): Node? {
+    fun toWordsMap(): Map<String, List<Int>> {
+        val map = mutableMapOf<String, MutableList<Int>>()
+        nodes.forEach { node ->
+            val words = node.toWords()
+            words.forEach { (word, indices) ->
+                map.computeIfAbsent(word) { mutableListOf() }.addAll(indices)
+            }
+        }
+        return map
+    }
+
+    fun findNode(string: String): DagNode? {
         return findNode(string.toCharArray(), nodes)
     }
 
@@ -51,7 +57,7 @@ class DagCorpus(words: List<String>): Corpus(words) {
         return node.indices.find { !matches.isMatched(it) }
     }
 
-    private fun toWords(node: Node): Map<Int, String> {
+    fun toWords(node: DagNode): Map<Int, String> {
         val words = node.children.fold(mutableMapOf<Int, String>()) { acc, n ->
             acc.also { it += toWords(n) }
         }
@@ -62,7 +68,7 @@ class DagCorpus(words: List<String>): Corpus(words) {
         return words
     }
 
-    private fun findNode(chars: CharArray, subnodes: List<Node>): Node? {
+    fun findNode(chars: CharArray, subnodes: List<DagNode>): DagNode? {
         val firstChar = chars[0]
         val n = subnodes.find { it.char == firstChar } ?: return null
         return if (chars.size > 1) {
