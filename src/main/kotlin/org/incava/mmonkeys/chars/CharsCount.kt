@@ -1,0 +1,9 @@
+package org.incava.mmonkeys.chars
+
+class CharsCount(val char: Char, val nextChars: List<CountElement>) : CountElement {
+    override fun char(): Char = char
+    override fun count(): Int {
+        // @todo don't recalculate each time
+        return nextChars.fold(0) { acc, it -> acc + it.count() }
+    }
+}
