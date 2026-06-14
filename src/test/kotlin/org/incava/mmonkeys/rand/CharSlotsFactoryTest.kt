@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.rand
 
+import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.chars.CharsElementFactory
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
@@ -23,6 +24,7 @@ class CharSlotsFactoryTest {
         val key = 't'
         val counts = sequences.twos[key]!!
         val result = CharSlotsFactory.createMapToSlots(counts)
-        assertNotNull(result)
+        Qlog.info("result", result)
+        assertNotNull(result.slots['t'])
     }
 }

@@ -24,7 +24,7 @@ class CharsProfileTest {
 
     fun getSlot(slots: Map<Char, Double>, ch: Char): Int = ((slots[ch] ?: 0.0) * 100).roundToInt()
 
-//    @Disabled("only for manual inspection")
+    @Disabled("only for manual inspection")
     @Test
     fun listSlotsFirsts() {
         Qlog.info("obj", obj)
@@ -47,7 +47,7 @@ class CharsProfileTest {
         assertEquals(19, space - e)
     }
 
-//    @Disabled("only for manual inspection")
+    @Disabled("only for manual inspection")
     @Test
     fun listSlotsSeconds() {
         val t = obj.seconds['t']!!

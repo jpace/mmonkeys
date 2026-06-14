@@ -1,6 +1,9 @@
 package org.incava.mmonkeys.chars
 
-import org.junit.jupiter.api.Assertions.*
+import org.incava.mmonkeys.corpus.CorpusFactory
+import org.incava.mmonkeys.rand.SequencesFactory
+import org.incava.mmonkeys.util.ResourceUtil
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -26,7 +29,17 @@ class CharsCountTest {
 
     @Test
     fun getNextChars() {
-        val result = obj.count()
         assertEquals(nextChars, obj.nextChars)
+    }
+
+    @Test
+    fun complex() {
+        val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
+        val sequences = SequencesFactory.createFromWords(words)
+        // only one dimension here (child elements are CharCount (singular))
+        val asCharToLists = CharsElementFactory.toMapToList(sequences.twos)
+        val expected = listOf(CharCount('u', 3941), CharCount(' ', 1))
+        val actual = asCharToLists.getValue('q')
+        assertEquals(expected, actual)
     }
 }

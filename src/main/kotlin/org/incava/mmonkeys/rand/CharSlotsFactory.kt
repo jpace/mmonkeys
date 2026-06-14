@@ -1,6 +1,5 @@
 package org.incava.mmonkeys.rand
 
-import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.chars.CharCount
 import org.incava.mmonkeys.chars.CharsCount
 import org.incava.mmonkeys.chars.CharsElementFactory
@@ -23,7 +22,6 @@ object CharSlotsFactory {
     }
 
     fun createListToSlots(list: List<CharCount>): CharsSlots {
-        Qlog.info("list", list)
         val counts = CharsElementFactory.toMap(list)
         return CharsSlots(counts)
     }

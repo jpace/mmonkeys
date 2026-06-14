@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.trials.mky.mind
 
+import org.incava.mmonkeys.chars.Chars2
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.mky.mind.ThreesDistributedStrategy
 import org.incava.mmonkeys.util.ResourceUtil
@@ -24,7 +25,8 @@ class ThreesDistributedStrategyTest {
         println("result1: <<<$result1>>>")
         val result2 = obj.getChar(result1)
         println("result2: <<<$result2>>>")
-        val result3 = obj.getChar(result1, result2)
+        val chars = Chars2(result1, result2)
+        val result3 = obj.getChar(chars)
         println("result3: <<<$result3>>>")
     }
 }

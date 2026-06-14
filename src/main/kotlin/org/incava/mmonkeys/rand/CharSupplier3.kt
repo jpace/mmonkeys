@@ -1,5 +1,7 @@
 package org.incava.mmonkeys.rand
 
+import org.incava.mmonkeys.chars.Chars2
+
 interface CharSupplier3 : CharSupplier2 {
-    fun getChar(firstChar: Char, secondChar: Char): Char
+    fun getChar(chars: Chars2): Char
 }
