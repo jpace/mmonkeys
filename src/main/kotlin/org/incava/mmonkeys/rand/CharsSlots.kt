@@ -2,9 +2,9 @@ package org.incava.mmonkeys.rand
 
 import kotlin.random.Random
 
+// Slots range from 0.0 to 1.0, each slot representing a percentage
+// from the previous slot to the next.
 class CharsSlots(counts: MapCharToCount) {
-    val distributed: CharSupplier1
-    val random: CharSupplier1
     val slots: Map<Char, Double>
 
     init {
@@ -18,14 +18,12 @@ class CharsSlots(counts: MapCharToCount) {
             current = chPct
             chPct
         }
-        distributed = object : CharSupplier1 {
-            override fun getChar(): Char {
-                val num = Random.nextDouble(1.0)
-                return slots.keys.first { num < slots.getValue(it) }
-            }
-        }
-        random = object : CharSupplier1 {
-            override fun getChar(): Char = slots.keys.random()
-        }
     }
+
+    fun getDistributedChar(): Char {
+        val num = Random.nextDouble(1.0)
+        return slots.keys.first { num < slots.getValue(it) }
+    }
+
+    fun getRandomChar(): Char = slots.keys.random()
 }

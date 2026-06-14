@@ -38,11 +38,11 @@ class SequencesTrial {
             result.getValue(first).toSortedMap().forEach { (second, count) ->
                 Console.info("$first -> $second", count)
             }
-            val random = CharsSlots(result.getValue(first))
-            Qlog.info("distributed", random.distributed.getChar())
-            Qlog.info("distributed", random.distributed.getChar())
-            Qlog.info("distributed", random.distributed.getChar())
-            Qlog.info("distributed", random.distributed.getChar())
+            val slots = CharsSlots(result.getValue(first))
+            Qlog.info("distributed", slots.getDistributedChar())
+            Qlog.info("distributed", slots.getDistributedChar())
+            Qlog.info("distributed", slots.getDistributedChar())
+            Qlog.info("distributed", slots.getDistributedChar())
         }
         // this is probably the same as weighted ... maybe
         val firstToCount = result.mapValues { it.value.values.sum() }

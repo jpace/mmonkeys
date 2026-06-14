@@ -12,6 +12,6 @@ class WeightedStrategy(words: List<String>) : TypeStrategy() {
     }
 
     override fun getNextChar(): Char {
-        return charSlots.distributed.getChar()
+        return charSlots.getDistributedChar()
     }
 }

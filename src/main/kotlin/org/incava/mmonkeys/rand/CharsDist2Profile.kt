@@ -5,6 +5,6 @@ open class CharsDist2Profile(firsts: CharsSlots, val seconds: Map<Char, CharsSlo
 
     fun getChar(seconds: Map<Char, CharsSlots>, firstChar: Char): Char {
         val forFirst = seconds.getValue(firstChar)
-        return forFirst.distributed.getChar()
+        return getIt(forFirst)
     }
 }

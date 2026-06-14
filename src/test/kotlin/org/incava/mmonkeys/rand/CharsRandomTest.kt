@@ -35,7 +35,7 @@ class CharsRandomTest {
     private fun assertRandoms(obj: CharsSlots, charToPct: Map<Char, Double>) {
         val results = mutableMapOf<Char, Int>()
         repeat(iterations) {
-            val ch = obj.distributed.getChar()
+            val ch = obj.getDistributedChar()
             results[ch] = (results[ch] ?: 0) + 1
         }
         results.toSortedMap().forEach { (ch, count) ->

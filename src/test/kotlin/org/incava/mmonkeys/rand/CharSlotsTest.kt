@@ -15,6 +15,6 @@ class CharSlotsTest {
         chars.forEach { counted[it] = (counted[it] ?: 0) + 1 }
         val obj = CharsSlots(counted)
         Qlog.info("obj", obj)
-        Qlog.info("obj.distributed.getChar()", obj.distributed.getChar())
+        Qlog.info("obj.distributedChar", obj.getDistributedChar())
     }
 }
