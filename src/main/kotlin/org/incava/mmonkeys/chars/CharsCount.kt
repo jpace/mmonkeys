@@ -6,4 +6,8 @@ class CharsCount(val char: Char, val nextChars: List<CountElement>) : CountEleme
         // @todo don't recalculate each time
         return nextChars.fold(0) { acc, it -> acc + it.count() }
     }
+
+    override fun toString(): String {
+        return "CharsCount(char=$char, nextChars=$nextChars)"
+    }
 }

@@ -4,7 +4,7 @@ import kotlin.random.Random
 
 // Slots range from 0.0 to 1.0, each slot representing a percentage
 // from the previous slot to the next.
-class CharsSlots(counts: MapCharToCount) {
+class CharsSlots(counts: Map<Char, Int>) {
     val slots: Map<Char, Double>
 
     init {

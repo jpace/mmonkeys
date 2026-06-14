@@ -1,11 +1,8 @@
 package org.incava.mmonkeys.corpus
 
-import org.incava.mmonkeys.rand.MapCharToCount
-import org.incava.mmonkeys.rand.MutableMapCharToCount
-
 class CorpusTraits(var words: List<String>) {
-    fun characterCounts(): MapCharToCount {
-        val byChar: MutableMapCharToCount = mutableMapOf()
+    fun characterCounts(): Map<Char, Int> {
+        val byChar = mutableMapOf<Char, Int>()
         val numSpaces = words.size - 1
         byChar[' '] = numSpaces
         words.forEach { word ->

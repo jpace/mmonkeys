@@ -1,5 +1,6 @@
 package org.incava.mmonkeys.mky.mind
 
+import org.incava.mmonkeys.chars.CharsElementFactory
 import org.incava.mmonkeys.rand.CharSlotsFactory
 import org.incava.mmonkeys.rand.CharsDist2Profile
 import org.incava.mmonkeys.rand.Sequences
@@ -11,8 +12,9 @@ class TwosDistributedStrategy(sequences: Sequences) : TwosStrategy(sequences) {
     private val profile: CharsDist2Profile
 
     init {
-        val firsts = CharSlotsFactory.createFirsts(sequences.twos)
-        val seconds = CharSlotsFactory.createSeconds(sequences.twos)
+        val asCharToLists = CharsElementFactory.toMapToList(sequences.twos)
+        val firsts = CharSlotsFactory.createSlots(asCharToLists)
+        val seconds = CharSlotsFactory.createMapToSlots(sequences.twos)
         profile = CharsDist2Profile(firsts, seconds)
     }
 

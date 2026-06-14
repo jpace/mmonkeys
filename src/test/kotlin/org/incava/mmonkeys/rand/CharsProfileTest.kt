@@ -4,15 +4,17 @@ import org.incava.ikdk.io.Qlog
 import org.incava.mmonkeys.corpus.CorpusFactory
 import org.incava.mmonkeys.util.ResourceUtil
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import kotlin.math.roundToInt
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CharsProfileTest {
     lateinit var obj: CharsProfile
 
-    @BeforeEach
+    @BeforeAll
     fun setUp() {
         val words = CorpusFactory.fileToWords(ResourceUtil.FULL_FILE)
         val sequences = SequencesFactory.createFromWords(words)
@@ -22,7 +24,7 @@ class CharsProfileTest {
 
     fun getSlot(slots: Map<Char, Double>, ch: Char): Int = ((slots[ch] ?: 0.0) * 100).roundToInt()
 
-    @Disabled("only for manual inspection")
+//    @Disabled("only for manual inspection")
     @Test
     fun listSlotsFirsts() {
         Qlog.info("obj", obj)
@@ -45,7 +47,7 @@ class CharsProfileTest {
         assertEquals(19, space - e)
     }
 
-    @Disabled("only for manual inspection")
+//    @Disabled("only for manual inspection")
     @Test
     fun listSlotsSeconds() {
         val t = obj.seconds['t']!!

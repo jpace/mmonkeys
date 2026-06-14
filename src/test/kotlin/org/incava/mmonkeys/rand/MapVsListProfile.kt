@@ -8,19 +8,19 @@ import org.incava.mmonkeys.type.Keys
 import kotlin.random.Random
 
 class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
-    class Map2 : LinkedHashMap<Char, MutableMapCharToCount>() {
+    class Map2 : LinkedHashMap<Char, MutableMap<Char, Int>>() {
         fun lookup(chars: List<Char>): Int? {
             return this[chars[0]]?.get(chars[1])
         }
     }
 
-    class Map3 : LinkedHashMap<Char, MutableMap<Char, MutableMapCharToCount>>() {
+    class Map3 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, Int>>>() {
         fun lookup(chars: List<Char>): Int? {
             return this[chars[0]]?.get(chars[1])?.get(chars[2])
         }
     }
 
-    class Map4 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, MutableMapCharToCount>>>() {
+    class Map4 : LinkedHashMap<Char, MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>>() {
         fun lookup(chars: List<Char>): Int? {
             return this[chars[0]]?.get(chars[1])?.get(chars[2])?.get(chars[3])
         }
@@ -39,17 +39,17 @@ class MapVsListProfile(val numInvokes: Long, val numTrials: Int) {
         }
     }
 
-    fun addToMap(map: MutableMapCharToCount, char: Char, number: Int) {
+    fun addToMap(map: MutableMap<Char, Int>, char: Char, number: Int) {
         map[char] = number
     }
 
-    fun addToMap(map: MutableMap<Char, MutableMapCharToCount>, x: Char, y: Char, number: Int) {
+    fun addToMap(map: MutableMap<Char, MutableMap<Char, Int>>, x: Char, y: Char, number: Int) {
         MapUtil.ensureMap(map, x)
             .also { map1 -> addToMap(map1, y, number) }
     }
 
     fun addToMap(
-        map: MutableMap<Char, MutableMap<Char, MutableMapCharToCount>>,
+        map: MutableMap<Char, MutableMap<Char, MutableMap<Char, Int>>>,
         x: Char,
         y: Char,
         z: Char,
